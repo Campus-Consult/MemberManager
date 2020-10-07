@@ -787,7 +787,7 @@
             "type": "string",
             "nullable": true
           },
-          "adressNr": {
+          "adressNo": {
             "type": "string",
             "nullable": true
           },

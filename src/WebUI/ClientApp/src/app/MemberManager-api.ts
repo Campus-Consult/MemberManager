@@ -1238,7 +1238,7 @@ export class PersonDetailVm implements IPersonDetailVm {
     emailAssociaton?: string | undefined;
     mobilePrivate?: string | undefined;
     adressStreet?: string | undefined;
-    adressNr?: string | undefined;
+    adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
 
@@ -1262,7 +1262,7 @@ export class PersonDetailVm implements IPersonDetailVm {
             this.emailAssociaton = _data["emailAssociaton"];
             this.mobilePrivate = _data["mobilePrivate"];
             this.adressStreet = _data["adressStreet"];
-            this.adressNr = _data["adressNr"];
+            this.adressNo = _data["adressNo"];
             this.adressZIP = _data["adressZIP"];
             this.adressCity = _data["adressCity"];
         }
@@ -1286,7 +1286,7 @@ export class PersonDetailVm implements IPersonDetailVm {
         data["emailAssociaton"] = this.emailAssociaton;
         data["mobilePrivate"] = this.mobilePrivate;
         data["adressStreet"] = this.adressStreet;
-        data["adressNr"] = this.adressNr;
+        data["adressNo"] = this.adressNo;
         data["adressZIP"] = this.adressZIP;
         data["adressCity"] = this.adressCity;
         return data; 
@@ -1303,7 +1303,7 @@ export interface IPersonDetailVm {
     emailAssociaton?: string | undefined;
     mobilePrivate?: string | undefined;
     adressStreet?: string | undefined;
-    adressNr?: string | undefined;
+    adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
 }

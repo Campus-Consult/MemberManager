@@ -16,7 +16,7 @@ namespace MemberManager.Application.People.Queries.GetPersonDetail
         public string EmailAssociaton { get; set; }
         public string MobilePrivate { get; set; }
         public string AdressStreet { get; set; }
-        public string AdressNr { get; set; }
+        public string AdressNo { get; set; }
         public string AdressZIP { get; set; }
         public string AdressCity { get; set; }
     }

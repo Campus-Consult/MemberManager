@@ -3,6 +3,7 @@ using MemberManager.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -33,7 +34,14 @@ namespace MemberManager.WebUI
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
                     await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
-                    await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+                    await ApplicationDbContextSeed.SeedSampleTodoListDataAsync(context);
+                    await ApplicationDbContextSeed.SeedDefaultMemberDataAsync(context);
+
+                    #if DEBUG
+                    // make sure to never seed random data in release build
+                    var config = services.GetRequiredService<IConfiguration>().GetSection("ApplicationDbContextSeedConfig").Get<ApplicationDbContextSeedConfig>();
+                    await ApplicationDbContextSeed.SeedRandomMemberDataAsync(context, config);
+                    #endif
                 }
                 catch (Exception ex)
                 {

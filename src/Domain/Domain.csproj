@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>MemberManager.Domain</RootNamespace>
+    <AssemblyName>MemberManager.Domain</AssemblyName>
+  </PropertyGroup>
+
+</Project>

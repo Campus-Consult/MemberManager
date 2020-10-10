@@ -35,8 +35,8 @@
                 {{position.isActive?"Aktiv":"Veraltet"}}
             </td>
             <td>
-                <div *ngFor="let persPos of position.currentHolders">
-                    <a title="Besetzt seit {{persPos.begin | date: 'dd.MM.yyyy'}}" routerLink="/Person/{{persPos.personID}}">{{persPos.firstName}} {{persPos.lastName}}</a><a><i (click)="dismiss(position, persPos)" class="fa fa-times dismiss-cross" aria-hidden="true"></i></a>
+                <div *ngFor="let persPos of position.assignees">
+                    <a title="Besetzt seit {{persPos.beginDateTime | date: 'dd.MM.yyyy'}}" routerLink="/Person/{{persPos.id}}">{{persPos.firstName}} {{persPos.surname}}</a><a><i (click)="dismiss(position, persPos)" class="fa fa-times dismiss-cross" aria-hidden="true"></i></a>
                 </div>
             </td>
             <td>

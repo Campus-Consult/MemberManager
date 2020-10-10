@@ -1,0 +1,76 @@
+<table class="table table-borderless table-sm">
+  <tbody>
+    <tr>
+      <td class="font-weight-bold" width="200">Vorname</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="personDetails.firstName"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">Nachname</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="personDetails.lastName"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">Geburtstag</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="personDetails.birthdate?personDetails.birthdate.toLocaleDateString(): personDetails.birthdate"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">Geschlecht</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="personDetails.gender"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">E-Mail (Campus Consult)</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="personDetails.emailAssociaton"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">E-Mail (privat)</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="personDetails.emailPrivate"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">Straße, Hausnummer</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="strasseHausNr"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+    <tr>
+      <td class="font-weight-bold" width="200">PLZ, Stadt</td>
+      <td colspan="2">
+        <app-skeleton-loader
+          [value]="stadtPLZ"
+          type="LINE"
+        ></app-skeleton-loader>
+      </td>
+    </tr>
+  </tbody>
+</table>

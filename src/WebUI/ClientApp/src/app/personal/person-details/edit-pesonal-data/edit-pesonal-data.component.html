@@ -1,0 +1,97 @@
+<form class="example-form" [formGroup]="personalForm" (ngSubmit)="onSubmit()">
+  <table class="table table-borderless table-sm">
+    <tbody>
+      <tr>
+        <td class="font-weight-bold" width="200">Vorname</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="text" formControlName="firstName" matInput placeholder="Vorname" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">Nachname</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="text" formControlName="lastName" matInput placeholder="Nachname" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">Geburtstag</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="date" formControlName="birthdate" matInput placeholder="Geburtstag" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">Geschlecht</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="text" formControlName="gender" matInput placeholder="Geschlecht" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">E-Mail (Campus Consult)</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="email" formControlName="emailAssociaton" matInput placeholder="E-Mail (Campus Consult)" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">E-Mail (privat)</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="email" formControlName="emailPrivate"  matInput placeholder="E-Mail (privat)" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">Telefonnummer (privat)</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="tel" formControlName="mobilePrivate"  matInput placeholder="Telefonnummer (privat)" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">Straße, Hausnummer</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="text" formControlName="adressStreet" matInput placeholder="Straße" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+          <mat-form-field  appearance="outline">
+            <input type="text" formControlName="adressNr" matInput placeholder="Hausnummer" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-weight-bold" width="200">PLZ, Stadt</td>
+        <td colspan="2">
+          <mat-form-field appearance="outline">
+            <input type="number" maxlength="5" formControlName="adressZIP" matInput placeholder="PLZ" />
+            <mat-hint>Hint</mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <input #postalCode type="text" formControlName="adressCity" matInput placeholder="Stadt" />
+            <mat-hint>{{postalCode.value.length}} / 5</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="submit" [disabled]="!personalForm.valid">Anwenden</button>
+  <button (click)='onCancel()'>Abbrechen</button>
+</form>

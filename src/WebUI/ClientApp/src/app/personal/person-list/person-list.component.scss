@@ -1,0 +1,13 @@
+table {
+  width: 100%;
+}
+
+#aboveList {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+#create {
+  justify-self: flex-end;
+}

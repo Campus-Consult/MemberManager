@@ -1,0 +1,9 @@
+<ng-container *ngIf="value; else elseTemplate">
+    {{value}}
+</ng-container>
+<ng-template #elseTemplate>
+    <ngx-skeleton-loader appearance="type" animation="progress"></ngx-skeleton-loader>
+</ng-template>
+
+
+

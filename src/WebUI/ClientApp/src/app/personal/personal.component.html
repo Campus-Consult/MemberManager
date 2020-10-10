@@ -1,0 +1,5 @@
+<h2>Personal List</h2>
+<div class="flex-container">
+  <app-person-list class="table-part" [personalData]="personalTableData" (onDetail)="changeDisplayedPerson($event)" (onRefresh)="doRefresh()"></app-person-list>
+  <app-person-details class="detail-view" [personTabledDTO]="selectedPerson"></app-person-details>
+</div>

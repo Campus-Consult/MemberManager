@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Von Posten absetzen</h1>
+<div mat-dialog-content>
+    <div>
+        <span>{{data.person.firstName}} {{data.person.lastName}} von Posten {{data.position.name}} absetzen</span>
+    </div>
+    <form [formGroup]="dismissForm">
+        <mat-form-field>
+            <input matInput placeholder="Datum" formControlName="date" [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="date.hasError('required')">
+            Datum ist Pflichtfeld
+            </mat-error>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-button (click)="onSubmit()" cdkFocusInitial>Absetzen</button>
+    <mat-spinner *ngIf="savingBeforeClose"></mat-spinner><!--TODO style, it's too big-->
+</div>

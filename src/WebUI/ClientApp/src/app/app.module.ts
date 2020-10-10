@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -16,6 +16,13 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { PersonalModule } from './personal/personal.module';
+import { ComponentsModule } from './components/components.module';
+import { PersonalComponent } from './personal/personal.component';
+import { PositionModule } from './position/position.module';
+import { PositionComponent } from './position/position.component';
+import { MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import { MemberStatusComponent } from './member-status/member-status.component';
 import { MemberStatusListComponent } from './member-status/member-status-list/member-status-list.component';
 import { MemberStatusDetailsComponent } from './member-status/member-status-details/member-status-details.component';
@@ -28,6 +35,7 @@ import { MemberStatusDetailsComponent } from './member-status/member-status-deta
     CounterComponent,
     FetchDataComponent,
     TodoComponent,
+    PrivacyComponent,
     MemberStatusComponent,
     MemberStatusListComponent,
     MemberStatusDetailsComponent
@@ -40,16 +48,25 @@ import { MemberStatusDetailsComponent } from './member-status/member-status-deta
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'Personal', component: PersonalComponent, pathMatch: 'full' },
+      { path: 'Position', component: PositionComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
       { path: 'member-status', component: MemberStatusComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    PersonalModule,
+    PositionModule,
+    ComponentsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    {provide: LOCALE_ID, useValue: 'de-DE'},
+    // workaround for dates, the date picker actually uses a datetime with 00:00 as time and with timezone this makes it
+    // wrap around to the previou day
+    // {provide: MAT_NATIVE_DATE_FORMATS, useValue: {useUtc: true}},
   ],
   bootstrap: [AppComponent]
 })

@@ -16,6 +16,9 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { MemberStatusComponent } from './member-status/member-status.component';
+import { MemberStatusListComponent } from './member-status/member-status-list/member-status-list.component';
+import { MemberStatusDetailsComponent } from './member-status/member-status-details/member-status-details.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    TodoComponent
+    TodoComponent,
+    MemberStatusComponent,
+    MemberStatusListComponent,
+    MemberStatusDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,6 +43,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
+      { path: 'member-status', component: MemberStatusComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot()

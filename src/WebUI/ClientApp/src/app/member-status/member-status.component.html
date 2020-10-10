@@ -1,0 +1,5 @@
+<h1>Member status</h1>
+<div class="flex-container">
+  <app-member-status-list class="table-part" [personalData]="personalTableData" (onDetail)="changeDisplayedPerson($event)" (onRefresh)="doRefresh()"></app-member-status-list>
+  <app-member-status-details class="detail-view" [personTabledDTO]="selectedPerson"></app-member-status-details>
+</div>

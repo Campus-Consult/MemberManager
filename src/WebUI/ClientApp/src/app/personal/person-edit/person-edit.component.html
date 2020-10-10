@@ -1,0 +1,27 @@
+<ng-container *ngIf="personDetails; else elseTemplate">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Editing Person</mat-card-title>
+            <mat-card-subtitle>{{displayedSubtitle}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button>Ok</button>
+        </mat-card-actions>
+    </mat-card>
+</ng-container>
+
+<ng-template #elseTemplate>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Editing Person</mat-card-title>
+            <mat-card-subtitle>No Person handed over to edit</mat-card-subtitle>
+        </mat-card-header>
+            <mat-card-content>
+                Report Mistake!
+            </mat-card-content>
+    </mat-card>
+</ng-template>
+

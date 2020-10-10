@@ -1,0 +1,27 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title> {{ title }} </mat-panel-title>
+    <mat-panel-description *ngIf="panelDescription">
+      {{ panelDescription }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="historyData && historyData.length > 0; else noData">
+    <table id="history-table" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ title + ":" }}</th>
+        <td mat-cell *matCellDef="let element">
+          <a (click)="emitOpenDetails($event)">{{ element.name }}</a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef>{{ "Zeitraum" }}</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.startDate + " - " + element.endDate }}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </ng-container>
+  <ng-template #noData> <p>Keine Daten vorliegend</p> </ng-template>
+</mat-expansion-panel>

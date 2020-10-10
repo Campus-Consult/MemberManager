@@ -16,6 +16,10 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { PersonalModule } from './personal/personal.module';
+import { ComponentsModule } from './components/components.module';
+import { PersonalComponent } from './personal/personal.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    TodoComponent
+    TodoComponent,
+    PrivacyComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,12 +39,15 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'Personal', component: PersonalComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    PersonalModule,
+    ComponentsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

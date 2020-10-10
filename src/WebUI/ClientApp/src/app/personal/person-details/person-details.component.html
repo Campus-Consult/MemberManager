@@ -1,0 +1,18 @@
+<mat-card class="detail-card">
+  <mat-card-header>
+    <mat-card-title>Person Details</mat-card-title>
+    <mat-card-subtitle>{{ displayedName }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content
+    *ngIf="personTabledDTO; else elseTemplate"
+    class="content-margin"
+  >
+    <app-personal-data [personDetails]="personDetails"></app-personal-data>
+    <app-history-panels [personDetails]="personDetails"></app-history-panels>
+  </mat-card-content>
+  <ng-template #elseTemplate>
+    <mat-card-content class="content-margin">
+      Click on person in table to show Details.
+    </mat-card-content>
+  </ng-template>
+</mat-card>

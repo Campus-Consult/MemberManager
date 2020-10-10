@@ -6,6 +6,26 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/MemberStatus": {
+      "get": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberStatusVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/People": {
       "get": {
         "tags": [
@@ -717,6 +737,40 @@
   },
   "components": {
     "schemas": {
+      "MemberStatusVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberStatus": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MemberStatusLookupDto"
+            }
+          }
+        }
+      },
+      "MemberStatusLookupDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
       "PeopleVm": {
         "type": "object",
         "additionalProperties": false,
@@ -941,13 +995,6 @@
           "name": {
             "type": "string",
             "nullable": true
-          },
-          "shortName": {
-            "type": "string",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
           }
         }
       },

@@ -995,6 +995,13 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         }
       },

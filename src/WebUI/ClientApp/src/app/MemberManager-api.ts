@@ -1675,6 +1675,8 @@ export interface IPositionsVm {
 export class PositionLookupDto implements IPositionLookupDto {
     id?: number;
     name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
 
     constructor(data?: IPositionLookupDto) {
         if (data) {
@@ -1689,6 +1691,8 @@ export class PositionLookupDto implements IPositionLookupDto {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.shortName = _data["shortName"];
+            this.isActive = _data["isActive"];
         }
     }
 
@@ -1703,6 +1707,8 @@ export class PositionLookupDto implements IPositionLookupDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        data["isActive"] = this.isActive;
         return data; 
     }
 }
@@ -1710,6 +1716,8 @@ export class PositionLookupDto implements IPositionLookupDto {
 export interface IPositionLookupDto {
     id?: number;
     name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
 }
 
 export class CreatePositionCommand implements ICreatePositionCommand {

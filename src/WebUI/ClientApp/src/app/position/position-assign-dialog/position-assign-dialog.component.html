@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Position Besetzen</h1>
+<div mat-dialog-content>
+  <div>
+      <span>Posten {{position.name}} besetzen</span>
+  </div>
+    <!-- <mat-form-field><input matInput [(ngModel)]="data.name" placeholder="Name"></mat-form-field>
+    <mat-form-field><input matInput [(ngModel)]="data.shortName" placeholder="Kurzbezeichnung"></mat-form-field> -->
+    <form [formGroup]="assignForm" > <!--(ngSubmit)="onFormSubmit()"-->
+        <app-search-select [assignSuggestions]="assignSuggestions" formControlName="assignPerson"></app-search-select>
+        <div>
+            <mat-form-field>
+                <input matInput placeholder="Datum" formControlName="assignDate" [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="assignDate.hasError('required')">
+                  Datum ist Pflichtfeld
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </form> 
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-button (click)="onSubmit()" cdkFocusInitial>Besetzen</button>
+    <mat-spinner *ngIf="savingBeforeClose"></mat-spinner><!--TODO style, it's too big-->
+</div>

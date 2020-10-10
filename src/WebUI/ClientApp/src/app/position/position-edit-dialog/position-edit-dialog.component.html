@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Edit Position</h1>
+<div mat-dialog-content>
+    <mat-form-field><input matInput [(ngModel)]="data.name" placeholder="Name"></mat-form-field>
+    <mat-form-field><input matInput [(ngModel)]="data.shortName" placeholder="Kurzbezeichnung"></mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-button (click)="onSave()" cdkFocusInitial>Speichern</button>
+    <mat-spinner *ngIf="savingBeforeClose"></mat-spinner><!--TODO style, it's too big-->
+</div>

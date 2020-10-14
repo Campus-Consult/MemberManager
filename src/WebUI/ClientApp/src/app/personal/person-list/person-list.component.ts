@@ -19,10 +19,13 @@ export class PersonListComponent implements OnInit {
   displayedColumns?: string[];
 
   @Output()
-  onDetail = new EventEmitter<number>();
+  detailEvent = new EventEmitter<number>();
 
   @Output()
-  onRefresh = new EventEmitter();
+  refreshEvent = new EventEmitter();
+
+  @Output()
+  createNewEvent = new EventEmitter();
 
   //dataSource = new MatTableDataSource<PersonTableData>(this.personalData);
 
@@ -65,12 +68,16 @@ export class PersonListComponent implements OnInit {
 
   /** =============Person Action Methods ============== */
 
-  details(persID: number) {
-    this.onDetail.emit(persID);
+  onDetails(persID: number) {
+    this.detailEvent.emit(persID);
   }
 
-  refresh(){
-    this.onRefresh.emit();
+  onRefresh(){
+    this.refreshEvent.emit();
+  }
+
+  onCreate(){
+    this.createNewEvent.emit();
   }
 
 }

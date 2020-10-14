@@ -3,8 +3,9 @@
   <app-person-list
     class="table-part"
     [personalData]="personalTableData"
-    (onDetail)="changeDisplayedPerson($event)"
-    (onRefresh)="doRefresh()"
+    (detailEvent)="changeDisplayedPerson($event)"
+    (refreshEvent)="doRefresh()"
+    (createNewEvent)="createPerson()"
   ></app-person-list>
   <div class="right-section">
     <ng-container *ngIf="isEditingMember; else details">

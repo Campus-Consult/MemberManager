@@ -1,31 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { Person } from 'src/app/models/person.class';
-import { MemberFormComponent } from '../person-details/member-form/member-form.component';
+import { CreatePersonComponent } from '../create-person/create-person.component';
+import { MemberFormComponent } from '../create-person/member-form/member-form.component';
 
 @Component({
   selector: 'app-edit-pesonal-data',
   templateUrl: './edit-pesonal-data.component.html',
   styleUrls: ['./edit-pesonal-data.component.scss'],
 })
-export class EditPetsonalDataComponent implements OnInit {
+export class EditPetsonalDataComponent extends CreatePersonComponent implements OnInit {
 
   @Input() memberdata: Person;
 
-  @ViewChild('memberForm') memberFormComp: MemberFormComponent;
-
-  memberForm: FormGroup;
-
   constructor() {
+    super();
   }
 
   ngOnInit(): void {
-    this.memberForm = this.memberFormComp.personalForm;
+    super.ngOnInit()
   }
-
-  onSubmit() {
-    console.log(this.memberForm.value);
-  }
-
-  onCancel() {}
 }

@@ -5,7 +5,7 @@ import { Person } from 'src/app/models/person.class';
 @Component({
   selector: 'app-member-form',
   templateUrl: './member-form.component.html',
-  styleUrls: ['./member-form.component.css']
+  styleUrls: ['./member-form.component.scss']
 })
 export class MemberFormComponent implements OnInit {
 

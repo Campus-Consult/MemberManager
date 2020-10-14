@@ -7,7 +7,7 @@ import { MemberFormComponent } from './member-form/member-form.component';
 @Component({
   selector: 'app-create-person',
   templateUrl: './create-person.component.html',
-  styleUrls: ['./create-person.component.css']
+  styleUrls: ['./create-person.component.scss']
 })
 export class CreatePersonComponent implements OnInit {
 

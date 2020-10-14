@@ -24,6 +24,7 @@
     <ng-template #details>
       <app-person-details
         [personTabledDTO]="selectedPerson"
+        (editEvent)="editPerson($event)"
       ></app-person-details>
     </ng-template>
   </div>

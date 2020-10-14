@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { Person } from 'src/app/models/person.class';
@@ -17,6 +19,9 @@ import { PeopleApiService } from '../../services/api/person-api.service';
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
   personTabledDTO: PersonListItem;
+
+  @Output()
+  editEvent = new EventEmitter<number>();
 
   personDetails: Person;
 
@@ -50,5 +55,9 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   getFullName(): string {
     return this.personTabledDTO.firstName + ' ' + this.personTabledDTO.lastName;
+  }
+
+  onEdit() {
+    this.editEvent.emit(this.personTabledDTO.personID);
   }
 }

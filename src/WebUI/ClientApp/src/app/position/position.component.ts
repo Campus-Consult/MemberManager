@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { PositionAssignDialogComponent } from './position-assign-dialog/position-assign-dialog.component';
 import { PositionDismissDialogComponent } from "./position-dismiss-dialog/position-dismiss-dialog.component";
 import { PositionEditDialogComponent } from "./position-edit-dialog/position-edit-dialog.component";
-import { PositionClient, PositionsVm, PositionLookupDto } from '../membermanager-api';
+import { PositionClient, PositionsVm, PositionLookupDto, PositionDto } from '../membermanager-api';
 
 @Component({
   selector: 'app-position',
@@ -14,9 +14,9 @@ import { PositionClient, PositionsVm, PositionLookupDto } from '../membermanager
 })
 export class PositionComponent implements OnInit {
 
-  allPositions: PositionLookupDto[];
+  allPositions: PositionDto[];
 
-  filteredPositions: PositionLookupDto[];
+  filteredPositions: PositionDto[];
   searchTerm: string;
   activeFilter: 'all' | 'active' | 'deprecated';
 
@@ -29,7 +29,7 @@ export class PositionComponent implements OnInit {
   ngOnInit(): void {
     this.activeFilter = 'all';
     this.searchTerm = '';
-    this.positionClient.get().subscribe(pos => {
+    this.positionClient.getWithAssignees().subscribe(pos => {
       this.allPositions = pos.positions;
       this.loading = false;
       this.updateFiltering();

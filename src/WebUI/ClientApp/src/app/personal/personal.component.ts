@@ -11,7 +11,10 @@ export class PersonalComponent implements OnInit {
 
   public searchValue = "";
 
+  // View 
   public selectedPerson: PersonListItem;
+  public isCreatingMember: boolean = false;
+  public isEditingMember: boolean = false;
 
   constructor(private personApi: PeopleApiService) {}
 
@@ -21,7 +24,23 @@ export class PersonalComponent implements OnInit {
 
   createPerson() {
     // TODO: API Anbindung
+    this.isCreatingMember = true;
+    this.isEditingMember = true;
+    // will be set back to false on completionEvent, see view html
   }
+
+  editPerson(persId: number) {
+    // TODO: API Anbindung
+    if (persId === this.selectedPerson.personID) {
+      this.isEditingMember = true;
+      // will be set back to false on completionEvent, see view html
+    } else{
+      // TODO: handeln?
+      console.warn('editPerson: PersonID is not the same in selectedPerson');
+    }
+    this.isCreatingMember = true;
+  }
+
 
   changeDisplayedPerson(persId: number) {
     this.selectedPerson = this.personalTableData.find(
@@ -32,7 +51,7 @@ export class PersonalComponent implements OnInit {
   doRefresh() {
     this.personApi.getPersonaLookUpData().subscribe(
       (val) => {
-        // TODO: Loading
+        // TODO: Loading; Transfer into personalList?
         this.personalTableData = val;
       },
       (err) => console.error(err)

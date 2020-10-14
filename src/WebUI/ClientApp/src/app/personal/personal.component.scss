@@ -5,7 +5,7 @@ $table-width: 60%;
     justify-self: flex-start;
   }
 
-.detail-view {
+.right-section {
     width: 100% - $table-width;
     justify-self: flex-end;
     margin-left: 15px; // padding from div in highest hierachie 

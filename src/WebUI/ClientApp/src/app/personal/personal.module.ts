@@ -18,7 +18,8 @@ import { PersonalDataComponent } from './person-details/personal-data/personal-d
 import { EditPetsonalDataComponent } from './edit-pesonal-data/edit-pesonal-data.component';
 import { HistoryExpansionComponent } from './person-details/history-panels/history-expansion/history-expansion.component';
 import { HistoryPanelsComponent } from './person-details/history-panels/history-panels.component';
-import { MemberFormComponent } from './person-details/member-form/member-form.component';
+import { MemberFormComponent } from './create-person/member-form/member-form.component';
+import { CreatePersonComponent } from './create-person/create-person.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MemberFormComponent } from './person-details/member-form/member-form.co
     EditPetsonalDataComponent,
     HistoryExpansionComponent,
     HistoryPanelsComponent,
-    MemberFormComponent
+    MemberFormComponent,
+    CreatePersonComponent
   ],
   exports: [PersonalComponent],
   imports: [

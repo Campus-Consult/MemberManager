@@ -22,10 +22,6 @@ import { ComponentsModule } from './components/components.module';
 import { PersonalComponent } from './personal/personal.component';
 import { PositionModule } from './position/position.module';
 import { PositionComponent } from './position/position.component';
-import { MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
-import { MemberStatusComponent } from './member-status/member-status.component';
-import { MemberStatusListComponent } from './member-status/member-status-list/member-status-list.component';
-import { MemberStatusDetailsComponent } from './member-status/member-status-details/member-status-details.component';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
 
@@ -40,9 +36,6 @@ registerLocaleData(localeDe);
     FetchDataComponent,
     TodoComponent,
     PrivacyComponent,
-    MemberStatusComponent,
-    MemberStatusListComponent,
-    MemberStatusDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -57,7 +50,6 @@ registerLocaleData(localeDe);
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
-      { path: 'member-status', component: MemberStatusComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

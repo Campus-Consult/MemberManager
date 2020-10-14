@@ -11,10 +11,10 @@ import { PeopleApiService } from '../../services/api/person-api.service';
 
 @Component({
   selector: 'app-person-details',
-  templateUrl: './person-details.component.html',
-  styleUrls: ['./person-details.component.scss'],
+  templateUrl: './member-data-sheet.component.html',
+  styleUrls: ['./member-data-sheet.component.scss'],
 })
-export class PersonDetailsComponent implements OnInit, OnChanges {
+export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
   personTabledDTO: PersonListItem;
 

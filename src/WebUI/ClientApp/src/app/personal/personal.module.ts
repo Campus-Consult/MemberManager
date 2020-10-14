@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonalComponent } from './personal.component';
-import { PersonDetailsComponent } from './person-details/person-details.component';
+import { MemberDataSheetComponent } from './person-details/member-data-sheet.component';
 import { PersonListComponent } from './person-list/person-list.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,7 +23,7 @@ import { MemberFormComponent } from './person-details/member-form/member-form.co
 @NgModule({
   declarations: [
     PersonalComponent,
-    PersonDetailsComponent,
+    MemberDataSheetComponent,
     PersonListComponent,
     PersonalDataComponent,
     EditPetsonalDataComponent,

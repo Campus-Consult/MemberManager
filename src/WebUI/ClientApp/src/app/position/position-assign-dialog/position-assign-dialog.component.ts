@@ -29,10 +29,13 @@ import { formatDate, getLocaleId } from '@angular/common';
     }
   
     ngOnInit(): void {
-      // TODO
-      for (let i = 0;i<20;i++) {
-        this.assignSuggestions.push({name: "name "+i, id: i});
-      }
+      this.positionClient
+        .assignSuggestions(this.position.id)
+        .subscribe(suggestions => {
+          this.assignSuggestions = suggestions.suggestions.map(s => {
+            return {name: s.name, id: s.id};
+          });
+        });
       console.log(this.assignSuggestions);
       // this.positionApiService.getAssignmentsSuggestion().subscribe(suggestions => {
       //   this.assignSuggestions = suggestions.map(s => {

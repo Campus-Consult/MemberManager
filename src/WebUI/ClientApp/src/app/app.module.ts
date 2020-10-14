@@ -26,6 +26,10 @@ import { MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import { MemberStatusComponent } from './member-status/member-status.component';
 import { MemberStatusListComponent } from './member-status/member-status-list/member-status-list.component';
 import { MemberStatusDetailsComponent } from './member-status/member-status-details/member-status-details.component';
+import localeDe from "@angular/common/locales/de";
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [

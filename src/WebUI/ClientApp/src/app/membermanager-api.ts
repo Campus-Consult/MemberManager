@@ -358,6 +358,8 @@ export class PeopleClient implements IPeopleClient {
 export interface IPositionClient {
     get(): Observable<PositionsVm>;
     create(command: CreatePositionCommand): Observable<number>;
+    getWithAssignees(): Observable<PositionsWAVm>;
+    assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions>;
     update(id: number): Observable<FileResponse>;
     deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse>;
     assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse>;
@@ -474,6 +476,106 @@ export class PositionClient implements IPositionClient {
             }));
         }
         return _observableOf<number>(<any>null);
+    }
+
+    getWithAssignees(): Observable<PositionsWAVm> {
+        let url_ = this.baseUrl + "/api/Position/GetWithAssignees";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetWithAssignees(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetWithAssignees(<any>response_);
+                } catch (e) {
+                    return <Observable<PositionsWAVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PositionsWAVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetWithAssignees(response: HttpResponseBase): Observable<PositionsWAVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PositionsWAVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PositionsWAVm>(<any>null);
+    }
+
+    assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions> {
+        let url_ = this.baseUrl + "/api/Position/AssignSuggestions?";
+        if (positionID === null)
+            throw new Error("The parameter 'positionID' cannot be null.");
+        else if (positionID !== undefined)
+            url_ += "positionID=" + encodeURIComponent("" + positionID) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAssignSuggestions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAssignSuggestions(<any>response_);
+                } catch (e) {
+                    return <Observable<PeopleAssignSuggestions>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PeopleAssignSuggestions>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAssignSuggestions(response: HttpResponseBase): Observable<PeopleAssignSuggestions> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PeopleAssignSuggestions.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PeopleAssignSuggestions>(<any>null);
     }
 
     update(id: number): Observable<FileResponse> {
@@ -1718,6 +1820,242 @@ export interface IPositionLookupDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
+}
+
+export class PositionsWAVm implements IPositionsWAVm {
+    positions?: PositionDto[] | undefined;
+
+    constructor(data?: IPositionsWAVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["positions"])) {
+                this.positions = [] as any;
+                for (let item of _data["positions"])
+                    this.positions!.push(PositionDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PositionsWAVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PositionsWAVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.positions)) {
+            data["positions"] = [];
+            for (let item of this.positions)
+                data["positions"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPositionsWAVm {
+    positions?: PositionDto[] | undefined;
+}
+
+export class PositionDto implements IPositionDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+    assignees?: PositionAssignee[] | undefined;
+
+    constructor(data?: IPositionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+            this.isActive = _data["isActive"];
+            if (Array.isArray(_data["assignees"])) {
+                this.assignees = [] as any;
+                for (let item of _data["assignees"])
+                    this.assignees!.push(PositionAssignee.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PositionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PositionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        data["isActive"] = this.isActive;
+        if (Array.isArray(this.assignees)) {
+            data["assignees"] = [];
+            for (let item of this.assignees)
+                data["assignees"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPositionDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+    assignees?: PositionAssignee[] | undefined;
+}
+
+export class PositionAssignee implements IPositionAssignee {
+    id?: number;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    beginDateTime?: Date;
+
+    constructor(data?: IPositionAssignee) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.surname = _data["surname"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PositionAssignee {
+        data = typeof data === 'object' ? data : {};
+        let result = new PositionAssignee();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["surname"] = this.surname;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPositionAssignee {
+    id?: number;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    beginDateTime?: Date;
+}
+
+export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {
+    suggestions?: PeopleAssignSuggestion[] | undefined;
+
+    constructor(data?: IPeopleAssignSuggestions) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["suggestions"])) {
+                this.suggestions = [] as any;
+                for (let item of _data["suggestions"])
+                    this.suggestions!.push(PeopleAssignSuggestion.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PeopleAssignSuggestions {
+        data = typeof data === 'object' ? data : {};
+        let result = new PeopleAssignSuggestions();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.suggestions)) {
+            data["suggestions"] = [];
+            for (let item of this.suggestions)
+                data["suggestions"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPeopleAssignSuggestions {
+    suggestions?: PeopleAssignSuggestion[] | undefined;
+}
+
+export class PeopleAssignSuggestion implements IPeopleAssignSuggestion {
+    name?: string | undefined;
+    id?: number;
+
+    constructor(data?: IPeopleAssignSuggestion) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): PeopleAssignSuggestion {
+        data = typeof data === 'object' ? data : {};
+        let result = new PeopleAssignSuggestion();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IPeopleAssignSuggestion {
+    name?: string | undefined;
+    id?: number;
 }
 
 export class CreatePositionCommand implements ICreatePositionCommand {

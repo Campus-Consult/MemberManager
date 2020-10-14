@@ -1,0 +1,50 @@
+<div>
+    <mat-form-field><input matInput [(ngModel)]="searchTerm" (keyup)="updateFiltering()" placeholder="Suche"></mat-form-field>
+    <mat-radio-group [(ngModel)]="activeFilter" (change)="updateFiltering()" aria-label="Select an option">
+        <mat-radio-button value="all">Alle</mat-radio-button>
+        <mat-radio-button value="active">Aktiv</mat-radio-button>
+        <mat-radio-button value="deprecated">Veraltet</mat-radio-button>
+    </mat-radio-group>      
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Kurzbezeichnung
+            </th>
+            <th>
+                Veraltet
+            </th>
+            <th>
+                Aktuell Besetzt
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let position of filteredPositions">
+            <td>
+                {{position.name}}
+            </td>
+            <td>
+                {{position.shortName}}
+            </td>
+            <td>
+                {{position.isActive?"Aktiv":"Veraltet"}}
+            </td>
+            <td>
+                <div *ngFor="let persPos of position.currentHolders">
+                    <a title="Besetzt seit {{persPos.begin | date: 'dd.MM.yyyy'}}" routerLink="/Person/{{persPos.personID}}">{{persPos.firstName}} {{persPos.lastName}}</a><a><i (click)="dismiss(position, persPos)" class="fa fa-times dismiss-cross" aria-hidden="true"></i></a>
+                </div>
+            </td>
+            <td>
+                <a (click)="loadDetails(position.positionID)">Historie</a>
+                <a (click)="edit(position)">Edit</a>
+                <a (click)="assign(position)">Besetzen</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

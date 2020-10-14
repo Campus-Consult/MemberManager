@@ -1,0 +1,73 @@
+<form class="example-form" [formGroup]="personalForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Legacy form field</mat-label>
+    <input type="text" formControlName="firstName" matInput />
+    <mat-hint>Vorname</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Nachname</mat-label>
+    <input type="text" formControlName="lastName" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Geburtsdatum</mat-label>
+    <input type="date" formControlName="birthdate" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Geschlecht</mat-label>
+    <input type="text" formControlName="gender" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>E-Mail (Campus Consult</mat-label>
+    <input
+      type="email"
+      formControlName="emailAssociaton"
+      matInput
+      placeholder="@campus-consult.org"
+    />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>E-Mail (privat)</mat-label>
+    <input type="email" formControlName="emailPrivate" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-label>Telefonnummer (privat)</mat-label>
+  <mat-form-field appearance="outline">
+    <input
+      type="tel"
+      formControlName="mobilePrivate"
+      matInput
+      placeholder="+49"
+    />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Straße</mat-label>
+    <input type="text" formControlName="adressStreet" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Hausnummer</mat-label>
+    <input type="number" formControlName="adressNr" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Postleitzahl</mat-label>
+    <input type="number" maxlength="5" formControlName="adressZIP" matInput />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-label>Stadt</mat-label>
+  <mat-form-field appearance="outline">
+    <input
+      #postalCode
+      type="text"
+      formControlName="adressCity"
+      matInput
+      placeholder="Paderborn"
+    />
+    <mat-hint>{{ postalCode.value.length }} / 5</mat-hint>
+  </mat-form-field>
+</form>

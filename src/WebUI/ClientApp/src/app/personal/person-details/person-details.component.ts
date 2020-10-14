@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Person } from 'src/app/models/person.class';
 import { PersonListItem } from '../personal.component';
-import { PersonApiService } from '../../services/api/person-api.service';
+import { PeopleApiService } from '../../services/api/person-api.service';
 
 @Component({
   selector: 'app-person-details',
@@ -22,7 +22,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
   public displayedName: string;
 
-  constructor(private personApi: PersonApiService) {}
+  constructor(private personApi: PeopleApiService) {}
 
   ngOnInit(): void {
     this.displayedName = this.personTabledDTO

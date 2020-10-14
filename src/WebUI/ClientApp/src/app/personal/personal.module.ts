@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonalComponent } from './personal.component';
-import { PersonEditComponent } from './person-edit/person-edit.component';
 import { PersonDetailsComponent } from './person-details/person-details.component';
 import { PersonListComponent } from './person-list/person-list.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,17 +18,18 @@ import { PersonalDataComponent } from './person-details/personal-data/personal-d
 import { EditPetsonalDataComponent } from './person-details/edit-pesonal-data/edit-pesonal-data.component';
 import { HistoryExpansionComponent } from './person-details/history-panels/history-expansion/history-expansion.component';
 import { HistoryPanelsComponent } from './person-details/history-panels/history-panels.component';
+import { MemberFormComponent } from './person-details/member-form/member-form.component';
 
 @NgModule({
   declarations: [
     PersonalComponent,
-    PersonEditComponent,
     PersonDetailsComponent,
     PersonListComponent,
     PersonalDataComponent,
     EditPetsonalDataComponent,
     HistoryExpansionComponent,
-    HistoryPanelsComponent
+    HistoryPanelsComponent,
+    MemberFormComponent
   ],
   exports: [PersonalComponent],
   imports: [

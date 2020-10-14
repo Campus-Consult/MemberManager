@@ -31,9 +31,9 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
 
         public async Task<bool> PersonIsNotAssignedAlready(AssignPositionCommand model, int personId, CancellationToken cancellationToken)
         {
-            return await _context.PersonPositions
+            return !await _context.PersonPositions
                 .Where(pp => pp.PersonId == personId)
-                .FirstAsync(pp => pp.BeginDateTime <= model.AssignmentDateTime && (pp.EndDateTime == null || pp.EndDateTime >= model.AssignmentDateTime)) == null;
+                .AnyAsync(pp => pp.BeginDateTime <= model.AssignmentDateTime && (pp.EndDateTime == null || pp.EndDateTime >= model.AssignmentDateTime));
         }
     }
 }

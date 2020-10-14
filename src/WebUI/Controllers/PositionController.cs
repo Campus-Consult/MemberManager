@@ -1,7 +1,9 @@
 ﻿using MemberManager.Application.Positions.Commands.AssignPosition;
 using MemberManager.Application.Positions.Commands.CreatePosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
+using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
 using MemberManager.Application.Positions.Queries.GetPositions;
+using MemberManager.Application.Positions.Queries.GetPositionsWithAssignees;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -21,6 +23,16 @@ namespace MemberManager.WebUI.Controllers
         //    return await Mediator.Send(new GetPositionDetailQuery { Id = id });
         //}
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PositionsWAVm>> GetWithAssignees() {
+            return await Mediator.Send(new GetPositionsWithAssigneesQuery());
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PeopleAssignSuggestions>> AssignSuggestions(int positionID) {
+            return await Mediator.Send(new GetAssignSuggestionsQuery{PositionID = positionID});
+        }
+
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreatePositionCommand command)
         {
@@ -28,7 +40,7 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id/*, UpdatePositionCommand command*/)
+        public Task<ActionResult> Update(int id/*, UpdatePositionCommand command*/)
         {
             //if (id != command.Id)
             //{
@@ -37,7 +49,7 @@ namespace MemberManager.WebUI.Controllers
 
             //await Mediator.Send(command);
 
-            return NoContent();
+            return Task.FromResult<ActionResult>(NoContent());
         }
 
         [HttpPut("[action]")]

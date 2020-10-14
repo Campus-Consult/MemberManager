@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { Person } from 'src/app/models/person.class';
-import { MemberFormComponent } from '../member-form/member-form.component';
+import { MemberFormComponent } from '../person-details/member-form/member-form.component';
 
 @Component({
   selector: 'app-edit-pesonal-data',

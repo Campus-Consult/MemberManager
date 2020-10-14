@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { ComponentsModule } from '../components/components.module';
 import { PersonalDataComponent } from './person-details/personal-data/personal-data.component';
-import { EditPetsonalDataComponent } from './person-details/edit-pesonal-data/edit-pesonal-data.component';
+import { EditPetsonalDataComponent } from './edit-pesonal-data/edit-pesonal-data.component';
 import { HistoryExpansionComponent } from './person-details/history-panels/history-expansion/history-expansion.component';
 import { HistoryPanelsComponent } from './person-details/history-panels/history-panels.component';
 import { MemberFormComponent } from './person-details/member-form/member-form.component';

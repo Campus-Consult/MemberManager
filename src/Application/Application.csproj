@@ -22,7 +22,6 @@
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
     <Folder Include="MemberStatus\Commands\" />
-    <Folder Include="MemberStatus\Queries\GetMemberStatusDetail\" />
     <Folder Include="Positions\Commands\UpdatePosition\" />
     <Folder Include="Positions\Queries\GetPositionDetail\" />
     <Folder Include="Positions\Queries\GetPositionHistory\" />

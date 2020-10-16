@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MemberStatusClient, MemberStatusVm } from '../membermanager-api';
 
 @Component({
   selector: 'app-member-status',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MemberStatusComponent implements OnInit {
 
-  constructor() { }
+  memberStatusVm: MemberStatusVm;
+
+  constructor(private memberStatusClient: MemberStatusClient) {
+    memberStatusClient.get().subscribe(
+      result => {
+        this.memberStatusVm = result;
+      },
+      error => console.error(error)
+    );
+  }
 
   ngOnInit(): void {
   }
-
 }

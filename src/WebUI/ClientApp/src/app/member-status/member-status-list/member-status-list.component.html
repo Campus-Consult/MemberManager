@@ -1,0 +1,41 @@
+
+<p *ngIf="!dataSource"><em>Loading...</em></p>
+
+<div *ngIf="dataSource">
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="shortName">
+      <th mat-header-cell *matHeaderCellDef>Kurzform</th>
+      <td mat-cell *matCellDef="let element">{{ element.shortName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive" mat-sort-header>
+      <th mat-header-cell *matHeaderCellDef>aktiv</th>
+      <td mat-cell *matCellDef="let element">{{ element.isActive }}</td>
+    </ng-container>
+
+    <!--<ng-container matColumnDef="buttons">
+      <th mat-header-cell *matHeaderCellDef>
+        <button mat-button color="accent" (click)="refresh()">
+          <mat-icon outline>refresh</mat-icon>
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button color="primary" (click)="details(element.personID)">
+          <mat-icon outline>info</mat-icon>
+        </button>
+      </td>
+    </ng-container>-->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator [length]="25"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+</div>

@@ -220,6 +220,16 @@
           "Position"
         ],
         "operationId": "Position_GetWithAssignees",
+        "parameters": [
+          {
+            "name": "history",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -283,6 +293,18 @@
             "x-position": 1
           }
         ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
         "responses": {
           "200": {
             "description": "",
@@ -365,6 +387,50 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/AssignPositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/Dismiss": {
+      "post": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_Dismiss",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DismissPositionCommand"
               }
             }
           },
@@ -1062,6 +1128,11 @@
           "beginDateTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -1106,6 +1177,24 @@
           }
         }
       },
+      "UpdatePositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "DeactivatePositionCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1133,6 +1222,24 @@
             "format": "int32"
           },
           "assignmentDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DismissPositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dismissDateTime": {
             "type": "string",
             "format": "date-time"
           }

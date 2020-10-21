@@ -292,11 +292,12 @@ export class PeopleClient implements IPeopleClient {
 export interface IPositionClient {
     get(): Observable<PositionsVm>;
     create(command: CreatePositionCommand): Observable<number>;
-    getWithAssignees(): Observable<PositionsWAVm>;
+    getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm>;
     assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions>;
-    update(id: number): Observable<FileResponse>;
+    update(id: number, command: UpdatePositionCommand): Observable<FileResponse>;
     deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse>;
     assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse>;
+    dismiss(id: number | undefined, command: DismissPositionCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -412,8 +413,12 @@ export class PositionClient implements IPositionClient {
         return _observableOf<number>(<any>null);
     }
 
-    getWithAssignees(): Observable<PositionsWAVm> {
-        let url_ = this.baseUrl + "/api/Position/GetWithAssignees";
+    getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm> {
+        let url_ = this.baseUrl + "/api/Position/GetWithAssignees?";
+        if (history === null)
+            throw new Error("The parameter 'history' cannot be null.");
+        else if (history !== undefined)
+            url_ += "history=" + encodeURIComponent("" + history) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -512,17 +517,21 @@ export class PositionClient implements IPositionClient {
         return _observableOf<PeopleAssignSuggestions>(<any>null);
     }
 
-    update(id: number): Observable<FileResponse> {
+    update(id: number, command: UpdatePositionCommand): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Position/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(command);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",			
             headers: new HttpHeaders({
+                "Content-Type": "application/json", 
                 "Accept": "application/octet-stream"
             })
         };
@@ -650,6 +659,60 @@ export class PositionClient implements IPositionClient {
     }
 
     protected processAssign(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    dismiss(id: number | undefined, command: DismissPositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/Dismiss?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDismiss(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDismiss(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDismiss(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1773,6 +1836,7 @@ export class PositionAssignee implements IPositionAssignee {
     firstName?: string | undefined;
     surname?: string | undefined;
     beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 
     constructor(data?: IPositionAssignee) {
         if (data) {
@@ -1789,6 +1853,7 @@ export class PositionAssignee implements IPositionAssignee {
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
             this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
         }
     }
 
@@ -1805,6 +1870,7 @@ export class PositionAssignee implements IPositionAssignee {
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
         data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -1814,6 +1880,7 @@ export interface IPositionAssignee {
     firstName?: string | undefined;
     surname?: string | undefined;
     beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 }
 
 export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {
@@ -1940,6 +2007,50 @@ export interface ICreatePositionCommand {
     shortName?: string | undefined;
 }
 
+export class UpdatePositionCommand implements IUpdatePositionCommand {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+
+    constructor(data?: IUpdatePositionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePositionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePositionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        return data; 
+    }
+}
+
+export interface IUpdatePositionCommand {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+}
+
 export class DeactivatePositionCommand implements IDeactivatePositionCommand {
     id?: number;
     endDateTime?: Date;
@@ -2022,6 +2133,50 @@ export interface IAssignPositionCommand {
     id?: number;
     personId?: number;
     assignmentDateTime?: Date;
+}
+
+export class DismissPositionCommand implements IDismissPositionCommand {
+    id?: number;
+    personId?: number;
+    dismissDateTime?: Date;
+
+    constructor(data?: IDismissPositionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.personId = _data["personId"];
+            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DismissPositionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DismissPositionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["personId"] = this.personId;
+        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IDismissPositionCommand {
+    id?: number;
+    personId?: number;
+    dismissDateTime?: Date;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

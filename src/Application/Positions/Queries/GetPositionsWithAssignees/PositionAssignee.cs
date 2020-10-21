@@ -17,5 +17,6 @@ namespace MemberManager.Application.Positions.Queries.GetPositionsWithAssignees
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public DateTime BeginDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
     }
 }

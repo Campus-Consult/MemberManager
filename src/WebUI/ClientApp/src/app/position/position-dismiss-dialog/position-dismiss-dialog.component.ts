@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { PositionApiService, Position, PositionHolder } from '../../services/positionapi.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { PositionClient, PositionAssignee, PositionLookupDto, DismissPositionCommand } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-position-dismiss-dialog',
@@ -14,9 +14,9 @@ export class PositionDismissDialogComponent implements OnInit{
 
   constructor(
     private formBuilder: FormBuilder,
-    private positionApiService: PositionApiService,
+    private positionClient: PositionClient,
     public dialogRef: MatDialogRef<PositionDismissDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {position: Position, person: PositionHolder}) {
+    @Inject(MAT_DIALOG_DATA) public data: {position: PositionLookupDto, person: PositionAssignee}) {
       this.savingBeforeClose = false;
   }
 
@@ -48,8 +48,11 @@ export class PositionDismissDialogComponent implements OnInit{
     this.savingBeforeClose = true;
     this.dialogRef.disableClose = true;
 
-    const personsToDismiss: number[] = [this.data.person.personID];
-    this.positionApiService.dismiss(this.data.position.positionID, formatDate(this.date.value, "yyyy-MM-dd", "en-US"), personsToDismiss).subscribe(val => {
+    this.positionClient.dismiss(this.data.position.id, new DismissPositionCommand({
+      id: this.data.position.id,
+      personId: this.data.person.id,
+      dismissDateTime: this.date.value,
+    })).subscribe(val => {
       this.dialogRef.close();
     }, err => {
       // how do we want to handle errors? Notification top right?

@@ -1,6 +1,8 @@
 ﻿using MemberManager.Application.Positions.Commands.AssignPosition;
 using MemberManager.Application.Positions.Commands.CreatePosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
+using MemberManager.Application.Positions.Commands.DismissPosition;
+using MemberManager.Application.Positions.Commands.UpdatePosition;
 using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
 using MemberManager.Application.Positions.Queries.GetPositions;
 using MemberManager.Application.Positions.Queries.GetPositionsWithAssignees;
@@ -24,8 +26,10 @@ namespace MemberManager.WebUI.Controllers
         //}
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<PositionsWAVm>> GetWithAssignees() {
-            return await Mediator.Send(new GetPositionsWithAssigneesQuery());
+        public async Task<ActionResult<PositionsWAVm>> GetWithAssignees(bool history) {
+            return await Mediator.Send(new GetPositionsWithAssigneesQuery{
+                IncludeHistory = history,
+            });
         }
 
         [HttpGet("[action]")]
@@ -40,16 +44,16 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPut("{id}")]
-        public Task<ActionResult> Update(int id/*, UpdatePositionCommand command*/)
+        public async Task<ActionResult> Update(int id, UpdatePositionCommand command)
         {
-            //if (id != command.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (id != command.Id)
+            {
+               return BadRequest();
+            }
 
-            //await Mediator.Send(command);
+            await Mediator.Send(command);
 
-            return Task.FromResult<ActionResult>(NoContent());
+            return NoContent();
         }
 
         [HttpPut("[action]")]
@@ -75,6 +79,18 @@ namespace MemberManager.WebUI.Controllers
 
             await Mediator.Send(command);
 
+            return NoContent();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Dismiss(int id, DismissPositionCommand command) {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+            
             return NoContent();
         }
     }

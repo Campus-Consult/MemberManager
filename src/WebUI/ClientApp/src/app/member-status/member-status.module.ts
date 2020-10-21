@@ -10,6 +10,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ComponentsModule } from '../components/components.module';
 import { MemberStatusComponent } from './member-status.component';
 import { MemberStatusListComponent } from './member-status-list/member-status-list.component';
@@ -34,6 +37,9 @@ import { MemberStatusListComponent } from './member-status-list/member-status-li
     MatGridListModule,
     MatCardModule,
     MatExpansionModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule
   ]
 })

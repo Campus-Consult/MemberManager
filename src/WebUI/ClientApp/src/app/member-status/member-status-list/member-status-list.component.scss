@@ -1,0 +1,26 @@
+@import './src/styles.scss';
+
+$table-select-highlight: $cc-middle-blue;
+
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-column-select {
+  overflow: initial;
+}
+
+.mat-row {
+  min-height: 65px;
+
+  &.selected {
+    background: $table-select-highlight;
+    .mat-cell {
+      color: white;
+    }
+  }
+}

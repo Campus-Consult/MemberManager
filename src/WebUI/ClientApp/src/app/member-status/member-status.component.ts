@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MemberStatusClient, MemberStatusVm } from '../membermanager-api';
 
 @Component({
@@ -6,7 +6,9 @@ import { MemberStatusClient, MemberStatusVm } from '../membermanager-api';
   templateUrl: './member-status.component.html',
   styleUrls: ['./member-status.component.scss']
 })
-export class MemberStatusComponent implements OnInit {
+export class MemberStatusComponent {
+
+  debug = false;
 
   memberStatusVm: MemberStatusVm;
 
@@ -17,8 +19,5 @@ export class MemberStatusComponent implements OnInit {
       },
       error => console.error(error)
     );
-  }
-
-  ngOnInit(): void {
   }
 }

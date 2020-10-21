@@ -17,6 +17,6 @@
     </mat-card-content>
   </ng-template>
   <mat-card-actions>
-    <button id="editButton" mat-icon-button color="primary" (click)="onEdit()"><mat-icon>create</mat-icon></button>
+    <button *ngIf="personTabledDTO" id="editButton" mat-icon-button color="primary" (click)="onEdit()"><mat-icon>create</mat-icon></button>
   </mat-card-actions>
 </mat-card>

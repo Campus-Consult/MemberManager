@@ -8,24 +8,28 @@
     (createNewEvent)="createPerson()"
   ></app-person-list>
   <div class="right-section">
-    <ng-container *ngIf="isEditingMember; else details">
-      <app-edit-pesonal-data
-        #edit
-        [memberdata]="selectedPerson"
-        (completionEvent)="isEditingMember = false"
-      ></app-edit-pesonal-data>
-    </ng-container>
-    <ng-container *ngIf="isCreatingMember; else details">
-      <app-create-person
-        #create
-        (completionEvent)="isEditingMember = false"
-      ></app-create-person>
-    </ng-container>
-    <ng-template #details>
+    <ng-container
+      *ngIf="!isEditingMember || !isCreatingMember; else elseTemplate"
+    >
       <app-person-details
         [personTabledDTO]="selectedPerson"
         (editEvent)="editPerson($event)"
       ></app-person-details>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <ng-container *ngIf="isEditingMember">
+        <app-edit-pesonal-data
+          #edit
+          [memberdata]="selectedPerson"
+          (completionEvent)="isEditingMember = false"
+        ></app-edit-pesonal-data>
+      </ng-container>
+      <ng-container *ngIf="isCreatingMember">
+        <app-create-person
+          #create
+          (completionEvent)="isEditingMember = false"
+        ></app-create-person>
+      </ng-container>
     </ng-template>
   </div>
 </div>

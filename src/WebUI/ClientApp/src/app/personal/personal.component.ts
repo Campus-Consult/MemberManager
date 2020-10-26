@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { Person } from "../models/person.class";
 import { PeopleApiService } from "../services/api/person-api.service";
 import { CreatePersonComponent } from "./create-person/create-person.component";
@@ -24,25 +24,28 @@ export class PersonalComponent implements OnInit {
     this.doRefresh();
   }
 
-  onCreate(){
+  onCreate() {
     let dialogRef = this.dialog.open(CreatePersonComponent, {
-      height: '400px',
-      width: '600px',
+      height: "600px",
+      width: "600px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`); 
+    dialogRef.afterClosed().subscribe((result) => {
+      this.personApi.createPerson(result);
+      console.log(`Dialog result: ${result}`);
     });
   }
 
-  onEdit(person: Person){
+  onEdit(person: Person) {
+    const persId = this.selectedPerson.personID;
     let dialogRef = this.dialog.open(EditPersonalDataComponent, {
-      height: '400px',
-      width: '600px',
-      data: person
+      height: "600px",
+      width: "600px",
+      data: person,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
+      this.personApi.editPerson(persId, result);
       console.log(`Dialog result: ${result}`); // Pizza!
     });
   }
@@ -65,6 +68,17 @@ export class PersonalComponent implements OnInit {
     );*/
 
     this.personalTableData = this.personApi.getPersonaLookUpData();
+  }
+
+  getDialogSizeConfig(): MatDialogConfig {
+    let height: string;
+    let width: string;
+
+    if (window.screenY <= 600) {
+      //mobile fullscreen
+      //max-height:
+    }
+    return { maxHeight: height, maxWidth: width };
   }
 }
 

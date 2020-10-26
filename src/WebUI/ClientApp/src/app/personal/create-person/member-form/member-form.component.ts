@@ -9,12 +9,17 @@ import { Person } from 'src/app/models/person.class';
 })
 export class MemberFormComponent implements OnInit {
 
-  @Input() memberData: Person;
+  @Input() memberData?: Person;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.addPersonalDataToForm();
+    if (this.memberData) {
+      this.addPersonalDataToForm();
+    } else {
+      
+    }
+    
   }
 
   personalForm = new FormGroup({

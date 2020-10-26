@@ -66,8 +66,12 @@ export class PersonalComponent implements OnInit {
       },
       (err) => console.error(err)
     );*/
+    console.log('Refresh');
+    
 
-    this.personalTableData = this.personApi.getPersonaLookUpData();
+    this.personalTableData = this.personApi.getPersonaLookUpData(true);
+    console.log(this.personalTableData);
+    
   }
 
   getDialogSizeConfig(): MatDialogConfig {

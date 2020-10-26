@@ -12,61 +12,79 @@
     <mat-icon outline>add_box</mat-icon>
   </button>
 </div>
+<ng-container *ngIf="personalData; else loading">
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef>Vorname</th>
+      <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+    </ng-container>
 
-<table mat-table [dataSource]="dataSource">
-  <ng-container matColumnDef="firstName">
-    <th mat-header-cell *matHeaderCellDef>Vorname</th>
-    <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
-  </ng-container>
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef>Nachname</th>
+      <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="lastName">
-    <th mat-header-cell *matHeaderCellDef>Nachname</th>
-    <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
-  </ng-container>
+    <ng-container matColumnDef="personsMemberStatus" mat-sort-header>
+      <th mat-header-cell *matHeaderCellDef>Mitgliedsstatus</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.personsMemberStatus }}
+      </td>
+    </ng-container>
 
-  <ng-container matColumnDef="personsMemberStatus" mat-sort-header>
-    <th mat-header-cell *matHeaderCellDef>Mitgliedsstatus</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.personsMemberStatus }}
-    </td>
-  </ng-container>
+    <ng-container matColumnDef="personsCareerLevel" mat-sort-header>
+      <th mat-header-cell *matHeaderCellDef>Karriere Stufe</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.personsCareerLevel }}
+      </td>
+    </ng-container>
 
-  <ng-container matColumnDef="personsCareerLevel" mat-sort-header>
-    <th mat-header-cell *matHeaderCellDef>Karriere Stufe</th>
-    <td mat-cell *matCellDef="let element">{{ element.personsCareerLevel }}</td>
-  </ng-container>
+    <ng-container matColumnDef="personsPosition" mat-sort-header>
+      <th mat-header-cell *matHeaderCellDef>Position</th>
+      <td mat-cell *matCellDef="let element">{{ element.personsPosition }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="personsPosition" mat-sort-header>
-    <th mat-header-cell *matHeaderCellDef>Position</th>
-    <td mat-cell *matCellDef="let element">{{ element.personsPosition }}</td>
-  </ng-container>
+    <ng-container matColumnDef="buttons">
+      <th mat-header-cell *matHeaderCellDef>
+        <ng-container *ngIf="isRefreshing; else refreshButton">
+          <mat-spinner color="accent"></mat-spinner>
+        </ng-container>
+        <ng-template #refreshButton>
+          <button mat-button color="accent" (click)="onRefresh()">
+            <mat-icon outline>refresh</mat-icon>
+          </button>
+        </ng-template>
+        
 
-  <ng-container matColumnDef="buttons">
-    <th mat-header-cell *matHeaderCellDef>
-      <button mat-button color="accent" (click)="onRefresh()">
-        <mat-icon outline>refresh</mat-icon>
-      </button>
-    </th>
-    <td mat-cell *matCellDef="let element">
-      <button mat-button color="primary" (click)="onDetails(element.personID)">
-        <mat-icon outline>info</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-button
+          color="primary"
+          (click)="onDetails(element.personID)"
+        >
+          <mat-icon outline>info</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-  <!-- Row shown when there is no matching data. -->
-  <tr class="mat-row" *matNoDataRow>
-    <td class="mat-cell" colspan="4">
-      No data matching the filter "{{ input.value }}"
-    </td>
-  </tr>
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">
+        No data matching the filter "{{ input.value }}"
+      </td>
+    </tr>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
 
-<mat-paginator
-  [length]="25"
-  [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 25]"
-></mat-paginator>
+  <mat-paginator
+    [length]="25"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25]"
+  ></mat-paginator>
+</ng-container>
+<ng-template #loading>
+  <mat-progress-spinner class="example-margin" color="accent"></mat-progress-spinner>
+  <h2 class="example-h2">Mitglieder werden geladen</h2>
+</ng-template>

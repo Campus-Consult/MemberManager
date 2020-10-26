@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { PersonListItem } from '../personal.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './person-list.component.html',
   styleUrls: ['./person-list.component.scss'],
 })
-export class PersonListComponent implements OnInit {
+export class PersonListComponent implements OnInit, OnChanges {
   @Input()
   personalData: PersonListItem[];
 
@@ -27,17 +27,15 @@ export class PersonListComponent implements OnInit {
   @Output()
   createNewEvent = new EventEmitter();
 
-  //dataSource = new MatTableDataSource<PersonTableData>(this.personalData);
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   
   public selectedPerson: PersonListItem;
-
   
   public searchValue = '';
 
+  public isRefreshing = false;
 
   constructor() {}
 
@@ -54,6 +52,12 @@ export class PersonListComponent implements OnInit {
     }
 
     this.dataSource = new MatTableDataSource(this.personalData);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataSource = new MatTableDataSource(this.personalData);
+    // TODO: ste to false, when table really have chjanged his data!
+    this.isRefreshing = false;
   }
 
   ngAfterViewInit() {
@@ -78,6 +82,7 @@ export class PersonListComponent implements OnInit {
 
   onCreate(){
     this.createNewEvent.emit();
+    this.isRefreshing = true;
   }
 
 }

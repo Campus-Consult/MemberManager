@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Person } from "../models/person.class";
 import { PeopleApiService } from "../services/api/person-api.service";
+import { CreatePersonComponent } from "./create-person/create-person.component";
+import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
 
 @Component({
   selector: "app-personal",
@@ -11,51 +15,56 @@ export class PersonalComponent implements OnInit {
 
   public searchValue = "";
 
-  // View 
+  // View
   public selectedPerson: PersonListItem;
-  public isCreatingMember: boolean = false;
-  public isEditingMember: boolean = false;
 
-  constructor(private personApi: PeopleApiService) {}
+  constructor(private personApi: PeopleApiService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.doRefresh();
   }
 
-  createPerson() {
-    // TODO: API Anbindung
-    this.isCreatingMember = true;
-    this.isEditingMember = true;
-    // will be set back to false on completionEvent, see view html
+  onCreate(){
+    let dialogRef = this.dialog.open(CreatePersonComponent, {
+      height: '400px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`); 
+    });
   }
 
-  editPerson(persId: number) {
-    // TODO: API Anbindung
-    if (persId === this.selectedPerson.personID) {
-      this.isEditingMember = true;
-      // will be set back to false on completionEvent, see view html
-    } else{
-      // TODO: handeln?
-      console.warn('editPerson: PersonID is not the same in selectedPerson');
-    }
-    this.isCreatingMember = true;
+  onEdit(person: Person){
+    let dialogRef = this.dialog.open(EditPersonalDataComponent, {
+      height: '400px',
+      width: '600px',
+      data: person
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`); // Pizza!
+    });
   }
 
-
-  changeDisplayedPerson(persId: number) {
+  onChangeDisplayedPerson(persId: number) {
     this.selectedPerson = this.personalTableData.find(
       (val) => val.personID === persId
     );
   }
 
   doRefresh() {
-    this.personApi.getPersonaLookUpData().subscribe(
+    // TODO: Implement Refresh => ngchange in List!
+
+    /*     this.personApi.getPersonaLookUpData().subscribe(
       (val) => {
         // TODO: Loading; Transfer into personalList?
         this.personalTableData = val;
       },
       (err) => console.error(err)
-    );
+    );*/
+
+    this.personalTableData = this.personApi.getPersonaLookUpData();
   }
 }
 

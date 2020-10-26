@@ -1,23 +1,41 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IUpdatePersonCommand, UpdatePersonCommand } from 'src/app/membermanager-api';
 import { Person } from 'src/app/models/person.class';
 import { CreatePersonComponent } from '../create-person/create-person.component';
-import { MemberFormComponent } from '../create-person/member-form/member-form.component';
 
 @Component({
   selector: 'app-edit-pesonal-data',
   templateUrl: './edit-pesonal-data.component.html',
   styleUrls: ['./edit-pesonal-data.component.scss'],
 })
-export class EditPetsonalDataComponent extends CreatePersonComponent implements OnInit {
+export class EditPersonalDataComponent extends CreatePersonComponent implements OnInit, AfterViewInit {
 
-  @Input() memberdata: Person;
+  memberdata: Person;
 
-  constructor() {
-    super();
+  constructor(public dialogRef: MatDialogRef<CreatePersonComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+    super(dialogRef);
   }
 
   ngOnInit(): void {
-    super.ngOnInit()
+    this.memberdata = this.data;
   }
+
+  /**
+   * @override
+   * Called onSubmit
+   * Returns modal esult value
+   */
+  getResult(): any{
+    const input = this.memberForm.value;
+    const dto = {
+      id: this.memberdata.personID,
+      firstName: input.firstName,
+      surname: input.lastName,
+      birthdate: new Date(input.birthdate),
+      gender: ''
+    };
+    return input;
+  }
+
 }

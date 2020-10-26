@@ -1,36 +1,48 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Person } from 'src/app/models/person.class';
-import { EditPetsonalDataComponent } from '../edit-pesonal-data/edit-pesonal-data.component';
-import { MemberFormComponent } from './member-form/member-form.component';
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { MatDialogRef } from "@angular/material/dialog";
+import { MemberFormComponent } from "./member-form/member-form.component";
 
 @Component({
-  selector: 'app-create-person',
-  templateUrl: './create-person.component.html',
-  styleUrls: ['./create-person.component.scss']
+  selector: "app-create-person",
+  templateUrl: "./create-person.component.html",
+  styleUrls: ["./create-person.component.scss"],
 })
-export class CreatePersonComponent implements OnInit {
-
-  @Output() completionEvent = new EventEmitter();
-
-  @ViewChild('memberForm') memberFormComp: MemberFormComponent;
+export class CreatePersonComponent implements AfterViewInit {
+  @ViewChild(MemberFormComponent) memberFormComp: MemberFormComponent;
 
   memberForm: FormGroup;
 
-  constructor() {
-  }
+  constructor(public dialogRef: MatDialogRef<CreatePersonComponent>) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit() {
     this.memberForm = this.memberFormComp.personalForm;
   }
 
-  onSubmit() {
+  /**
+   * @override
+   * Called onSubmit
+   * Returns modal esult value
+   */
+  getResult(): any{
+    console.log('Create Result:');
     console.log(this.memberForm.value);
-    this.completionEvent.emit();
+    
+    return this.memberForm.value;
+  }
+
+  onSubmit() {
+    const isvalid = this.validateInput();
+    if (isvalid) {
+      this.dialogRef.close(this.getResult());
+    }
   }
 
   onCancel() {
-    this.completionEvent.emit();
+    this.dialogRef.close(undefined);
   }
 
+  validateInput(): boolean {
+    return this.memberForm.valid;
+  }
 }

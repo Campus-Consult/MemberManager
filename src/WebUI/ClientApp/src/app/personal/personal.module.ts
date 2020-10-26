@@ -21,7 +21,9 @@ import { HistoryPanelsComponent } from "./person-details/history-panels/history-
 import { MemberFormComponent } from "./create-person/member-form/member-form.component";
 import { CreatePersonComponent } from "./create-person/create-person.component";
 import { MatDialogModule } from "@angular/material/dialog";
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from "@angular/material/divider";
+import { MatTabsModule } from "@angular/material/tabs";
+import { HistoryTabComponent } from './person-details/history-tab/history-tab.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,7 @@ import {MatDividerModule} from '@angular/material/divider';
     HistoryPanelsComponent,
     MemberFormComponent,
     CreatePersonComponent,
+    HistoryTabComponent,
   ],
   exports: [PersonalComponent],
   imports: [
@@ -51,7 +54,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatExpansionModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTabsModule,
   ],
   entryComponents: [CreatePersonComponent, EditPersonalDataComponent],
 })

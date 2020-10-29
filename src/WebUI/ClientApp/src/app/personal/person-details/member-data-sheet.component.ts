@@ -50,14 +50,14 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   getPersondata(): Person {
-    return this.personApi.getPerson(this.personTabledDTO.personID);
+    return this.personApi.getPerson(Number(this.personTabledDTO.person.id));
   }
 
   getFullName(): string {
-    return this.personTabledDTO.firstName + ' ' + this.personTabledDTO.lastName;
+    return this.personTabledDTO.person.fistName + ' ' + this.personTabledDTO.person.surname;
   }
 
   onEdit() {
-    this.editEvent.emit(this.personTabledDTO.personID);
+    this.editEvent.emit(Number(this.personTabledDTO.person.id));
   }
 }

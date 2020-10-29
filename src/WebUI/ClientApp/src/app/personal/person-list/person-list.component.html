@@ -14,12 +14,12 @@
 </div>
 <ng-container *ngIf="personalData; else loading">
   <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="firstName">
+    <ng-container matColumnDef="fistName">
       <th mat-header-cell *matHeaderCellDef>Vorname</th>
       <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="lastName">
+    <ng-container matColumnDef="surname">
       <th mat-header-cell *matHeaderCellDef>Nachname</th>
       <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
     </ng-container>
@@ -27,20 +27,22 @@
     <ng-container matColumnDef="personsMemberStatus" mat-sort-header>
       <th mat-header-cell *matHeaderCellDef>Mitgliedsstatus</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.personsMemberStatus }}
+        <p *ngFor="let item of element.personsMemberStatus">{{ item.name }}</p>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="personsCareerLevel" mat-sort-header>
       <th mat-header-cell *matHeaderCellDef>Karriere Stufe</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.personsCareerLevel }}
+        <p *ngFor="let item of element.personsCareerLevel">{{ item.name }}</p>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="personsPosition" mat-sort-header>
       <th mat-header-cell *matHeaderCellDef>Position</th>
-      <td mat-cell *matCellDef="let element">{{ element.personsPosition }}</td>
+      <td mat-cell *matCellDef="let element">
+        <p *ngFor="let item of element.personsPosition">{{ item.name }}</p>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="buttons">
@@ -53,8 +55,6 @@
             <mat-icon outline>refresh</mat-icon>
           </button>
         </ng-template>
-        
-
       </th>
       <td mat-cell *matCellDef="let element">
         <button
@@ -85,6 +85,9 @@
   ></mat-paginator>
 </ng-container>
 <ng-template #loading>
-  <mat-progress-spinner class="example-margin" color="accent"></mat-progress-spinner>
+  <mat-progress-spinner
+    class="example-margin"
+    color="accent"
+  ></mat-progress-spinner>
   <h2 class="example-h2">Mitglieder werden geladen</h2>
 </ng-template>

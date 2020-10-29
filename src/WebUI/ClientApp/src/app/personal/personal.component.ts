@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { PersonLookupDto, PositionLookupDto } from "../membermanager-api";
 import { Person } from "../models/person.class";
 import { PeopleApiService } from "../services/api/person-api.service";
 import { CreatePersonComponent } from "./create-person/create-person.component";
@@ -37,7 +38,7 @@ export class PersonalComponent implements OnInit {
   }
 
   onEdit(person: Person) {
-    const persId = this.selectedPerson.personID;
+    const persId = Number(this.selectedPerson.person.id);
     let dialogRef = this.dialog.open(EditPersonalDataComponent, {
       height: "600px",
       width: "600px",
@@ -52,7 +53,7 @@ export class PersonalComponent implements OnInit {
 
   onChangeDisplayedPerson(persId: number) {
     this.selectedPerson = this.personalTableData.find(
-      (val) => val.personID === persId
+      (val) => val.person.id === persId.toString()
     );
   }
 
@@ -66,12 +67,11 @@ export class PersonalComponent implements OnInit {
       },
       (err) => console.error(err)
     );*/
-    console.log('Refresh');
-    
+    console.log("Refresh");
 
-    this.personalTableData = this.personApi.getPersonaLookUpData(true);
-    console.log(this.personalTableData);
-    
+    this.personApi
+      .getPersonaLookUpData(true)
+      .subscribe((val) => (this.personalTableData = val));
   }
 
   getDialogSizeConfig(): MatDialogConfig {
@@ -87,10 +87,8 @@ export class PersonalComponent implements OnInit {
 }
 
 export interface PersonListItem {
-  personID: number;
-  firstName: string;
-  lastName: string;
-  personsMemberStatus: string;
-  personsCareerLevel: string;
-  personsPosition: string;
+  person: PersonLookupDto;
+  personsMemberStatus: PositionLookupDto[];
+  personsCareerLevel: PositionLookupDto[];
+  personsPosition: PositionLookupDto[];
 }

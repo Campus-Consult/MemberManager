@@ -18,27 +18,29 @@ This has to be added to the secret settings:
 ```
 
 ## Deployment
+For all files related to the deployment, see the deployment directory
 
-appsettings.Production.json:
+To deploy the Project to the server, the following steps have to be taken:
 
-```json
-{
-  "UseInMemoryDatabase": false,
-  "ConnectionStrings": {
-    "DefaultConnection": "server=localhost;port=3306;database=membermanager;user=membermanager;password=insertpasswordhere"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Debug",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
-  },
-  "IdentityServer": {
-    "Key": {
-      "Type": "Development"
-    }
-  },
-  "Urls": "http://localhost:5002"
-}
-```
+1. Build the Project for publishing in Production mode:
+
+    cd src/WebUI
+    dotnet publish -c Production
+
+2. Upload the files to the server via ssh:
+
+    cd deployment
+    ./publish.sh
+
+3. After logging in via ssh on the server, copy the files to their real destination
+
+    cp -r /tmp/membermanager/publish /var/www/membermanager
+
+4. Restart the service
+
+    sudo service dotnet-membermanager restart
+
+## Adding a migration
+Execute this from the src directory, replace MigrationName with the actual name
+
+    dotnet ef migrations add MigrationName -s WebUI -p Infrastructure

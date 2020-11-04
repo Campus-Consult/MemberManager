@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MemberManager.Infrastructure.Persistence.Migrations
+namespace MemberManager.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +48,21 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CareerLevels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    ShortName = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CareerLevels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceCodes",
                 columns: table => new
                 {
@@ -61,6 +77,42 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeviceCodes", x => x.UserCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MemberStatus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberStatus", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "People",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(maxLength: 200, nullable: false),
+                    Surname = table.Column<string>(maxLength: 200, nullable: false),
+                    Birthdate = table.Column<DateTime>(nullable: false),
+                    Gender = table.Column<int>(nullable: false),
+                    EmailPrivate = table.Column<string>(nullable: true),
+                    EmailAssociaton = table.Column<string>(nullable: true),
+                    MobilePrivate = table.Column<string>(nullable: true),
+                    AdressStreet = table.Column<string>(nullable: true),
+                    AdressNo = table.Column<string>(nullable: true),
+                    AdressZIP = table.Column<string>(nullable: true),
+                    AdressCity = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_People", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,11 +133,26 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Positions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    ShortName = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Positions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TodoLists",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -103,7 +170,7 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -124,7 +191,7 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -205,11 +272,95 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PersonCareerLevels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PersonId = table.Column<int>(nullable: false),
+                    CareerLevelId = table.Column<int>(nullable: false),
+                    BeginDateTime = table.Column<DateTime>(nullable: false),
+                    EndDateTime = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonCareerLevels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonCareerLevels_CareerLevels_CareerLevelId",
+                        column: x => x.CareerLevelId,
+                        principalTable: "CareerLevels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonCareerLevels_People_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "People",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonMemberStatus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PersonId = table.Column<int>(nullable: false),
+                    MemberStatusId = table.Column<int>(nullable: false),
+                    BeginDateTime = table.Column<DateTime>(nullable: false),
+                    EndDateTime = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonMemberStatus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonMemberStatus_MemberStatus_MemberStatusId",
+                        column: x => x.MemberStatusId,
+                        principalTable: "MemberStatus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonMemberStatus_People_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "People",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonPositions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PersonId = table.Column<int>(nullable: false),
+                    PositionId = table.Column<int>(nullable: false),
+                    BeginDateTime = table.Column<DateTime>(nullable: false),
+                    EndDateTime = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonPositions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonPositions_People_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "People",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonPositions_Positions_PositionId",
+                        column: x => x.PositionId,
+                        principalTable: "Positions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TodoItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -241,8 +392,7 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -268,8 +418,7 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -291,6 +440,36 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 name: "IX_PersistedGrants_SubjectId_ClientId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonCareerLevels_CareerLevelId",
+                table: "PersonCareerLevels",
+                column: "CareerLevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonCareerLevels_PersonId",
+                table: "PersonCareerLevels",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonMemberStatus_MemberStatusId",
+                table: "PersonMemberStatus",
+                column: "MemberStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonMemberStatus_PersonId",
+                table: "PersonMemberStatus",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonPositions_PersonId",
+                table: "PersonPositions",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonPositions_PositionId",
+                table: "PersonPositions",
+                column: "PositionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TodoItems_ListId",
@@ -322,6 +501,15 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
+                name: "PersonCareerLevels");
+
+            migrationBuilder.DropTable(
+                name: "PersonMemberStatus");
+
+            migrationBuilder.DropTable(
+                name: "PersonPositions");
+
+            migrationBuilder.DropTable(
                 name: "TodoItems");
 
             migrationBuilder.DropTable(
@@ -329,6 +517,18 @@ namespace MemberManager.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CareerLevels");
+
+            migrationBuilder.DropTable(
+                name: "MemberStatus");
+
+            migrationBuilder.DropTable(
+                name: "People");
+
+            migrationBuilder.DropTable(
+                name: "Positions");
 
             migrationBuilder.DropTable(
                 name: "TodoLists");

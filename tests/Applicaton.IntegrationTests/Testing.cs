@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using Respawn;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,8 +20,7 @@ using System.Threading.Tasks;
 public class Testing
 {   
     private static IConfigurationRoot _configuration;
-    private static IServiceScopeFactory _scopeFactory;
-    private static Checkpoint _checkpoint;
+    public static IServiceScopeFactory _scopeFactory;
     private static string _currentUserId;
 
     [OneTimeSetUp]
@@ -58,10 +58,6 @@ public class Testing
 
         _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
         
-        _checkpoint = new Checkpoint
-        {
-            TablesToIgnore = new [] { "__EFMigrationsHistory" }
-        };
 
         EnsureDatabase();
     }
@@ -72,7 +68,7 @@ public class Testing
 
         var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-        context.Database.Migrate();
+        context.Database.EnsureCreated();
     }
 
     public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -95,18 +91,47 @@ public class Testing
 
         var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
+        var alreadyExistsUser = await userManager.FindByNameAsync(userName);
+
+        if (alreadyExistsUser != null) {
+            _currentUserId = alreadyExistsUser.Id;
+
+            return _currentUserId;
+        }
+
         var user = new ApplicationUser { UserName = userName, Email = userName };
 
         var result = await userManager.CreateAsync(user, password);
 
-        _currentUserId = user.Id;
+        if (result.Succeeded)
+        {
+            _currentUserId = user.Id;
 
-        return _currentUserId;
+            return _currentUserId;
+        }
+
+        var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
+
+        throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
     }
 
     public static async Task ResetState()
     {
-        await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
+        
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+        context.People.RemoveRange(context.People);
+        context.PersonCareerLevels.RemoveRange(context.PersonCareerLevels);
+        context.PersonMemberStatus.RemoveRange(context.PersonMemberStatus);
+        context.PersonPositions.RemoveRange(context.PersonPositions);
+        context.Positions.RemoveRange(context.Positions);
+        context.CareerLevels.RemoveRange(context.CareerLevels);
+        context.MemberStatus.RemoveRange(context.MemberStatus);
+        context.TodoItems.RemoveRange(context.TodoItems);
+        context.TodoLists.RemoveRange(context.TodoLists);
+        await context.SaveChangesAsync();
         _currentUserId = null;
     }
 

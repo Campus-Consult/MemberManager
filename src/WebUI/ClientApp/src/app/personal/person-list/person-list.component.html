@@ -47,8 +47,8 @@
 
     <ng-container matColumnDef="buttons">
       <th mat-header-cell *matHeaderCellDef>
-        <ng-container *ngIf="isRefreshing; else refreshButton">
-          <mat-spinner color="accent"></mat-spinner>
+        <ng-container *ngIf="true; else refreshButton">
+          <mat-spinner [diameter]="20" color="accent"></mat-spinner>
         </ng-container>
         <ng-template #refreshButton>
           <button mat-button color="accent" (click)="onRefresh()">
@@ -85,9 +85,6 @@
   ></mat-paginator>
 </ng-container>
 <ng-template #loading>
-  <mat-progress-spinner
-    class="example-margin"
-    color="accent"
-  ></mat-progress-spinner>
-  <h2 class="example-h2">Mitglieder werden geladen</h2>
+  <h2 >Mitglieder werden geladen</h2>
+  <mat-spinner color="primary"></mat-spinner>
 </ng-template>

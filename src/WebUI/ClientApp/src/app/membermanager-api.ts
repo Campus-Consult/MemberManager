@@ -292,9 +292,10 @@ export class PeopleClient implements IPeopleClient {
 export interface IPositionClient {
     get(): Observable<PositionsVm>;
     create(command: CreatePositionCommand): Observable<number>;
+    get2(id: number, history: boolean | undefined): Observable<PositionDto>;
+    update(id: number, command: UpdatePositionCommand): Observable<FileResponse>;
     getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm>;
     assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions>;
-    update(id: number, command: UpdatePositionCommand): Observable<FileResponse>;
     deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse>;
     assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse>;
     dismiss(id: number | undefined, command: DismissPositionCommand): Observable<FileResponse>;
@@ -413,6 +414,114 @@ export class PositionClient implements IPositionClient {
         return _observableOf<number>(<any>null);
     }
 
+    get2(id: number, history: boolean | undefined): Observable<PositionDto> {
+        let url_ = this.baseUrl + "/api/Position/{id}?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        if (history === null)
+            throw new Error("The parameter 'history' cannot be null.");
+        else if (history !== undefined)
+            url_ += "history=" + encodeURIComponent("" + history) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet2(<any>response_);
+                } catch (e) {
+                    return <Observable<PositionDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PositionDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet2(response: HttpResponseBase): Observable<PositionDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PositionDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PositionDto>(<any>null);
+    }
+
+    update(id: number, command: UpdatePositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
     getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm> {
         let url_ = this.baseUrl + "/api/Position/GetWithAssignees?";
         if (history === null)
@@ -515,59 +624,6 @@ export class PositionClient implements IPositionClient {
             }));
         }
         return _observableOf<PeopleAssignSuggestions>(<any>null);
-    }
-
-    update(id: number, command: UpdatePositionCommand): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(command);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/octet-stream"
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdate(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpdate(<any>response_);
-                } catch (e) {
-                    return <Observable<FileResponse>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<FileResponse>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<FileResponse>(<any>null);
     }
 
     deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse> {
@@ -1727,50 +1783,6 @@ export interface IPositionLookupDto {
     isActive?: boolean;
 }
 
-export class PositionsWAVm implements IPositionsWAVm {
-    positions?: PositionDto[] | undefined;
-
-    constructor(data?: IPositionsWAVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["positions"])) {
-                this.positions = [] as any;
-                for (let item of _data["positions"])
-                    this.positions!.push(PositionDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PositionsWAVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new PositionsWAVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.positions)) {
-            data["positions"] = [];
-            for (let item of this.positions)
-                data["positions"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPositionsWAVm {
-    positions?: PositionDto[] | undefined;
-}
-
 export class PositionDto implements IPositionDto {
     id?: number;
     name?: string | undefined;
@@ -1881,6 +1893,50 @@ export interface IPositionAssignee {
     surname?: string | undefined;
     beginDateTime?: Date;
     endDateTime?: Date | undefined;
+}
+
+export class PositionsWAVm implements IPositionsWAVm {
+    positions?: PositionDto[] | undefined;
+
+    constructor(data?: IPositionsWAVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["positions"])) {
+                this.positions = [] as any;
+                for (let item of _data["positions"])
+                    this.positions!.push(PositionDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PositionsWAVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PositionsWAVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.positions)) {
+            data["positions"] = [];
+            for (let item of this.positions)
+                data["positions"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPositionsWAVm {
+    positions?: PositionDto[] | undefined;
 }
 
 export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {

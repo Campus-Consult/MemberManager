@@ -4,6 +4,7 @@ using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Application.Positions.Commands.DismissPosition;
 using MemberManager.Application.Positions.Commands.UpdatePosition;
 using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
+using MemberManager.Application.Positions.Queries.GetPositionDetails;
 using MemberManager.Application.Positions.Queries.GetPositions;
 using MemberManager.Application.Positions.Queries.GetPositionsWithAssignees;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,11 @@ namespace MemberManager.WebUI.Controllers
             return await Mediator.Send(new GetPositionsQuery());
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<PositionDetailVm>> Get(int id)
-        //{
-        //    return await Mediator.Send(new GetPositionDetailQuery { Id = id });
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PositionDto>> Get(int id, bool history=true)
+        {
+           return await Mediator.Send(new GetPositionDetailsQuery { Id = id, IncludeHistory = history });
+        }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<PositionsWAVm>> GetWithAssignees(bool history) {

@@ -12,8 +12,6 @@ import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data
   styleUrls: ["./personal.component.scss"],
 })
 export class PersonalComponent implements OnInit {
-  public personalTableData: PersonListItem[];
-
   public searchValue = "";
 
   // View
@@ -21,9 +19,7 @@ export class PersonalComponent implements OnInit {
 
   constructor(private personApi: PeopleApiService, private dialog: MatDialog) {}
 
-  ngOnInit(): void {
-    this.doRefresh();
-  }
+  ngOnInit(): void {}
 
   onCreate() {
     let dialogRef = this.dialog.open(CreatePersonComponent, {
@@ -52,13 +48,6 @@ export class PersonalComponent implements OnInit {
 
   onChangeDisplayedPerson(persId: number) {
     this.selectedPersonId = persId;
-  }
-
-  doRefresh() {
-    // TODO: Implement Refresh => ngchange in List!
-    this.personApi
-      .getPersonaLookUpData(true)
-      .subscribe((val) => (this.personalTableData = val));
   }
 
   getDialogSizeConfig(): MatDialogConfig {

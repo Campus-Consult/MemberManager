@@ -2,9 +2,7 @@
 <div class="flex-container">
   <app-person-list
     class="table-part"
-    [personalData]="personalTableData"
     (detailEvent)="onChangeDisplayedPerson($event)"
-    (refreshEvent)="doRefresh()"
     (createNewEvent)="onCreate()"
   ></app-person-list>
   <div class="right-section">

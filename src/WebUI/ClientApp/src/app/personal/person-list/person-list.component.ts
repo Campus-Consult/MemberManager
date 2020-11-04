@@ -3,6 +3,7 @@ import { PersonListItem } from '../personal.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { PeopleApiService } from 'src/app/services/api/person-api.service';
 
 @Component({
   selector: 'app-person-list',
@@ -10,7 +11,6 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./person-list.component.scss'],
 })
 export class PersonListComponent implements OnInit, OnChanges {
-  @Input()
   personalData: PersonListItem[];
 
   dataSource: MatTableDataSource<PersonListItem>;
@@ -20,9 +20,6 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   @Output()
   detailEvent = new EventEmitter<number>();
-
-  @Output()
-  refreshEvent = new EventEmitter();
 
   @Output()
   createNewEvent = new EventEmitter();
@@ -37,7 +34,7 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   public isRefreshing = false;
 
-  constructor() {}
+  constructor(private personApi: PeopleApiService ) {}
 
   ngOnInit(): void {
     if (!this.displayedColumns) {
@@ -77,7 +74,9 @@ export class PersonListComponent implements OnInit, OnChanges {
   }
 
   onRefresh(){
-    this.refreshEvent.emit();
+    this.personApi
+    .getPersonaLookUpData(true)
+    .subscribe((val) => (this.personalData = val));
   }
 
   onCreate(){

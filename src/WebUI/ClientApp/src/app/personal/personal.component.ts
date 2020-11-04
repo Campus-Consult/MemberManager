@@ -17,7 +17,7 @@ export class PersonalComponent implements OnInit {
   public searchValue = "";
 
   // View
-  public selectedPerson: PersonListItem;
+  public selectedPersonId: number;
 
   constructor(private personApi: PeopleApiService, private dialog: MatDialog) {}
 
@@ -38,7 +38,6 @@ export class PersonalComponent implements OnInit {
   }
 
   onEdit(person: Person) {
-    const persId = Number(this.selectedPerson.person.id);
     let dialogRef = this.dialog.open(EditPersonalDataComponent, {
       height: "600px",
       width: "600px",
@@ -46,29 +45,17 @@ export class PersonalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.personApi.editPerson(persId, result);
+      this.personApi.editPerson(this.selectedPersonId, result);
       console.log(`Dialog result: ${result}`); // Pizza!
     });
   }
 
   onChangeDisplayedPerson(persId: number) {
-    this.selectedPerson = this.personalTableData.find(
-      (val) => val.person.id === persId.toString()
-    );
+    this.selectedPersonId = persId;
   }
 
   doRefresh() {
     // TODO: Implement Refresh => ngchange in List!
-
-    /*     this.personApi.getPersonaLookUpData().subscribe(
-      (val) => {
-        // TODO: Loading; Transfer into personalList?
-        this.personalTableData = val;
-      },
-      (err) => console.error(err)
-    );*/
-    console.log("Refresh");
-
     this.personApi
       .getPersonaLookUpData(true)
       .subscribe((val) => (this.personalTableData = val));

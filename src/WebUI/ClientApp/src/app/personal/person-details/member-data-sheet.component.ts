@@ -8,7 +8,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Person } from 'src/app/models/person.class';
-import { PersonListItem } from '../personal.component';
 import { PeopleApiService } from '../../services/api/person-api.service';
 
 @Component({
@@ -18,7 +17,7 @@ import { PeopleApiService } from '../../services/api/person-api.service';
 })
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
-  personTabledDTO: PersonListItem;
+  personId: number;
 
   @Output()
   editEvent = new EventEmitter<number>();
@@ -26,38 +25,43 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   personDetails: Person;
 
   public displayedName: string;
+  loadingString = 'loading...'
 
   constructor(private personApi: PeopleApiService) {}
 
   ngOnInit(): void {
-    this.displayedName = this.personTabledDTO
-      ? this.getFullName()
-      : 'No Person Selected';
-  }
+    this.displayedName = this.personId
+    ? this.loadingString
+    : 'No Person Selected';  }
 
   ngOnChanges(changes: SimpleChanges): void {
     for (const propName in changes) {
       const chng = changes[propName];
-      if (propName === 'personTabledDTO' && chng.currentValue) {
-        this.personTabledDTO = chng.currentValue as PersonListItem;
+      if (propName === 'personId') {
+        this.personId = chng.currentValue;
       }
     }
+
+    this.displayedName = this.loadingString;;
+    
     // Load person Details
-    if (this.personTabledDTO) {
-      this.displayedName = this.getFullName();
-      this.personDetails = this.getPersondata();
+    if (this.personId) {
+      this.loadPersondata();
     }
   }
 
-  getPersondata(): Person {
-    return this.personApi.getPerson(Number(this.personTabledDTO.person.id));
+  loadPersondata() {
+    this.personApi.getPerson(this.personId).subscribe((person)=>{
+      this.personDetails = person;   
+      this.displayedName = this.getFullName();
+    })
   }
 
   getFullName(): string {
-    return this.personTabledDTO.person.fistName + ' ' + this.personTabledDTO.person.surname;
+    return this.personDetails.firstName + ' ' + this.personDetails.lastName;
   }
 
   onEdit() {
-    this.editEvent.emit(Number(this.personTabledDTO.person.id));
+    this.editEvent.emit(this.personId);
   }
 }

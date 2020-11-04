@@ -4,11 +4,11 @@
       <span>Person Details</span>
     </mat-card-title>
     <mat-card-subtitle>
-      <span>{{ displayedName }}</span>
+      <span>{{ displayedName }} </span>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content
-    *ngIf="personTabledDTO; else elseTemplate"
+    *ngIf="personId; else elseTemplate"
     class="content-margin"
   >
     <mat-tab-group>
@@ -28,7 +28,7 @@
   <mat-card-actions>
     <!-- TODO: in den head transferieren -->
     <button
-      *ngIf="personTabledDTO"
+      *ngIf="personId"
       id="editButton"
       mat-icon-button
       color="primary"

@@ -14,14 +14,14 @@
 </div>
 <ng-container *ngIf="personalData; else loading">
   <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="fistName">
+    <ng-container matColumnDef="firstName">
       <th mat-header-cell *matHeaderCellDef>Vorname</th>
-      <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.person.fistName }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="surname">
+    <ng-container matColumnDef="lastName">
       <th mat-header-cell *matHeaderCellDef>Nachname</th>
-      <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.person.surname }}</td>
     </ng-container>
 
     <ng-container matColumnDef="personsMemberStatus" mat-sort-header>

@@ -37,6 +37,9 @@ export class PersonListComponent implements OnInit, OnChanges {
   constructor(private personApi: PeopleApiService ) {}
 
   ngOnInit(): void {
+    // Loading Member
+    this.onRefresh();
+
     if (!this.displayedColumns) {
       this.displayedColumns = [
         'firstName',
@@ -53,8 +56,6 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.personalData);
-    // TODO: ste to false, when table really have chjanged his data!
-    this.isRefreshing = false;
   }
 
   ngAfterViewInit() {
@@ -70,18 +71,24 @@ export class PersonListComponent implements OnInit, OnChanges {
   /** =============Person Action Methods ============== */
 
   onDetails(persID: number) {
+    console.log(persID);
+    
     this.detailEvent.emit(persID);
   }
 
   onRefresh(){
+    this.isRefreshing = true;
     this.personApi
     .getPersonaLookUpData(true)
-    .subscribe((val) => (this.personalData = val));
+    .subscribe((val) => {
+      this.personalData = val;
+      this.dataSource = new MatTableDataSource(this.personalData);
+      this.isRefreshing = false;
+    });
   }
 
   onCreate(){
     this.createNewEvent.emit();
-    this.isRefreshing = true;
   }
 
 }

@@ -1,6 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { IPersonDetailVm, IPersonLookupDto, PositionLookupDto } from "../membermanager-api";
+import {
+  CreatePersonCommand,
+  ICreatePersonCommand,
+  IPersonDetailVm,
+  IPersonLookupDto,
+  IUpdatePersonCommand,
+  PeopleClient,
+  PositionLookupDto,
+  UpdatePersonCommand,
+} from "../membermanager-api";
 import { PeopleApiService } from "../services/api/person-api.service";
 import { CreatePersonComponent } from "./create-person/create-person.component";
 import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
@@ -16,7 +25,7 @@ export class PersonalComponent implements OnInit {
   // View
   public selectedPerson: IPersonLookupDto;
 
-  constructor(private personApi: PeopleApiService, private dialog: MatDialog) {}
+  constructor(private personApi: PeopleClient, private dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
@@ -27,8 +36,8 @@ export class PersonalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.personApi.createPerson(result);
       console.log(`Dialog result: ${result}`);
+      this.requestCReatePerson(result);
     });
   }
 
@@ -40,8 +49,8 @@ export class PersonalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.personApi.editPerson(Number(this.selectedPerson.id), result);
       console.log(`Dialog result: ${result}`); // Pizza!
+      this.requestEDitPerson(person.id, result);
     });
   }
 
@@ -58,6 +67,67 @@ export class PersonalComponent implements OnInit {
       //max-height:
     }
     return { maxHeight: height, maxWidth: width };
+  }
+
+  // =================== API ===============
+  // Are handled central in this. component
+
+  private requestCReatePerson(formResult: any) {
+    const command = this.convertCreateFormIntoCommand(formResult);
+    this.personApi.create(command).subscribe(
+      (val) => {},
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
+    const iCommand: ICreatePersonCommand = {
+      // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
+      firstName: formResult.firstName,
+      surname: formResult.lastName,
+      birthdate: formResult.birthdate,
+      gender: formResult.gender,
+      emailPrivate: formResult.emailPrivate,
+      emailAssociaton: formResult.emailAssociaton,
+      mobilePrivate: formResult.mobilePrivate,
+      adressStreet: formResult.adressStreet,
+      adressNo: formResult.adressNr,
+      adressZIP: formResult.adressZIP,
+      adressCity: formResult.adressCity,
+    };
+    console.warn("convertFormIntoCommand not implemented");
+    return new CreatePersonCommand(iCommand);
+  }
+
+  private requestEDitPerson(personId: number, formresult: any) {
+    const command = this.convertEditFormIntoCommand(formresult);
+    this.personApi.update(personId,command).subscribe(
+      (val) => {},
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  private convertEditFormIntoCommand(formResult: any): UpdatePersonCommand {
+    const iCommand: IUpdatePersonCommand = {
+      // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
+      firstName: formResult.firstName,
+      surname: formResult.lastName,
+      birthdate: formResult.birthdate,
+      gender: formResult.gender,
+      emailPrivate: formResult.emailPrivate,
+      emailAssociaton: formResult.emailAssociaton,
+      mobilePrivate: formResult.mobilePrivate,
+      adressStreet: formResult.adressStreet,
+      adressNo: formResult.adressNr,
+      adressZIP: formResult.adressZIP,
+      adressCity: formResult.adressCity,
+    };
+    console.warn("convertFormIntoCommand not implemented");
+    return new UpdatePersonCommand(iCommand);
   }
 }
 

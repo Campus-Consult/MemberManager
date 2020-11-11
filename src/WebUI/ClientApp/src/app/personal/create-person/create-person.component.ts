@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
+import { CreatePersonCommand, ICreatePersonCommand, PeopleClient } from "src/app/membermanager-api";
 import { MemberFormComponent } from "./member-form/member-form.component";
 
 /**
@@ -23,23 +24,26 @@ export class CreatePersonComponent implements AfterViewInit {
   }
 
   /**
-   * @override
-   * Called onSubmit
-   * Returns modal result value
+   * Results Module returns on close
    */
-  getResult(): any{
-    console.log('Create Result:');
+  getResult(): any {
+    console.log("Create Result:");
     console.log(this.memberForm.value);
-    
+
     return this.memberForm.value;
   }
 
   onSubmit() {
     const isvalid = this.validateInput();
+    this.handleValidation(isvalid);
     if (isvalid) {
       // Modal Output User Input in Modal
       this.dialogRef.close(this.getResult());
     }
+  }
+
+  handleValidation(isvalid: boolean) {
+    console.warn('handleValidation not implemented');
   }
 
   onCancel() {

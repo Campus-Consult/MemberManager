@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IUpdatePersonCommand, PersonDetailVm, UpdatePersonCommand } from 'src/app/membermanager-api';
-import { Person } from 'src/app/models/person.class';
+import { PeopleClient, PersonDetailVm } from 'src/app/membermanager-api';
 import { CreatePersonComponent } from '../create-person/create-person.component';
 
 /**

@@ -15,7 +15,7 @@ export class PersonalComponent implements OnInit {
   public searchValue = "";
 
   // View
-  public selectedPersonId: number;
+  public selectedPerson: PersonLookupDto;
 
   constructor(private personApi: PeopleApiService, private dialog: MatDialog) {}
 
@@ -41,13 +41,13 @@ export class PersonalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.personApi.editPerson(this.selectedPersonId, result);
+      this.personApi.editPerson(Number(this.selectedPerson.id), result);
       console.log(`Dialog result: ${result}`); // Pizza!
     });
   }
 
-  onChangeDisplayedPerson(persId: number) {
-    this.selectedPersonId = persId;
+  onChangeDisplayedPerson(selectedPerson: PersonLookupDto) {
+    this.selectedPerson = selectedPerson;
   }
 
   getDialogSizeConfig(): MatDialogConfig {

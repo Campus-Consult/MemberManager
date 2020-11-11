@@ -7,6 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { PersonLookupDto } from 'src/app/membermanager-api';
 import { Person } from 'src/app/models/person.class';
 import { PeopleApiService } from '../../services/api/person-api.service';
 
@@ -17,51 +18,57 @@ import { PeopleApiService } from '../../services/api/person-api.service';
 })
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
-  personId: number;
+  person: PersonLookupDto;
 
   @Output()
   editEvent = new EventEmitter<number>();
 
-  personDetails: Person;
+  private personDetails: Person;
 
   public displayedName: string;
-  loadingString = 'loading...'
+  private loadingPerson = false;
 
   constructor(private personApi: PeopleApiService) {}
 
   ngOnInit(): void {
-    this.displayedName = this.personId
-    ? this.loadingString
-    : 'No Person Selected';  }
+    this.displayedName = 'No Person Selected';  }
 
   ngOnChanges(changes: SimpleChanges): void {
     for (const propName in changes) {
       const chng = changes[propName];
       if (propName === 'personId') {
-        this.personId = chng.currentValue;
+        this.person = chng.currentValue;
       }
     }
-
-    this.displayedName = this.loadingString;;
-    
+  
     // Load person Details
-    if (this.personId) {
+    if (this.person) {
       this.loadPersondata();
+      this.displayedName = this.getFullName();
     }
   }
 
   loadPersondata() {
-    this.personApi.getPerson(this.personId).subscribe((person)=>{
+    this.loadingPerson = true;
+    this.personApi.getPerson(Number(this.person.id)).subscribe((person)=>{
       this.personDetails = person;   
-      this.displayedName = this.getFullName();
+      console.log(this.personDetails);
+      this.loadingPerson = false;
     })
   }
 
   getFullName(): string {
-    return this.personDetails.firstName + ' ' + this.personDetails.lastName;
+    let fullname = ''
+    if (this.person.fistName) {
+      fullname = fullname + this.person.fistName;
+    }
+    if (this.person.fistName) {
+      fullname = fullname + ' ' + this.person.surname
+    }
+    return fullname;
   }
 
   onEdit() {
-    this.editEvent.emit(this.personId);
+    this.editEvent.emit(Number(this.person.id));
   }
 }

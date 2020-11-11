@@ -8,7 +8,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content
-    *ngIf="personId; else elseTemplate"
+    *ngIf="person; else elseTemplate"
     class="content-margin"
   >
     <mat-tab-group>
@@ -28,7 +28,7 @@
   <mat-card-actions>
     <!-- TODO: in den head transferieren -->
     <button
-      *ngIf="personId"
+      *ngIf="person"
       id="editButton"
       mat-icon-button
       color="primary"

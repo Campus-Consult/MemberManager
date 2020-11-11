@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { PeopleApiService } from 'src/app/services/api/person-api.service';
+import { PersonLookupDto } from 'src/app/membermanager-api';
+import { find } from 'rxjs/operators';
 
 @Component({
   selector: 'app-person-list',
@@ -19,7 +21,7 @@ export class PersonListComponent implements OnInit, OnChanges {
   displayedColumns?: string[];
 
   @Output()
-  detailEvent = new EventEmitter<number>();
+  detailEvent = new EventEmitter<PersonLookupDto>();
 
   @Output()
   createNewEvent = new EventEmitter();
@@ -28,7 +30,7 @@ export class PersonListComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   
-  public selectedPerson: PersonListItem;
+  public selectedPerson: PersonLookupDto;
   
   public searchValue = '';
 
@@ -70,10 +72,11 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   /** =============Person Action Methods ============== */
 
-  onDetails(persID: number) {
-    console.log(persID);
+  onDetails(person: PersonLookupDto) {
+    console.log(person);
+    this.selectedPerson = person;
     
-    this.detailEvent.emit(persID);
+    this.detailEvent.emit(this.selectedPerson);
   }
 
   onRefresh(){

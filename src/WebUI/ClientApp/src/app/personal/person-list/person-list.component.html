@@ -47,7 +47,7 @@
 
     <ng-container matColumnDef="buttons">
       <th mat-header-cell *matHeaderCellDef>
-        <ng-container *ngIf="loading; else refreshButton">
+        <ng-container *ngIf="isRefreshing; else refreshButton">
           <mat-spinner id="refresh-spinner" [diameter]="20" color="accent"></mat-spinner>
         </ng-container>
         <ng-template #refreshButton>

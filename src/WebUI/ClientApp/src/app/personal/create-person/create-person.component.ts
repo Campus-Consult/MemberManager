@@ -3,6 +3,9 @@ import { FormGroup } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MemberFormComponent } from "./member-form/member-form.component";
 
+/**
+ * Create People Modal
+ */
 @Component({
   selector: "app-create-person",
   templateUrl: "./create-person.component.html",
@@ -22,7 +25,7 @@ export class CreatePersonComponent implements AfterViewInit {
   /**
    * @override
    * Called onSubmit
-   * Returns modal esult value
+   * Returns modal result value
    */
   getResult(): any{
     console.log('Create Result:');
@@ -34,6 +37,7 @@ export class CreatePersonComponent implements AfterViewInit {
   onSubmit() {
     const isvalid = this.validateInput();
     if (isvalid) {
+      // Modal Output User Input in Modal
       this.dialogRef.close(this.getResult());
     }
   }

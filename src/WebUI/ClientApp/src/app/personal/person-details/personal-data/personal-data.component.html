@@ -13,7 +13,7 @@
       <td class="font-weight-bold" width="200">Nachname</td>
       <td colspan="2">
         <app-skeleton-loader
-          [value]="personDetails.lastName"
+          [value]="personDetails.surname"
           type="line"
         ></app-skeleton-loader>
       </td>
@@ -31,7 +31,7 @@
       <td class="font-weight-bold" width="200">Geschlecht</td>
       <td colspan="2">
         <app-skeleton-loader
-          [value]="personDetails.gender"
+          [value]="getGenderString(personDetails.gender)"
           type="line"
         ></app-skeleton-loader>
       </td>

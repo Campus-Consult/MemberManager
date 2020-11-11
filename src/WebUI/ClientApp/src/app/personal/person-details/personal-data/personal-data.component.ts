@@ -1,11 +1,10 @@
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Input,
+  ChangeDetectionStrategy, Component,
+
+
+  Input, OnChanges, OnInit, SimpleChanges
 } from '@angular/core';
-import { Person } from 'src/app/models/person.class';
+import { Gender, IPersonDetailVm } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-personal-data',
@@ -13,9 +12,9 @@ import { Person } from 'src/app/models/person.class';
   styleUrls: ['./personal-data.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PersonalDataComponent implements OnInit {
+export class PersonalDataComponent implements OnInit, OnChanges {
   @Input()
-  personDetails: Person;
+  personDetails: IPersonDetailVm;
 
   strasseHausNr: string;
 
@@ -25,34 +24,32 @@ export class PersonalDataComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.personDetails) {
-      console.log('Werde ausgeführt');
-      
       this.personDetails = this.getEmptypersonDetails();
     }
-    console.log(this.personDetails);
-    
     this.strasseHausNr = this.getStrasseHausnr();
     this.stadtPLZ = this.getPLZStadt();
   }
 
-  getEmptypersonDetails(): Person {
+  ngOnChanges(changes: SimpleChanges): void {
+    this.strasseHausNr = this.getStrasseHausnr();
+    this.stadtPLZ = this.getPLZStadt();
+  }
+
+  getEmptypersonDetails(): IPersonDetailVm {
     return {
       firstName: undefined,
-      lastName: undefined,
-      personID: undefined,
-      personsCareerLevels: [],
-      personsMemberStatus: [],
-      personsPositions: [],
+      surname: undefined,
+      id: undefined,
     };
   }
 
   private getStrasseHausnr():string {
     let value: string;
-    if(this.personDetails.adressStreet && this.personDetails.adressNr)
-      value = this.personDetails.adressStreet + ', ' + this.personDetails.adressNr;
+    if(this.personDetails.adressStreet && this.personDetails.adressNo)
+      value = this.personDetails.adressStreet + ', ' + this.personDetails.adressNo;
     else if(this.personDetails.adressStreet)
-      value = this.personDetails.adressNr + ' -';
-    else if(this.personDetails.adressNr)
+      value = this.personDetails.adressNo + ' -';
+    else if(this.personDetails.adressNo)
       value = '- , ' + this.personDetails.adressStreet;
     return value;
   }
@@ -66,5 +63,24 @@ export class PersonalDataComponent implements OnInit {
     else if(this.personDetails.adressCity)
       value = '- , ' + this.personDetails.adressCity;
     return value;
+  }
+
+  getGenderString(gender: Gender): string{
+    let string = 'Did you just assume my gender?!';
+    switch (gender) {
+      case Gender.MALE:
+        string = 'Männlich';
+        break;
+      case Gender.FEMALE:
+        string = "Weiblich";
+        break;
+      case Gender.DIVERS:
+        string = 'Apache Kampfhelikopter';
+        break;
+      default:
+        string = 'No Gender'
+        break;
+    }
+    return string
   }
 }

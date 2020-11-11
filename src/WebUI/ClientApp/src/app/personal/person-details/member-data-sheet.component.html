@@ -16,7 +16,7 @@
         <app-personal-data [personDetails]="personDetails"></app-personal-data>
       </mat-tab>
       <mat-tab label="Historie">
-        <app-history-panels [personDetails]="personDetails"></app-history-panels>
+        <app-history-panels [person]="person"></app-history-panels>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
@@ -32,6 +32,7 @@
       id="editButton"
       mat-icon-button
       color="primary"
+      [disabled]="!personDetails"
       (click)="onEdit()"
     >
       <mat-icon>create</mat-icon>

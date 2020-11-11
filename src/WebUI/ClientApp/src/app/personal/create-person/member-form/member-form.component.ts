@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { PersonDetailVm } from 'src/app/membermanager-api';
 import { Person } from 'src/app/models/person.class';
 
 @Component({
@@ -9,7 +10,7 @@ import { Person } from 'src/app/models/person.class';
 })
 export class MemberFormComponent implements OnInit {
 
-  @Input() memberData?: Person;
+  @Input() memberData?: PersonDetailVm;
 
   constructor() { }
 
@@ -44,7 +45,7 @@ export class MemberFormComponent implements OnInit {
       console.error(error);
       this.personalForm.setValue({
         firstName: this.memberData.firstName,
-        lastName: this.memberData.lastName,
+        lastName: this.memberData.surname,
         birthdate: this.memberData.birthdate
           ? this.memberData.birthdate
           : '',
@@ -59,8 +60,8 @@ export class MemberFormComponent implements OnInit {
         adressStreet: this.memberData.adressStreet
           ? this.memberData.adressStreet
           : '',
-        adressNr: this.memberData.adressNr
-          ? this.memberData.adressNr
+        adressNr: this.memberData.adressNo
+          ? this.memberData.adressNo
           : '',
         adressZIP: this.memberData.adressZIP
           ? this.memberData.adressZIP

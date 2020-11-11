@@ -1,5 +1,6 @@
 import { newArray } from '@angular/compiler/src/util';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { IPersonLookupDto } from 'src/app/membermanager-api';
 import {
   CareerLevel,
   MemberStatus,
@@ -14,7 +15,7 @@ import { HistoryData } from './history-expansion/history-expansion.component';
   styleUrls: ['./history-panels.component.scss'],
 })
 export class HistoryPanelsComponent implements OnInit, OnChanges {
-  @Input() personDetails: Person;
+  @Input() person: IPersonLookupDto;
 
   // Expansionpanels Desc
   public currentMemberState: MemberStatus;
@@ -28,7 +29,7 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnChanges(chng) {
-    if ('personDetails' in chng && this.personDetails) {
+    if ('personDetails' in chng && this.person) {
        this.currentMemberState = this.getCurrentMemberStatus();
        this.currentCareerLevel = this.getCurrentCareerLevel();
        this.currentPositions = this.getCurrentPositions();
@@ -48,38 +49,38 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   }
 
   getCareerLevelHistory(): HistoryData[] {
-    const personId = this.personDetails;
+    const personId = this.person.id;
     console.warn('getCareerLevelHistory not implemented');
     
     return [];
   }
 
   getPositionHistory(): HistoryData[] {
-    const personId = this.personDetails;
+    const personId = this.person.id;
     console.warn('getPositionHistory not implemented');
     return [];
   }
 
   getMemberStatusHistory(): HistoryData[] {
-    const personId = this.personDetails;
+    const personId = this.person.id;
     console.warn('getMemberStatusHistory not implemented');
     return [];
   }
 
   getCurrentCareerLevel(): CareerLevel {
-    const personId = this.personDetails;
+    const personId = this.person;
     console.warn('getCurrentCareerLevel not implemented');
     return undefined;
   }
 
   getCurrentPositions(): Position[] {
-    const personId = this.personDetails;
+    const personId = this.person;
     console.warn('getCurrentPositions not implemented');
     return [];
   }
 
   getCurrentMemberStatus(): MemberStatus {
-    const personId = this.personDetails;
+    const personId = this.person;
     console.warn('getCurrentMemberStatus not implemented');
     return undefined;
   }

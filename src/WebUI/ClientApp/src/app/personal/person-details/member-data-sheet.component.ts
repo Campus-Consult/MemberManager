@@ -5,11 +5,9 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
-import { PersonLookupDto } from 'src/app/membermanager-api';
-import { Person } from 'src/app/models/person.class';
-import { PeopleApiService } from '../../services/api/person-api.service';
+import { IPersonDetailVm, IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-person-details',
@@ -18,17 +16,17 @@ import { PeopleApiService } from '../../services/api/person-api.service';
 })
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
-  person: PersonLookupDto;
+  person: IPersonLookupDto;
 
   @Output()
-  editEvent = new EventEmitter<number>();
+  editEvent = new EventEmitter<IPersonDetailVm>();
 
-  private personDetails: Person;
+  public personDetails: IPersonDetailVm;
 
   public displayedName: string;
   private loadingPerson = false;
 
-  constructor(private personApi: PeopleApiService) {}
+  constructor(private personApi: PeopleClient) {}
 
   ngOnInit(): void {
     this.displayedName = 'No Person Selected';  }
@@ -50,7 +48,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   loadPersondata() {
     this.loadingPerson = true;
-    this.personApi.getPerson(Number(this.person.id)).subscribe((person)=>{
+    this.personApi.get2(Number(this.person.id)).subscribe((person)=>{
       this.personDetails = person;   
       console.log(this.personDetails);
       this.loadingPerson = false;
@@ -69,6 +67,6 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   onEdit() {
-    this.editEvent.emit(Number(this.person.id));
+    this.editEvent.emit(this.personDetails);
   }
 }

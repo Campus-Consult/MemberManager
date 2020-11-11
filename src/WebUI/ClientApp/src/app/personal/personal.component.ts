@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { PersonLookupDto, PositionLookupDto } from "../membermanager-api";
-import { Person } from "../models/person.class";
+import { IPersonDetailVm, IPersonLookupDto, PositionLookupDto } from "../membermanager-api";
 import { PeopleApiService } from "../services/api/person-api.service";
 import { CreatePersonComponent } from "./create-person/create-person.component";
 import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
@@ -15,7 +14,7 @@ export class PersonalComponent implements OnInit {
   public searchValue = "";
 
   // View
-  public selectedPerson: PersonLookupDto;
+  public selectedPerson: IPersonLookupDto;
 
   constructor(private personApi: PeopleApiService, private dialog: MatDialog) {}
 
@@ -33,7 +32,7 @@ export class PersonalComponent implements OnInit {
     });
   }
 
-  onEdit(person: Person) {
+  onEdit(person: IPersonDetailVm) {
     let dialogRef = this.dialog.open(EditPersonalDataComponent, {
       height: "600px",
       width: "600px",
@@ -46,7 +45,7 @@ export class PersonalComponent implements OnInit {
     });
   }
 
-  onChangeDisplayedPerson(selectedPerson: PersonLookupDto) {
+  onChangeDisplayedPerson(selectedPerson: IPersonLookupDto) {
     this.selectedPerson = selectedPerson;
   }
 
@@ -63,7 +62,7 @@ export class PersonalComponent implements OnInit {
 }
 
 export interface PersonListItem {
-  person: PersonLookupDto;
+  person: IPersonLookupDto;
   personsMemberStatus: PositionLookupDto[];
   personsCareerLevel: PositionLookupDto[];
   personsPosition: PositionLookupDto[];

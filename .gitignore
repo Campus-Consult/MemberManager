@@ -234,3 +234,5 @@ _Pvt_Extensions
 .ionide/
 
 .angulardoc.json
+
+appsettings.Production.json

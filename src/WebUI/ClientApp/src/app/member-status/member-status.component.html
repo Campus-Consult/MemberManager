@@ -1,2 +1,8 @@
-<p>member-status works!</p>
-<app-member-status-list class="table-part" [memberStatusLookupDtos]="memberStatusVm?.memberStatus"></app-member-status-list>
+<div class="d-flex flex-row align-items-stretch">
+  <div class="mat-elevation-z8 m-2 p-2 flex-grow-1">
+    <app-member-status-list class="table-part" [memberStatusLookupDtos]="memberStatusVm?.memberStatus"></app-member-status-list>
+  </div>
+  <div class="mat-elevation-z8 m-2 p-2">
+    <app-member-status-details [memberStatusID]="1"></app-member-status-details>
+  </div>
+</div>

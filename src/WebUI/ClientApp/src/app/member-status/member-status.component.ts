@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MemberStatusClient, MemberStatusVm } from '../membermanager-api';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-member-status',
@@ -8,12 +9,16 @@ import { MemberStatusClient, MemberStatusVm } from '../membermanager-api';
 })
 export class MemberStatusComponent {
 
-  debug = false;
+  debug: boolean = false;
 
   memberStatusVm: MemberStatusVm;
 
-  constructor(private memberStatusClient: MemberStatusClient) {
-    memberStatusClient.get().subscribe(
+  selectedMemberStatusID: number;
+
+  constructor(private memberStatusClient: MemberStatusClient) { }
+
+  ngOnInit() {
+    this.memberStatusClient.get().subscribe(
       result => {
         this.memberStatusVm = result;
       },

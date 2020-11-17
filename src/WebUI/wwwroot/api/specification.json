@@ -884,7 +884,8 @@
             "nullable": true
           },
           "countAssignees": {
-            "type": "boolean"
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

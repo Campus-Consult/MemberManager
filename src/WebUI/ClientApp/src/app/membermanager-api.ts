@@ -1500,7 +1500,7 @@ export interface IMemberStatusLookupDto {
 export class MemberStatusDetailVm implements IMemberStatusDetailVm {
     id?: number;
     name?: string | undefined;
-    countAssignees?: boolean;
+    countAssignees?: number;
 
     constructor(data?: IMemberStatusDetailVm) {
         if (data) {
@@ -1538,7 +1538,7 @@ export class MemberStatusDetailVm implements IMemberStatusDetailVm {
 export interface IMemberStatusDetailVm {
     id?: number;
     name?: string | undefined;
-    countAssignees?: boolean;
+    countAssignees?: number;
 }
 
 export class PeopleVm implements IPeopleVm {

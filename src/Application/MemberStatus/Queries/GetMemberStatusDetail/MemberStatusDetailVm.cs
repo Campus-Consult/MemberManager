@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
+using MemberManager.Application.Common.Mappings;
 using System;
 using System.Linq;
 
 namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
 {
-    public class MemberStatusDetailVm
+    public class MemberStatusDetailVm : IMapFrom<Domain.Entities.MemberStatus>
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool CountAssignees { get; set; }
+        public int CountAssignees { get; set; }
 
         public void Mapping(Profile profile)
         {

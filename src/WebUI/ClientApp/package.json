@@ -33,7 +33,7 @@
     "jquery": "3.5.1",
     "ngx-bootstrap": "^6.2.0",
     "ngx-skeleton-loader": "^2.6.0",
-    "oidc-client": "1.10.1",
+    "oidc-client": "^1.9.1",
     "popper.js": "^1.16.1",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.3",

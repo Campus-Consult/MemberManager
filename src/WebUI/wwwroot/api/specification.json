@@ -57,6 +57,26 @@
         }
       }
     },
+    "/api/People/GetWithBasicInfo": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "operationId": "People_GetWithBasicInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleBasicInfoVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/People/{id}": {
       "get": {
         "tags": [
@@ -794,6 +814,52 @@
             "nullable": true
           },
           "surname": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PeopleBasicInfoVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "people": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PersonBasicInfoLookupDto"
+            }
+          }
+        }
+      },
+      "PersonBasicInfoLookupDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fistName": {
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentPositions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "currentCareerLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentMemberStatus": {
             "type": "string",
             "nullable": true
           }

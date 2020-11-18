@@ -77,16 +77,21 @@ export class PersonalComponent implements OnInit {
       (val) => {},
       (err) => {
         console.error(err);
+        alert("CREATE Person failed: \n" + err);
       }
     );
   }
 
   private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
-    const iCommand: ICreatePersonCommand = {
+    if (formResult) {
+    }
+    // Casting
+    const birthday = new Date(formResult.birthdate);
+    const iCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
-      birthdate: formResult.birthdate,
+      birthdate: birthday,
       gender: formResult.gender,
       emailPrivate: formResult.emailPrivate,
       emailAssociaton: formResult.emailAssociaton,
@@ -96,26 +101,28 @@ export class PersonalComponent implements OnInit {
       adressZIP: formResult.adressZIP,
       adressCity: formResult.adressCity,
     };
-    console.warn("convertFormIntoCommand not implemented");
     return new CreatePersonCommand(iCommand);
   }
 
   private requestEDitPerson(personId: number, formresult: any) {
     const command = this.convertEditFormIntoCommand(formresult);
-    this.personApi.update(personId,command).subscribe(
+    this.personApi.update(personId, command).subscribe(
       (val) => {},
       (err) => {
         console.error(err);
+        alert("EDIT Person failed: \n" + err);
       }
     );
   }
 
   private convertEditFormIntoCommand(formResult: any): UpdatePersonCommand {
+    // Casting
+    const birthday = new Date(formResult.birthdate);
     const iCommand: IUpdatePersonCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
-      birthdate: formResult.birthdate,
+      birthdate: birthday,
       gender: formResult.gender,
       emailPrivate: formResult.emailPrivate,
       emailAssociaton: formResult.emailAssociaton,

@@ -3,8 +3,7 @@ import { PersonListItem } from '../personal.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { PeopleApiService } from 'src/app/services/api/person-api.service';
-import { IPersonLookupDto } from 'src/app/membermanager-api';
+import { IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-person-list',
@@ -35,7 +34,7 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   public isRefreshing = false;
 
-  constructor(private personApi: PeopleApiService ) {}
+  constructor(private personApi: PeopleClient ) {}
 
   ngOnInit(): void {
     // Loading Member
@@ -72,7 +71,6 @@ export class PersonListComponent implements OnInit, OnChanges {
   /** =============Person Action Methods ============== */
 
   onDetails(person: IPersonLookupDto) {
-    console.log(person);
     this.selectedPerson = person;
     
     this.detailEvent.emit(this.selectedPerson);
@@ -80,10 +78,18 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   onRefresh(){
     this.isRefreshing = true;
-    this.personApi
-    .getPersonaLookUpData(true)
+    this.personApi.get()
     .subscribe((val) => {
-      this.personalData = val;
+      this.personalData = new Array<PersonListItem>()
+      for (const person of val.people) {
+        this.personalData.push({  
+          person: person,
+          personsMemberStatus: [],
+          personsCareerLevel: [],
+          personsPosition: []
+        });
+      }
+      // this.personalData = val;
       this.dataSource = new MatTableDataSource(this.personalData);
       this.isRefreshing = false;
     });

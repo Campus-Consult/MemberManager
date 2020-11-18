@@ -50,7 +50,6 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     this.loadingPerson = true;
     this.personApi.get2(Number(this.person.id)).subscribe((person)=>{
       this.personDetails = person;   
-      console.log(this.personDetails);
       this.loadingPerson = false;
     })
   }

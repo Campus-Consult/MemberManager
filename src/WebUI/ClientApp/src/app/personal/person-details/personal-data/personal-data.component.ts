@@ -1,8 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component,
-
-
-  Input, OnChanges, OnInit, SimpleChanges
+  ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges
 } from '@angular/core';
 import { Gender, IPersonDetailVm } from 'src/app/membermanager-api';
 
@@ -31,8 +28,10 @@ export class PersonalDataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.strasseHausNr = this.getStrasseHausnr();
-    this.stadtPLZ = this.getPLZStadt();
+    if (this.personDetails) {
+      this.strasseHausNr = this.getStrasseHausnr();
+    this.stadtPLZ = this.getPLZStadt(); 
+    }
   }
 
   getEmptypersonDetails(): IPersonDetailVm {
@@ -44,7 +43,7 @@ export class PersonalDataComponent implements OnInit, OnChanges {
   }
 
   private getStrasseHausnr():string {
-    let value: string;
+    let value = '';
     if(this.personDetails.adressStreet && this.personDetails.adressNo)
       value = this.personDetails.adressStreet + ', ' + this.personDetails.adressNo;
     else if(this.personDetails.adressStreet)

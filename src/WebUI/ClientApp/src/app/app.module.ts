@@ -22,7 +22,6 @@ import { ComponentsModule } from './components/components.module';
 import { PersonalComponent } from './personal/personal.component';
 import { PositionModule } from './position/position.module';
 import { PositionComponent } from './position/position.component';
-import { MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
 

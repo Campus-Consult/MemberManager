@@ -10,7 +10,6 @@ import {
   PositionLookupDto,
   UpdatePersonCommand,
 } from "../membermanager-api";
-import { PeopleApiService } from "../services/api/person-api.service";
 import { CreatePersonComponent } from "./create-person/create-person.component";
 import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
 

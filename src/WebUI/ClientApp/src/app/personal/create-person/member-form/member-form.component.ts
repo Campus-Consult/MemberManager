@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { PersonDetailVm } from 'src/app/membermanager-api';
-import { Person } from 'src/app/models/person.class';
+import { Gender, PersonDetailVm } from 'src/app/membermanager-api';
 
+/**
+ * Form Template To Create or Edit Member
+ */
 @Component({
   selector: 'app-member-form',
   templateUrl: './member-form.component.html',
@@ -12,16 +14,11 @@ export class MemberFormComponent implements OnInit {
 
   @Input() memberData?: PersonDetailVm;
 
-  constructor() { }
-
-  ngOnInit(): void {
-    if (this.memberData) {
-      this.addPersonalDataToForm();
-    } else {
-      
-    }
-    
-  }
+  genders = [
+    {value: Gender.MALE, viewValue: 'Männlich'},
+    {value: Gender.FEMALE, viewValue: 'Weiblich'},
+    {value: Gender.DIVERS, viewValue: 'Divers'}
+  ];
 
   personalForm = new FormGroup({
     firstName: new FormControl(''),
@@ -29,7 +26,7 @@ export class MemberFormComponent implements OnInit {
     birthdate: new FormControl(''),
     gender: new FormControl(''),
     emailPrivate: new FormControl(''),
-    emailAssociaton: new FormControl(''),
+    emailAssociaton: new FormControl('@campus-consult.org'),
     mobilePrivate: new FormControl(''),
     adressStreet: new FormControl(''),
     adressNr: new FormControl(''),
@@ -37,12 +34,15 @@ export class MemberFormComponent implements OnInit {
     adressCity: new FormControl(''),
   });
 
+  constructor() { }
+
+  ngOnInit(): void {
+    if (this.memberData) {
+      this.addPersonalDataToForm();
+    }
+  }
+
   addPersonalDataToForm() {
-    try {
-      // todo: is working?
-      this.personalForm.setValue(this.memberData);
-    } catch (error) {
-      console.error(error);
       this.personalForm.setValue({
         firstName: this.memberData.firstName,
         lastName: this.memberData.surname,
@@ -70,7 +70,5 @@ export class MemberFormComponent implements OnInit {
           ? this.memberData.adressCity
           : '',
       });
-    }
   }
-
 }

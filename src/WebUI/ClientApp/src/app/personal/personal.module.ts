@@ -25,6 +25,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatTabsModule } from "@angular/material/tabs";
 import { HistoryTabComponent } from './person-details/history-tab/history-tab.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatDialogModule,
     MatDividerModule,
     MatTabsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSelectModule
   ],
   entryComponents: [CreatePersonComponent, EditPersonalDataComponent],
 })

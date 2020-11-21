@@ -26,6 +26,7 @@ import { MemberStatusModule } from './member-status/member-status.module';
 import { MemberStatusComponent } from './member-status/member-status.component';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 registerLocaleData(localeDe);
 
@@ -70,4 +71,8 @@ registerLocaleData(localeDe);
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(overlayContainer: OverlayContainer) {
+    overlayContainer.getContainerElement().classList.add('cc-theme');
+  }
+}

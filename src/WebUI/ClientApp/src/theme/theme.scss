@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+// import our custom themes
+@import 'color/cc-theme.scss';
+@import 'color/cc-dark-theme.scss';
+@import 'typography/cc-typography.scss';
+
+@import '../app/member-status/member-status-list/member-status-list.component.scss-theme.scss';
+
+// always include only once per project
+@include mat-core($cc-typography);
+
+
+.cc-theme {
+  @include angular-material-theme($cc-theme);
+  @include member-status-list-theme($cc-theme);
+}
+
+.cc-dark-theme {
+  @include angular-material-theme($cc-dark-theme);
+  @include member-status-list-theme($cc-dark-theme);
+}

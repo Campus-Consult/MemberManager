@@ -22,8 +22,7 @@ import { ComponentsModule } from './components/components.module';
 import { PersonalComponent } from './personal/personal.component';
 import { PositionModule } from './position/position.module';
 import { PositionComponent } from './position/position.component';
-import { MemberStatusModule } from './member-status/member-status.module';
-import { MemberStatusComponent } from './member-status/member-status.component';
+import { MemberStatusModule } from './modules/member-status/member-status.module';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -50,7 +49,6 @@ registerLocaleData(localeDe);
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'Personal', component: PersonalComponent, pathMatch: 'full' },
       { path: 'Position', component: PositionComponent, pathMatch: 'full' },
-      { path: 'member-status', component: MemberStatusComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },

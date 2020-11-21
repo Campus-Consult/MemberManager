@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MemberStatusClient, MemberStatusLookupDto } from '../../membermanager-api';
-import { MatPaginator } from '@angular/material/paginator';
+import { MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatSpinner } from '@angular/material/progress-spinner';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({

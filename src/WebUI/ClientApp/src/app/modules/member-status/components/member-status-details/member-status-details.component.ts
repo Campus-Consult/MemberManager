@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MemberStatusClient, MemberStatusDetailVm } from '../../membermanager-api';
+import { MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
 
 @Component({
   selector: 'app-member-status-details',

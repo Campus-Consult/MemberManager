@@ -5,7 +5,7 @@
 @import 'color/cc-dark-theme.scss';
 @import 'typography/cc-typography.scss';
 
-@import '../app/member-status/member-status-list/member-status-list.component.scss-theme.scss';
+@import '../app/modules/member-status/components/member-status-list/member-status-list.component.scss-theme.scss';
 
 // always include only once per project
 @include mat-core($cc-typography);

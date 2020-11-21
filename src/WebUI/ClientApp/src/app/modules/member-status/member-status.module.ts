@@ -35,25 +35,19 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { ComponentsModule } from '../components/components.module';
-import { MemberStatusComponent } from './member-status.component';
-import { MemberStatusListComponent } from './member-status-list/member-status-list.component';
-import { FormsModule } from '@angular/forms';
-import { MemberStatusDetailsComponent } from './member-status-details/member-status-details.component';
+
+import { MemberStatusRoutingModule } from './member-status-routing.module';
+
+import { MemberStatusComponent } from './components/member-status/member-status.component';
+import { MemberStatusListComponent } from './components/member-status-list/member-status-list.component';
+import { MemberStatusDetailsComponent } from './components/member-status-details/member-status-details.component';
 
 @NgModule({
-  declarations: [
-    MemberStatusComponent, MemberStatusListComponent, MemberStatusDetailsComponent
-  ],
-  exports: [
-    MemberStatusComponent
-  ],
   imports: [
     CommonModule,
-    ComponentsModule,
-    FlexLayoutModule,
-    FormsModule,
-    MatCheckboxModule,
+    FlexLayoutModule, 
+    MemberStatusRoutingModule,
+
     MatCheckboxModule,
     MatButtonModule,
     MatInputModule,
@@ -84,6 +78,12 @@ import { MemberStatusDetailsComponent } from './member-status-details/member-sta
     MatTableModule,
     MatSortModule,
     MatPaginatorModule
-  ]
+  ],
+  declarations: [
+    MemberStatusComponent, MemberStatusListComponent, MemberStatusDetailsComponent
+  ],
+  exports: [
+    MemberStatusComponent,
+  ],
 })
 export class MemberStatusModule { }

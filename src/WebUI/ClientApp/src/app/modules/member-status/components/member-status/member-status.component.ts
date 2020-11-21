@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MemberStatusClient } from '../membermanager-api';
 
 @Component({
   selector: 'app-member-status',

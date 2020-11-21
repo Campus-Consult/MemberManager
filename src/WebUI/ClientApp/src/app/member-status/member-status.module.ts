@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 //Angular Material Components
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,6 +51,7 @@ import { MemberStatusDetailsComponent } from './member-status-details/member-sta
   imports: [
     CommonModule,
     ComponentsModule,
+    FlexLayoutModule,
     FormsModule,
     MatCheckboxModule,
     MatCheckboxModule,

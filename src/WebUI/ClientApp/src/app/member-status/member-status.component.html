@@ -1,8 +1,8 @@
-<div class="d-flex flex-row align-items-stretch">
-  <div class="mat-elevation-z8 m-2 p-2 flex-grow-1">
-    <app-member-status-list class="table-part" [memberStatusLookupDtos]="memberStatusVm?.memberStatus"></app-member-status-list>
+<div fxLayout="row" fxLayoutGap="10px">
+  <div class="mat-elevation-z8" fxFlex="60%">
+    <app-member-status-list></app-member-status-list>
   </div>
-  <div class="mat-elevation-z8 m-2 p-2">
+  <div class="mat-elevation-z8" fxFlex="40%">
     <app-member-status-details [memberStatusID]="1"></app-member-status-details>
   </div>
 </div>

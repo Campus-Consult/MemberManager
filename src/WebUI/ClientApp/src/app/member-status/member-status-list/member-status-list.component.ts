@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MemberStatusLookupDto } from '../../membermanager-api';
+import { MemberStatusClient, MemberStatusLookupDto } from '../../membermanager-api';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -9,23 +9,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 @Component({
   selector: 'app-member-status-list',
   templateUrl: './member-status-list.component.html',
-  styleUrls: ['./member-status-list.component.scss']
+  styleUrls: [
+    './member-status-list.component.scss']
 })
 
 export class MemberStatusListComponent implements OnInit {
-  private _memberStatusLookupDtos: MemberStatusLookupDto[];
-
-  @Input()
-  set memberStatusLookupDtos(value: MemberStatusLookupDto[]) {
-    this._memberStatusLookupDtos = value;
-    this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(value);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  get memberStatusLookupDtos(): MemberStatusLookupDto[] {
-    return this._memberStatusLookupDtos;
-  }
-
   @Input()
   displayedColumns?: string[];
 
@@ -35,7 +23,7 @@ export class MemberStatusListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
+  constructor(private memberStatusClient: MemberStatusClient) {
     this.dataSource = new MatTableDataSource();
 
     const initialSelection = [];
@@ -56,5 +44,14 @@ export class MemberStatusListComponent implements OnInit {
         'countAssignees',
       ];
     }
+
+    this.memberStatusClient.get().subscribe(
+      result => {
+        this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(result.memberStatus);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      error => console.error(error)
+    );
   }
 }

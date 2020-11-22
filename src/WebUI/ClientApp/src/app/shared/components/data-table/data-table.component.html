@@ -1,4 +1,9 @@
-<!--<div *ngIf="dataSource">
+<mat-form-field id=filter>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="name">
@@ -20,7 +25,4 @@
   </table>
 
   <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-</div>-->
-<div *ngIf="memberStatus">
-  <data-table #dataTable [data]="memberStatus"></data-table>
 </div>

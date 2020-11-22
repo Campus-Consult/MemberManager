@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { SharedModule } from '../../shared/shared.module';
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 //Angular Material Components
@@ -45,7 +47,8 @@ import { MemberStatusDetailsComponent } from './components/member-status-details
 @NgModule({
   imports: [
     CommonModule,
-    FlexLayoutModule, 
+    FlexLayoutModule,
+    SharedModule,
     MemberStatusRoutingModule,
 
     MatCheckboxModule,
@@ -84,6 +87,6 @@ import { MemberStatusDetailsComponent } from './components/member-status-details
   ],
   exports: [
     MemberStatusComponent,
-  ],
+  ]
 })
 export class MemberStatusModule { }

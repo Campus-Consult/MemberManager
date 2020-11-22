@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 
 // mixin name will be used in main theme.scss
-@mixin member-status-list-color($config-or-theme) {
+@mixin data-table-theme($config-or-theme) {
   // Extract the color configuration in case a theme has been passed.
   // This allows consumers to either pass a theme object or a color configuration.
   $config: mat-get-color-config($config-or-theme);
@@ -14,7 +14,24 @@
   // $foreground: map-get($config, foreground);
   // $background: map-get($config, background);
   // all of these variables contain many additional variables
-  app-member-status-list {
+  data-table {
+    table {
+      width: 100%;
+    }
+
+    #filter {
+      &.mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .mat-column-select {
+      overflow: initial;
+    }
+
+    .mat-row {
+      min-height: 65px;
+    }
 
     .mat-row {
       min-height: 65px;
@@ -28,20 +45,4 @@
       }
     }
   }
-}
-
-@mixin member-status-list-theme($theme) {
-  // Extracts the color and typography configurations from the theme.
-  $color: mat-get-color-config($theme);
-  $typography: mat-get-typography-config($theme);
-
-  // Do not generate styles if configurations for individual theming
-  // systems have been explicitly set to `null`.
-  @if $color != null {
-    @include member-status-list-color($color);
-  }
-
-  /*@if $typography != null {
-    @include member-status-list-typography($typography);
-  }*/
 }

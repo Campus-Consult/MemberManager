@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ClientApp\src\app\modules\member-status\pages\" />
+    <Folder Include="ClientApp\src\app\shared\components\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\modules\member-status\member-status-routing.module.ts" />

@@ -5,18 +5,22 @@
 @import 'color/cc-dark-theme.scss';
 @import 'typography/cc-typography.scss';
 
-@import '../app/modules/member-status/components/member-status-list/member-status-list.component.scss-theme.scss';
+@import '../app/shared/components/data-table/data-table.component.scss';
 
 // always include only once per project
 @include mat-core($cc-typography);
 
+@mixin custom-component-theme($theme) {
+  @include data-table-theme($theme)
+}
 
 .cc-theme {
   @include angular-material-theme($cc-theme);
-  @include member-status-list-theme($cc-theme);
+  @include custom-component-theme($cc-theme);
 }
 
 .cc-dark-theme {
   @include angular-material-theme($cc-dark-theme);
-  @include member-status-list-theme($cc-dark-theme);
+  @include custom-component-theme($cc-dark-theme);
 }
+

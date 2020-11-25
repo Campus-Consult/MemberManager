@@ -2,6 +2,7 @@
 using MemberManager.Application.Positions.Commands.CreatePosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Application.Positions.Commands.DismissPosition;
+using MemberManager.Application.Positions.Commands.ReactivatePosition;
 using MemberManager.Application.Positions.Commands.UpdatePosition;
 using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
 using MemberManager.Application.Positions.Queries.GetPositionDetails;
@@ -33,9 +34,9 @@ namespace MemberManager.WebUI.Controllers
             });
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult<PeopleAssignSuggestions>> AssignSuggestions(int positionID) {
-            return await Mediator.Send(new GetAssignSuggestionsQuery{PositionID = positionID});
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<PeopleAssignSuggestions>> AssignSuggestions(int id) {
+            return await Mediator.Send(new GetAssignSuggestionsQuery{PositionID = id});
         }
 
         [HttpPost]
@@ -57,7 +58,7 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
-        [HttpPut("[action]")]
+        [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Deactivate(int id, DeactivatePositionCommand command)
         {
             if (id != command.Id)
@@ -70,7 +71,19 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
-        [HttpPut("[action]")]
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Reactivate(int id, ReactivatePositionCommand command)
+        {
+            if (id != command.Id) {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Assign(int id, AssignPositionCommand command)
         {
             if (id != command.Id)
@@ -83,7 +96,7 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Dismiss(int id, DismissPositionCommand command) {
             if (id != command.Id)
             {

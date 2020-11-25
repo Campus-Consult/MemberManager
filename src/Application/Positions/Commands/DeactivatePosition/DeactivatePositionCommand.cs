@@ -3,6 +3,7 @@ using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
 using MemberManager.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,11 +28,6 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
         public async Task<Unit> Handle(DeactivatePositionCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.Positions.FindAsync(request.Id);
-
-            if (entity == null)
-            {
-                throw new NotFoundException(nameof(Position), request.Id);
-            }
 
             foreach (var assignment in entity.PersonPositions)
             {

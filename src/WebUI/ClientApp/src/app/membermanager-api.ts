@@ -295,10 +295,11 @@ export interface IPositionClient {
     get2(id: number, history: boolean | undefined): Observable<PositionDto>;
     update(id: number, command: UpdatePositionCommand): Observable<FileResponse>;
     getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm>;
-    assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions>;
-    deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse>;
-    assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse>;
-    dismiss(id: number | undefined, command: DismissPositionCommand): Observable<FileResponse>;
+    assignSuggestions(id: number): Observable<PeopleAssignSuggestions>;
+    deactivate(id: number, command: DeactivatePositionCommand): Observable<FileResponse>;
+    reactivate(id: number, command: ReactivatePositionCommand): Observable<FileResponse>;
+    assign(id: number, command: AssignPositionCommand): Observable<FileResponse>;
+    dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -574,12 +575,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<PositionsWAVm>(<any>null);
     }
 
-    assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions> {
-        let url_ = this.baseUrl + "/api/Position/AssignSuggestions?";
-        if (positionID === null)
-            throw new Error("The parameter 'positionID' cannot be null.");
-        else if (positionID !== undefined)
-            url_ += "positionID=" + encodeURIComponent("" + positionID) + "&"; 
+    assignSuggestions(id: number): Observable<PeopleAssignSuggestions> {
+        let url_ = this.baseUrl + "/api/Position/{id}/AssignSuggestions";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -626,12 +626,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<PeopleAssignSuggestions>(<any>null);
     }
 
-    deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/Deactivate?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    deactivate(id: number, command: DeactivatePositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Deactivate";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -646,7 +645,7 @@ export class PositionClient implements IPositionClient {
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDeactivate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -680,12 +679,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/Assign?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    reactivate(id: number, command: ReactivatePositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Reactivate";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -700,7 +698,60 @@ export class PositionClient implements IPositionClient {
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReactivate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReactivate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processReactivate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    assign(id: number, command: AssignPositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Assign";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processAssign(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -734,12 +785,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    dismiss(id: number | undefined, command: DismissPositionCommand): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/Dismiss?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Dismiss";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -2145,6 +2195,42 @@ export class DeactivatePositionCommand implements IDeactivatePositionCommand {
 export interface IDeactivatePositionCommand {
     id?: number;
     endDateTime?: Date;
+}
+
+export class ReactivatePositionCommand implements IReactivatePositionCommand {
+    id?: number;
+
+    constructor(data?: IReactivatePositionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ReactivatePositionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReactivatePositionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IReactivatePositionCommand {
+    id?: number;
 }
 
 export class AssignPositionCommand implements IAssignPositionCommand {

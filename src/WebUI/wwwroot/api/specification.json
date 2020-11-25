@@ -328,7 +328,7 @@
         }
       }
     },
-    "/api/Position/AssignSuggestions": {
+    "/api/Position/{id}/AssignSuggestions": {
       "get": {
         "tags": [
           "Position"
@@ -336,8 +336,9 @@
         "operationId": "Position_AssignSuggestions",
         "parameters": [
           {
-            "name": "positionID",
-            "in": "query",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -359,8 +360,8 @@
         }
       }
     },
-    "/api/Position/Deactivate": {
-      "put": {
+    "/api/Position/{id}/Deactivate": {
+      "post": {
         "tags": [
           "Position"
         ],
@@ -368,7 +369,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -403,8 +405,53 @@
         }
       }
     },
-    "/api/Position/Assign": {
-      "put": {
+    "/api/Position/{id}/Reactivate": {
+      "post": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_Reactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReactivatePositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/Assign": {
+      "post": {
         "tags": [
           "Position"
         ],
@@ -412,7 +459,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -447,7 +495,7 @@
         }
       }
     },
-    "/api/Position/Dismiss": {
+    "/api/Position/{id}/Dismiss": {
       "post": {
         "tags": [
           "Position"
@@ -456,7 +504,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1245,6 +1294,16 @@
           "endDateTime": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "ReactivatePositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

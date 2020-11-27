@@ -21,7 +21,7 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
   @Input() dataSource: MatTableDataSource<T>;
   @Input() columns: string[];
 
-  @Output() onSelect = new EventEmitter<T>();
+  @Output() onSelectEvent = new EventEmitter<T>();
 
   selection: SelectionModel<T>;
 
@@ -34,7 +34,7 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
     // selection changed
     this.selection.changed.subscribe((a) => {
       console.log(a.added[0]);
-      this.onSelect.emit(a.added[0] as T);
+      this.onSelectEvent.emit(a.added[0] as T);
     });
   }
 

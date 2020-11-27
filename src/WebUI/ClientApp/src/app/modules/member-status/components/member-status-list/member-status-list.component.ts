@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
@@ -19,6 +19,9 @@ export class MemberStatusListComponent implements AfterViewInit {
     if (this.dataSource) this.dataSource.sort = this.sort;
   }
 
+  @Output() onSelectEvent = new EventEmitter<MemberStatusLookupDto>();
+
+
   memberStatus: MemberStatusLookupDto[];
   dataSource: MatTableDataSource<MemberStatusLookupDto>;
   columns: string[] = ['name', 'countAssignees'];
@@ -38,6 +41,6 @@ export class MemberStatusListComponent implements AfterViewInit {
   }
 
   onSelect(item: MemberStatusLookupDto) {
-    console.log(item.name);
+    this.onSelectEvent.emit(item);
   }
 }

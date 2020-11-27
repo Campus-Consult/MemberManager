@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChild, ContentChildren, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
@@ -9,24 +8,22 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent<T> implements OnInit, AfterViewInit  {
-  @Input()
-  data: T[];
+export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
 
-  @Input()
-  displayedColumns?: string[];
-
-  @Input()
-  selectable?: boolean;
-
-  dataSource: MatTableDataSource<T>;
-  selection: SelectionModel<T>;
+  @ContentChildren(MatColumnDef) columnDefs: QueryList<MatColumnDef>;
+  @ContentChildren(MatRowDef) rowDefs: QueryList<MatRowDef<T>>;
+  @ContentChildren(MatHeaderRowDef) headerRowDefs: QueryList<MatHeaderRowDef>;
+  @ContentChild(MatNoDataRow) noDataRow: MatNoDataRow;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable, { static: true }) table: MatTable<T>;
 
-  @Output()
-  onSelect = new EventEmitter<string>();
+  @Input() dataSource: MatTableDataSource<T>;
+  @Input() columns: string[];
+
+  @Output() onSelect = new EventEmitter<T>();
+
+  selection: SelectionModel<T>;
 
   constructor() {
     const initialSelection = [];
@@ -36,24 +33,22 @@ export class DataTableComponent<T> implements OnInit, AfterViewInit  {
 
     // selection changed
     this.selection.changed.subscribe((a) => {
-      // TODO
+      console.log(a.added[0]);
+      this.onSelect.emit(a.added[0] as T);
     });
-  }
-
-  ngOnInit(): void {
-    if (!this.displayedColumns) {
-      this.displayedColumns = [
-        'name',
-        'countAssignees',
-      ];
-    }
-
-    this.dataSource = new MatTableDataSource<T>(this.data);
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  }
+
+  // after the <ng-content> has been initialized, the column definitions are available.
+  // All that's left is to add them to the table ourselves:
+  ngAfterContentInit() {
+    this.columnDefs.forEach(columnDef => this.table.addColumnDef(columnDef));
+    this.rowDefs.forEach(rowDef => this.table.addRowDef(rowDef));
+    this.headerRowDefs.forEach(headerRowDef => this.table.addHeaderRowDef(headerRowDef));
+    this.table.setNoDataRow(this.noDataRow);
   }
 
   applyFilter(event: Event) {

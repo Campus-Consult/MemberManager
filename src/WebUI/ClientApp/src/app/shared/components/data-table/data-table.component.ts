@@ -33,7 +33,6 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
 
     // selection changed
     this.selection.changed.subscribe((a) => {
-      console.log(a.added[0]);
       this.onSelectEvent.emit(a.added[0] as T);
     });
   }

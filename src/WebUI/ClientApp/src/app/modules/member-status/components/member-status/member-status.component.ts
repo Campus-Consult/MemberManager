@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MemberStatusLookupDto } from '../../../../membermanager-api';
 
 @Component({
   selector: 'app-member-status',
@@ -9,7 +10,13 @@ export class MemberStatusComponent {
 
   debug: boolean = false;
 
+  selectedMemberStatus: MemberStatusLookupDto;
+
   constructor() { }
 
   ngOnInit() { }
+
+  onListSelection(selectedMemberStatus: MemberStatusLookupDto) {
+    this.selectedMemberStatus = selectedMemberStatus;
+  }
 }

@@ -1,8 +1,8 @@
 <div fxLayout="row" fxLayoutGap="10px">
-  <div class="p-3 border" fxFlex="60%">
-    <app-member-status-list></app-member-status-list>
-  </div>
-  <div class="p-3 border" fxFlex="40%">
-    <app-member-status-details [memberStatusID]="1"></app-member-status-details>
-  </div>
+  <mat-card class="p-3" fxFlex="60%">
+    <app-member-status-list (onSelectEvent)="onListSelection($event)"></app-member-status-list>
+  </mat-card>
+  <mat-card class="p-3" fxFlex="40%">
+    <app-member-status-details *ngIf="selectedMemberStatus" [memberStatusID]="selectedMemberStatus?.id"></app-member-status-details>
+  </mat-card>
 </div>

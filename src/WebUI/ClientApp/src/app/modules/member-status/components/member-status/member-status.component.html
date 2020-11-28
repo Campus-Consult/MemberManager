@@ -2,7 +2,14 @@
   <mat-card class="p-3" fxFlex="60%">
     <app-member-status-list (onSelectEvent)="onListSelection($event)"></app-member-status-list>
   </mat-card>
-  <mat-card class="p-3" fxFlex="40%">
-    <app-member-status-details *ngIf="selectedMemberStatus" [memberStatusID]="selectedMemberStatus?.id"></app-member-status-details>
+  <mat-card *ngIf="selectedMemberStatus" class="p-3" fxFlex="40%">
+    <mat-card-header>
+      <mat-icon color="primary" mat-card-avatar>info</mat-icon>
+      <mat-card-title>{{selectedMemberStatus.name}}</mat-card-title>
+      <mat-card-subtitle>Member status</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-member-status-details [memberStatusID]="selectedMemberStatus?.id"></app-member-status-details>
+    </mat-card-content>
   </mat-card>
 </div>

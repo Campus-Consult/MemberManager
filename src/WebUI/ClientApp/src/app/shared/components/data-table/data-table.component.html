@@ -1,18 +1,16 @@
 <mat-form-field id=filter>
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input>
+  <mat-label>Search</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
 </mat-form-field>
 
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
-    <ng-content></ng-content>
+<table mat-table [dataSource]="dataSource">
+  <ng-content></ng-content>
 
-    <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"
-        [ngClass]="{ 'selected': selection.isSelected(row)}"
-        (click)="selection.select(row)">
-    </tr>
-  </table>
+  <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns;"
+      [ngClass]="{ 'selected': selection.isSelected(row)}"
+      (click)="selection.select(row)">
+  </tr>
+</table>
 
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-</div>
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>

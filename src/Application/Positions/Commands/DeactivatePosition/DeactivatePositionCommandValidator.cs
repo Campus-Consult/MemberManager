@@ -35,7 +35,7 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
         }
 
         public async Task<bool> PositionEndsBeforeLastActive(DeactivatePositionCommand model, int positionId, CancellationToken cancellationToken) {
-            return await _context.PersonPositions
+            return !await _context.PersonPositions
                 .Where(p => p.PositionId == positionId && p.BeginDateTime > model.EndDateTime)
                 .AnyAsync(cancellationToken);
         }

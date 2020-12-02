@@ -26,19 +26,22 @@ export class EditPersonalDataComponent extends CreatePersonComponent implements 
 
   onSubmit() {
     const isvalid = this.validateInputFront();
-    this.handleValidation(isvalid);
-    const command = this.convertEditFormIntoCommand(this.getResult());
-    this.personApi.update(this.memberdata.id, command).subscribe(
-      (val) => {
-        // Modal Output User Input in Modal
-        this.dialogRef.close(this.getResult());
-        // TODO: Succesfull Toast
-      },
-      (err) => {
-        console.error(err);
-        this.handleError(err);
-      }
-    );
+    if (isvalid) {
+      const command = this.convertEditFormIntoCommand(this.getResult());
+      this.personApi.update(this.memberdata.id, command).subscribe(
+        (val) => {
+          // Modal Output User Input in Modal
+          this.dialogRef.close(this.getResult());
+          // TODO: Succesfull Toast
+        },
+        (err) => {
+          console.error(err);
+          this.handleError(err);
+        }
+      );
+    } else {
+
+    }
   }
 
   private convertEditFormIntoCommand(formResult: any): UpdatePersonCommand {

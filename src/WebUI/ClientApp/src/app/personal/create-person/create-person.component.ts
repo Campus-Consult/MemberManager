@@ -18,7 +18,7 @@ export class CreatePersonComponent implements AfterViewInit {
   memberForm: FormGroup;
 
   // For backend validation
-  invalidHints = new Array<string>();
+  invalidHints: Array<string>;
   lastRequestErr;
 
   constructor(
@@ -39,7 +39,6 @@ export class CreatePersonComponent implements AfterViewInit {
 
   onSubmit() {
     const isvalid = this.validateInputFront();
-    this.handleValidation(isvalid);
 
     if (isvalid) {
       const command = this.convertCreateFormIntoCommand(this.getResult());
@@ -50,15 +49,10 @@ export class CreatePersonComponent implements AfterViewInit {
           // TODO: Succesfull Toast
         },
         (err) => {
-          console.error(err);
           this.handleError(err);
         }
       );
     }
-  }
-
-  handleValidation(isvalid: boolean) {
-    console.warn("handleValidation not implemented");
   }
 
   onCancel() {
@@ -96,7 +90,7 @@ export class CreatePersonComponent implements AfterViewInit {
 
   handleError(err) {
     try {
-      this.lastRequestErr = JSON.parse(err);
+      this.lastRequestErr = JSON.parse(err.response);      
       if (this.lastRequestErr.status === 400) {
         this.invalidHints = new Array<string>()
         // Prepare input-invalid-msg

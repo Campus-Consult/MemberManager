@@ -8,7 +8,7 @@
     </div>
     <div
       class="input-invalid-msg"
-      *ngIf="invalidHints.length > 0"
+      *ngIf="invalidHints"
     >
       <h4 class="backend-hint">Person nicht erstellt:</h4>
       <p *ngFor="let item of invalidHints" class="backend-hint">{{ item }}</p>

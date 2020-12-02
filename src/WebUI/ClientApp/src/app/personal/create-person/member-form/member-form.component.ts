@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Gender, PersonDetailVm } from 'src/app/membermanager-api';
 
 /**
@@ -21,12 +21,12 @@ export class MemberFormComponent implements OnInit {
   ];
 
   personalForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('',[Validators.required]),
     birthdate: new FormControl(''),
-    gender: new FormControl(''),
+    gender: new FormControl('',[Validators.required]),
     emailPrivate: new FormControl(''),
-    emailAssociaton: new FormControl('@campus-consult.org'),
+    emailAssociaton: new FormControl('@campus-consult.org',[Validators.required]),
     mobilePrivate: new FormControl(''),
     adressStreet: new FormControl(''),
     adressNr: new FormControl(''),

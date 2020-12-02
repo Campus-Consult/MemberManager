@@ -3,11 +3,11 @@
       <p><mat-label>Mitglieds Daten</mat-label></p>
       <mat-form-field appearance="outline">
         <mat-label>Vorname</mat-label>
-        <input type="text" formControlName="firstName" matInput />
+        <input type="text" formControlName="firstName" matInput required />
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Nachname</mat-label>
-        <input type="text" formControlName="lastName" matInput />
+        <input type="text" formControlName="lastName" matInput required />
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Geburtsdatum</mat-label>
@@ -15,7 +15,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Geschlecht</mat-label>
-        <mat-select formControlName="gender" name="gender">
+        <mat-select formControlName="gender" name="gender" required>
           <mat-option *ngFor="let gender of genders" [value]="gender.value">
             {{gender.viewValue}}
           </mat-option>
@@ -31,6 +31,7 @@
           formControlName="emailAssociaton"
           matInput
           placeholder="@campus-consult.org"
+          required
         />
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -55,12 +56,11 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Hausnummer</mat-label>
-        <input type="number" formControlName="adressNr" matInput />
+        <input formControlName="adressNr" matInput />
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Postleitzahl</mat-label>
         <input
-          type="number"
           maxlength="5"
           formControlName="adressZIP"
           matInput

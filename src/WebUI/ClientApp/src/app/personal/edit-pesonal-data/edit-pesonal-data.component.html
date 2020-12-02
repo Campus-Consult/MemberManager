@@ -9,6 +9,13 @@
     <div id="form-container">
       <app-member-form [memberData]="memberdata"></app-member-form>
     </div>
+    <div
+      class="input-invalid-msg"
+      *ngIf="invalidHints && invalidHints.length > 0"
+    >
+      <h4 class="backend-hint">Person nicht erstellt:</h4>
+      <p *ngFor="let item of invalidHints" class="backend-hint">{{ item }}</p>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button color="accent" (click)="onSubmit()">Anwenden</button>

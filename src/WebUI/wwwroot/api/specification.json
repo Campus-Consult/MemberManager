@@ -915,6 +915,27 @@
           "adressCity": {
             "type": "string",
             "nullable": true
+          },
+          "careerLevels": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PersonCareerLevelVm"
+            }
+          },
+          "memberStatus": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PersonMemberStatusVm"
+            }
+          },
+          "positions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PersonPositionVm"
+            }
           }
         }
       },
@@ -931,6 +952,95 @@
           1,
           2
         ]
+      },
+      "PersonCareerLevelVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "careerLevelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "careerLevelName": {
+            "type": "string",
+            "nullable": true
+          },
+          "careerLevelShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "beginDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "PersonMemberStatusVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberStatusId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberStatusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "beginDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "PersonPositionVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "positionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "positionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "beginDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
       },
       "CreatePersonCommand": {
         "type": "object",

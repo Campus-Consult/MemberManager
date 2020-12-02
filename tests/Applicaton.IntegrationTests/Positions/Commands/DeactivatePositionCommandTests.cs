@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using MemberManager.Domain.Enums;
 using MemberManager.Application.Positions.Queries.GetPositionDetails;
+using System.Collections.Generic;
+using MemberManager.Application.Positions.Queries.GetPositionsWithAssignees;
 
 namespace MemberManager.Application.IntegrationTests.Positions.Commands
 {
@@ -18,16 +20,15 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
     public class DeactivatePositionCommandTests : TestBase
     {
-        [Test]
-        public async Task ShouldRequireValidPositionId()
-        {
+
+        public async Task<int> SetupTestPerson(string email="test@campus-consult.org") {
             var createPersonCommand = new CreatePersonCommand { 
                 AdressCity = "Test",
                 AdressNo = "100",
                 AdressStreet = "Test Street",
                 AdressZIP = "1234",
                 Birthdate = new DateTime(2019, 1, 1),
-                EmailAssociaton = "test@campus-consult.org",
+                EmailAssociaton = email,
                 EmailPrivate = "test@asdf.de",
                 FirstName = "Test",
                 Gender = Gender.DIVERS,
@@ -35,14 +36,24 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 Surname = "Test",
             };
 
-            var personId = await SendAsync(createPersonCommand);
+            return await SendAsync(createPersonCommand);
+        }
 
+        public async Task<int> SetupTestPosition() {
             var createPositionCommand = new CreatePositionCommand {
                 Name = "TestPos",
                 ShortName = "TP"
             };
 
-            var positionId = await SendAsync(createPositionCommand);
+            return await SendAsync(createPositionCommand);
+        }
+
+        [Test]
+        public async Task ShouldRequireValidPositionId()
+        {
+            var personId = await SetupTestPerson();
+
+            var positionId = await SetupTestPosition();
 
             var assignPersonToPositionCommand = new AssignPositionCommand {
                 Id = positionId,
@@ -66,28 +77,12 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
         [Test]
         public async Task ShouldTerminateOngoingAssignments()
         {
-            var createPersonCommand = new CreatePersonCommand { 
-                AdressCity = "Test",
-                AdressNo = "100",
-                AdressStreet = "Test Street",
-                AdressZIP = "1234",
-                Birthdate = new DateTime(2019, 1, 1),
-                EmailAssociaton = "test@campus-consult.org",
-                EmailPrivate = "test@asdf.de",
-                FirstName = "Test",
-                Gender = Gender.DIVERS,
-                MobilePrivate = "12345",
-                Surname = "Test",
-            };
+            
+            var personId = await SetupTestPerson();
 
-            var personId = await SendAsync(createPersonCommand);
+            var person2Id = await SetupTestPerson("test2@campus-consult.org");
 
-            var createPositionCommand = new CreatePositionCommand {
-                Name = "TestPos",
-                ShortName = "TP"
-            };
-
-            var positionId = await SendAsync(createPositionCommand);
+            var positionId = await SetupTestPosition();
 
             var assignPersonToPositionCommand = new AssignPositionCommand {
                 Id = positionId,
@@ -96,6 +91,14 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             };
 
             await SendAsync(assignPersonToPositionCommand);
+
+            var assignPerson2ToPositionCommand = new AssignPositionCommand {
+                Id = positionId,
+                PersonId = person2Id,
+                AssignmentDateTime = new DateTime(2019, 1, 1),
+            };
+
+            await SendAsync(assignPerson2ToPositionCommand);
 
             var deactivatePositionCommand = new DeactivatePositionCommand {
                 Id = positionId,
@@ -113,12 +116,54 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
             positionDetails.IsActive.Should().BeFalse();
 
-            positionDetails.Assignees.Count.Should().Be(1);
+            List<PositionAssignee> lists = positionDetails.Assignees.ToList();
 
-            var firstHistory = positionDetails.Assignees.First();
+            lists.Count.Should().Be(2);
 
-            firstHistory.BeginDateTime.Should().Be(new DateTime(2020, 1, 1));
-            firstHistory.EndDateTime.Should().Be(new DateTime(2020, 1, 31));
+            var firstHistory = positionDetails.Assignees.OrderBy(pa => pa.BeginDateTime).First();
+
+            lists[0].BeginDateTime.Should().Be(new DateTime(2019, 1, 1));
+            lists[0].EndDateTime.Should().Be(new DateTime(2020, 1, 31));
+
+            lists[1].BeginDateTime.Should().Be(new DateTime(2020, 1, 1));
+            lists[1].EndDateTime.Should().Be(new DateTime(2020, 1, 31));
+        }
+
+        [Test]
+        public async Task CantTerminateIfAssignmentInFuture()
+        {
+            
+            var personId = await SetupTestPerson();
+
+            var person2Id = await SetupTestPerson("test2@campus-consult.org");
+
+            var positionId = await SetupTestPosition();
+
+            var assignPersonToPositionCommand = new AssignPositionCommand {
+                Id = positionId,
+                PersonId = personId,
+                AssignmentDateTime = new DateTime(2020, 1, 1),
+            };
+
+            await SendAsync(assignPersonToPositionCommand);
+
+            var assignPerson2ToPositionCommand = new AssignPositionCommand {
+                Id = positionId,
+                PersonId = person2Id,
+                AssignmentDateTime = new DateTime(2019, 1, 1),
+            };
+
+            await SendAsync(assignPerson2ToPositionCommand);
+
+            var deactivatePositionCommand = new DeactivatePositionCommand {
+                Id = positionId,
+                EndDateTime = new DateTime(2019, 12, 31),
+            };
+            
+            FluentActions.Invoking(() =>
+                SendAsync(deactivatePositionCommand))
+                    .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("Id"))
+                    .And.Errors["Id"].Should().Contain("Can only deactivate a Position after the latest person was assigned to it!");
         }
     }
 }

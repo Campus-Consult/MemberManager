@@ -21,8 +21,9 @@ namespace MemberManager.Application.Positions.Queries.GetPositionsWithAssignees
                     opt.MapFrom(pos => pos.PersonPositions
                         .Select(pp => new PositionAssignee {
                             FirstName = pp.Person.FirstName,
+                            Id = pp.Id,
                             Surname = pp.Person.Surname,
-                            Id = pp.Person.Id,
+                            PersonId = pp.Person.Id,
                             BeginDateTime = pp.BeginDateTime,
                             EndDateTime = pp.EndDateTime,
                         })));

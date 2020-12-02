@@ -1188,7 +1188,7 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "personId": {
             "type": "integer",
             "format": "int32"
           },

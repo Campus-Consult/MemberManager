@@ -50,7 +50,7 @@ export class PositionDismissDialogComponent implements OnInit{
 
     this.positionClient.dismiss(this.data.position.id, new DismissPositionCommand({
       id: this.data.position.id,
-      personId: this.data.person.id,
+      personId: this.data.person.personId,
       dismissDateTime: this.date.value,
     })).subscribe(val => {
       this.dialogRef.close();

@@ -1894,7 +1894,7 @@ export interface IPositionDto {
 }
 
 export class PositionAssignee implements IPositionAssignee {
-    id?: number;
+    personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
     beginDateTime?: Date;
@@ -1911,7 +1911,7 @@ export class PositionAssignee implements IPositionAssignee {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.personId = _data["personId"];
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
             this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
@@ -1928,7 +1928,7 @@ export class PositionAssignee implements IPositionAssignee {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["personId"] = this.personId;
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
         data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
@@ -1938,7 +1938,7 @@ export class PositionAssignee implements IPositionAssignee {
 }
 
 export interface IPositionAssignee {
-    id?: number;
+    personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
     beginDateTime?: Date;

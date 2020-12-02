@@ -14,6 +14,7 @@ namespace MemberManager.Application.Positions.Queries.GetPositionsWithAssignees
 {
     public class PositionAssignee {
         public int Id { get; set; }
+        public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public DateTime BeginDateTime { get; set; }

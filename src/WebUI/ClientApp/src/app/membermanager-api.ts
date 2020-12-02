@@ -1500,6 +1500,9 @@ export class PersonDetailVm implements IPersonDetailVm {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
+    careerLevels?: PersonCareerLevelVm[] | undefined;
+    memberStatus?: PersonMemberStatusVm[] | undefined;
+    positions?: PersonPositionVm[] | undefined;
 
     constructor(data?: IPersonDetailVm) {
         if (data) {
@@ -1524,6 +1527,21 @@ export class PersonDetailVm implements IPersonDetailVm {
             this.adressNo = _data["adressNo"];
             this.adressZIP = _data["adressZIP"];
             this.adressCity = _data["adressCity"];
+            if (Array.isArray(_data["careerLevels"])) {
+                this.careerLevels = [] as any;
+                for (let item of _data["careerLevels"])
+                    this.careerLevels!.push(PersonCareerLevelVm.fromJS(item));
+            }
+            if (Array.isArray(_data["memberStatus"])) {
+                this.memberStatus = [] as any;
+                for (let item of _data["memberStatus"])
+                    this.memberStatus!.push(PersonMemberStatusVm.fromJS(item));
+            }
+            if (Array.isArray(_data["positions"])) {
+                this.positions = [] as any;
+                for (let item of _data["positions"])
+                    this.positions!.push(PersonPositionVm.fromJS(item));
+            }
         }
     }
 
@@ -1548,6 +1566,21 @@ export class PersonDetailVm implements IPersonDetailVm {
         data["adressNo"] = this.adressNo;
         data["adressZIP"] = this.adressZIP;
         data["adressCity"] = this.adressCity;
+        if (Array.isArray(this.careerLevels)) {
+            data["careerLevels"] = [];
+            for (let item of this.careerLevels)
+                data["careerLevels"].push(item.toJSON());
+        }
+        if (Array.isArray(this.memberStatus)) {
+            data["memberStatus"] = [];
+            for (let item of this.memberStatus)
+                data["memberStatus"].push(item.toJSON());
+        }
+        if (Array.isArray(this.positions)) {
+            data["positions"] = [];
+            for (let item of this.positions)
+                data["positions"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -1565,12 +1598,179 @@ export interface IPersonDetailVm {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
+    careerLevels?: PersonCareerLevelVm[] | undefined;
+    memberStatus?: PersonMemberStatusVm[] | undefined;
+    positions?: PersonPositionVm[] | undefined;
 }
 
 export enum Gender {
     MALE = 0,
     FEMALE = 1,
     DIVERS = 2,
+}
+
+export class PersonCareerLevelVm implements IPersonCareerLevelVm {
+    id?: number;
+    careerLevelId?: number;
+    careerLevelName?: string | undefined;
+    careerLevelShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IPersonCareerLevelVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.careerLevelId = _data["careerLevelId"];
+            this.careerLevelName = _data["careerLevelName"];
+            this.careerLevelShortName = _data["careerLevelShortName"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PersonCareerLevelVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonCareerLevelVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["careerLevelId"] = this.careerLevelId;
+        data["careerLevelName"] = this.careerLevelName;
+        data["careerLevelShortName"] = this.careerLevelShortName;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPersonCareerLevelVm {
+    id?: number;
+    careerLevelId?: number;
+    careerLevelName?: string | undefined;
+    careerLevelShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+}
+
+export class PersonMemberStatusVm implements IPersonMemberStatusVm {
+    id?: number;
+    memberStatusId?: number;
+    memberStatusName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IPersonMemberStatusVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.memberStatusId = _data["memberStatusId"];
+            this.memberStatusName = _data["memberStatusName"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PersonMemberStatusVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonMemberStatusVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["memberStatusId"] = this.memberStatusId;
+        data["memberStatusName"] = this.memberStatusName;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPersonMemberStatusVm {
+    id?: number;
+    memberStatusId?: number;
+    memberStatusName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+}
+
+export class PersonPositionVm implements IPersonPositionVm {
+    id?: number;
+    positionId?: number;
+    positionName?: string | undefined;
+    positionShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IPersonPositionVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.positionId = _data["positionId"];
+            this.positionName = _data["positionName"];
+            this.positionShortName = _data["positionShortName"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PersonPositionVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonPositionVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["positionId"] = this.positionId;
+        data["positionName"] = this.positionName;
+        data["positionShortName"] = this.positionShortName;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPersonPositionVm {
+    id?: number;
+    positionId?: number;
+    positionName?: string | undefined;
+    positionShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 }
 
 export class CreatePersonCommand implements ICreatePersonCommand {

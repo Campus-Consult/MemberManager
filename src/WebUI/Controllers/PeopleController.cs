@@ -2,6 +2,7 @@
 using MemberManager.Application.People.Commands.DeletePerson;
 using MemberManager.Application.People.Commands.UpdatePerson;
 using MemberManager.Application.People.Queries.GetPeople;
+using MemberManager.Application.People.Queries.GetPeopleBasicInfo;
 using MemberManager.Application.People.Queries.GetPersonDetail;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,12 @@ namespace MemberManager.WebUI.Controllers
         public async Task<ActionResult<PeopleVm>> Get()
         {
             return await Mediator.Send(new GetPeopleQuery());
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PeopleBasicInfoVm>> GetWithBasicInfo()
+        {
+            return await Mediator.Send(new GetPeopleBasicInfoQuery());
         }
 
         [HttpGet("{id}")]

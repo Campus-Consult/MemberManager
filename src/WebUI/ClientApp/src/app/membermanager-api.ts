@@ -17,6 +17,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export interface IPeopleClient {
     get(): Observable<PeopleVm>;
     create(command: CreatePersonCommand): Observable<number>;
+    getWithBasicInfo(): Observable<PeopleBasicInfoVm>;
     get2(id: number): Observable<PersonDetailVm>;
     update(id: number, command: UpdatePersonCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
@@ -133,6 +134,54 @@ export class PeopleClient implements IPeopleClient {
             }));
         }
         return _observableOf<number>(<any>null);
+    }
+
+    getWithBasicInfo(): Observable<PeopleBasicInfoVm> {
+        let url_ = this.baseUrl + "/api/People/GetWithBasicInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetWithBasicInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetWithBasicInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<PeopleBasicInfoVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PeopleBasicInfoVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetWithBasicInfo(response: HttpResponseBase): Observable<PeopleBasicInfoVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PeopleBasicInfoVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PeopleBasicInfoVm>(<any>null);
     }
 
     get2(id: number): Observable<PersonDetailVm> {
@@ -1497,6 +1546,114 @@ export interface IPersonLookupDto {
     id?: string | undefined;
     fistName?: string | undefined;
     surname?: string | undefined;
+}
+
+export class PeopleBasicInfoVm implements IPeopleBasicInfoVm {
+    people?: PersonBasicInfoLookupDto[] | undefined;
+
+    constructor(data?: IPeopleBasicInfoVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["people"])) {
+                this.people = [] as any;
+                for (let item of _data["people"])
+                    this.people!.push(PersonBasicInfoLookupDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PeopleBasicInfoVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PeopleBasicInfoVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.people)) {
+            data["people"] = [];
+            for (let item of this.people)
+                data["people"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPeopleBasicInfoVm {
+    people?: PersonBasicInfoLookupDto[] | undefined;
+}
+
+export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
+    id?: number;
+    fistName?: string | undefined;
+    surname?: string | undefined;
+    currentPositions?: string[] | undefined;
+    currentCareerLevel?: string | undefined;
+    currentMemberStatus?: string | undefined;
+
+    constructor(data?: IPersonBasicInfoLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fistName = _data["fistName"];
+            this.surname = _data["surname"];
+            if (Array.isArray(_data["currentPositions"])) {
+                this.currentPositions = [] as any;
+                for (let item of _data["currentPositions"])
+                    this.currentPositions!.push(item);
+            }
+            this.currentCareerLevel = _data["currentCareerLevel"];
+            this.currentMemberStatus = _data["currentMemberStatus"];
+        }
+    }
+
+    static fromJS(data: any): PersonBasicInfoLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonBasicInfoLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fistName"] = this.fistName;
+        data["surname"] = this.surname;
+        if (Array.isArray(this.currentPositions)) {
+            data["currentPositions"] = [];
+            for (let item of this.currentPositions)
+                data["currentPositions"].push(item);
+        }
+        data["currentCareerLevel"] = this.currentCareerLevel;
+        data["currentMemberStatus"] = this.currentMemberStatus;
+        return data; 
+    }
+}
+
+export interface IPersonBasicInfoLookupDto {
+    id?: number;
+    fistName?: string | undefined;
+    surname?: string | undefined;
+    currentPositions?: string[] | undefined;
+    currentCareerLevel?: string | undefined;
+    currentMemberStatus?: string | undefined;
 }
 
 export class PersonDetailVm implements IPersonDetailVm {

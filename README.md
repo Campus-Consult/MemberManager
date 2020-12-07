@@ -6,7 +6,7 @@ The MemberManager is a member management system made and used by Campus Consult 
 ## Code
 The application is a asp.net core web-api with an Angular frontend.
 
-The projects architecture is based on the clean architecture solution template by Jason Tyler (https://jasontaylor.dev/clean-architecture-getting-started/)
+The projects architecture is based on the clean architecture solution template by Jason Tayler (https://jasontaylor.dev/clean-architecture-getting-started/)
 
 ## Configuration
 This has to be added to the secret settings:

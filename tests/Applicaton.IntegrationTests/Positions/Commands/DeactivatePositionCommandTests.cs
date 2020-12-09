@@ -56,7 +56,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             var positionId = await SetupTestPosition();
 
             var assignPersonToPositionCommand = new AssignPositionCommand {
-                Id = positionId,
+                PositionId = positionId,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
             };
@@ -85,7 +85,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             var positionId = await SetupTestPosition();
 
             var assignPersonToPositionCommand = new AssignPositionCommand {
-                Id = positionId,
+                PositionId = positionId,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
             };
@@ -93,7 +93,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             await SendAsync(assignPersonToPositionCommand);
 
             var assignPerson2ToPositionCommand = new AssignPositionCommand {
-                Id = positionId,
+                PositionId = positionId,
                 PersonId = person2Id,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
             };
@@ -140,7 +140,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             var positionId = await SetupTestPosition();
 
             var assignPersonToPositionCommand = new AssignPositionCommand {
-                Id = positionId,
+                PositionId = positionId,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
             };
@@ -148,7 +148,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             await SendAsync(assignPersonToPositionCommand);
 
             var assignPerson2ToPositionCommand = new AssignPositionCommand {
-                Id = positionId,
+                PositionId = positionId,
                 PersonId = person2Id,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
             };

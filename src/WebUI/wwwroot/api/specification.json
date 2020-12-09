@@ -1381,7 +1381,7 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "positionId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1392,6 +1392,11 @@
           "assignmentDateTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "dismissDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

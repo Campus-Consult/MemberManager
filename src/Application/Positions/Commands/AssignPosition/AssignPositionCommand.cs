@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 
 namespace MemberManager.Application.Positions.Commands.AssignPosition
 {
-    public class AssignPositionCommand : IRequest
+    public class AssignPositionCommand : IRequest<int>
     {
-        public int Id { get; set; }
+        public int PositionId { get; set; }
         public int PersonId { get; set; }
         public DateTime AssignmentDateTime { get; set; }
+        public DateTime? DismissDateTime { get; set; }
     }
 
-    public class AssignPositionCommandHandler : IRequestHandler<AssignPositionCommand>
+    public class AssignPositionCommandHandler : IRequestHandler<AssignPositionCommand, int>
     {
         private readonly IApplicationDbContext _context;
 
@@ -24,27 +25,28 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
             _context = context;
         }
 
-        public async Task<Unit> Handle(AssignPositionCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AssignPositionCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Positions.FindAsync(request.Id);
+            var entity = await _context.Positions.FindAsync(request.PositionId);
 
             if(entity == null)
             {
                 throw new NotFoundException(nameof(Position));
             }
 
-            entity.PersonPositions.Add(
-                new PersonPosition()
+            var newPersonPosition = new PersonPosition()
                 {
-                    PositionId = request.Id,
+                    PositionId = request.PositionId,
                     PersonId = request.PersonId,
                     BeginDateTime = request.AssignmentDateTime,
-                }
-            );
+                    EndDateTime = request.DismissDateTime,
+                };
+
+            entity.PersonPositions.Add(newPersonPosition);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return newPersonPosition.Id;
         }
     }
 }

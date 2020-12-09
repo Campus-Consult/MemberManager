@@ -76,7 +76,7 @@ import { formatDate, getLocaleId } from '@angular/common';
   
       this.positionClient.assign(this.position.id, new AssignPositionCommand({
         assignmentDateTime: this.assignDate.value,
-        id: this.position.id,
+        positionId: this.position.id,
         personId: this.assignPerson.value.id,
       })).subscribe(val => {
         this.dialogRef.close();

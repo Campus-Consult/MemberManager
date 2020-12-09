@@ -86,7 +86,7 @@ namespace MemberManager.WebUI.Controllers
         [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Assign(int id, AssignPositionCommand command)
         {
-            if (id != command.Id)
+            if (id != command.PositionId)
             {
                 return BadRequest();
             }

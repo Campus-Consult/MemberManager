@@ -2395,9 +2395,10 @@ export interface IReactivatePositionCommand {
 }
 
 export class AssignPositionCommand implements IAssignPositionCommand {
-    id?: number;
+    positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
+    dismissDateTime?: Date | undefined;
 
     constructor(data?: IAssignPositionCommand) {
         if (data) {
@@ -2410,9 +2411,10 @@ export class AssignPositionCommand implements IAssignPositionCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.positionId = _data["positionId"];
             this.personId = _data["personId"];
             this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
+            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
         }
     }
 
@@ -2425,17 +2427,19 @@ export class AssignPositionCommand implements IAssignPositionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["positionId"] = this.positionId;
         data["personId"] = this.personId;
         data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
+        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
 
 export interface IAssignPositionCommand {
-    id?: number;
+    positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
+    dismissDateTime?: Date | undefined;
 }
 
 export class DismissPositionCommand implements IDismissPositionCommand {

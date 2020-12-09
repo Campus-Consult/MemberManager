@@ -1,19 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+// Import global assets 
+@import 'assets/fonts/_fonts.scss';
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
+// Import Angular Material Theme
+@import 'theme/theme.scss';
 
-code {
-  color: #e01a76;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100% }
+/* Theming should be done with the material theme*/

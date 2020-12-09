@@ -6,6 +6,58 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/MemberStatus": {
+      "get": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberStatusVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/MemberStatus/{id}": {
+      "get": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_Get2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberStatusDetailVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/People": {
       "get": {
         "tags": [
@@ -788,6 +840,55 @@
   },
   "components": {
     "schemas": {
+      "MemberStatusVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberStatus": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MemberStatusLookupDto"
+            }
+          }
+        }
+      },
+      "MemberStatusLookupDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "countAssignees": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MemberStatusDetailVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "countAssignees": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "PeopleVm": {
         "type": "object",
         "additionalProperties": false,

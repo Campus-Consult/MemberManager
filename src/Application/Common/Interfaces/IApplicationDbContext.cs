@@ -12,7 +12,7 @@ namespace MemberManager.Application.Common.Interfaces
         DbSet<CareerLevel> CareerLevels { get; set; }
         DbSet<PersonCareerLevel> PersonCareerLevels { get; set; }
 
-        DbSet<MemberStatus> MemberStatus { get; set; }
+        DbSet<Domain.Entities.MemberStatus> MemberStatus { get; set; }
         DbSet<PersonMemberStatus> PersonMemberStatus { get; set; }
 
         DbSet<Position> Positions { get; set; }

@@ -14,6 +14,124 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IMemberStatusClient {
+    get(): Observable<MemberStatusVm>;
+    get2(id: number): Observable<MemberStatusDetailVm>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MemberStatusClient implements IMemberStatusClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    get(): Observable<MemberStatusVm> {
+        let url_ = this.baseUrl + "/api/MemberStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<MemberStatusVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MemberStatusVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<MemberStatusVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MemberStatusVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MemberStatusVm>(<any>null);
+    }
+
+    get2(id: number): Observable<MemberStatusDetailVm> {
+        let url_ = this.baseUrl + "/api/MemberStatus/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet2(<any>response_);
+                } catch (e) {
+                    return <Observable<MemberStatusDetailVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MemberStatusDetailVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet2(response: HttpResponseBase): Observable<MemberStatusDetailVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MemberStatusDetailVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MemberStatusDetailVm>(<any>null);
+    }
+}
+
 export interface IPeopleClient {
     get(): Observable<PeopleVm>;
     create(command: CreatePersonCommand): Observable<number>;
@@ -1289,6 +1407,138 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf<WeatherForecast[]>(<any>null);
     }
+}
+
+export class MemberStatusVm implements IMemberStatusVm {
+    memberStatus?: MemberStatusLookupDto[] | undefined;
+
+    constructor(data?: IMemberStatusVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["memberStatus"])) {
+                this.memberStatus = [] as any;
+                for (let item of _data["memberStatus"])
+                    this.memberStatus!.push(MemberStatusLookupDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): MemberStatusVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.memberStatus)) {
+            data["memberStatus"] = [];
+            for (let item of this.memberStatus)
+                data["memberStatus"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IMemberStatusVm {
+    memberStatus?: MemberStatusLookupDto[] | undefined;
+}
+
+export class MemberStatusLookupDto implements IMemberStatusLookupDto {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+
+    constructor(data?: IMemberStatusLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countAssignees = _data["countAssignees"];
+        }
+    }
+
+    static fromJS(data: any): MemberStatusLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countAssignees"] = this.countAssignees;
+        return data; 
+    }
+}
+
+export interface IMemberStatusLookupDto {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+}
+
+export class MemberStatusDetailVm implements IMemberStatusDetailVm {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+
+    constructor(data?: IMemberStatusDetailVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countAssignees = _data["countAssignees"];
+        }
+    }
+
+    static fromJS(data: any): MemberStatusDetailVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusDetailVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countAssignees"] = this.countAssignees;
+        return data; 
+    }
+}
+
+export interface IMemberStatusDetailVm {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
 }
 
 export class PeopleVm implements IPeopleVm {

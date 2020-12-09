@@ -3,9 +3,25 @@
   <app-person-list
     class="table-part"
     (detailEvent)="onChangeDisplayedPerson($event)"
-    (createNewEvent)="onCreate()"
   ></app-person-list>
   <div class="right-section">
+    <div id="buttons">
+      <button mat-raised-button color="accent" id="create" (click)="onCreate()">
+        <mat-icon outline>add</mat-icon>
+      </button>
+      <ng-container *ngIf="refreshingList; else refreshButton">
+        <mat-spinner
+          id="refresh-spinner"
+          [diameter]="20"
+          color="accent"
+        ></mat-spinner>
+      </ng-container>
+      <ng-template #refreshButton>
+        <button mat-raised-button color="accent" (click)="onRefresh()">
+          <mat-icon outline>refresh</mat-icon>
+        </button>
+      </ng-template>
+    </div>
     <app-person-details
       [person]="selectedPerson"
       (editEvent)="onEdit($event)"

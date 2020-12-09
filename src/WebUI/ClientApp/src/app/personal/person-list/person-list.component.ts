@@ -1,15 +1,41 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { IPersonBasicInfoLookupDto, IPersonLookupDto, PeopleBasicInfoVm, PeopleClient, PersonBasicInfoLookupDto } from 'src/app/membermanager-api';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+} from "@angular/core";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
+import {
+  IPersonBasicInfoLookupDto,
+  IPersonLookupDto,
+  PeopleBasicInfoVm,
+  PeopleClient,
+  PersonBasicInfoLookupDto,
+} from "src/app/membermanager-api";
+import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
+
+export const PERSON_LIST_POSSIBLE_COLUMNS = [
+  "firstName",
+  "lastName",
+  "currentMemberStatus",
+  "currentCareerLevel",
+  "currentPositions",
+];
 
 @Component({
-  selector: 'app-person-list',
-  templateUrl: './person-list.component.html',
-  styleUrls: ['./person-list.component.scss'],
+  selector: "app-person-list",
+  templateUrl: "./person-list.component.html",
+  styleUrls: ["./person-list.component.scss"],
 })
-export class PersonListComponent implements OnInit, OnChanges {
+export class PersonListComponent implements OnInit, AfterViewInit {
   personalData: PersonBasicInfoLookupDto[];
 
   dataSource: MatTableDataSource<IPersonBasicInfoLookupDto>;
@@ -20,77 +46,51 @@ export class PersonListComponent implements OnInit, OnChanges {
   @Output()
   detailEvent = new EventEmitter<IPersonBasicInfoLookupDto>();
 
-  @Output()
-  createNewEvent = new EventEmitter();
+  private sort: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    if (this.dataSource) this.dataSource.sort = this.sort;
+  }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
-  
   public selectedPerson: IPersonBasicInfoLookupDto;
-  
-  public searchValue = '';
 
   public isRefreshing = false;
 
-  constructor(private personApi: PeopleClient ) {}
+  constructor(private personApi: PeopleClient) {}
 
   ngOnInit(): void {
     // Loading Member
-    this.onRefresh();
-
     if (!this.displayedColumns) {
-      this.displayedColumns = [
-        'firstName',
-        'lastName',
-        'currentMemberStatus',
-        'currentCareerLevel',
-        'currentPositions',
-        'buttons'
-      ];
+      this.displayedColumns = PERSON_LIST_POSSIBLE_COLUMNS;
     }
-
-    this.dataSource = new MatTableDataSource(this.personalData);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.dataSource = new MatTableDataSource(this.personalData);
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.personApi.getWithBasicInfo().subscribe(
+      (val: PeopleBasicInfoVm) => {
+        this.personalData = val.people;
+        this.dataSource = new MatTableDataSource(this.personalData);
+        this.dataSource.sort = this.sort;
+        console.log("Read After View Inint");
+      },
+      (error) => console.error(error)
+    );
   }
 
   /** =============Person Action Methods ============== */
 
-  onDetails(person: IPersonBasicInfoLookupDto) {
+  onSelect(person: IPersonBasicInfoLookupDto) {
     this.selectedPerson = person;
-    
+
     this.detailEvent.emit(this.selectedPerson);
   }
 
-  onRefresh(){
+  refresh(): Observable<any> {
     this.isRefreshing = true;
-    this.personApi.getWithBasicInfo()
-    .subscribe((val:PeopleBasicInfoVm) => {
+    return this.personApi.getWithBasicInfo().pipe(map((val: PeopleBasicInfoVm) => {
       this.personalData = val.people;
-      this.dataSource = new MatTableDataSource(this.personalData);
+      this.dataSource.data = this.personalData;
       this.isRefreshing = false;
-    });
+    }));
   }
-
-  onCreate(){
-    this.createNewEvent.emit();
-  }
-
 }

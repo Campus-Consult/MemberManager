@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import {
   IPersonBasicInfoLookupDto,
@@ -6,6 +6,7 @@ import {
 } from "../membermanager-api";
 import { CreatePersonComponent } from "./create-person/create-person.component";
 import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
+import { PersonListComponent } from "./person-list/person-list.component";
 
 @Component({
   selector: "app-personal",
@@ -13,10 +14,12 @@ import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data
   styleUrls: ["./personal.component.scss"],
 })
 export class PersonalComponent implements OnInit {
-  public searchValue = "";
+  @ViewChild(PersonListComponent) personListComp: PersonListComponent;
 
   // View
   public selectedPerson: IPersonBasicInfoLookupDto;
+
+  refreshingList = false;
 
   constructor(private dialog: MatDialog) {}
 
@@ -48,6 +51,19 @@ export class PersonalComponent implements OnInit {
       this.requestEDitPerson(person.id, result);
       */
     });
+  }
+
+  onRefresh() {
+    this.refreshingList = !this.refreshingList;
+    this.personListComp.refresh().subscribe(
+      () => {
+        this.refreshingList = !this.refreshingList;
+      },
+      (err) => {
+        console.error();
+        this.refreshingList = !this.refreshingList;
+      }
+    );
   }
 
   onChangeDisplayedPerson(selectedPerson: IPersonBasicInfoLookupDto) {

@@ -1,21 +1,19 @@
-import { newArray } from '@angular/compiler/src/util';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { IPersonLookupDto } from 'src/app/membermanager-api';
+import { Component, Input, OnChanges, OnInit } from "@angular/core";
+import { IPersonBasicInfoLookupDto } from "src/app/membermanager-api";
 import {
   CareerLevel,
   MemberStatus,
-  Person,
   Position,
-} from 'src/app/models/person.class';
-import { HistoryData } from './history-expansion/history-expansion.component';
+} from "src/app/models/person.class";
+import { HistoryData } from "./history-expansion/history-expansion.component";
 
 @Component({
-  selector: 'app-history-panels',
-  templateUrl: './history-panels.component.html',
-  styleUrls: ['./history-panels.component.scss'],
+  selector: "app-history-panels",
+  templateUrl: "./history-panels.component.html",
+  styleUrls: ["./history-panels.component.scss"],
 })
 export class HistoryPanelsComponent implements OnInit, OnChanges {
-  @Input() person: IPersonLookupDto;
+  @Input() person: IPersonBasicInfoLookupDto;
 
   // Expansionpanels Desc
   public currentMemberState: MemberStatus;
@@ -29,59 +27,56 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnChanges(chng) {
-    if ('personDetails' in chng && this.person) {
-       this.currentMemberState = this.getCurrentMemberStatus();
-       this.currentCareerLevel = this.getCurrentCareerLevel();
-       this.currentPositions = this.getCurrentPositions();
-    
-       this.memberStateHistory = this.getMemberStatusHistory();
-       this.careerLevelHistory = this. getCareerLevelHistory();
-       this.positionsHistory  = this.getPositionHistory();
+    if ("personDetails" in chng && this.person) {
+      this.currentMemberState = this.getCurrentMemberStatus();
+      this.currentCareerLevel = this.getCurrentCareerLevel();
+      this.currentPositions = this.getCurrentPositions();
+
+      this.memberStateHistory = this.getMemberStatusHistory();
+      this.careerLevelHistory = this.getCareerLevelHistory();
+      this.positionsHistory = this.getPositionHistory();
     }
   }
 
   ngOnInit(): void {
-
     // TODO: transform into History data
-
     // TODO AAM: Propertys could undefinded and need get from Backend
-
   }
 
   getCareerLevelHistory(): HistoryData[] {
     const personId = this.person.id;
-    console.warn('getCareerLevelHistory not implemented');
-    
+    console.warn("getCareerLevelHistory not implemented");
+
     return [];
   }
 
   getPositionHistory(): HistoryData[] {
     const personId = this.person.id;
-    console.warn('getPositionHistory not implemented');
+    console.warn("getPositionHistory not implemented");
     return [];
   }
 
   getMemberStatusHistory(): HistoryData[] {
     const personId = this.person.id;
-    console.warn('getMemberStatusHistory not implemented');
+    console.warn("getMemberStatusHistory not implemented");
     return [];
   }
 
   getCurrentCareerLevel(): CareerLevel {
     const personId = this.person;
-    console.warn('getCurrentCareerLevel not implemented');
+    console.warn("getCurrentCareerLevel not implemented");
     return undefined;
   }
 
   getCurrentPositions(): Position[] {
     const personId = this.person;
-    console.warn('getCurrentPositions not implemented');
+    console.warn("getCurrentPositions not implemented");
     return [];
   }
 
   getCurrentMemberStatus(): MemberStatus {
     const personId = this.person;
-    console.warn('getCurrentMemberStatus not implemented');
+    console.warn("getCurrentMemberStatus not implemented");
     return undefined;
   }
 }

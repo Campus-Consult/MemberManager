@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
-import { PersonListItem } from '../personal.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
+import { IPersonBasicInfoLookupDto, IPersonLookupDto, PeopleBasicInfoVm, PeopleClient, PersonBasicInfoLookupDto } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-person-list',
@@ -11,15 +10,15 @@ import { IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
   styleUrls: ['./person-list.component.scss'],
 })
 export class PersonListComponent implements OnInit, OnChanges {
-  personalData: PersonListItem[];
+  personalData: PersonBasicInfoLookupDto[];
 
-  dataSource: MatTableDataSource<PersonListItem>;
+  dataSource: MatTableDataSource<IPersonBasicInfoLookupDto>;
 
   @Input()
   displayedColumns?: string[];
 
   @Output()
-  detailEvent = new EventEmitter<IPersonLookupDto>();
+  detailEvent = new EventEmitter<IPersonBasicInfoLookupDto>();
 
   @Output()
   createNewEvent = new EventEmitter();
@@ -28,7 +27,7 @@ export class PersonListComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   
-  public selectedPerson: IPersonLookupDto;
+  public selectedPerson: IPersonBasicInfoLookupDto;
   
   public searchValue = '';
 
@@ -44,9 +43,9 @@ export class PersonListComponent implements OnInit, OnChanges {
       this.displayedColumns = [
         'firstName',
         'lastName',
-        'personsMemberStatus',
-        'personsCareerLevel',
-        'personsPosition',
+        'currentMemberStatus',
+        'currentCareerLevel',
+        'currentPositions',
         'buttons'
       ];
     }
@@ -70,7 +69,7 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   /** =============Person Action Methods ============== */
 
-  onDetails(person: IPersonLookupDto) {
+  onDetails(person: IPersonBasicInfoLookupDto) {
     this.selectedPerson = person;
     
     this.detailEvent.emit(this.selectedPerson);
@@ -78,18 +77,9 @@ export class PersonListComponent implements OnInit, OnChanges {
 
   onRefresh(){
     this.isRefreshing = true;
-    this.personApi.get()
-    .subscribe((val) => {
-      this.personalData = new Array<PersonListItem>()
-      for (const person of val.people) {
-        this.personalData.push({  
-          person: person,
-          personsMemberStatus: [],
-          personsCareerLevel: [],
-          personsPosition: []
-        });
-      }
-      // this.personalData = val;
+    this.personApi.getWithBasicInfo()
+    .subscribe((val:PeopleBasicInfoVm) => {
+      this.personalData = val.people;
       this.dataSource = new MatTableDataSource(this.personalData);
       this.isRefreshing = false;
     });

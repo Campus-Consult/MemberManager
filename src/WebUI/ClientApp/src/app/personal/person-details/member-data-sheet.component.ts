@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { IPersonDetailVm, IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
+import { IPersonBasicInfoLookupDto, IPersonDetailVm, IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-person-details',
@@ -16,7 +16,7 @@ import { IPersonDetailVm, IPersonLookupDto, PeopleClient } from 'src/app/memberm
 })
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
-  person: IPersonLookupDto;
+  person: IPersonBasicInfoLookupDto;
 
   @Output()
   editEvent = new EventEmitter<IPersonDetailVm>();

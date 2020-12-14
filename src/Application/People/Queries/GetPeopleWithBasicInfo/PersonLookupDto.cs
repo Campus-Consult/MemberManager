@@ -11,7 +11,7 @@ namespace MemberManager.Application.People.Queries.GetPeopleBasicInfo
         public string FistName { get; set; }
         public string Surname { get; set; }
 
-        public IList<string> CurrentPositions { get; set; }
+        public IList<SimplePositionDto> CurrentPositions { get; set; }
 
         public string CurrentCareerLevel { get; set; }
 

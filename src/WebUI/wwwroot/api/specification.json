@@ -953,7 +953,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/SimplePositionDto"
             }
           },
           "currentCareerLevel": {
@@ -961,6 +961,24 @@
             "nullable": true
           },
           "currentMemberStatus": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SimplePositionDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
             "type": "string",
             "nullable": true
           }

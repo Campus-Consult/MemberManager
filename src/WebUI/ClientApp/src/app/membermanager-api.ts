@@ -1677,7 +1677,7 @@ export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
     id?: number;
     fistName?: string | undefined;
     surname?: string | undefined;
-    currentPositions?: string[] | undefined;
+    currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
     currentMemberStatus?: string | undefined;
 
@@ -1698,7 +1698,7 @@ export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
             if (Array.isArray(_data["currentPositions"])) {
                 this.currentPositions = [] as any;
                 for (let item of _data["currentPositions"])
-                    this.currentPositions!.push(item);
+                    this.currentPositions!.push(SimplePositionDto.fromJS(item));
             }
             this.currentCareerLevel = _data["currentCareerLevel"];
             this.currentMemberStatus = _data["currentMemberStatus"];
@@ -1720,7 +1720,7 @@ export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
         if (Array.isArray(this.currentPositions)) {
             data["currentPositions"] = [];
             for (let item of this.currentPositions)
-                data["currentPositions"].push(item);
+                data["currentPositions"].push(item.toJSON());
         }
         data["currentCareerLevel"] = this.currentCareerLevel;
         data["currentMemberStatus"] = this.currentMemberStatus;
@@ -1732,9 +1732,53 @@ export interface IPersonBasicInfoLookupDto {
     id?: number;
     fistName?: string | undefined;
     surname?: string | undefined;
-    currentPositions?: string[] | undefined;
+    currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
     currentMemberStatus?: string | undefined;
+}
+
+export class SimplePositionDto implements ISimplePositionDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+
+    constructor(data?: ISimplePositionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+        }
+    }
+
+    static fromJS(data: any): SimplePositionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimplePositionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        return data; 
+    }
+}
+
+export interface ISimplePositionDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
 }
 
 export class PersonDetailVm implements IPersonDetailVm {

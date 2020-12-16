@@ -74,7 +74,7 @@ export class PersonalDataComponent implements OnInit, OnChanges {
         string = "Weiblich";
         break;
       case Gender.DIVERS:
-        string = 'Apache Kampfhelikopter';
+        string = 'Divers';
         break;
       default:
         string = 'No Gender'

@@ -18,6 +18,7 @@ export class CreatePersonComponent implements AfterViewInit {
   memberForm: FormGroup;
 
   // For backend validation
+  errorHintTitle = 'Person nicht erstellt:'
   invalidHints: Array<string>;
   lastRequestErr;
 
@@ -38,20 +39,11 @@ export class CreatePersonComponent implements AfterViewInit {
   }
 
   onSubmit() {
-    const isvalid = this.validateInputFront();
-
+    const isvalid = this.validateForm();
     if (isvalid) {
-      const command = this.convertCreateFormIntoCommand(this.getResult());
-      this.personApi.create(command).subscribe(
-        (val) => {
-          // Modal Output User Input in Modal
-          this.dialogRef.close(this.getResult());
-          // TODO: Succesfull Toast
-        },
-        (err) => {
-          this.handleError(err);
-        }
-      );
+      this.handleFormValid()
+    } else {
+      this.handleFormInvalid()
     }
   }
 
@@ -59,8 +51,36 @@ export class CreatePersonComponent implements AfterViewInit {
     this.dialogRef.close(undefined);
   }
 
-  validateInputFront(): boolean {
+  protected validateForm(): boolean {
     return this.memberForm.valid;
+  }
+
+  /**
+   * @override
+   * Methode Called in OnSubmit when Form is Valid
+   * Do BackendRequest with user input
+   */
+  protected handleFormValid() {
+    const command = this.convertCreateFormIntoCommand(this.getResult());
+    this.personApi.create(command).subscribe(
+      (val) => {
+        // Modal Output User Input in Modal
+        this.dialogRef.close(this.getResult());
+        // TODO: Succesfull Toast
+      },
+      (err) => {
+        this.handleError(err);
+      }
+    );
+  }
+  
+  /**
+   * @override
+   * Methode Called in OnSubmit when Form is invalid
+   * inform user, by adding Invalid Hints or something similiar
+   */
+  protected handleFormInvalid() {
+    throw new Error("Method not implemented.");
   }
 
   private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
@@ -88,20 +108,21 @@ export class CreatePersonComponent implements AfterViewInit {
     return new CreatePersonCommand(iCommand);
   }
 
-  handleError(err) {
+  protected handleError(err) {
+    this.invalidHints = new Array<string>();
     try {
-      this.lastRequestErr = JSON.parse(err.response);      
-      if (this.lastRequestErr.status === 400) {
-        this.invalidHints = new Array<string>()
-        // Prepare input-invalid-msg
-        for (const key in this.lastRequestErr.errors) {
-          if (Object.prototype.hasOwnProperty.call(this.lastRequestErr, key)) {
-            this.invalidHints.push(this.lastRequestErr[key]);
-          }
+      this.lastRequestErr = JSON.parse(err.response);
+      // Prepare input-invalid-msg
+      this.invalidHints.push('Backend: ERROR-STATUS '+this.lastRequestErr.status);
+      for (const key in this.lastRequestErr.errors) {
+        if (Object.prototype.hasOwnProperty.call(this.lastRequestErr, key)) {
+          this.invalidHints.push(this.lastRequestErr[key]);
         }
       }
-    } catch (err) {
-      console.warn("Could not parse Request ERROR");
+    } catch (parseErr) {
+      console.warn("ERROR: Probably could not parse Request");
+      console.error(parseErr);
+      this.invalidHints.push("Ein unbekannter Fehler ist aufgetreten!");
     } finally {
       console.error(err);
     }

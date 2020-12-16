@@ -27,6 +27,7 @@ import { HistoryTabComponent } from './person-details/history-tab/history-tab.co
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import { SharedModule } from "../shared/shared.module";
+import { ErrorHintComponent } from './create-person/error-hint/error-hint.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SharedModule } from "../shared/shared.module";
     MemberFormComponent,
     CreatePersonComponent,
     HistoryTabComponent,
+    ErrorHintComponent,
   ],
   exports: [PersonalComponent],
   imports: [

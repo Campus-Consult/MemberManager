@@ -6,6 +6,7 @@ import { CreatePersonComponent } from '../create-person/create-person.component'
 /**
  * Edit People Modal
  * @extends CreatePersonComponent
+ * most Logic in CreatePersonComponent 
  */
 @Component({
   selector: 'app-edit-pesonal-data',
@@ -15,6 +16,8 @@ import { CreatePersonComponent } from '../create-person/create-person.component'
 export class EditPersonalDataComponent extends CreatePersonComponent implements OnInit, AfterViewInit {
 
   memberdata: PersonDetailVm;
+  
+  errorHintTitle = 'Änderungen nicht übernommen'
 
   constructor(public dialogRef: MatDialogRef<CreatePersonComponent>, @Inject(MAT_DIALOG_DATA) public data: any, protected personApi: PeopleClient) {
     super(dialogRef, personApi);
@@ -24,10 +27,11 @@ export class EditPersonalDataComponent extends CreatePersonComponent implements 
     this.memberdata = this.data;
   }
 
-  onSubmit() {
-    const isvalid = this.validateInputFront();
-    if (isvalid) {
-      const command = this.convertEditFormIntoCommand(this.getResult());
+  /**
+   * @override
+   */
+  protected handleFormValid(){
+    const command = this.convertEditFormIntoCommand(this.getResult());
       this.personApi.update(this.memberdata.id, command).subscribe(
         (val) => {
           // Modal Output User Input in Modal
@@ -39,9 +43,6 @@ export class EditPersonalDataComponent extends CreatePersonComponent implements 
           this.handleError(err);
         }
       );
-    } else {
-
-    }
   }
 
   private convertEditFormIntoCommand(formResult: any): UpdatePersonCommand {

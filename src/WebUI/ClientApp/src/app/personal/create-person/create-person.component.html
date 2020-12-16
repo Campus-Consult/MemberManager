@@ -6,12 +6,11 @@
     <div id="form-container">
       <app-member-form></app-member-form>
     </div>
-    <div
-      class="input-invalid-msg"
-      *ngIf="invalidHints"
-    >
-      <h4 class="backend-hint">Person nicht erstellt:</h4>
-      <p *ngFor="let item of invalidHints" class="backend-hint">{{ item }}</p>
+    <div class="error-hint" *ngIf="invalidHints">
+      <app-error-hint
+        [invalidHints]="invalidHints"
+        [title]="errorHintTitle"
+      ></app-error-hint>
     </div>
   </mat-card-content>
   <mat-card-actions>

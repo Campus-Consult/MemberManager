@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   IPersonBasicInfoLookupDto,
   IPersonDetailVm,
@@ -21,7 +22,7 @@ export class PersonalComponent implements OnInit {
 
   refreshingList = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {}
 
@@ -57,10 +58,17 @@ export class PersonalComponent implements OnInit {
     this.refreshingList = !this.refreshingList;
     this.personListComp.refresh().subscribe(
       () => {
+        this._snackBar.open('Personenliste neugeladen', 'YAY!', {
+          duration: 2000,
+        });
         this.refreshingList = !this.refreshingList;
       },
       (err) => {
         console.error();
+        this._snackBar.open('Personenliste neuladen fehlgeschlagen', 'Nooo!', {
+          duration: 2000,
+        });
+        this.refreshingList = !this.refreshingList;
         this.refreshingList = !this.refreshingList;
       }
     );

@@ -23,11 +23,13 @@ import { CreatePersonComponent } from "./create-person/create-person.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatTabsModule } from "@angular/material/tabs";
-import { HistoryTabComponent } from './person-details/history-tab/history-tab.component';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatSelectModule} from '@angular/material/select';
+import { HistoryTabComponent } from "./person-details/history-tab/history-tab.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSelectModule } from "@angular/material/select";
 import { SharedModule } from "../shared/shared.module";
-import { ErrorHintComponent } from './create-person/error-hint/error-hint.component';
+import { ErrorHintComponent } from "./create-person/error-hint/error-hint.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -62,8 +64,10 @@ import { ErrorHintComponent } from './create-person/error-hint/error-hint.compon
     MatDividerModule,
     MatTabsModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     MatSelectModule,
-    SharedModule
+    MatTooltipModule,
+    SharedModule,
   ],
   entryComponents: [CreatePersonComponent, EditPersonalDataComponent],
 })

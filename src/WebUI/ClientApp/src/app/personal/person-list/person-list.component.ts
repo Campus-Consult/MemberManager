@@ -1,26 +1,22 @@
 import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  OnChanges,
-  SimpleChanges,
   AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
 } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import {
   IPersonBasicInfoLookupDto,
-  IPersonLookupDto,
   PeopleBasicInfoVm,
   PeopleClient,
   PersonBasicInfoLookupDto,
 } from "src/app/membermanager-api";
-import { map } from "rxjs/operators";
-import { Observable } from "rxjs";
 
 export const PERSON_LIST_POSSIBLE_COLUMNS = [
   "firstName",
@@ -46,6 +42,10 @@ export class PersonListComponent implements OnInit, AfterViewInit {
   @Output()
   detailEvent = new EventEmitter<IPersonBasicInfoLookupDto>();
 
+  // propertys for handling view when no dataSource
+  loadingTable: boolean = true;
+  loadingError = 'Error Happened';
+
   private sort: MatSort;
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -66,14 +66,18 @@ export class PersonListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.loadingTable = true;
     this.personApi.getWithBasicInfo().subscribe(
       (val: PeopleBasicInfoVm) => {
         this.personalData = val.people;
         this.dataSource = new MatTableDataSource(this.personalData);
         this.dataSource.sort = this.sort;
-        console.log("Read After View Inint");
+        this.loadingTable = false;
       },
-      (error) => console.error(error)
+      (error) => {
+        this.loadingTable = false;
+        this.loadingError = error;
+      }
     );
   }
 
@@ -87,10 +91,12 @@ export class PersonListComponent implements OnInit, AfterViewInit {
 
   refresh(): Observable<any> {
     this.isRefreshing = true;
-    return this.personApi.getWithBasicInfo().pipe(map((val: PeopleBasicInfoVm) => {
-      this.personalData = val.people;
-      this.dataSource.data = this.personalData;
-      this.isRefreshing = false;
-    }));
+    return this.personApi.getWithBasicInfo().pipe(
+      map((val: PeopleBasicInfoVm) => {
+        this.personalData = val.people;
+        this.dataSource.data = this.personalData;
+        this.isRefreshing = false;
+      })
+    );
   }
 }

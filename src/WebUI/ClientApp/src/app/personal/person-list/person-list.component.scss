@@ -12,6 +12,12 @@ table {
   justify-self: flex-end;
 }
 
-#refresh-spinner {
-  margin-left: 20px; // pushes soinner in Center
+.position-item {
+  margin-bottom: -10px;
+  font-size: xx-small;
+}
+
+.loading-error {
+  color: red;
+  font-style: italic;
 }

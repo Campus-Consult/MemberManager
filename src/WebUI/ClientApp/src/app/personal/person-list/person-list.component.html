@@ -39,6 +39,11 @@
   </data-table>
 </ng-container>
 <ng-template #loading>
-  <h2>Mitglieder werden geladen</h2>
-  <mat-spinner color="primary"></mat-spinner>
+  <ng-container *ngIf="loadingTable; else elseTemplate">
+    <h2>Mitglieder werden geladen</h2>
+    <mat-spinner color="primary"></mat-spinner>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <p class="loading-error">{{loadingError}}</p>
+  </ng-template>
 </ng-template>

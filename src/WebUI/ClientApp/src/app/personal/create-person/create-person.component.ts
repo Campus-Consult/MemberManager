@@ -18,7 +18,7 @@ export class CreatePersonComponent implements AfterViewInit {
   memberForm: FormGroup;
 
   // For backend validation
-  errorHintTitle = 'Person nicht erstellt:'
+  errorHintTitle = "Person nicht erstellt:";
   invalidHints: Array<string>;
   lastRequestErr;
 
@@ -40,10 +40,12 @@ export class CreatePersonComponent implements AfterViewInit {
 
   onSubmit() {
     const isvalid = this.validateForm();
+    console.log("Form valid:" + isvalid);
+
     if (isvalid) {
-      this.handleFormValid()
+      this.handleFormValid();
     } else {
-      this.handleFormInvalid()
+      this.handleFormInvalid();
     }
   }
 
@@ -62,6 +64,8 @@ export class CreatePersonComponent implements AfterViewInit {
    */
   protected handleFormValid() {
     const command = this.convertCreateFormIntoCommand(this.getResult());
+    console.log(command);
+
     this.personApi.create(command).subscribe(
       (val) => {
         // Modal Output User Input in Modal
@@ -73,14 +77,22 @@ export class CreatePersonComponent implements AfterViewInit {
       }
     );
   }
-  
+
   /**
    * @override
    * Methode Called in OnSubmit when Form is invalid
    * inform user, by adding Invalid Hints or something similiar
    */
   protected handleFormInvalid() {
-    throw new Error("Method not implemented.");
+    const invalid = [];
+    this.invalidHints = [];
+    const controls = this.memberForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+        this.invalidHints.push(name);
+      }
+    }
   }
 
   private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
@@ -89,7 +101,14 @@ export class CreatePersonComponent implements AfterViewInit {
     if (formResult.birthdate) {
       birthday = new Date(formResult.birthdate);
     }
-    console.log(birthday);
+    // do propertys undefined if blank string, because backend intepret value is set and checks format 
+/*     const commandPrep = {};
+    for (const key in formResult) {
+      if (Object.prototype.hasOwnProperty.call(formResult, key) && formResult[key] !== '') {
+        commandPrep[key] = ;
+        
+      }
+    } */
 
     const iCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
@@ -113,18 +132,23 @@ export class CreatePersonComponent implements AfterViewInit {
     try {
       this.lastRequestErr = JSON.parse(err.response);
       // Prepare input-invalid-msg
-      this.invalidHints.push('Backend: ERROR-STATUS '+this.lastRequestErr.status);
-      for (const key in this.lastRequestErr.errors) {
-        if (Object.prototype.hasOwnProperty.call(this.lastRequestErr, key)) {
-          this.invalidHints.push(this.lastRequestErr[key]);
+      this.invalidHints.push(
+        "ERROR-STATUS " + this.lastRequestErr.status
+      );
+      const errors = this.lastRequestErr.errors;
+      for (const key in errors) {
+        if (Object.prototype.hasOwnProperty.call(errors, key)) {
+            const msg = errors[key];
+          this.invalidHints.push(msg);
         }
-      }
+      }    
     } catch (parseErr) {
       console.warn("ERROR: Probably could not parse Request");
       console.error(parseErr);
-      this.invalidHints.push("Ein unbekannter Fehler ist aufgetreten!");
     } finally {
-      console.error(err);
+      if (this.invalidHints.length < 1) {
+        this.invalidHints.push("Ein unbekannter Fehler ist aufgetreten!");
+      }
     }
   }
 }

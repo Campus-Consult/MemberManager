@@ -23,15 +23,15 @@ export class MemberFormComponent implements OnInit {
   personalForm = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('',Validators.required),
-    birthdate: new FormControl(''),
+    birthdate: new FormControl(),
     gender: new FormControl('',Validators.required),
-    emailPrivate: new FormControl(''),
-    emailAssociaton: new FormControl('@campus-consult.org',[Validators.email]),
-    mobilePrivate: new FormControl('', Validators.email),
-    adressStreet: new FormControl(''),
-    adressNr: new FormControl(''),
-    adressZIP: new FormControl(''),
-    adressCity: new FormControl(''),
+    emailPrivate: new FormControl('',[Validators.required, Validators.email]),
+    emailAssociaton: new FormControl('@campus-consult.org',[Validators.required, Validators.email]),
+    mobilePrivate: new FormControl(),
+    adressStreet: new FormControl(),
+    adressNr: new FormControl(),
+    adressZIP: new FormControl(),
+    adressCity: new FormControl(),
   });
 
   constructor() { }

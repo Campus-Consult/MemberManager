@@ -28,29 +28,24 @@ export class PersonalComponent implements OnInit {
 
   onCreate() {
     let dialogRef = this.dialog.open(CreatePersonComponent, {
-      height: "600px",
+      maxHeight: "800px",
       width: "600px",
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-      /* In Create Component verschoben
-      this.requestCReatePerson(result); */
+      this.onRefresh();
     });
   }
 
   onEdit(person: IPersonDetailVm) {
     let dialogRef = this.dialog.open(EditPersonalDataComponent, {
-      height: "600px",
+      maxHeight: "800px",
       width: "600px",
       data: person,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`); // Pizza!
-      /* In Edit Component verschoben
-      this.requestEDitPerson(person.id, result);
-      */
+      this.onRefresh();
     });
   }
 

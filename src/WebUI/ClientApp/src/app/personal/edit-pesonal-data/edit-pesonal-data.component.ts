@@ -1,25 +1,35 @@
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IUpdatePersonCommand, PeopleClient, PersonDetailVm, UpdatePersonCommand } from 'src/app/membermanager-api';
-import { CreatePersonComponent } from '../create-person/create-person.component';
+import { AfterViewInit, Component, Inject, OnInit } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {
+  IUpdatePersonCommand,
+  PeopleClient,
+  PersonDetailVm,
+  UpdatePersonCommand,
+} from "src/app/membermanager-api";
+import { CreatePersonComponent } from "../create-person/create-person.component";
 
 /**
  * Edit People Modal
  * @extends CreatePersonComponent
- * most Logic in CreatePersonComponent 
+ * most Logic in CreatePersonComponent
  */
 @Component({
-  selector: 'app-edit-pesonal-data',
-  templateUrl: './edit-pesonal-data.component.html',
-  styleUrls: ['./edit-pesonal-data.component.scss'],
+  selector: "app-edit-pesonal-data",
+  templateUrl: "./edit-pesonal-data.component.html",
+  styleUrls: ["./edit-pesonal-data.component.scss"],
 })
-export class EditPersonalDataComponent extends CreatePersonComponent implements OnInit, AfterViewInit {
-
+export class EditPersonalDataComponent
+  extends CreatePersonComponent
+  implements OnInit, AfterViewInit {
   memberdata: PersonDetailVm;
-  
-  errorHintTitle = 'Änderungen nicht übernommen'
 
-  constructor(public dialogRef: MatDialogRef<CreatePersonComponent>, @Inject(MAT_DIALOG_DATA) public data: any, protected personApi: PeopleClient) {
+  errorHintTitle = "Änderungen nicht übernommen";
+
+  constructor(
+    public dialogRef: MatDialogRef<CreatePersonComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    protected personApi: PeopleClient
+  ) {
     super(dialogRef, personApi);
   }
 
@@ -30,26 +40,30 @@ export class EditPersonalDataComponent extends CreatePersonComponent implements 
   /**
    * @override
    */
-  protected handleFormValid(){
+  protected handleFormValid() {
     const command = this.convertEditFormIntoCommand(this.getResult());
-      this.personApi.update(this.memberdata.id, command).subscribe(
-        (val) => {
-          // Modal Output User Input in Modal
-          this.dialogRef.close(this.getResult());
-          // TODO: Succesfull Toast
-        },
-        (err) => {
-          console.error(err);
-          this.handleError(err);
-        }
-      );
+    this.personApi.update(this.memberdata.id, command).subscribe(
+      (val) => {
+        // Modal Output User Input in Modal
+        this.dialogRef.close(this.getResult());
+        // TODO: Succesfull Toast
+      },
+      (err) => {
+        console.error(err);
+        this.handleError(err);
+      }
+    );
   }
 
   private convertEditFormIntoCommand(formResult: any): UpdatePersonCommand {
     // Casting
-    const birthday = new Date(formResult.birthdate);
+    let birthday: Date;
+    if (formResult.birthdate) {
+      birthday = new Date(formResult.birthdate);
+    }
     const iCommand: IUpdatePersonCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
+      id: this.memberdata.id,
       firstName: formResult.firstName,
       surname: formResult.lastName,
       birthdate: birthday,
@@ -62,9 +76,6 @@ export class EditPersonalDataComponent extends CreatePersonComponent implements 
       adressZIP: formResult.adressZIP,
       adressCity: formResult.adressCity,
     };
-    console.warn("convertFormIntoCommand not implemented");
     return new UpdatePersonCommand(iCommand);
   }
-
-
 }

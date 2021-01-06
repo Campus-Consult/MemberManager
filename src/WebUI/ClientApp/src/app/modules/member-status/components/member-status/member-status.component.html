@@ -3,12 +3,31 @@
     <app-member-status-list (onSelectEvent)="onListSelection($event)"></app-member-status-list>
   </mat-card>
   <mat-card *ngIf="selectedMemberStatus" class="p-3" fxFlex="40%">
-    <mat-card-header>
-      <mat-icon color="primary" mat-card-avatar>info</mat-icon>
-      <mat-card-title>{{selectedMemberStatus.name}}</mat-card-title>
-      <mat-card-subtitle>Member status</mat-card-subtitle>
-    </mat-card-header>
+    <div fxLayout="row" fxLayoutAlign="start start">
+      <mat-card-header fxFlex>
+        <mat-icon color="primary" mat-card-avatar>info</mat-icon>
+        <mat-card-title>{{selectedMemberStatus.name}}</mat-card-title>
+        <mat-card-subtitle>Member status</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-button-toggle-group #group="matButtonToggleGroup" fxFlex="nogrow">
+        <mat-button-toggle value="left" aria-label="Text align left">
+          <mat-icon>search</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center">
+          <mat-icon>edit</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="right" aria-label="Text align right">
+          <mat-icon>person_add</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="justify" aria-label="Text align justify">
+          <mat-icon>person_remove</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
     <mat-card-content>
+
       <app-member-status-details [memberStatusID]="selectedMemberStatus?.id"></app-member-status-details>
     </mat-card-content>
   </mat-card>

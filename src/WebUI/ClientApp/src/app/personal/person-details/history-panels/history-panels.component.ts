@@ -1,10 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from "@angular/core";
 import { IPersonBasicInfoLookupDto } from "src/app/membermanager-api";
-import {
-  CareerLevel,
-  MemberStatus,
-  Position,
-} from "src/app/models/person.class";
 import { HistoryData } from "./history-expansion/history-expansion.component";
 
 @Component({
@@ -16,9 +11,9 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   @Input() person: IPersonBasicInfoLookupDto;
 
   // Expansionpanels Desc
-  public currentMemberState: MemberStatus;
-  public currentCareerLevel: CareerLevel;
-  public currentPositions: Position[];
+  public currentMemberState: any;
+  public currentCareerLevel: any;
+  public currentPositions: any[];
 
   public memberStateHistory: HistoryData[];
   public careerLevelHistory: HistoryData[];
@@ -62,19 +57,19 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
     return [];
   }
 
-  getCurrentCareerLevel(): CareerLevel {
+  getCurrentCareerLevel(): any {
     const personId = this.person;
     console.warn("getCurrentCareerLevel not implemented");
     return undefined;
   }
 
-  getCurrentPositions(): Position[] {
+  getCurrentPositions(): any[] {
     const personId = this.person;
     console.warn("getCurrentPositions not implemented");
     return [];
   }
 
-  getCurrentMemberStatus(): MemberStatus {
+  getCurrentMemberStatus(): any {
     const personId = this.person;
     console.warn("getCurrentMemberStatus not implemented");
     return undefined;

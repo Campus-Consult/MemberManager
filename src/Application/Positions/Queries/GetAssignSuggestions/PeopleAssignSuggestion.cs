@@ -2,8 +2,9 @@ using System.Collections.Generic;
 
 namespace MemberManager.Application.Positions.Queries.GetAssignSuggestions
 {
-    public class PeopleAssignSuggestions
+    public class PeopleAssignSuggestion
     {
-        public ICollection<PeopleAssignSuggestion> Suggestions { get; set; }
+        public string Name { get; set; }
+        public int Id { get; set; }
     }
 }

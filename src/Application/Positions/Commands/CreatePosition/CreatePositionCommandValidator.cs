@@ -19,12 +19,12 @@ namespace MemberManager.Application.Positions.Commands.CreatePosition
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(200)
                 .NotEmpty()
-                .MustAsync(PositionNameIsUnique).WithMessage("Position name already exists.");
+                .MustAsync(PositionNameIsUnique).WithMessage("Positionsname existiert bereits.");
             RuleFor(v => v.ShortName)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(20)
                 .NotEmpty()
-                .MustAsync(PositionShortNameIsUnique).WithMessage("Position shortname already exists.");
+                .MustAsync(PositionShortNameIsUnique).WithMessage("Positions Kurzbezeichnung existiert bereits.");
         }
 
         public async Task<bool> PositionNameIsUnique(CreatePositionCommand command, string personName, CancellationToken cancellationToken)

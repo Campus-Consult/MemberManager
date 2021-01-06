@@ -18,16 +18,16 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
 
             RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
-                .MustAsync(PersonExists).WithMessage("Person does not exist.")
-                .MustAsync(PersonIsNotAssignedAlready).WithMessage("Person is already assigned to that Position at that Time");
+                .MustAsync(PersonExists).WithMessage("Person existiert nicht.")
+                .MustAsync(PersonIsNotAssignedAlready).WithMessage("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
             
             RuleFor(v => v.PositionId).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position does not exist.");
+                .MustAsync(PositionExists).WithMessage("Position existiert nicht.");
 
             RuleFor(v => v.AssignmentDateTime).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
-                .Must(AssignmentDateTimeIsBeforeEndDateTime).WithMessage("Assignment has to be before Dismiss.");
+                .Must(AssignmentDateTimeIsBeforeEndDateTime).WithMessage("Anfangszeit muss vor Endzeit sein.");
         }
 
         public async Task<bool> PositionExists(AssignPositionCommand command1, int positionId, CancellationToken cancellationToken) {

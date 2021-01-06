@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+
 import { MemberStatusLookupDto } from '../../../../membermanager-api';
+import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 
 @Component({
   selector: 'app-member-status',
@@ -12,11 +15,17 @@ export class MemberStatusComponent {
 
   selectedMemberStatus: MemberStatusLookupDto;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() { }
 
   onListSelection(selectedMemberStatus: MemberStatusLookupDto) {
     this.selectedMemberStatus = selectedMemberStatus;
+  }
+
+  onAssignPersonButtonClicked() {
+    this.dialog.open(MemberStatusAssignDialogComponent, {
+      data: this.selectedMemberStatus,
+    });
   }
 }

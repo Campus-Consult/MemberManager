@@ -17,7 +17,7 @@
         <mat-button-toggle value="center" aria-label="Text align center">
           <mat-icon>edit</mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle value="right" aria-label="Text align right">
+        <mat-button-toggle (click)="onAssignPersonButtonClicked()" value="right" aria-label="Text align right">
           <mat-icon>person_add</mat-icon>
         </mat-button-toggle>
         <mat-button-toggle value="justify" aria-label="Text align justify">

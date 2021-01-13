@@ -15,11 +15,11 @@ namespace MemberManager.Application.CareerLevels.Commands.CreateCareerLevelComma
             RuleFor(v => v.Name).Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(200)
                 .NotEmpty()
-                .MustAsync(CareerLevelNameUnique).WithMessage("Career Level Name has to be unique!");
+                .MustAsync(CareerLevelNameUnique).WithMessage("Name des Karrierelevels wird bereits verwendet!");
             RuleFor(v => v.ShortName).Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(200)
                 .NotEmpty()
-                .MustAsync(CareerLevelShortNameUnique).WithMessage("Career Level short Name has to be unique!");
+                .MustAsync(CareerLevelShortNameUnique).WithMessage("Kurzbezeichnung des Karrierelevels wird bereits verwendet!");
         }
 
         public async Task<bool> CareerLevelNameUnique(CreateCareerLevelCommand model, string name, CancellationToken cancellationToken) {

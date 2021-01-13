@@ -14,15 +14,15 @@ namespace MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelComma
             _context = context;
             RuleFor(v => v.CareerLevelId).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
-                .MustAsync(CareerLevelExists).WithMessage("Career Level doesn't exist!");
+                .MustAsync(CareerLevelExists).WithMessage("Karrierelevel existiert nicht!");
             RuleFor(v => v.Name).Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(200)
                 .NotEmpty()
-                .MustAsync(PositioNameUnique).WithMessage("Career Level Name has to be unique!");
+                .MustAsync(PositioNameUnique).WithMessage("Name des Karrierelevels wird bereits verwendet!");
             RuleFor(v => v.ShortName).Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(200)
                 .NotEmpty()
-                .MustAsync(PositionShortNameUnique).WithMessage("Career Level short Name has to be unique!");
+                .MustAsync(PositionShortNameUnique).WithMessage("Kurzbezeichnung des Karrierelevels wird bereits verwendet!");
         }
 
         public async Task<bool> CareerLevelExists(UpdateCareerLevelCommand model, int careerLevelId, CancellationToken cancellationToken) {

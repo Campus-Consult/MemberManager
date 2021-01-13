@@ -53,7 +53,7 @@ export class SearchSelectComponent implements ControlValueAccessor, OnInit, OnCh
 
   private filterSuggestions(value: string): SelectOption[] {
     if (value) {
-      return this.selectSuggestions.filter(suggestion => suggestion.name.toLowerCase().includes(value));
+      return this.selectSuggestions.filter(suggestion => suggestion.name.toLowerCase().includes(value.toLowerCase()));
     } else {
       return this.selectSuggestions;
     }

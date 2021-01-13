@@ -1,6 +1,10 @@
 import { Component, Input, OnChanges, OnInit } from "@angular/core";
-import { IPersonBasicInfoLookupDto } from "src/app/membermanager-api";
-import { HistoryData } from "./history-expansion/history-expansion.component";
+import {
+  IPersonDetailVm,
+  PersonCareerLevelVm,
+  PersonMemberStatusVm,
+  PersonPositionVm,
+} from "src/app/membermanager-api";
 
 @Component({
   selector: "app-history-panels",
@@ -8,70 +12,90 @@ import { HistoryData } from "./history-expansion/history-expansion.component";
   styleUrls: ["./history-panels.component.scss"],
 })
 export class HistoryPanelsComponent implements OnInit, OnChanges {
-  @Input() person: IPersonBasicInfoLookupDto;
+  @Input() person: IPersonDetailVm;
 
-  // Expansionpanels Desc
-  public currentMemberState: any;
-  public currentCareerLevel: any;
-  public currentPositions: any[];
+  /** key = title of expansionPanel, item = historyData */
+  historyPanels = new Map<string, HistoryData[]>();
 
-  public memberStateHistory: HistoryData[];
-  public careerLevelHistory: HistoryData[];
-  public positionsHistory: HistoryData[];
+  displayedColumns: string[] = ["name", "time period"];
 
   constructor() {}
 
   ngOnChanges(chng) {
-    if ("personDetails" in chng && this.person) {
-      this.currentMemberState = this.getCurrentMemberStatus();
-      this.currentCareerLevel = this.getCurrentCareerLevel();
-      this.currentPositions = this.getCurrentPositions();
-
-      this.memberStateHistory = this.getMemberStatusHistory();
-      this.careerLevelHistory = this.getCareerLevelHistory();
-      this.positionsHistory = this.getPositionHistory();
+    if ("person" in chng && this.person) {
+      this.initHistoryData();
     }
   }
 
   ngOnInit(): void {
-    // TODO: transform into History data
-    // TODO AAM: Propertys could undefinded and need get from Backend
+    if (this.person) {
+      this.initHistoryData();
+    }
   }
 
-  getCareerLevelHistory(): HistoryData[] {
-    const personId = this.person.id;
-    console.warn("getCareerLevelHistory not implemented");
+  emitOpenDetails(event: MouseEvent) {}
 
-    return [];
+  dateToString(date: Date) {
+    return date ? date.toDateString() : "-";
   }
 
-  getPositionHistory(): HistoryData[] {
-    const personId = this.person.id;
-    console.warn("getPositionHistory not implemented");
-    return [];
+  initHistoryData() {
+    const memberStateHistory = this.getMemberStatusHistory(
+      this.person.memberStatus
+    );
+    this.historyPanels.set("Mitglieds-Status", memberStateHistory);
+    const careerLevelHistory = this.getCareerLevelHistory(
+      this.person.careerLevels
+    );
+    this.historyPanels.set("Karriere-Level", careerLevelHistory);
+    const positionsHistory = this.getPositionHistory(this.person.positions);
+    this.historyPanels.set("Posten", positionsHistory);
   }
 
-  getMemberStatusHistory(): HistoryData[] {
-    const personId = this.person.id;
-    console.warn("getMemberStatusHistory not implemented");
-    return [];
+  getCareerLevelHistory(careerLevels: PersonCareerLevelVm[]): HistoryData[] {
+    const historyArr = new Array<HistoryData>();
+    for (const carerLevel of careerLevels) {
+      historyArr.push({
+        id: carerLevel.id,
+        name: carerLevel.careerLevelName,
+        startDate: carerLevel.beginDateTime,
+        endDate: carerLevel.endDateTime,
+      });
+    }
+    return historyArr;
   }
 
-  getCurrentCareerLevel(): any {
-    const personId = this.person;
-    console.warn("getCurrentCareerLevel not implemented");
-    return undefined;
+  getPositionHistory(positions: PersonPositionVm[]): HistoryData[] {
+    const historyArr = new Array<HistoryData>();
+    for (const position of positions) {
+      historyArr.push({
+        id: position.id,
+        name: position.positionName,
+        startDate: position.beginDateTime,
+        endDate: position.endDateTime,
+      });
+    }
+    return historyArr;
   }
 
-  getCurrentPositions(): any[] {
-    const personId = this.person;
-    console.warn("getCurrentPositions not implemented");
-    return [];
+  getMemberStatusHistory(memberStates: PersonMemberStatusVm[]): HistoryData[] {
+    const historyArr = new Array<HistoryData>();
+    for (const memberState of memberStates) {
+      historyArr.push({
+        id: memberState.id,
+        name: memberState.memberStatusName,
+        startDate: memberState.beginDateTime,
+        endDate: memberState.endDateTime,
+      });
+    }
+    return historyArr;
   }
+}
 
-  getCurrentMemberStatus(): any {
-    const personId = this.person;
-    console.warn("getCurrentMemberStatus not implemented");
-    return undefined;
-  }
+export interface HistoryData {
+  /** ID of the Element, for Details */
+  id: number;
+  name: string;
+  startDate: Date;
+  endDate: Date;
 }

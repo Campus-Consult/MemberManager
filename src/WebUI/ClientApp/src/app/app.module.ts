@@ -25,6 +25,7 @@ import { PositionComponent } from './position/position.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
 registerLocaleData(localeDe);
@@ -44,6 +45,7 @@ registerLocaleData(localeDe);
     FontAwesomeModule,
     HttpClientModule,
     FormsModule,
+    MatIconModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },

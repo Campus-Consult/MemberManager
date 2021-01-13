@@ -1,35 +1,49 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PersonalComponent } from './personal.component';
-import { PersonEditComponent } from './person-edit/person-edit.component';
-import { PersonDetailsComponent } from './person-details/person-details.component';
-import { PersonListComponent } from './person-list/person-list.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import {MatExpansionModule} from '@angular/material/expansion';
-import { ComponentsModule } from '../components/components.module';
-import { PersonalDataComponent } from './person-details/personal-data/personal-data.component';
-import { EditPetsonalDataComponent } from './person-details/edit-pesonal-data/edit-pesonal-data.component';
-import { HistoryExpansionComponent } from './person-details/history-panels/history-expansion/history-expansion.component';
-import { HistoryPanelsComponent } from './person-details/history-panels/history-panels.component';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { PersonalComponent } from "./personal.component";
+import { MemberDataSheetComponent } from "./person-details/member-data-sheet.component";
+import { PersonListComponent } from "./person-list/person-list.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { ComponentsModule } from "../components/components.module";
+import { PersonalDataComponent } from "./person-details/personal-data/personal-data.component";
+import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
+import { HistoryExpansionComponent } from "./person-details/history-panels/history-expansion/history-expansion.component";
+import { HistoryPanelsComponent } from "./person-details/history-panels/history-panels.component";
+import { MemberFormComponent } from "./create-person/member-form/member-form.component";
+import { CreatePersonComponent } from "./create-person/create-person.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatTabsModule } from "@angular/material/tabs";
+import { HistoryTabComponent } from "./person-details/history-tab/history-tab.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSelectModule } from "@angular/material/select";
+import { SharedModule } from "../shared/shared.module";
+import { ErrorHintComponent } from "./create-person/error-hint/error-hint.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
     PersonalComponent,
-    PersonEditComponent,
-    PersonDetailsComponent,
+    MemberDataSheetComponent,
     PersonListComponent,
     PersonalDataComponent,
-    EditPetsonalDataComponent,
+    EditPersonalDataComponent,
     HistoryExpansionComponent,
-    HistoryPanelsComponent
+    HistoryPanelsComponent,
+    MemberFormComponent,
+    CreatePersonComponent,
+    HistoryTabComponent,
+    ErrorHintComponent,
   ],
   exports: [PersonalComponent],
   imports: [
@@ -45,7 +59,16 @@ import { HistoryPanelsComponent } from './person-details/history-panels/history-
     MatGridListModule,
     MatCardModule,
     MatExpansionModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatTabsModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatSelectModule,
+    MatTooltipModule,
+    SharedModule,
   ],
+  entryComponents: [CreatePersonComponent, EditPersonalDataComponent],
 })
 export class PersonalModule {}

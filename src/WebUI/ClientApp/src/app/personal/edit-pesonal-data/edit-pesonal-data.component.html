@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Person bearbeiten</mat-card-title>
+    <mat-card-subtitle>{{
+      memberdata.firstName + memberdata.surname
+    }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div id="form-container">
+      <app-member-form [memberData]="memberdata"></app-member-form>
+    </div>
+    <div class="error-hint" *ngIf="invalidHints">
+      <app-error-hint
+        [invalidHints]="invalidHints"
+        [title]="errorHintTitle"
+      ></app-error-hint>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="accent" (click)="onSubmit()">Anwenden</button>
+    <button mat-button color="primary" (click)="onCancel()">Verwerfen</button>
+  </mat-card-actions>
+</mat-card>

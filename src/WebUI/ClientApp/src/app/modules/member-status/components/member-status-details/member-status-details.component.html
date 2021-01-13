@@ -1,0 +1,15 @@
+<div>
+  <h1>Details:</h1>
+  <div *ngIf="memberStatus">
+    <dl>
+      <dt>ID:</dt>
+      <dd>{{ memberStatus.id }}</dd>
+      <dt>Name:</dt>
+      <dd>{{ memberStatus.name }}</dd>
+      <dt>Assignees:</dt>
+      <dd>{{ memberStatus.countAssignees }}</dd>
+    </dl>
+  </div>
+</div>
+
+

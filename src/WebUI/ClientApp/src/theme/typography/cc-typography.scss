@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+
+$cc-typography: mat-typography-config(
+  $font-family: 'Titillium Web, sans-serif',
+  /*$headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(16px, 24px, 500)*/
+);

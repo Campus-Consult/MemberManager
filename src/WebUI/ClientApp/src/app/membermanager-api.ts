@@ -14,6 +14,124 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IMemberStatusClient {
+    get(): Observable<MemberStatusVm>;
+    get2(id: number): Observable<MemberStatusDetailVm>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MemberStatusClient implements IMemberStatusClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    get(): Observable<MemberStatusVm> {
+        let url_ = this.baseUrl + "/api/MemberStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<MemberStatusVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MemberStatusVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<MemberStatusVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MemberStatusVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MemberStatusVm>(<any>null);
+    }
+
+    get2(id: number): Observable<MemberStatusDetailVm> {
+        let url_ = this.baseUrl + "/api/MemberStatus/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet2(<any>response_);
+                } catch (e) {
+                    return <Observable<MemberStatusDetailVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MemberStatusDetailVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet2(response: HttpResponseBase): Observable<MemberStatusDetailVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MemberStatusDetailVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MemberStatusDetailVm>(<any>null);
+    }
+}
+
 export interface IPeopleClient {
     get(): Observable<PeopleVm>;
     create(command: CreatePersonCommand): Observable<number>;
@@ -1291,6 +1409,138 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export class MemberStatusVm implements IMemberStatusVm {
+    memberStatus?: MemberStatusLookupDto[] | undefined;
+
+    constructor(data?: IMemberStatusVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["memberStatus"])) {
+                this.memberStatus = [] as any;
+                for (let item of _data["memberStatus"])
+                    this.memberStatus!.push(MemberStatusLookupDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): MemberStatusVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.memberStatus)) {
+            data["memberStatus"] = [];
+            for (let item of this.memberStatus)
+                data["memberStatus"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IMemberStatusVm {
+    memberStatus?: MemberStatusLookupDto[] | undefined;
+}
+
+export class MemberStatusLookupDto implements IMemberStatusLookupDto {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+
+    constructor(data?: IMemberStatusLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countAssignees = _data["countAssignees"];
+        }
+    }
+
+    static fromJS(data: any): MemberStatusLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countAssignees"] = this.countAssignees;
+        return data; 
+    }
+}
+
+export interface IMemberStatusLookupDto {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+}
+
+export class MemberStatusDetailVm implements IMemberStatusDetailVm {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+
+    constructor(data?: IMemberStatusDetailVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countAssignees = _data["countAssignees"];
+        }
+    }
+
+    static fromJS(data: any): MemberStatusDetailVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusDetailVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countAssignees"] = this.countAssignees;
+        return data; 
+    }
+}
+
+export interface IMemberStatusDetailVm {
+    id?: number;
+    name?: string | undefined;
+    countAssignees?: number;
+}
+
 export class PeopleVm implements IPeopleVm {
     people?: PersonLookupDto[] | undefined;
 
@@ -1427,7 +1677,7 @@ export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
     id?: number;
     fistName?: string | undefined;
     surname?: string | undefined;
-    currentPositions?: string[] | undefined;
+    currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
     currentMemberStatus?: string | undefined;
 
@@ -1448,7 +1698,7 @@ export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
             if (Array.isArray(_data["currentPositions"])) {
                 this.currentPositions = [] as any;
                 for (let item of _data["currentPositions"])
-                    this.currentPositions!.push(item);
+                    this.currentPositions!.push(SimplePositionDto.fromJS(item));
             }
             this.currentCareerLevel = _data["currentCareerLevel"];
             this.currentMemberStatus = _data["currentMemberStatus"];
@@ -1470,7 +1720,7 @@ export class PersonBasicInfoLookupDto implements IPersonBasicInfoLookupDto {
         if (Array.isArray(this.currentPositions)) {
             data["currentPositions"] = [];
             for (let item of this.currentPositions)
-                data["currentPositions"].push(item);
+                data["currentPositions"].push(item.toJSON());
         }
         data["currentCareerLevel"] = this.currentCareerLevel;
         data["currentMemberStatus"] = this.currentMemberStatus;
@@ -1482,9 +1732,53 @@ export interface IPersonBasicInfoLookupDto {
     id?: number;
     fistName?: string | undefined;
     surname?: string | undefined;
-    currentPositions?: string[] | undefined;
+    currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
     currentMemberStatus?: string | undefined;
+}
+
+export class SimplePositionDto implements ISimplePositionDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+
+    constructor(data?: ISimplePositionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+        }
+    }
+
+    static fromJS(data: any): SimplePositionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SimplePositionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        return data; 
+    }
+}
+
+export interface ISimplePositionDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
 }
 
 export class PersonDetailVm implements IPersonDetailVm {
@@ -1500,6 +1794,9 @@ export class PersonDetailVm implements IPersonDetailVm {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
+    careerLevels?: PersonCareerLevelVm[] | undefined;
+    memberStatus?: PersonMemberStatusVm[] | undefined;
+    positions?: PersonPositionVm[] | undefined;
 
     constructor(data?: IPersonDetailVm) {
         if (data) {
@@ -1524,6 +1821,21 @@ export class PersonDetailVm implements IPersonDetailVm {
             this.adressNo = _data["adressNo"];
             this.adressZIP = _data["adressZIP"];
             this.adressCity = _data["adressCity"];
+            if (Array.isArray(_data["careerLevels"])) {
+                this.careerLevels = [] as any;
+                for (let item of _data["careerLevels"])
+                    this.careerLevels!.push(PersonCareerLevelVm.fromJS(item));
+            }
+            if (Array.isArray(_data["memberStatus"])) {
+                this.memberStatus = [] as any;
+                for (let item of _data["memberStatus"])
+                    this.memberStatus!.push(PersonMemberStatusVm.fromJS(item));
+            }
+            if (Array.isArray(_data["positions"])) {
+                this.positions = [] as any;
+                for (let item of _data["positions"])
+                    this.positions!.push(PersonPositionVm.fromJS(item));
+            }
         }
     }
 
@@ -1548,6 +1860,21 @@ export class PersonDetailVm implements IPersonDetailVm {
         data["adressNo"] = this.adressNo;
         data["adressZIP"] = this.adressZIP;
         data["adressCity"] = this.adressCity;
+        if (Array.isArray(this.careerLevels)) {
+            data["careerLevels"] = [];
+            for (let item of this.careerLevels)
+                data["careerLevels"].push(item.toJSON());
+        }
+        if (Array.isArray(this.memberStatus)) {
+            data["memberStatus"] = [];
+            for (let item of this.memberStatus)
+                data["memberStatus"].push(item.toJSON());
+        }
+        if (Array.isArray(this.positions)) {
+            data["positions"] = [];
+            for (let item of this.positions)
+                data["positions"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -1565,12 +1892,179 @@ export interface IPersonDetailVm {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
+    careerLevels?: PersonCareerLevelVm[] | undefined;
+    memberStatus?: PersonMemberStatusVm[] | undefined;
+    positions?: PersonPositionVm[] | undefined;
 }
 
 export enum Gender {
     MALE = 0,
     FEMALE = 1,
     DIVERS = 2,
+}
+
+export class PersonCareerLevelVm implements IPersonCareerLevelVm {
+    id?: number;
+    careerLevelId?: number;
+    careerLevelName?: string | undefined;
+    careerLevelShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IPersonCareerLevelVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.careerLevelId = _data["careerLevelId"];
+            this.careerLevelName = _data["careerLevelName"];
+            this.careerLevelShortName = _data["careerLevelShortName"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PersonCareerLevelVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonCareerLevelVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["careerLevelId"] = this.careerLevelId;
+        data["careerLevelName"] = this.careerLevelName;
+        data["careerLevelShortName"] = this.careerLevelShortName;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPersonCareerLevelVm {
+    id?: number;
+    careerLevelId?: number;
+    careerLevelName?: string | undefined;
+    careerLevelShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+}
+
+export class PersonMemberStatusVm implements IPersonMemberStatusVm {
+    id?: number;
+    memberStatusId?: number;
+    memberStatusName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IPersonMemberStatusVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.memberStatusId = _data["memberStatusId"];
+            this.memberStatusName = _data["memberStatusName"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PersonMemberStatusVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonMemberStatusVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["memberStatusId"] = this.memberStatusId;
+        data["memberStatusName"] = this.memberStatusName;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPersonMemberStatusVm {
+    id?: number;
+    memberStatusId?: number;
+    memberStatusName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+}
+
+export class PersonPositionVm implements IPersonPositionVm {
+    id?: number;
+    positionId?: number;
+    positionName?: string | undefined;
+    positionShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IPersonPositionVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.positionId = _data["positionId"];
+            this.positionName = _data["positionName"];
+            this.positionShortName = _data["positionShortName"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PersonPositionVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonPositionVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["positionId"] = this.positionId;
+        data["positionName"] = this.positionName;
+        data["positionShortName"] = this.positionShortName;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPersonPositionVm {
+    id?: number;
+    positionId?: number;
+    positionName?: string | undefined;
+    positionShortName?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 }
 
 export class CreatePersonCommand implements ICreatePersonCommand {

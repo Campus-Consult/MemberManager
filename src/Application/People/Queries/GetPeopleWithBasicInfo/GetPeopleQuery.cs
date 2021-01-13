@@ -39,7 +39,7 @@ namespace MemberManager.Application.People.Queries.GetPeopleBasicInfo
                     CurrentMemberStatus = person.PersonMemberStatus
                         .Where(cl => cl.EndDateTime == null).Select(pm => pm.MemberStatus.Name).FirstOrDefault(),
                     CurrentPositions = person.PersonPositions
-                        .Where(cl => cl.EndDateTime == null).Select(pp => pp.Position.Name).ToList(),
+                        .Where(cl => cl.EndDateTime == null).Select(pp => _mapper.Map<SimplePositionDto>(pp.Position)).ToList(),
                 } ).ToListAsync();
             
             return new PeopleBasicInfoVm {

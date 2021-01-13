@@ -30,14 +30,27 @@ namespace MemberManager.Application.People.Queries.GetPersonDetail
         public async Task<PersonDetailVm> Handle(GetPersonDetailQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.People
-                .FindAsync(request.Id);
+                .Include(p => p.PersonPositions).ThenInclude(pp => pp.Position)
+                .Include(p => p.PersonMemberStatus).ThenInclude(pp => pp.MemberStatus)
+                .Include(p => p.PersonCareerLevels).ThenInclude(pp => pp.CareerLevel)
+                .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(Person), request.Id);
             }
 
-            return _mapper.Map<PersonDetailVm>(entity);
+            var personDetailVm = _mapper.Map<PersonDetailVm>(entity);
+            personDetailVm.MemberStatus = entity.PersonMemberStatus
+                .OrderBy(p => p.BeginDateTime).ThenBy(p => p.EndDateTime)
+                .Select(PersonMemberStatusVm.fromPersonMemberStatus).ToList();
+            personDetailVm.CareerLevels = entity.PersonCareerLevels
+                .OrderBy(p => p.BeginDateTime).ThenBy(p => p.EndDateTime)
+                .Select(PersonCareerLevelVm.fromPersonCareerLevel).ToList();
+            personDetailVm.Positions = entity.PersonPositions
+                .OrderBy(p => p.BeginDateTime).ThenBy(p => p.EndDateTime)
+                .Select(PersonPositionVm.fromPersonPosition).ToList();
+            return personDetailVm;
         }
     }
 }

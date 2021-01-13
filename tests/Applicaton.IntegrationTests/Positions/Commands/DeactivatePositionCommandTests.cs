@@ -71,7 +71,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             FluentActions.Invoking(() =>
                 SendAsync(deactivatePositionCommand))
                     .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("Id"))
-                    .And.Errors["Id"].Should().Contain("Position does not exist.");
+                    .And.Errors["Id"].Should().Contain("Posten existiert nicht.");
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             FluentActions.Invoking(() =>
                 SendAsync(deactivatePositionCommand))
                     .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("Id"))
-                    .And.Errors["Id"].Should().Contain("Can only deactivate a Position after the latest person was assigned to it!");
+                    .And.Errors["Id"].Should().Contain("Posten kann nur zu einem Zeitpunkt deaktiviert werden, wenn in der Zukunft keine Personen mehr zugewiesen werden!");
         }
     }
 }

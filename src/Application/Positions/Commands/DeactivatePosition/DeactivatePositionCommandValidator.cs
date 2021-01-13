@@ -21,7 +21,7 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
                 .NotEmpty()
                 .MustAsync(PositionExists).WithMessage("Posten existiert nicht.")
                 .MustAsync(PositionIsNotDeactivatedAlready).WithMessage("Posten ist bereits deaktiviert.")
-                .MustAsync(PositionEndsBeforeLastActive).WithMessage("Posten kann nur deaktiviert werden, wenn in der Zukunft keine Personen zugewiesen werden!");
+                .MustAsync(PositionEndsBeforeLastActive).WithMessage("Posten kann nur zu einem Zeitpunkt deaktiviert werden, wenn in der Zukunft keine Personen mehr zugewiesen werden!");
         }
 
         public async Task<bool> PositionExists(DeactivatePositionCommand model, int positionId, CancellationToken cancellationTokenn)

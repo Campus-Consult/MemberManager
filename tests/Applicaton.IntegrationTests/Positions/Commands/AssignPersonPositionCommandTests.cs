@@ -140,7 +140,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 AssignmentDateTime = new DateTime(2019, 1, 1),
                 DismissDateTime = new DateTime(2020, 10, 10),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
-                    .And.Errors["PersonId"].Should().Contain("Person is already assigned to that Position at that Time");
+                    .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
             FluentActions.Invoking(() =>
                 SendAsync(new AssignPositionCommand {
@@ -149,7 +149,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 AssignmentDateTime = new DateTime(2019, 1, 1),
                 DismissDateTime = new DateTime(2020, 1, 1),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
-                    .And.Errors["PersonId"].Should().Contain("Person is already assigned to that Position at that Time");
+                    .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
             FluentActions.Invoking(() =>
                 SendAsync(new AssignPositionCommand {
@@ -158,7 +158,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 AssignmentDateTime = new DateTime(2020, 1, 4),
                 DismissDateTime = new DateTime(2020, 1, 5),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
-                    .And.Errors["PersonId"].Should().Contain("Person is already assigned to that Position at that Time");
+                    .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
             FluentActions.Invoking(() =>
                 SendAsync(new AssignPositionCommand {
@@ -167,7 +167,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 AssignmentDateTime = new DateTime(2020, 1, 2),
                 DismissDateTime = new DateTime(2020, 1, 3),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
-                    .And.Errors["PersonId"].Should().Contain("Person is already assigned to that Position at that Time");
+                    .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
         }
     }
 }

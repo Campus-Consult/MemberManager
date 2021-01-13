@@ -24,8 +24,9 @@ export class MemberStatusComponent {
   }
 
   onAssignPersonButtonClicked() {
+
     this.dialog.open(MemberStatusAssignDialogComponent, {
-      data: this.selectedMemberStatus,
+      data: { description: "Assign to " + this.selectedMemberStatus.name, memberStatus: this.selectedMemberStatus }
     });
   }
 }

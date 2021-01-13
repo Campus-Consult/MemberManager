@@ -14,6 +14,124 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface ICareerLevelClient {
+    get(): Observable<CareerLevelsVm>;
+    get2(id: number): Observable<CareerLevelDto>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class CareerLevelClient implements ICareerLevelClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    get(): Observable<CareerLevelsVm> {
+        let url_ = this.baseUrl + "/api/CareerLevel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<CareerLevelsVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CareerLevelsVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<CareerLevelsVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CareerLevelsVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CareerLevelsVm>(<any>null);
+    }
+
+    get2(id: number): Observable<CareerLevelDto> {
+        let url_ = this.baseUrl + "/api/CareerLevel/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet2(<any>response_);
+                } catch (e) {
+                    return <Observable<CareerLevelDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CareerLevelDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet2(response: HttpResponseBase): Observable<CareerLevelDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CareerLevelDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CareerLevelDto>(<any>null);
+    }
+}
+
 export interface IMemberStatusClient {
     get(): Observable<MemberStatusVm>;
     get2(id: number): Observable<MemberStatusDetailVm>;
@@ -1840,6 +1958,214 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf<WeatherForecast[]>(<any>null);
     }
+}
+
+export class CareerLevelsVm implements ICareerLevelsVm {
+    careerLevels?: CareerLevelLookupDto[] | undefined;
+
+    constructor(data?: ICareerLevelsVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["careerLevels"])) {
+                this.careerLevels = [] as any;
+                for (let item of _data["careerLevels"])
+                    this.careerLevels!.push(CareerLevelLookupDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CareerLevelsVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new CareerLevelsVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.careerLevels)) {
+            data["careerLevels"] = [];
+            for (let item of this.careerLevels)
+                data["careerLevels"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICareerLevelsVm {
+    careerLevels?: CareerLevelLookupDto[] | undefined;
+}
+
+export class CareerLevelLookupDto implements ICareerLevelLookupDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+
+    constructor(data?: ICareerLevelLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+            this.isActive = _data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): CareerLevelLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CareerLevelLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        data["isActive"] = this.isActive;
+        return data; 
+    }
+}
+
+export interface ICareerLevelLookupDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+}
+
+export class CareerLevelDto implements ICareerLevelDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+    assignees?: CareerLevelAssignee[] | undefined;
+
+    constructor(data?: ICareerLevelDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+            this.isActive = _data["isActive"];
+            if (Array.isArray(_data["assignees"])) {
+                this.assignees = [] as any;
+                for (let item of _data["assignees"])
+                    this.assignees!.push(CareerLevelAssignee.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CareerLevelDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CareerLevelDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        data["isActive"] = this.isActive;
+        if (Array.isArray(this.assignees)) {
+            data["assignees"] = [];
+            for (let item of this.assignees)
+                data["assignees"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICareerLevelDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+    assignees?: CareerLevelAssignee[] | undefined;
+}
+
+export class CareerLevelAssignee implements ICareerLevelAssignee {
+    id?: number;
+    personId?: number;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: ICareerLevelAssignee) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.personId = _data["personId"];
+            this.firstName = _data["firstName"];
+            this.surname = _data["surname"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CareerLevelAssignee {
+        data = typeof data === 'object' ? data : {};
+        let result = new CareerLevelAssignee();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["personId"] = this.personId;
+        data["firstName"] = this.firstName;
+        data["surname"] = this.surname;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ICareerLevelAssignee {
+    id?: number;
+    personId?: number;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 }
 
 export class MemberStatusVm implements IMemberStatusVm {

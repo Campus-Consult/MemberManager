@@ -6,6 +6,58 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/CareerLevel": {
+      "get": {
+        "tags": [
+          "CareerLevel"
+        ],
+        "operationId": "CareerLevel_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CareerLevelsVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CareerLevel/{id}": {
+      "get": {
+        "tags": [
+          "CareerLevel"
+        ],
+        "operationId": "CareerLevel_Get2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CareerLevelDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/MemberStatus": {
       "get": {
         "tags": [
@@ -1180,6 +1232,99 @@
   },
   "components": {
     "schemas": {
+      "CareerLevelsVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "careerLevels": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CareerLevelLookupDto"
+            }
+          }
+        }
+      },
+      "CareerLevelLookupDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CareerLevelDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "assignees": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CareerLevelAssignee"
+            }
+          }
+        }
+      },
+      "CareerLevelAssignee": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "beginDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
       "MemberStatusVm": {
         "type": "object",
         "additionalProperties": false,

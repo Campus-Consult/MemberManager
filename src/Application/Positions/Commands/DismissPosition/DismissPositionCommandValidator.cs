@@ -18,7 +18,7 @@ namespace MemberManager.Application.Positions.Commands.DismissPosition
 
             RuleFor(v => v.Id)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position existiert nicht.");
+                .MustAsync(PositionExists).WithMessage("Posten existiert nicht.");
 
             RuleFor(v => v.PersonId)
                 .NotEmpty()

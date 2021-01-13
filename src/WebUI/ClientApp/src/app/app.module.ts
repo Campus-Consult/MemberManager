@@ -22,10 +22,11 @@ import { ComponentsModule } from './components/components.module';
 import { PersonalComponent } from './personal/personal.component';
 import { PositionModule } from './position/position.module';
 import { PositionComponent } from './position/position.component';
-import { MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
+import { MemberStatusModule } from './modules/member-status/member-status.module';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 registerLocaleData(localeDe);
 
@@ -58,6 +59,7 @@ registerLocaleData(localeDe);
     ModalModule.forRoot(),
     PersonalModule,
     PositionModule,
+    MemberStatusModule,
     ComponentsModule,
   ],
   providers: [
@@ -69,4 +71,8 @@ registerLocaleData(localeDe);
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(overlayContainer: OverlayContainer) {
+    overlayContainer.getContainerElement().classList.add('cc-theme');
+  }
+}

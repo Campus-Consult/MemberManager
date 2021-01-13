@@ -1,0 +1,48 @@
+@import '~@angular/material/theming';
+
+// mixin name will be used in main theme.scss
+@mixin data-table-theme($config-or-theme) {
+  // Extract the color configuration in case a theme has been passed.
+  // This allows consumers to either pass a theme object or a color configuration.
+  $config: mat-get-color-config($config-or-theme);
+
+  // retrieve variables from theme
+  // (all possible variables, use only what you really need)
+  $primary: map-get($config, primary);
+  // $accent: map-get($config, accent);
+  // $warn: map-get($config, accent);
+  // $foreground: map-get($config, foreground);
+  // $background: map-get($config, background);
+  // all of these variables contain many additional variables
+  data-table {
+    table {
+      width: 100%;
+    }
+
+    #filter {
+      &.mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .mat-column-select {
+      overflow: initial;
+    }
+
+    .mat-row {
+      min-height: 65px;
+    }
+
+    .mat-row {
+      min-height: 65px;
+
+      &.selected {
+        background: mat-color($primary, default);
+
+        .mat-cell {
+          color: mat-color($primary, default-contrast);
+        }
+      }
+    }
+  }
+}

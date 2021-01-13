@@ -2,6 +2,7 @@
 using MemberManager.Domain.Entities;
 using MemberManager.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace MemberManager.Application.People.Queries.GetPersonDetail
 {
@@ -19,5 +20,8 @@ namespace MemberManager.Application.People.Queries.GetPersonDetail
         public string AdressNo { get; set; }
         public string AdressZIP { get; set; }
         public string AdressCity { get; set; }
+        public IList<PersonCareerLevelVm> CareerLevels { get; set; }
+        public IList<PersonMemberStatusVm> MemberStatus { get; set; }
+        public IList<PersonPositionVm> Positions { get; set; }
     }
 }

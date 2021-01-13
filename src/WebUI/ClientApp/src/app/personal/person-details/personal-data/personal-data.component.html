@@ -5,7 +5,7 @@
       <td colspan="2">
         <app-skeleton-loader
           [value]="personDetails.firstName"
-          type="LINE"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -13,8 +13,8 @@
       <td class="font-weight-bold" width="200">Nachname</td>
       <td colspan="2">
         <app-skeleton-loader
-          [value]="personDetails.lastName"
-          type="LINE"
+          [value]="personDetails.surname"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -23,7 +23,7 @@
       <td colspan="2">
         <app-skeleton-loader
           [value]="personDetails.birthdate?personDetails.birthdate.toLocaleDateString(): personDetails.birthdate"
-          type="LINE"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -31,8 +31,8 @@
       <td class="font-weight-bold" width="200">Geschlecht</td>
       <td colspan="2">
         <app-skeleton-loader
-          [value]="personDetails.gender"
-          type="LINE"
+          [value]="getGenderString(personDetails.gender)"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -41,7 +41,7 @@
       <td colspan="2">
         <app-skeleton-loader
           [value]="personDetails.emailAssociaton"
-          type="LINE"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -50,7 +50,7 @@
       <td colspan="2">
         <app-skeleton-loader
           [value]="personDetails.emailPrivate"
-          type="LINE"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -59,7 +59,7 @@
       <td colspan="2">
         <app-skeleton-loader
           [value]="strasseHausNr"
-          type="LINE"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>
@@ -68,7 +68,7 @@
       <td colspan="2">
         <app-skeleton-loader
           [value]="stadtPLZ"
-          type="LINE"
+          type="line"
         ></app-skeleton-loader>
       </td>
     </tr>

@@ -18,9 +18,9 @@ namespace MemberManager.Application.Positions.Commands.UpdatePosition
 
             RuleFor(v => v.Id)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position does not exists.")
-                .MustAsync(PositionNameUnique).WithMessage("Position name already exists.")
-                .MustAsync(PositionExists).WithMessage("Position shortname already exists.");
+                .MustAsync(PositionExists).WithMessage("Posten existiert nicht.")
+                .MustAsync(PositionNameUnique).WithMessage("Postenname existiert bereits.")
+                .MustAsync(PositionExists).WithMessage("Posten Kurzbezeichnung existiert bereits.");
         }
 
         public async Task<bool> PositionExists(UpdatePositionCommand model, int positionId, CancellationToken cancellationToken) {

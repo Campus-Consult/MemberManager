@@ -1,76 +1,102 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PersonListItem } from '../personal.component';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import {
+  IPersonBasicInfoLookupDto,
+  PeopleBasicInfoVm,
+  PeopleClient,
+  PersonBasicInfoLookupDto,
+} from "src/app/membermanager-api";
+
+export const PERSON_LIST_POSSIBLE_COLUMNS = [
+  "firstName",
+  "lastName",
+  "currentMemberStatus",
+  "currentCareerLevel",
+  "currentPositions",
+];
 
 @Component({
-  selector: 'app-person-list',
-  templateUrl: './person-list.component.html',
-  styleUrls: ['./person-list.component.scss'],
+  selector: "app-person-list",
+  templateUrl: "./person-list.component.html",
+  styleUrls: ["./person-list.component.scss"],
 })
-export class PersonListComponent implements OnInit {
-  @Input()
-  personalData: PersonListItem[];
+export class PersonListComponent implements OnInit, AfterViewInit {
+  personalData: PersonBasicInfoLookupDto[];
 
-  dataSource: MatTableDataSource<PersonListItem>;
+  dataSource: MatTableDataSource<IPersonBasicInfoLookupDto>;
 
   @Input()
   displayedColumns?: string[];
 
   @Output()
-  onDetail = new EventEmitter<number>();
+  detailEvent = new EventEmitter<IPersonBasicInfoLookupDto>();
 
-  @Output()
-  onRefresh = new EventEmitter();
+  // propertys for handling view when no dataSource
+  loadingTable: boolean = true;
+  loadingError = 'Error Happened';
 
-  //dataSource = new MatTableDataSource<PersonTableData>(this.personalData);
+  private sort: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    if (this.dataSource) this.dataSource.sort = this.sort;
+  }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  public selectedPerson: IPersonBasicInfoLookupDto;
 
-  
-  public selectedPerson: PersonListItem;
+  public isRefreshing = false;
 
-  
-  public searchValue = '';
-
-
-  constructor() {}
+  constructor(private personApi: PeopleClient) {}
 
   ngOnInit(): void {
+    // Loading Member
     if (!this.displayedColumns) {
-      this.displayedColumns = [
-        'firstName',
-        'lastName',
-        'personsMemberStatus',
-        'personsCareerLevel',
-        'personsPosition',
-        'buttons'
-      ];
+      this.displayedColumns = PERSON_LIST_POSSIBLE_COLUMNS;
     }
-
-    this.dataSource = new MatTableDataSource(this.personalData);
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.loadingTable = true;
+    this.personApi.getWithBasicInfo().subscribe(
+      (val: PeopleBasicInfoVm) => {
+        this.personalData = val.people;
+        this.dataSource = new MatTableDataSource(this.personalData);
+        this.dataSource.sort = this.sort;
+        this.loadingTable = false;
+      },
+      (error) => {
+        this.loadingTable = false;
+        this.loadingError = error;
+      }
+    );
   }
 
   /** =============Person Action Methods ============== */
 
-  details(persID: number) {
-    this.onDetail.emit(persID);
+  onSelect(person: IPersonBasicInfoLookupDto) {
+    this.selectedPerson = person;
+
+    this.detailEvent.emit(this.selectedPerson);
   }
 
-  refresh(){
-    this.onRefresh.emit();
+  refresh(): Observable<any> {
+    this.isRefreshing = true;
+    return this.personApi.getWithBasicInfo().pipe(
+      map((val: PeopleBasicInfoVm) => {
+        this.personalData = val.people;
+        this.dataSource.data = this.personalData;
+        this.isRefreshing = false;
+      })
+    );
   }
-
 }

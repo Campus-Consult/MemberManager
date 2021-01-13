@@ -23,7 +23,7 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
             
             RuleFor(v => v.PositionId).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position existiert nicht.");
+                .MustAsync(PositionExists).WithMessage("Posten existiert nicht.");
 
             RuleFor(v => v.AssignmentDateTime).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()

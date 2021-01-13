@@ -286,12 +286,106 @@
         }
       }
     },
+    "/api/Position/{id}": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_Get2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "history",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Position/GetWithAssignees": {
       "get": {
         "tags": [
           "Position"
         ],
         "operationId": "Position_GetWithAssignees",
+        "parameters": [
+          {
+            "name": "history",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -306,7 +400,7 @@
         }
       }
     },
-    "/api/Position/AssignSuggestions": {
+    "/api/Position/{id}/AssignSuggestions": {
       "get": {
         "tags": [
           "Position"
@@ -314,8 +408,9 @@
         "operationId": "Position_AssignSuggestions",
         "parameters": [
           {
-            "name": "positionID",
-            "in": "query",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -337,41 +432,8 @@
         }
       }
     },
-    "/api/Position/{id}": {
-      "put": {
-        "tags": [
-          "Position"
-        ],
-        "operationId": "Position_Update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Position/Deactivate": {
-      "put": {
+    "/api/Position/{id}/Deactivate": {
+      "post": {
         "tags": [
           "Position"
         ],
@@ -379,7 +441,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -414,8 +477,53 @@
         }
       }
     },
-    "/api/Position/Assign": {
-      "put": {
+    "/api/Position/{id}/Reactivate": {
+      "post": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_Reactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReactivatePositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/Assign": {
+      "post": {
         "tags": [
           "Position"
         ],
@@ -423,7 +531,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -437,6 +546,51 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/AssignPositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/Dismiss": {
+      "post": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_Dismiss",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DismissPositionCommand"
               }
             }
           },
@@ -1297,19 +1451,6 @@
           }
         }
       },
-      "PositionsWAVm": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "positions": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/PositionDto"
-            }
-          }
-        }
-      },
       "PositionDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1346,6 +1487,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "firstName": {
             "type": "string",
             "nullable": true
@@ -1357,6 +1502,24 @@
           "beginDateTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "PositionsWAVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "positions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PositionDto"
+            }
           }
         }
       },
@@ -1401,6 +1564,24 @@
           }
         }
       },
+      "UpdatePositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "DeactivatePositionCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1415,7 +1596,40 @@
           }
         }
       },
+      "ReactivatePositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "AssignPositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "positionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assignmentDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dismissDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "DismissPositionCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1427,7 +1641,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "assignmentDateTime": {
+          "dismissDateTime": {
             "type": "string",
             "format": "date-time"
           }

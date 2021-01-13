@@ -459,11 +459,14 @@ export class PeopleClient implements IPeopleClient {
 export interface IPositionClient {
     get(): Observable<PositionsVm>;
     create(command: CreatePositionCommand): Observable<number>;
-    getWithAssignees(): Observable<PositionsWAVm>;
-    assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions>;
-    update(id: number): Observable<FileResponse>;
-    deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse>;
-    assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse>;
+    get2(id: number, history: boolean | undefined): Observable<PositionDto>;
+    update(id: number, command: UpdatePositionCommand): Observable<FileResponse>;
+    getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm>;
+    assignSuggestions(id: number): Observable<PeopleAssignSuggestions>;
+    deactivate(id: number, command: DeactivatePositionCommand): Observable<FileResponse>;
+    reactivate(id: number, command: ReactivatePositionCommand): Observable<FileResponse>;
+    assign(id: number, command: AssignPositionCommand): Observable<FileResponse>;
+    dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -579,8 +582,120 @@ export class PositionClient implements IPositionClient {
         return _observableOf<number>(<any>null);
     }
 
-    getWithAssignees(): Observable<PositionsWAVm> {
-        let url_ = this.baseUrl + "/api/Position/GetWithAssignees";
+    get2(id: number, history: boolean | undefined): Observable<PositionDto> {
+        let url_ = this.baseUrl + "/api/Position/{id}?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        if (history === null)
+            throw new Error("The parameter 'history' cannot be null.");
+        else if (history !== undefined)
+            url_ += "history=" + encodeURIComponent("" + history) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet2(<any>response_);
+                } catch (e) {
+                    return <Observable<PositionDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PositionDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet2(response: HttpResponseBase): Observable<PositionDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PositionDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PositionDto>(<any>null);
+    }
+
+    update(id: number, command: UpdatePositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    getWithAssignees(history: boolean | undefined): Observable<PositionsWAVm> {
+        let url_ = this.baseUrl + "/api/Position/GetWithAssignees?";
+        if (history === null)
+            throw new Error("The parameter 'history' cannot be null.");
+        else if (history !== undefined)
+            url_ += "history=" + encodeURIComponent("" + history) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -627,12 +742,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<PositionsWAVm>(<any>null);
     }
 
-    assignSuggestions(positionID: number | undefined): Observable<PeopleAssignSuggestions> {
-        let url_ = this.baseUrl + "/api/Position/AssignSuggestions?";
-        if (positionID === null)
-            throw new Error("The parameter 'positionID' cannot be null.");
-        else if (positionID !== undefined)
-            url_ += "positionID=" + encodeURIComponent("" + positionID) + "&"; 
+    assignSuggestions(id: number): Observable<PeopleAssignSuggestions> {
+        let url_ = this.baseUrl + "/api/Position/{id}/AssignSuggestions";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -679,61 +793,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<PeopleAssignSuggestions>(<any>null);
     }
 
-    update(id: number): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/{id}";
+    deactivate(id: number, command: DeactivatePositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Deactivate";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "application/octet-stream"
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdate(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpdate(<any>response_);
-                } catch (e) {
-                    return <Observable<FileResponse>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<FileResponse>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<FileResponse>(<any>null);
-    }
-
-    deactivate(id: number | undefined, command: DeactivatePositionCommand): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/Deactivate?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -748,7 +812,7 @@ export class PositionClient implements IPositionClient {
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDeactivate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -782,12 +846,11 @@ export class PositionClient implements IPositionClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    assign(id: number | undefined, command: AssignPositionCommand): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Position/Assign?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    reactivate(id: number, command: ReactivatePositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Reactivate";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -802,7 +865,60 @@ export class PositionClient implements IPositionClient {
             })
         };
 
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReactivate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReactivate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processReactivate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    assign(id: number, command: AssignPositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Assign";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processAssign(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -817,6 +933,59 @@ export class PositionClient implements IPositionClient {
     }
 
     protected processAssign(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Position/{id}/Dismiss";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDismiss(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDismiss(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDismiss(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -2315,50 +2484,6 @@ export interface IPositionLookupDto {
     isActive?: boolean;
 }
 
-export class PositionsWAVm implements IPositionsWAVm {
-    positions?: PositionDto[] | undefined;
-
-    constructor(data?: IPositionsWAVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["positions"])) {
-                this.positions = [] as any;
-                for (let item of _data["positions"])
-                    this.positions!.push(PositionDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PositionsWAVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new PositionsWAVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.positions)) {
-            data["positions"] = [];
-            for (let item of this.positions)
-                data["positions"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPositionsWAVm {
-    positions?: PositionDto[] | undefined;
-}
-
 export class PositionDto implements IPositionDto {
     id?: number;
     name?: string | undefined;
@@ -2421,9 +2546,11 @@ export interface IPositionDto {
 
 export class PositionAssignee implements IPositionAssignee {
     id?: number;
+    personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
     beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 
     constructor(data?: IPositionAssignee) {
         if (data) {
@@ -2437,9 +2564,11 @@ export class PositionAssignee implements IPositionAssignee {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.personId = _data["personId"];
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
             this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
         }
     }
 
@@ -2453,18 +2582,66 @@ export class PositionAssignee implements IPositionAssignee {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["personId"] = this.personId;
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
         data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
 
 export interface IPositionAssignee {
     id?: number;
+    personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
     beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+}
+
+export class PositionsWAVm implements IPositionsWAVm {
+    positions?: PositionDto[] | undefined;
+
+    constructor(data?: IPositionsWAVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["positions"])) {
+                this.positions = [] as any;
+                for (let item of _data["positions"])
+                    this.positions!.push(PositionDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PositionsWAVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PositionsWAVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.positions)) {
+            data["positions"] = [];
+            for (let item of this.positions)
+                data["positions"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPositionsWAVm {
+    positions?: PositionDto[] | undefined;
 }
 
 export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {
@@ -2591,6 +2768,50 @@ export interface ICreatePositionCommand {
     shortName?: string | undefined;
 }
 
+export class UpdatePositionCommand implements IUpdatePositionCommand {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+
+    constructor(data?: IUpdatePositionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePositionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePositionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        return data; 
+    }
+}
+
+export interface IUpdatePositionCommand {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+}
+
 export class DeactivatePositionCommand implements IDeactivatePositionCommand {
     id?: number;
     endDateTime?: Date;
@@ -2631,10 +2852,47 @@ export interface IDeactivatePositionCommand {
     endDateTime?: Date;
 }
 
-export class AssignPositionCommand implements IAssignPositionCommand {
+export class ReactivatePositionCommand implements IReactivatePositionCommand {
     id?: number;
+
+    constructor(data?: IReactivatePositionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ReactivatePositionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReactivatePositionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IReactivatePositionCommand {
+    id?: number;
+}
+
+export class AssignPositionCommand implements IAssignPositionCommand {
+    positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
+    dismissDateTime?: Date | undefined;
 
     constructor(data?: IAssignPositionCommand) {
         if (data) {
@@ -2647,9 +2905,10 @@ export class AssignPositionCommand implements IAssignPositionCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.positionId = _data["positionId"];
             this.personId = _data["personId"];
             this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
+            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
         }
     }
 
@@ -2662,17 +2921,63 @@ export class AssignPositionCommand implements IAssignPositionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["positionId"] = this.positionId;
         data["personId"] = this.personId;
         data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
+        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
 
 export interface IAssignPositionCommand {
-    id?: number;
+    positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
+    dismissDateTime?: Date | undefined;
+}
+
+export class DismissPositionCommand implements IDismissPositionCommand {
+    id?: number;
+    personId?: number;
+    dismissDateTime?: Date;
+
+    constructor(data?: IDismissPositionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.personId = _data["personId"];
+            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DismissPositionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DismissPositionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["personId"] = this.personId;
+        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IDismissPositionCommand {
+    id?: number;
+    personId?: number;
+    dismissDateTime?: Date;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

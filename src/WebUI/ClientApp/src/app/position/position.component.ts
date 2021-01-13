@@ -29,7 +29,7 @@ export class PositionComponent implements OnInit {
   ngOnInit(): void {
     this.activeFilter = 'all';
     this.searchTerm = '';
-    this.positionClient.getWithAssignees().subscribe(pos => {
+    this.positionClient.getWithAssignees(false).subscribe(pos => {
       this.allPositions = pos.positions;
       this.loading = false;
       this.updateFiltering();

@@ -3,8 +3,12 @@ using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
 using MemberManager.Domain.Entities;
 using System;
+using System.Data;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.EntityFrameworkCore;
 
 namespace MemberManager.Application.Positions.Commands.DeactivatePosition
 {
@@ -26,12 +30,9 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
 
         public async Task<Unit> Handle(DeactivatePositionCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Positions.FindAsync(request.Id);
-
-            if (entity == null)
-            {
-                throw new NotFoundException(nameof(Position), request.Id);
-            }
+            var entity = await _context.Positions
+                .Include(p => p.PersonPositions)
+                .SingleAsync(p => p.Id == request.Id);
 
             foreach (var assignment in entity.PersonPositions)
             {
@@ -42,7 +43,6 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
             }
 
             entity.IsActive = false;
-
 
             await _context.SaveChangesAsync(cancellationToken);
 

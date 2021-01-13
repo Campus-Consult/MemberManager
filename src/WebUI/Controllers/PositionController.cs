@@ -1,7 +1,11 @@
 ﻿using MemberManager.Application.Positions.Commands.AssignPosition;
 using MemberManager.Application.Positions.Commands.CreatePosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
+using MemberManager.Application.Positions.Commands.DismissPosition;
+using MemberManager.Application.Positions.Commands.ReactivatePosition;
+using MemberManager.Application.Positions.Commands.UpdatePosition;
 using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
+using MemberManager.Application.Positions.Queries.GetPositionDetails;
 using MemberManager.Application.Positions.Queries.GetPositions;
 using MemberManager.Application.Positions.Queries.GetPositionsWithAssignees;
 using Microsoft.AspNetCore.Mvc;
@@ -17,20 +21,22 @@ namespace MemberManager.WebUI.Controllers
             return await Mediator.Send(new GetPositionsQuery());
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<PositionDetailVm>> Get(int id)
-        //{
-        //    return await Mediator.Send(new GetPositionDetailQuery { Id = id });
-        //}
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult<PositionsWAVm>> GetWithAssignees() {
-            return await Mediator.Send(new GetPositionsWithAssigneesQuery());
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PositionDto>> Get(int id, bool history=true)
+        {
+           return await Mediator.Send(new GetPositionDetailsQuery { Id = id, IncludeHistory = history });
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<PeopleAssignSuggestions>> AssignSuggestions(int positionID) {
-            return await Mediator.Send(new GetAssignSuggestionsQuery{PositionID = positionID});
+        public async Task<ActionResult<PositionsWAVm>> GetWithAssignees(bool history) {
+            return await Mediator.Send(new GetPositionsWithAssigneesQuery{
+                IncludeHistory = history,
+            });
+        }
+
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<PeopleAssignSuggestions>> AssignSuggestions(int id) {
+            return await Mediator.Send(new GetAssignSuggestionsQuery{PositionID = id});
         }
 
         [HttpPost]
@@ -40,19 +46,19 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPut("{id}")]
-        public Task<ActionResult> Update(int id/*, UpdatePositionCommand command*/)
+        public async Task<ActionResult> Update(int id, UpdatePositionCommand command)
         {
-            //if (id != command.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (id != command.Id)
+            {
+               return BadRequest();
+            }
 
-            //await Mediator.Send(command);
+            await Mediator.Send(command);
 
-            return Task.FromResult<ActionResult>(NoContent());
+            return NoContent();
         }
 
-        [HttpPut("[action]")]
+        [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Deactivate(int id, DeactivatePositionCommand command)
         {
             if (id != command.Id)
@@ -65,16 +71,40 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
-        [HttpPut("[action]")]
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Reactivate(int id, ReactivatePositionCommand command)
+        {
+            if (id != command.Id) {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Assign(int id, AssignPositionCommand command)
         {
-            if (id != command.Id)
+            if (id != command.PositionId)
             {
                 return BadRequest();
             }
 
             await Mediator.Send(command);
 
+            return NoContent();
+        }
+
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Dismiss(int id, DismissPositionCommand command) {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+            
             return NoContent();
         }
     }

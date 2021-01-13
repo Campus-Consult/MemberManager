@@ -36,7 +36,7 @@
             </td>
             <td>
                 <div *ngFor="let persPos of position.assignees">
-                    <a title="Besetzt seit {{persPos.beginDateTime | date: 'dd.MM.yyyy'}}" routerLink="/Person/{{persPos.id}}">{{persPos.firstName}} {{persPos.surname}}</a><a><i (click)="dismiss(position, persPos)" class="fa fa-times dismiss-cross" aria-hidden="true"></i></a>
+                    <a title="{{persPos.id}} Besetzt seit {{persPos.beginDateTime | date: 'dd.MM.yyyy'}}" routerLink="/Person/{{persPos.id}}">{{persPos.firstName}} {{persPos.surname}}</a><a (click)="dismiss(position, persPos)"><mat-icon aria-hidden="true">person_remove</mat-icon></a>
                 </div>
             </td>
             <td>

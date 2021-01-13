@@ -19,12 +19,13 @@ namespace MemberManager.Application.Positions.Queries.GetPositionsWithAssignees
             profile.CreateMap<Position, PositionDto>()
                 .ForMember(d => d.Assignees, opt =>
                     opt.MapFrom(pos => pos.PersonPositions
-                        .Where(pp => pp.EndDateTime == null)
                         .Select(pp => new PositionAssignee {
                             FirstName = pp.Person.FirstName,
+                            Id = pp.Id,
                             Surname = pp.Person.Surname,
-                            Id = pp.Person.Id,
+                            PersonId = pp.Person.Id,
                             BeginDateTime = pp.BeginDateTime,
+                            EndDateTime = pp.EndDateTime,
                         })));
         }
     }

@@ -2,6 +2,7 @@
 using MemberManager.Application.MemberStatus.Commands.AssignMemberStatus;
 using MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions;
+using MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,13 @@ namespace MemberManager.WebUI.Controllers
         [HttpGet("{id}/[action]")]
         public async Task<ActionResult<PeopleAssignSuggestions>> GetAssignSuggestions(int id)
         {
-            return await Mediator.Send(new GetAssignSuggestionsQuery { MemberStatusID = id });
+            return await Mediator.Send(new GetAssignSuggestionsQuery { MemberStatusId = id });
+        }
+
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<PeopleDismissSuggestions>> GetDismissSuggestions(int id)
+        {
+            return await Mediator.Send(new GetDismissSuggestionsQuery { MemberStatusId = id });
         }
 
         //    [HttpPost]

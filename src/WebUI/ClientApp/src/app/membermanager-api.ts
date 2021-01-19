@@ -18,6 +18,7 @@ export interface IMemberStatusClient {
     get(): Observable<MemberStatusVm>;
     get2(id: number): Observable<MemberStatusDetailVm>;
     getAssignSuggestions(id: number): Observable<PeopleAssignSuggestions>;
+    getDismissSuggestions(id: number): Observable<PeopleDismissSuggestions>;
     assign(id: number, command: AssignMemberStatusCommand): Observable<FileResponse>;
     dismiss(id: number, command: DismissFromMemberStatusCommand): Observable<FileResponse>;
 }
@@ -183,6 +184,57 @@ export class MemberStatusClient implements IMemberStatusClient {
             }));
         }
         return _observableOf<PeopleAssignSuggestions>(<any>null);
+    }
+
+    getDismissSuggestions(id: number): Observable<PeopleDismissSuggestions> {
+        let url_ = this.baseUrl + "/api/MemberStatus/{id}/GetDismissSuggestions";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDismissSuggestions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDismissSuggestions(<any>response_);
+                } catch (e) {
+                    return <Observable<PeopleDismissSuggestions>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PeopleDismissSuggestions>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDismissSuggestions(response: HttpResponseBase): Observable<PeopleDismissSuggestions> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PeopleDismissSuggestions.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PeopleDismissSuggestions>(<any>null);
     }
 
     assign(id: number, command: AssignMemberStatusCommand): Observable<FileResponse> {
@@ -1952,6 +2004,90 @@ export class PeopleAssignSuggestion implements IPeopleAssignSuggestion {
 export interface IPeopleAssignSuggestion {
     name?: string | undefined;
     id?: number;
+}
+
+export class PeopleDismissSuggestions implements IPeopleDismissSuggestions {
+    suggestions?: PeopleDismissSuggestion[] | undefined;
+
+    constructor(data?: IPeopleDismissSuggestions) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["suggestions"])) {
+                this.suggestions = [] as any;
+                for (let item of _data["suggestions"])
+                    this.suggestions!.push(PeopleDismissSuggestion.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PeopleDismissSuggestions {
+        data = typeof data === 'object' ? data : {};
+        let result = new PeopleDismissSuggestions();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.suggestions)) {
+            data["suggestions"] = [];
+            for (let item of this.suggestions)
+                data["suggestions"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPeopleDismissSuggestions {
+    suggestions?: PeopleDismissSuggestion[] | undefined;
+}
+
+export class PeopleDismissSuggestion implements IPeopleDismissSuggestion {
+    id?: number;
+    name?: string | undefined;
+
+    constructor(data?: IPeopleDismissSuggestion) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PeopleDismissSuggestion {
+        data = typeof data === 'object' ? data : {};
+        let result = new PeopleDismissSuggestion();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IPeopleDismissSuggestion {
+    id?: number;
+    name?: string | undefined;
 }
 
 export class AssignMemberStatusCommand implements IAssignMemberStatusCommand {

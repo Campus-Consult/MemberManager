@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using MemberManager.Application.MemberStatus.Commands.AssignMemberStatus;
+using MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail;
 using Microsoft.AspNetCore.Mvc;
@@ -18,5 +20,91 @@ namespace MemberManager.WebUI.Controllers
         {
             return await Mediator.Send(new GetMemberStatusDetailQuery { Id = id });
         }
+
+        //    [HttpGet("[action]")]
+        //    public async Task<ActionResult<MemberStatusWAVm>> GetWithAssignees(bool history)
+        //    {
+        //        return await Mediator.Send(new GetMemberStatusWithAssigneesQuery
+        //        {
+        //            IncludeHistory = history,
+        //        });
+        //    }
+
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<PeopleAssignSuggestions>> GetAssignSuggestions(int id)
+        {
+            return await Mediator.Send(new GetAssignSuggestionsQuery { MemberStatusID = id });
+        }
+
+        //    [HttpPost]
+        //    public async Task<ActionResult<int>> Create(CreateMemberStatusCommand command)
+        //    {
+        //        return await Mediator.Send(command);
+        //    }
+
+        //    [HttpPut("{id}")]
+        //    public async Task<ActionResult> Update(int id, UpdateMemberStatusCommand command)
+        //    {
+        //        if (id != command.Id)
+        //        {
+        //            return BadRequest();
+        //        }
+
+        //        await Mediator.Send(command);
+
+        //        return NoContent();
+        //    }
+
+        //    [HttpPost("{id}/[action]")]
+        //    public async Task<ActionResult> Deactivate(int id, DeactivateMemberStatusCommand command)
+        //    {
+        //        if (id != command.Id)
+        //        {
+        //            return BadRequest();
+        //        }
+
+        //        await Mediator.Send(command);
+
+        //        return NoContent();
+        //    }
+
+        //    [HttpPost("{id}/[action]")]
+        //    public async Task<ActionResult> Reactivate(int id, ReactivateMemberStatusCommand command)
+        //    {
+        //        if (id != command.Id)
+        //        {
+        //            return BadRequest();
+        //        }
+
+        //        await Mediator.Send(command);
+
+        //        return NoContent();
+        //    }
+
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Assign(int id, AssignMemberStatusCommand command)
+        {
+            if (id != command?.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        //    [HttpPost("{id}/[action]")]
+        //    public async Task<ActionResult> Dismiss(int id, DismissMemberStatusCommand command)
+        //    {
+        //        if (id != command.Id)
+        //        {
+        //            return BadRequest();
+        //        }
+
+        //        await Mediator.Send(command);
+
+        //        return NoContent();
+        //    }
     }
 }

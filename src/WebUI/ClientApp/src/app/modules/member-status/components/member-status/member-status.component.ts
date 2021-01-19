@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { MemberStatusLookupDto } from '../../../../membermanager-api';
 import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
+import { MemberStatusListComponent } from '../member-status-list/member-status-list.component';
 
 @Component({
   selector: 'app-member-status',
@@ -10,6 +11,8 @@ import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialo
   styleUrls: ['./member-status.component.scss']
 })
 export class MemberStatusComponent {
+
+  @ViewChild(MemberStatusListComponent) memberStatusList: MemberStatusListComponent;
 
   debug: boolean = false;
 
@@ -25,8 +28,15 @@ export class MemberStatusComponent {
 
   onAssignPersonButtonClicked() {
 
-    this.dialog.open(MemberStatusAssignDialogComponent, {
+    let dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
       data: { description: "Assign to " + this.selectedMemberStatus.name, memberStatus: this.selectedMemberStatus }
     });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.memberStatusList.reload();
+        }
+      })
   }
 }

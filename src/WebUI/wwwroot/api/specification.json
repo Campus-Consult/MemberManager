@@ -58,6 +58,83 @@
         }
       }
     },
+    "/api/MemberStatus/{id}/GetAssignSuggestions": {
+      "get": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_GetAssignSuggestions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleAssignSuggestions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/MemberStatus/{id}/Assign": {
+      "post": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_Assign",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignMemberStatusCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/People": {
       "get": {
         "tags": [
@@ -424,7 +501,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PeopleAssignSuggestions"
+                  "$ref": "#/components/schemas/PeopleAssignSuggestions2"
                 }
               }
             }
@@ -1043,6 +1120,51 @@
           }
         }
       },
+      "PeopleAssignSuggestions": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PeopleAssignSuggestion"
+            }
+          }
+        }
+      },
+      "PeopleAssignSuggestion": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AssignMemberStatusCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assignmentDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "PeopleVm": {
         "type": "object",
         "additionalProperties": false,
@@ -1391,7 +1513,7 @@
           }
         }
       },
-      "PeopleAssignSuggestions": {
+      "PeopleAssignSuggestions2": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1399,12 +1521,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PeopleAssignSuggestion"
+              "$ref": "#/components/schemas/PeopleAssignSuggestion2"
             }
           }
         }
       },
-      "PeopleAssignSuggestion": {
+      "PeopleAssignSuggestion2": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

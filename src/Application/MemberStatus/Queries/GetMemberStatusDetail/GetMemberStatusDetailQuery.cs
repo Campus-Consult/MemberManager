@@ -2,6 +2,7 @@
 using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +27,8 @@ namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
         public async Task<MemberStatusDetailVm> Handle(GetMemberStatusDetailQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.MemberStatus
-                .FindAsync(request.Id);
+                .Include(ms => ms.PersonMemberStatus)
+                .FirstAsync(ms => ms.Id == request.Id);
 
             if (entity == null)
             {

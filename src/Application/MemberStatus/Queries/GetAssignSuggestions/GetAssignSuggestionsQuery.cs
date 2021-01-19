@@ -10,7 +10,7 @@ namespace MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions
 {
     public class GetAssignSuggestionsQuery : IRequest<PeopleAssignSuggestions>
     {
-        public int MemberStatusID { get; set; }
+        public int MemberStatusId { get; set; }
     }
 
     public class GetAssignSuggestionsQueryHandler : IRequestHandler<GetAssignSuggestionsQuery, PeopleAssignSuggestions>

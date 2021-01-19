@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MemberManager.Application.MemberStatus.Commands.AssignMemberStatus;
+using MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail;
@@ -94,17 +95,17 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
-        //    [HttpPost("{id}/[action]")]
-        //    public async Task<ActionResult> Dismiss(int id, DismissMemberStatusCommand command)
-        //    {
-        //        if (id != command.Id)
-        //        {
-        //            return BadRequest();
-        //        }
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Dismiss(int id, DismissFromMemberStatusCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
 
-        //        await Mediator.Send(command);
+            await Mediator.Send(command);
 
-        //        return NoContent();
-        //    }
+            return NoContent();
+        }
     }
 }

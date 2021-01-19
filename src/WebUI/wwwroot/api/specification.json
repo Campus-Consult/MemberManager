@@ -135,6 +135,51 @@
         }
       }
     },
+    "/api/MemberStatus/{id}/Dismiss": {
+      "post": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_Dismiss",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DismissFromMemberStatusCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/People": {
       "get": {
         "tags": [
@@ -1160,6 +1205,24 @@
             "format": "int32"
           },
           "assignmentDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DismissFromMemberStatusCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dismissalDateTime": {
             "type": "string",
             "format": "date-time"
           }

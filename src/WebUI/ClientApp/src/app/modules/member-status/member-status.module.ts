@@ -45,6 +45,7 @@ import { MemberStatusComponent } from './components/member-status/member-status.
 import { MemberStatusListComponent } from './components/member-status-list/member-status-list.component';
 import { MemberStatusDetailsComponent } from './components/member-status-details/member-status-details.component';
 import { MemberStatusAssignDialogComponent } from './components/member-status-assign-dialog/member-status-assign-dialog.component';
+import { MemberStatusDismissDialogComponent } from './components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 
 @NgModule({
   imports: [
@@ -87,7 +88,11 @@ import { MemberStatusAssignDialogComponent } from './components/member-status-as
     ReactiveFormsModule,
   ],
   declarations: [
-    MemberStatusComponent, MemberStatusListComponent, MemberStatusDetailsComponent, MemberStatusAssignDialogComponent
+    MemberStatusComponent,
+    MemberStatusListComponent,
+    MemberStatusDetailsComponent,
+    MemberStatusAssignDialogComponent,
+    MemberStatusDismissDialogComponent,
   ],
   exports: [
     MemberStatusComponent,

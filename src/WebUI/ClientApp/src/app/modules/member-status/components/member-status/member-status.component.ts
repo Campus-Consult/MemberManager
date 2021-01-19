@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { MemberStatusLookupDto } from '../../../../membermanager-api';
 import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
+import { MemberStatusDetailsComponent } from '../member-status-details/member-status-details.component';
 import { MemberStatusListComponent } from '../member-status-list/member-status-list.component';
 
 @Component({
@@ -13,6 +14,7 @@ import { MemberStatusListComponent } from '../member-status-list/member-status-l
 export class MemberStatusComponent {
 
   @ViewChild(MemberStatusListComponent) memberStatusList: MemberStatusListComponent;
+  @ViewChild(MemberStatusDetailsComponent) memberStatusDetails: MemberStatusDetailsComponent;
 
   debug: boolean = false;
 
@@ -36,6 +38,7 @@ export class MemberStatusComponent {
       .subscribe(result => {
         if (result) {
           this.memberStatusList.reload();
+          this.memberStatusDetails.reload();
         }
       })
   }

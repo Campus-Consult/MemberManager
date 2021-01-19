@@ -25,4 +25,10 @@ export class MemberStatusDetailsComponent implements OnInit, OnChanges {
       this.memberStatus = result;
     });
   }
+
+  reload(): void {
+    this.memberStatusClient.get2(this.memberStatusID).subscribe(result => {
+      this.memberStatus = result;
+    });
+  }
 }

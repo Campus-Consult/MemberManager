@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
+import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
+import { AssigneeDTO, MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
 import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 
@@ -9,16 +10,24 @@ import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dia
   templateUrl: './member-status-details.component.html',
   styleUrls: ['./member-status-details.component.scss']
 })
-export class MemberStatusDetailsComponent implements OnInit, OnChanges {
+export class MemberStatusDetailsComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() memberStatusID: number;
   @Output() onReloadRequired = new EventEmitter();
 
   memberStatus: MemberStatusDetailVm;
 
+  assignees: AssigneeDTO[];
+  dataSource: MatTableDataSource<AssigneeDTO>;
+  columns: string[] = ['name', 'since', 'till'];
+
   constructor(public dialog: MatDialog, private memberStatusClient: MemberStatusClient) { }
 
   ngOnInit(): void {
+    this.fetchMemberStatusDetails();
+  }
+
+  ngAfterViewInit(): void {
     this.fetchMemberStatusDetails();
   }
 
@@ -42,6 +51,7 @@ export class MemberStatusDetailsComponent implements OnInit, OnChanges {
   private fetchMemberStatusDetails() {
     this.memberStatusClient.get2(this.memberStatusID).subscribe(result => {
       this.memberStatus = result;
+      this.dataSource = new MatTableDataSource<AssigneeDTO>(result.assignees);
     });
   }
 

@@ -7,35 +7,45 @@
     </mat-card-header>
 
     <mat-button-toggle-group #group="matButtonToggleGroup" fxFlex="nogrow">
-      <mat-button-toggle value="left" aria-label="Text align left">
+      <mat-button-toggle value="left" disabled>
         <mat-icon>search</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle value="center" aria-label="Text align center">
+      <mat-button-toggle value="center" disabled>
         <mat-icon>edit</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle (click)="onAssignPersonButtonClicked()" value="right" aria-label="Text align right">
+      <mat-button-toggle (click)="onAssignPersonButtonClicked()" value="right">
         <mat-icon>person_add</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle (click)="onDismissPersonButtonClicked()" value="justify" aria-label="Text align justify">
+      <mat-button-toggle (click)="onDismissPersonButtonClicked()" value="justify">
         <mat-icon>person_remove</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
 
   <mat-card-content>
-    <div>
-      <h1>Details:</h1>
-      <div *ngIf="memberStatus">
-        <dl>
-          <dt>ID:</dt>
-          <dd>{{ memberStatus.id }}</dd>
-          <dt>Name:</dt>
-          <dd>{{ memberStatus.name }}</dd>
-          <dt>Assignees:</dt>
-          <dd>{{ memberStatus.countAssignees }}</dd>
-        </dl>
-      </div>
-    </div>
+    <h1>Assignees: ({{ memberStatus.countAssignees }})</h1>
+
+    <table *ngIf="memberStatus?.assignees.length > 0" mat-table id="assigneeTable" [dataSource]="dataSource">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="since">
+        <th mat-header-cell *matHeaderCellDef>Since</th>
+        <td mat-cell *matCellDef="let element">{{ element.beginDateTime?.toLocaleDateString() }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="till">
+        <th mat-header-cell *matHeaderCellDef>Till</th>
+        <td mat-cell *matCellDef="let element">{{ element.endDateTime?.toLocaleDateString() }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+
   </mat-card-content>
 </mat-card>
 

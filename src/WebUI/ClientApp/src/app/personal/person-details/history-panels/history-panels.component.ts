@@ -17,7 +17,7 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   /** key = title of expansionPanel, item = historyData */
   historyPanels = new Map<string, HistoryData[]>();
 
-  displayedColumns: string[] = ["name", "time period"];
+  displayedColumns: string[] = ["name", "time-span"];
 
   constructor() {}
 
@@ -36,7 +36,7 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   emitOpenDetails(event: MouseEvent) {}
 
   dateToString(date: Date) {
-    return date ? date.toDateString() : "-";
+    return date ? date.toDateString() : "o. D.";
   }
 
   initHistoryData() {
@@ -57,7 +57,7 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
     for (const carerLevel of careerLevels) {
       historyArr.push({
         id: carerLevel.id,
-        name: carerLevel.careerLevelName,
+        name: carerLevel.careerLevelName + ' (' + carerLevel.careerLevelShortName + ')',
         startDate: carerLevel.beginDateTime,
         endDate: carerLevel.endDateTime,
       });
@@ -70,7 +70,7 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
     for (const position of positions) {
       historyArr.push({
         id: position.id,
-        name: position.positionName,
+        name: position.positionName + ' (' + position.positionShortName  + ')',
         startDate: position.beginDateTime,
         endDate: position.endDateTime,
       });

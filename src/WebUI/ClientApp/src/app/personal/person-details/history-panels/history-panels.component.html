@@ -4,15 +4,17 @@
       <mat-expansion-panel-header>
         <mat-panel-title> {{ history.key }} </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngIf="history.value && history.value.length > 0; else noData">
+      <!-- History level ist Array TSLint prevnting Error with $any()-->
+      <ng-container *ngIf="history.value && $any(history.value).length > 0; else noData">
         <table id="tight-table" mat-table [dataSource]="history.value">
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>{{ history.key }}</th>
+            <!-- History key ist string TSLint preventing Error with $any() -->
+            <th mat-header-cell *matHeaderCellDef>{{ $any(history.key) + ' (Kurz)' }}</th>
             <td mat-cell *matCellDef="let element">
               <a (click)="emitOpenDetails($event)">{{ element.name }}</a>
             </td>
           </ng-container>
-          <ng-container matColumnDef="time period">
+          <ng-container matColumnDef="time-span">
             <th mat-header-cell *matHeaderCellDef>{{ "Von - Bis" }}</th>
             <td mat-cell *matCellDef="let element">
               <p class="cell-paragraph">

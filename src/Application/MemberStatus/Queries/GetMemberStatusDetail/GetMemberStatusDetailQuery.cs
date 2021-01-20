@@ -28,6 +28,7 @@ namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
         {
             var entity = await _context.MemberStatus
                 .Include(ms => ms.PersonMemberStatus)
+                .ThenInclude(pms => pms.Person)
                 .FirstAsync(ms => ms.Id == request.Id);
 
             if (entity == null)

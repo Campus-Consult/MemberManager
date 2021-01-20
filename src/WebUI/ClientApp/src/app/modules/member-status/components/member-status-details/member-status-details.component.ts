@@ -1,5 +1,8 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
+import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
+import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 
 @Component({
   selector: 'app-member-status-details',
@@ -9,26 +12,64 @@ import { MemberStatusClient, MemberStatusDetailVm } from '../../../../membermana
 export class MemberStatusDetailsComponent implements OnInit, OnChanges {
 
   @Input() memberStatusID: number;
+  @Output() onReloadRequired = new EventEmitter();
 
   memberStatus: MemberStatusDetailVm;
 
-  constructor(private memberStatusClient: MemberStatusClient) { }
+  constructor(public dialog: MatDialog, private memberStatusClient: MemberStatusClient) { }
 
   ngOnInit(): void {
-    this.memberStatusClient.get2(this.memberStatusID).subscribe(result => {
-      this.memberStatus = result;
-    });
+    this.fetchMemberStatusDetails();
   }
 
   ngOnChanges(): void {
+    this.fetchMemberStatusDetails();
+  }
+
+  reload(): void {
+    this.fetchMemberStatusDetails();
+  }
+
+  private reloadRequired(): void {
+    // check if parent is bound
+    if (this.onReloadRequired.observers.length > 0) {
+      this.onReloadRequired.emit();
+    } else {
+      this.reload();
+    }
+  }
+
+  private fetchMemberStatusDetails() {
     this.memberStatusClient.get2(this.memberStatusID).subscribe(result => {
       this.memberStatus = result;
     });
   }
 
-  reload(): void {
-    this.memberStatusClient.get2(this.memberStatusID).subscribe(result => {
-      this.memberStatus = result;
+  private onAssignPersonButtonClicked() {
+
+    let dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
+      data: { description: "Assign to " + this.memberStatus.name, memberStatus: this.memberStatus }
     });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.reloadRequired();
+        }
+      })
+  }
+
+  private onDismissPersonButtonClicked() {
+
+    let dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
+      data: { description: "Dismiss from " + this.memberStatus.name, memberStatus: this.memberStatus }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.reloadRequired();
+        }
+      })
   }
 }

@@ -1,10 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 
 import { MemberStatusLookupDto } from '../../../../membermanager-api';
-import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDetailsComponent } from '../member-status-details/member-status-details.component';
-import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 import { MemberStatusListComponent } from '../member-status-list/member-status-list.component';
 
 @Component({
@@ -21,40 +18,14 @@ export class MemberStatusComponent {
 
   selectedMemberStatus: MemberStatusLookupDto;
 
-  constructor(public dialog: MatDialog) { }
-
   ngOnInit() { }
 
   onListSelection(selectedMemberStatus: MemberStatusLookupDto) {
     this.selectedMemberStatus = selectedMemberStatus;
   }
 
-  onAssignPersonButtonClicked() {
-
-    let dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
-      data: { description: "Assign to " + this.selectedMemberStatus.name, memberStatus: this.selectedMemberStatus }
-    });
-
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          this.reload();
-        }
-      })
-  }
-
-  onDismissPersonButtonClicked() {
-
-    let dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
-      data: { description: "Dismiss from " + this.selectedMemberStatus.name, memberStatus: this.selectedMemberStatus }
-    });
-
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          this.reload();
-        }
-      })
+  reloadRequired(): void {
+    this.reload();
   }
 
   reload(): void {

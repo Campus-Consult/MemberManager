@@ -1,15 +1,42 @@
-<div>
-  <h1>Details:</h1>
-  <div *ngIf="memberStatus">
-    <dl>
-      <dt>ID:</dt>
-      <dd>{{ memberStatus.id }}</dd>
-      <dt>Name:</dt>
-      <dd>{{ memberStatus.name }}</dd>
-      <dt>Assignees:</dt>
-      <dd>{{ memberStatus.countAssignees }}</dd>
-    </dl>
+<mat-card *ngIf="memberStatus">
+  <div fxLayout="row" fxLayoutAlign="start start">
+    <mat-card-header fxFlex>
+      <mat-icon color="primary" mat-card-avatar>info</mat-icon>
+      <mat-card-title>{{memberStatus.name}}</mat-card-title>
+      <mat-card-subtitle>Member status</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-button-toggle-group #group="matButtonToggleGroup" fxFlex="nogrow">
+      <mat-button-toggle value="left" aria-label="Text align left">
+        <mat-icon>search</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="center" aria-label="Text align center">
+        <mat-icon>edit</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle (click)="onAssignPersonButtonClicked()" value="right" aria-label="Text align right">
+        <mat-icon>person_add</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle (click)="onDismissPersonButtonClicked()" value="justify" aria-label="Text align justify">
+        <mat-icon>person_remove</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
-</div>
+
+  <mat-card-content>
+    <div>
+      <h1>Details:</h1>
+      <div *ngIf="memberStatus">
+        <dl>
+          <dt>ID:</dt>
+          <dd>{{ memberStatus.id }}</dd>
+          <dt>Name:</dt>
+          <dd>{{ memberStatus.name }}</dd>
+          <dt>Assignees:</dt>
+          <dd>{{ memberStatus.countAssignees }}</dd>
+        </dl>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
 
 

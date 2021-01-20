@@ -1882,6 +1882,7 @@ export class MemberStatusDetailVm implements IMemberStatusDetailVm {
     id?: number;
     name?: string | undefined;
     countAssignees?: number;
+    assignees?: AssigneeDTO[] | undefined;
 
     constructor(data?: IMemberStatusDetailVm) {
         if (data) {
@@ -1897,6 +1898,11 @@ export class MemberStatusDetailVm implements IMemberStatusDetailVm {
             this.id = _data["id"];
             this.name = _data["name"];
             this.countAssignees = _data["countAssignees"];
+            if (Array.isArray(_data["assignees"])) {
+                this.assignees = [] as any;
+                for (let item of _data["assignees"])
+                    this.assignees!.push(AssigneeDTO.fromJS(item));
+            }
         }
     }
 
@@ -1912,6 +1918,11 @@ export class MemberStatusDetailVm implements IMemberStatusDetailVm {
         data["id"] = this.id;
         data["name"] = this.name;
         data["countAssignees"] = this.countAssignees;
+        if (Array.isArray(this.assignees)) {
+            data["assignees"] = [];
+            for (let item of this.assignees)
+                data["assignees"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -1920,6 +1931,55 @@ export interface IMemberStatusDetailVm {
     id?: number;
     name?: string | undefined;
     countAssignees?: number;
+    assignees?: AssigneeDTO[] | undefined;
+}
+
+export class AssigneeDTO implements IAssigneeDTO {
+    personId?: number;
+    name?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: IAssigneeDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.personId = _data["personId"];
+            this.name = _data["name"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): AssigneeDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new AssigneeDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["personId"] = this.personId;
+        data["name"] = this.name;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IAssigneeDTO {
+    personId?: number;
+    name?: string | undefined;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 }
 
 export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {

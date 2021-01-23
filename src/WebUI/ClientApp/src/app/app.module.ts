@@ -49,8 +49,8 @@ registerLocaleData(localeDe);
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'Personal', component: PersonalComponent, pathMatch: 'full' },
-      { path: 'Position', component: PositionComponent, pathMatch: 'full' },
+      { path: 'Personal', component: PersonalComponent, canActivate: [AuthorizeGuard], pathMatch: 'full' },
+      { path: 'Position', component: PositionComponent,canActivate: [AuthorizeGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },

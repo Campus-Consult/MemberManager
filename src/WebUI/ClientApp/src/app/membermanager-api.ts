@@ -1882,7 +1882,7 @@ export class MemberStatusDetailVm implements IMemberStatusDetailVm {
     id?: number;
     name?: string | undefined;
     countAssignees?: number;
-    assignees?: AssigneeDTO[] | undefined;
+    assignees?: AssigneeDto[] | undefined;
 
     constructor(data?: IMemberStatusDetailVm) {
         if (data) {
@@ -1901,7 +1901,7 @@ export class MemberStatusDetailVm implements IMemberStatusDetailVm {
             if (Array.isArray(_data["assignees"])) {
                 this.assignees = [] as any;
                 for (let item of _data["assignees"])
-                    this.assignees!.push(AssigneeDTO.fromJS(item));
+                    this.assignees!.push(AssigneeDto.fromJS(item));
             }
         }
     }
@@ -1931,16 +1931,16 @@ export interface IMemberStatusDetailVm {
     id?: number;
     name?: string | undefined;
     countAssignees?: number;
-    assignees?: AssigneeDTO[] | undefined;
+    assignees?: AssigneeDto[] | undefined;
 }
 
-export class AssigneeDTO implements IAssigneeDTO {
+export class AssigneeDto implements IAssigneeDto {
     personId?: number;
     name?: string | undefined;
     beginDateTime?: Date;
     endDateTime?: Date | undefined;
 
-    constructor(data?: IAssigneeDTO) {
+    constructor(data?: IAssigneeDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1958,9 +1958,9 @@ export class AssigneeDTO implements IAssigneeDTO {
         }
     }
 
-    static fromJS(data: any): AssigneeDTO {
+    static fromJS(data: any): AssigneeDto {
         data = typeof data === 'object' ? data : {};
-        let result = new AssigneeDTO();
+        let result = new AssigneeDto();
         result.init(data);
         return result;
     }
@@ -1975,7 +1975,7 @@ export class AssigneeDTO implements IAssigneeDTO {
     }
 }
 
-export interface IAssigneeDTO {
+export interface IAssigneeDto {
     personId?: number;
     name?: string | undefined;
     beginDateTime?: Date;

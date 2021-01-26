@@ -1199,12 +1199,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/AssigneeDTO"
+              "$ref": "#/components/schemas/AssigneeDto"
             }
           }
         }
       },
-      "AssigneeDTO": {
+      "AssigneeDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

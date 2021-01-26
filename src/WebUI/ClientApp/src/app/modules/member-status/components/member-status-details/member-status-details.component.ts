@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
-import { AssigneeDTO, MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
+import { AssigneeDto, MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
 import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 
@@ -17,8 +17,8 @@ export class MemberStatusDetailsComponent implements OnInit, OnChanges, AfterVie
 
   memberStatus: MemberStatusDetailVm;
 
-  assignees: AssigneeDTO[];
-  dataSource: MatTableDataSource<AssigneeDTO>;
+  assignees: AssigneeDto[];
+  dataSource: MatTableDataSource<AssigneeDto>;
   columns: string[] = ['name', 'since', 'till'];
 
   constructor(public dialog: MatDialog, private memberStatusClient: MemberStatusClient) { }
@@ -51,7 +51,7 @@ export class MemberStatusDetailsComponent implements OnInit, OnChanges, AfterVie
   private fetchMemberStatusDetails() {
     this.memberStatusClient.get2(this.memberStatusID).subscribe(result => {
       this.memberStatus = result;
-      this.dataSource = new MatTableDataSource<AssigneeDTO>(result.assignees);
+      this.dataSource = new MatTableDataSource<AssigneeDto>(result.assignees);
     });
   }
 

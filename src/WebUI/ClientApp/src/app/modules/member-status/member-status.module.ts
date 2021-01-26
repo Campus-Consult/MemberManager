@@ -46,6 +46,7 @@ import { MemberStatusListComponent } from './components/member-status-list/membe
 import { MemberStatusDetailsComponent } from './components/member-status-details/member-status-details.component';
 import { MemberStatusAssignDialogComponent } from './components/member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from './components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
+import { MemberStatusHistoryDialogComponent } from './components/member-status-history-dialog/member-status-history-dialog.component';
 
 @NgModule({
   imports: [
@@ -93,6 +94,7 @@ import { MemberStatusDismissDialogComponent } from './components/member-status-d
     MemberStatusDetailsComponent,
     MemberStatusAssignDialogComponent,
     MemberStatusDismissDialogComponent,
+    MemberStatusHistoryDialogComponent,
   ],
   exports: [
     MemberStatusComponent,

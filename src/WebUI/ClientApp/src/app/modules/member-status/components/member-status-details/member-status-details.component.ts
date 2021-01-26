@@ -4,6 +4,7 @@ import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTa
 import { AssigneeDto, MemberStatusClient, MemberStatusDetailVm } from '../../../../membermanager-api';
 import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
+import { MemberStatusHistoryDialogComponent } from '../member-status-history-dialog/member-status-history-dialog.component';
 
 @Component({
   selector: 'app-member-status-details',
@@ -81,5 +82,13 @@ export class MemberStatusDetailsComponent implements OnInit, OnChanges, AfterVie
           this.reloadRequired();
         }
       })
+  }
+
+  private onShowHistoryButtonClicked() {
+
+    let dialogRef = this.dialog.open(MemberStatusHistoryDialogComponent, {
+      data: { description: "History of " + this.memberStatus.name, memberStatus: this.memberStatus },
+      width: '600px',
+    });
   }
 }

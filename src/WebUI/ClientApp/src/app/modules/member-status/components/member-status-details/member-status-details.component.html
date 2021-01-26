@@ -16,7 +16,7 @@
       <mat-button-toggle (click)="onDismissPersonButtonClicked()" [disabled]="memberStatus?.assignees.length == 0">
         <mat-icon>person_remove</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle disabled>
+      <mat-button-toggle (click)="onShowHistoryButtonClicked()">
         <mat-icon>history</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>

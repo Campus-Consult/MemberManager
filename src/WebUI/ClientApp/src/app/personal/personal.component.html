@@ -1,5 +1,26 @@
-<h2>Personal List</h2>
+<h2>Mitglieder Liste</h2>
 <div class="flex-container">
-  <app-person-list class="table-part" [personalData]="personalTableData" (onDetail)="changeDisplayedPerson($event)" (onRefresh)="doRefresh()"></app-person-list>
-  <app-person-details class="detail-view" [personTabledDTO]="selectedPerson"></app-person-details>
+  <app-person-list
+    class="table-part"
+    (detailEvent)="onChangeDisplayedPerson($event)"
+  ></app-person-list>
+  <div class="right-section">
+    <div id="buttons">
+      <button
+        mat-raised-button
+        color="accent"
+        matTooltip="Mitgliederliste neuladen"
+        (click)="onRefresh()"
+      >
+        <mat-icon outline>refresh</mat-icon>
+      </button>
+      <button mat-raised-button color="accent" id="create" (click)="onCreate()">
+        <mat-icon outline>add</mat-icon>
+      </button>
+    </div>
+    <app-person-details
+      [person]="selectedPerson"
+      (editEvent)="onEdit($event)"
+    ></app-person-details>
+  </div>
 </div>

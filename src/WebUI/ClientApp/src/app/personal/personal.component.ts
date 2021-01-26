@@ -1,46 +1,86 @@
-import { Component, OnInit } from '@angular/core';
-import { PersonApiService } from '../services/api/person-api.service';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  IPersonBasicInfoLookupDto,
+  IPersonDetailVm,
+} from "../membermanager-api";
+import { CreatePersonComponent } from "./create-person/create-person.component";
+import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
+import { PersonListComponent } from "./person-list/person-list.component";
 
 @Component({
-  selector: 'app-personal',
-  templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.scss'],
+  selector: "app-personal",
+  templateUrl: "./personal.component.html",
+  styleUrls: ["./personal.component.scss"],
 })
 export class PersonalComponent implements OnInit {
-  public personalTableData: PersonListItem[];
+  @ViewChild(PersonListComponent) personListComp: PersonListComponent;
 
-  public searchValue= '';
+  // View
+  public selectedPerson: IPersonBasicInfoLookupDto;
 
-  public selectedPerson: PersonListItem;
+  refreshingList = false;
 
-  constructor(private personApi: PersonApiService) {}
+  constructor(private dialog: MatDialog, private _snackBar: MatSnackBar) {}
 
-  ngOnInit(): void {
-    this.doRefresh();
+  ngOnInit(): void {}
+
+  onCreate() {
+    let dialogRef = this.dialog.open(CreatePersonComponent, {
+      maxHeight: "800px",
+      width: "600px",
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.onRefresh();
+    });
   }
 
-  createPerson() {
-    // TODO: API Anbindung
+  onEdit(person: IPersonDetailVm) {
+    let dialogRef = this.dialog.open(EditPersonalDataComponent, {
+      maxHeight: "800px",
+      width: "600px",
+      data: person,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.onRefresh();
+    });
   }
 
-  changeDisplayedPerson(persId: number){
-    this.selectedPerson = this.personalTableData.find((val)=>val.personID === persId);
+  onRefresh() {
+    this.refreshingList = !this.refreshingList;
+    this.personListComp.refresh().subscribe(
+      () => {
+        this._snackBar.open('Personenliste neugeladen', 'YAY!', {
+          duration: 2000,
+        });
+        this.refreshingList = !this.refreshingList;
+      },
+      (err) => {
+        console.error();
+        this._snackBar.open('Personenliste neuladen fehlgeschlagen', 'Nooo!', {
+          duration: 2000,
+        });
+        this.refreshingList = !this.refreshingList;
+        this.refreshingList = !this.refreshingList;
+      }
+    );
   }
 
-  doRefresh(){
-    this.personalTableData = this.personApi.getPersonalTableData();
+  onChangeDisplayedPerson(selectedPerson: IPersonBasicInfoLookupDto) {
+    this.selectedPerson = selectedPerson;
   }
 
+  getDialogSizeConfig(): MatDialogConfig {
+    let height: string;
+    let width: string;
+
+    if (window.screenY <= 600) {
+      //mobile fullscreen
+      //max-height:
+    }
+    return { maxHeight: height, maxWidth: width };
+  }
 }
-
-export interface PersonListItem{
-  personID: number
-  firstName: string;
-  lastName: string;
-  personsMemberStatus: string;
-  personsCareerLevel: string;
-  personsPosition: string;
-}
-
-
-

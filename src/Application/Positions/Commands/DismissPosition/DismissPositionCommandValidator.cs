@@ -18,16 +18,16 @@ namespace MemberManager.Application.Positions.Commands.DismissPosition
 
             RuleFor(v => v.Id)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position does not exists.");
+                .MustAsync(PositionExists).WithMessage("Posten existiert nicht.");
 
             RuleFor(v => v.PersonId)
                 .NotEmpty()
-                .MustAsync(PersonExists).WithMessage("Person does not exist.")
-                .MustAsync(PersonIsAssigned).WithMessage("Person is not assigned.");
+                .MustAsync(PersonExists).WithMessage("Person existiert nicht.")
+                .MustAsync(PersonIsAssigned).WithMessage("Person ist nicht besetzt.");
             
             RuleFor(v => v.DismissDateTime)
                 .NotEmpty()
-                .MustAsync(DismissDateTimeIsAfterStart).WithMessage("Dismiss Date is before Start.");
+                .MustAsync(DismissDateTimeIsAfterStart).WithMessage("Absetzungsdatum ist nach dem Startdatum.");
         }
 
         public async Task<bool> PositionExists(DismissPositionCommand model, int positionId, CancellationToken cancellationToken) {

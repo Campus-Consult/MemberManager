@@ -16,6 +16,14 @@ This has to be added to the secret settings:
     "ClientSecret": "client secret for graph"
   },
 ```
+You find your user secrets in:
+- (Windows) %APPDATA%\microsoft\UserSecrets\<userSecretsId>\secrets.json 
+
+    after you entered into console (make sure you are in dotnet project directory): 
+
+    dotnet user-secrets set YourSecretName "YourSecretContent"
+
+See as reference: https://stackoverflow.com/questions/42268265/how-to-get-manage-user-secrets-in-a-net-core-console-application
 
 ## Deployment
 For all files related to the deployment, see the deployment directory
@@ -25,11 +33,13 @@ To deploy the Project to the server, the following steps have to be taken:
 1. Build the Project for publishing in Production mode:
 
     cd src/WebUI
+
     dotnet publish -c Production
 
 2. Upload the files to the server via ssh:
 
     cd deployment
+
     ./publish.sh
 
 3. After logging in via ssh on the server, copy the files to their real destination

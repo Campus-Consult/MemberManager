@@ -19,9 +19,9 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
             RuleFor(v => v.Id)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position does not exist.")
-                .MustAsync(PositionIsNotDeactivatedAlready).WithMessage("Position is already deactivated.")
-                .MustAsync(PositionEndsBeforeLastActive).WithMessage("Can only deactivate a Position after the latest person was assigned to it!");
+                .MustAsync(PositionExists).WithMessage("Posten existiert nicht.")
+                .MustAsync(PositionIsNotDeactivatedAlready).WithMessage("Posten ist bereits deaktiviert.")
+                .MustAsync(PositionEndsBeforeLastActive).WithMessage("Posten kann nur zu einem Zeitpunkt deaktiviert werden, wenn in der Zukunft keine Personen mehr zugewiesen werden!");
         }
 
         public async Task<bool> PositionExists(DeactivatePositionCommand model, int positionId, CancellationToken cancellationTokenn)
@@ -35,7 +35,7 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
         }
 
         public async Task<bool> PositionEndsBeforeLastActive(DeactivatePositionCommand model, int positionId, CancellationToken cancellationToken) {
-            return await _context.PersonPositions
+            return !await _context.PersonPositions
                 .Where(p => p.PositionId == positionId && p.BeginDateTime > model.EndDateTime)
                 .AnyAsync(cancellationToken);
         }

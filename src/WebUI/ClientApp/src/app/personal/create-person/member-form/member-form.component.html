@@ -1,0 +1,79 @@
+<form class="example-form" [formGroup]="personalForm">
+    <div class="form-group">
+      <p><mat-label>Mitglieds Daten</mat-label></p>
+      <mat-form-field appearance="outline">
+        <mat-label>Vorname</mat-label>
+        <input type="text" formControlName="firstName" matInput required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Nachname</mat-label>
+        <input type="text" formControlName="lastName" matInput required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Geschlecht</mat-label>
+        <mat-select formControlName="gender" name="gender" required>
+          <mat-option *ngFor="let gender of genders" [value]="gender.value">
+            {{gender.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Geburtsdatum</mat-label>
+        <input type="date" formControlName="birthdate" matInput />
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <p><mat-label>Kontakt</mat-label></p>
+      <mat-form-field appearance="outline">
+        <mat-label>E-Mail (Campus Consult</mat-label>
+        <input
+          type="email"
+          formControlName="emailAssociaton"
+          matInput
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>E-Mail (privat)</mat-label>
+        <input type="email" formControlName="emailPrivate" matInput required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Telefonnummer (privat)</mat-label>
+        <input
+          type="tel"
+          formControlName="mobilePrivate"
+          matInput
+          placeholder="+49"
+        />
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <p><mat-label>Wohnort</mat-label></p>
+      <mat-form-field appearance="outline">
+        <mat-label>Straße</mat-label>
+        <input type="text" formControlName="adressStreet" matInput />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Hausnummer</mat-label>
+        <input formControlName="adressNr" matInput />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Postleitzahl</mat-label>
+        <input
+          maxlength="5"
+          formControlName="adressZIP"
+          matInput
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Stadt</mat-label>
+        <input
+          #postalCode
+          type="text"
+          formControlName="adressCity"
+          matInput
+          placeholder="Paderborn"
+        />
+      </mat-form-field>
+    </div>
+  </form>

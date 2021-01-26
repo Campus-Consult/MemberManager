@@ -17,8 +17,8 @@ namespace MemberManager.Application.Positions.Commands.ReactivatePosition
 
             RuleFor(v => v.Id)
                 .NotEmpty()
-                .MustAsync(PositionExists).WithMessage("Position does not exist.")
-                .MustAsync(PositionIsNotActiveAlready).WithMessage("Position is already active.");
+                .MustAsync(PositionExists).WithMessage("Posten existiert nicht.")
+                .MustAsync(PositionIsNotActiveAlready).WithMessage("Posten ist bereits aktiv.");
         }
 
         public async Task<bool> PositionExists(ReactivatePositionCommand model, int positionId, CancellationToken cancellationToken)

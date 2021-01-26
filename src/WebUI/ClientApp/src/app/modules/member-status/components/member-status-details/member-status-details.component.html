@@ -23,8 +23,6 @@
   </div>
 
   <mat-card-content>
-    <h1>Assignees: ({{ memberStatus.countAssignees }})</h1>
-
     <table *ngIf="memberStatus?.assignees.length > 0" mat-table id="assigneeTable" [dataSource]="dataSource">
 
       <ng-container matColumnDef="name">

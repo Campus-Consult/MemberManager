@@ -5,6 +5,7 @@ using MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail;
+using MemberManager.Application.MemberStatus.Queries.GetMemberStatusHistory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MemberManager.WebUI.Controllers
@@ -21,6 +22,12 @@ namespace MemberManager.WebUI.Controllers
         public async Task<ActionResult<MemberStatusDetailVm>> Get(int id)
         {
             return await Mediator.Send(new GetMemberStatusDetailQuery { Id = id });
+        }
+
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<MemberStatusHistoryVm>> GetHistory(int id)
+        {
+            return await Mediator.Send(new GetMemberStatusHistoryQuery { Id = id });
         }
 
         [HttpGet("{id}/[action]")]

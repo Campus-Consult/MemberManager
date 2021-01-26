@@ -17,6 +17,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export interface IMemberStatusClient {
     get(): Observable<MemberStatusVm>;
     get2(id: number): Observable<MemberStatusDetailVm>;
+    getHistory(id: number): Observable<MemberStatusHistoryVm>;
     getAssignSuggestions(id: number): Observable<PeopleAssignSuggestions>;
     getDismissSuggestions(id: number): Observable<PeopleDismissSuggestions>;
     assign(id: number, command: AssignMemberStatusCommand): Observable<FileResponse>;
@@ -133,6 +134,57 @@ export class MemberStatusClient implements IMemberStatusClient {
             }));
         }
         return _observableOf<MemberStatusDetailVm>(<any>null);
+    }
+
+    getHistory(id: number): Observable<MemberStatusHistoryVm> {
+        let url_ = this.baseUrl + "/api/MemberStatus/{id}/GetHistory";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetHistory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetHistory(<any>response_);
+                } catch (e) {
+                    return <Observable<MemberStatusHistoryVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MemberStatusHistoryVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetHistory(response: HttpResponseBase): Observable<MemberStatusHistoryVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MemberStatusHistoryVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MemberStatusHistoryVm>(<any>null);
     }
 
     getAssignSuggestions(id: number): Observable<PeopleAssignSuggestions> {
@@ -1980,6 +2032,58 @@ export interface IAssigneeDto {
     name?: string | undefined;
     beginDateTime?: Date;
     endDateTime?: Date | undefined;
+}
+
+export class MemberStatusHistoryVm implements IMemberStatusHistoryVm {
+    id?: number;
+    name?: string | undefined;
+    assignees?: AssigneeDto[] | undefined;
+
+    constructor(data?: IMemberStatusHistoryVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            if (Array.isArray(_data["assignees"])) {
+                this.assignees = [] as any;
+                for (let item of _data["assignees"])
+                    this.assignees!.push(AssigneeDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): MemberStatusHistoryVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberStatusHistoryVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        if (Array.isArray(this.assignees)) {
+            data["assignees"] = [];
+            for (let item of this.assignees)
+                data["assignees"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IMemberStatusHistoryVm {
+    id?: number;
+    name?: string | undefined;
+    assignees?: AssigneeDto[] | undefined;
 }
 
 export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {

@@ -58,6 +58,38 @@
         }
       }
     },
+    "/api/MemberStatus/{id}/GetHistory": {
+      "get": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_GetHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberStatusHistoryVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/MemberStatus/{id}/GetAssignSuggestions": {
       "get": {
         "tags": [
@@ -1224,6 +1256,27 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "MemberStatusHistoryVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignees": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AssigneeDto"
+            }
           }
         }
       },

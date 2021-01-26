@@ -7,17 +7,17 @@
     </mat-card-header>
 
     <mat-button-toggle-group #group="matButtonToggleGroup" fxFlex="nogrow">
-      <mat-button-toggle value="left" disabled>
-        <mat-icon>search</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="center" disabled>
+      <mat-button-toggle disabled>
         <mat-icon>edit</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle (click)="onAssignPersonButtonClicked()" value="right">
+      <mat-button-toggle (click)="onAssignPersonButtonClicked()">
         <mat-icon>person_add</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle (click)="onDismissPersonButtonClicked()" value="justify">
+      <mat-button-toggle (click)="onDismissPersonButtonClicked()" [disabled]="memberStatus?.assignees.length == 0">
         <mat-icon>person_remove</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle disabled>
+        <mat-icon>history</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>

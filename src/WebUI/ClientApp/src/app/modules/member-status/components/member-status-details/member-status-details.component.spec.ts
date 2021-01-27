@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MemberStatusDetailsComponent } from './member-status-details.component';
 
@@ -8,7 +9,8 @@ fdescribe('MemberStatusDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MemberStatusDetailsComponent ]
+      declarations: [MemberStatusDetailsComponent],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
   });

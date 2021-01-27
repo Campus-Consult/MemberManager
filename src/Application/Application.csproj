@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Positions\Queries\GetPositionDetail\**" />
+    <Compile Remove="Positions\Queries\GetPositionHistory\**" />
+    <EmbeddedResource Remove="Positions\Queries\GetPositionDetail\**" />
+    <EmbeddedResource Remove="Positions\Queries\GetPositionHistory\**" />
+    <None Remove="Positions\Queries\GetPositionDetail\**" />
+    <None Remove="Positions\Queries\GetPositionHistory\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="FluentValidation" Version="8.6.0" />
@@ -21,10 +30,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
-    <Folder Include="MemberStatus\Commands\" />
     <Folder Include="Positions\Commands\UpdatePosition\" />
-    <Folder Include="Positions\Queries\GetPositionDetail\" />
-    <Folder Include="Positions\Queries\GetPositionHistory\" />
   </ItemGroup>
 
 </Project>

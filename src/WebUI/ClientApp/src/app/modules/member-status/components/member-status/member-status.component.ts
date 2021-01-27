@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+
 import { MemberStatusLookupDto } from '../../../../membermanager-api';
+import { MemberStatusDetailsComponent } from '../member-status-details/member-status-details.component';
+import { MemberStatusListComponent } from '../member-status-list/member-status-list.component';
 
 @Component({
   selector: 'app-member-status',
@@ -8,15 +11,25 @@ import { MemberStatusLookupDto } from '../../../../membermanager-api';
 })
 export class MemberStatusComponent {
 
+  @ViewChild(MemberStatusListComponent) memberStatusList: MemberStatusListComponent;
+  @ViewChild(MemberStatusDetailsComponent) memberStatusDetails: MemberStatusDetailsComponent;
+
   debug: boolean = false;
 
   selectedMemberStatus: MemberStatusLookupDto;
-
-  constructor() { }
 
   ngOnInit() { }
 
   onListSelection(selectedMemberStatus: MemberStatusLookupDto) {
     this.selectedMemberStatus = selectedMemberStatus;
+  }
+
+  reloadRequired(): void {
+    this.reload();
+  }
+
+  reload(): void {
+    this.memberStatusList.reload();
+    this.memberStatusDetails.reload();
   }
 }

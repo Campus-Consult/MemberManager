@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angu
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 
 @Component({
   selector: 'app-member-status-list',
@@ -19,12 +20,16 @@ export class MemberStatusListComponent implements AfterViewInit {
     if (this.dataSource) this.dataSource.sort = this.sort;
   }
 
+  @ViewChild(DataTableComponent) dataTable: DataTableComponent<MemberStatusLookupDto>;
+
   @Output() onSelectEvent = new EventEmitter<MemberStatusLookupDto>();
 
 
   memberStatus: MemberStatusLookupDto[];
   dataSource: MatTableDataSource<MemberStatusLookupDto>;
   columns: string[] = ['name', 'countAssignees'];
+
+  selected: MemberStatusLookupDto;
 
   constructor(private memberStatusClient: MemberStatusClient) { }
 
@@ -41,6 +46,18 @@ export class MemberStatusListComponent implements AfterViewInit {
   }
 
   onSelect(item: MemberStatusLookupDto) {
+    this.selected = item;
     this.onSelectEvent.emit(item);
+  }
+
+  reload() {
+    this.memberStatusClient.get().subscribe(
+      result => {
+        this.memberStatus = result.memberStatus;
+        this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(result.memberStatus);
+        this.dataSource.sort = this.sort;
+      },
+      error => console.error(error)
+    );
   }
 }

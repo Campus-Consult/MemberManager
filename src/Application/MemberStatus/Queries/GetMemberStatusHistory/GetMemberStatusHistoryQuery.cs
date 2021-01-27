@@ -6,25 +6,25 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
+namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusHistory
 {
-    public class GetMemberStatusDetailQuery : IRequest<MemberStatusDetailVm>
+    public class GetMemberStatusHistoryQuery : IRequest<MemberStatusHistoryVm>
     {
         public int Id { get; set; }
     }
 
-    public class GetMemberStatusDetailQueryHandler : IRequestHandler<GetMemberStatusDetailQuery, MemberStatusDetailVm>
+    public class GetMemberStatusHistoryQueryHandler : IRequestHandler<GetMemberStatusHistoryQuery, MemberStatusHistoryVm>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetMemberStatusDetailQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetMemberStatusHistoryQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<MemberStatusDetailVm> Handle(GetMemberStatusDetailQuery request, CancellationToken cancellationToken)
+        public async Task<MemberStatusHistoryVm> Handle(GetMemberStatusHistoryQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.MemberStatus
                 .Include(ms => ms.PersonMemberStatus)
@@ -36,7 +36,7 @@ namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
                 throw new NotFoundException(nameof(MemberStatus), request.Id);
             }
 
-            return _mapper.Map<MemberStatusDetailVm>(entity);
+            return _mapper.Map<MemberStatusHistoryVm>(entity);
         }
     }
 }

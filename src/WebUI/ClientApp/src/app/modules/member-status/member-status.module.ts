@@ -37,12 +37,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MemberStatusRoutingModule } from './member-status-routing.module';
 
 import { MemberStatusComponent } from './components/member-status/member-status.component';
 import { MemberStatusListComponent } from './components/member-status-list/member-status-list.component';
 import { MemberStatusDetailsComponent } from './components/member-status-details/member-status-details.component';
+import { MemberStatusAssignDialogComponent } from './components/member-status-assign-dialog/member-status-assign-dialog.component';
+import { MemberStatusDismissDialogComponent } from './components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
+import { MemberStatusHistoryDialogComponent } from './components/member-status-history-dialog/member-status-history-dialog.component';
 
 @NgModule({
   imports: [
@@ -80,10 +84,17 @@ import { MemberStatusDetailsComponent } from './components/member-status-details
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
-    MemberStatusComponent, MemberStatusListComponent, MemberStatusDetailsComponent
+    MemberStatusComponent,
+    MemberStatusListComponent,
+    MemberStatusDetailsComponent,
+    MemberStatusAssignDialogComponent,
+    MemberStatusDismissDialogComponent,
+    MemberStatusHistoryDialogComponent,
   ],
   exports: [
     MemberStatusComponent,

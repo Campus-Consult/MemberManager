@@ -1,6 +1,7 @@
 ﻿using MemberManager.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MemberManager.Domain.Entities
 {
@@ -29,5 +30,17 @@ namespace MemberManager.Domain.Entities
         public ICollection<PersonCareerLevel> PersonCareerLevels { get; private set; }
         public ICollection<PersonMemberStatus> PersonMemberStatus { get; private set; }
         public ICollection<PersonPosition> PersonPositions { get; private set; }
+
+        public PersonCareerLevel GetCurrentCareerLevel(DateTime time) {
+            // throw away all later assignments and get the latest one
+            var old = PersonCareerLevels
+                .Where(p => p.BeginDateTime < time).ToList();
+            // Aggregate throwing an exception if empty is just really dumb
+            if (old.Count == 0) {
+                return null;
+            } else {
+                return old.Aggregate((latest,p) => p.BeginDateTime > latest.BeginDateTime ? p : latest);
+            }
+        }
     }
 }

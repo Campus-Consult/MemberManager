@@ -17,6 +17,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export interface ICareerLevelClient {
     get(): Observable<CareerLevelsVm>;
     get2(id: number): Observable<CareerLevelDto>;
+    changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number>;
 }
 
 @Injectable({
@@ -129,6 +130,61 @@ export class CareerLevelClient implements ICareerLevelClient {
             }));
         }
         return _observableOf<CareerLevelDto>(<any>null);
+    }
+
+    changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/CareerLevel/{id}/ChangePersonCareerLevel";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processChangePersonCareerLevel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processChangePersonCareerLevel(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processChangePersonCareerLevel(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
     }
 }
 
@@ -518,6 +574,7 @@ export interface IPeopleClient {
     get(): Observable<PeopleVm>;
     create(command: CreatePersonCommand): Observable<number>;
     getWithBasicInfo(): Observable<PeopleBasicInfoVm>;
+    getCurrentCareerLevel(id: number, time: Date | null | undefined): Observable<CareerLevelAssignmentDto>;
     get2(id: number): Observable<PersonDetailVm>;
     update(id: number, command: UpdatePersonCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
@@ -682,6 +739,59 @@ export class PeopleClient implements IPeopleClient {
             }));
         }
         return _observableOf<PeopleBasicInfoVm>(<any>null);
+    }
+
+    getCurrentCareerLevel(id: number, time: Date | null | undefined): Observable<CareerLevelAssignmentDto> {
+        let url_ = this.baseUrl + "/api/People/{id}/GetCurrentCareerLevel?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        if (time !== undefined)
+            url_ += "time=" + encodeURIComponent(time ? "" + time.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCurrentCareerLevel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCurrentCareerLevel(<any>response_);
+                } catch (e) {
+                    return <Observable<CareerLevelAssignmentDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CareerLevelAssignmentDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetCurrentCareerLevel(response: HttpResponseBase): Observable<CareerLevelAssignmentDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CareerLevelAssignmentDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CareerLevelAssignmentDto>(<any>null);
     }
 
     get2(id: number): Observable<PersonDetailVm> {
@@ -2168,6 +2278,50 @@ export interface ICareerLevelAssignee {
     endDateTime?: Date | undefined;
 }
 
+export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelCommand {
+    careerLevelId?: number;
+    personId?: number;
+    changeDateTime?: Date;
+
+    constructor(data?: IChangePersonCareerLevelCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.careerLevelId = _data["careerLevelId"];
+            this.personId = _data["personId"];
+            this.changeDateTime = _data["changeDateTime"] ? new Date(_data["changeDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ChangePersonCareerLevelCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChangePersonCareerLevelCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["careerLevelId"] = this.careerLevelId;
+        data["personId"] = this.personId;
+        data["changeDateTime"] = this.changeDateTime ? this.changeDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IChangePersonCareerLevelCommand {
+    careerLevelId?: number;
+    personId?: number;
+    changeDateTime?: Date;
+}
+
 export class MemberStatusVm implements IMemberStatusVm {
     memberStatus?: MemberStatusLookupDto[] | undefined;
 
@@ -2906,6 +3060,66 @@ export interface ISimplePositionDto {
     id?: number;
     name?: string | undefined;
     shortName?: string | undefined;
+}
+
+export class CareerLevelAssignmentDto implements ICareerLevelAssignmentDto {
+    personCareerLevelId?: number;
+    careerLevelId?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
+
+    constructor(data?: ICareerLevelAssignmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.personCareerLevelId = _data["personCareerLevelId"];
+            this.careerLevelId = _data["careerLevelId"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+            this.isActive = _data["isActive"];
+            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CareerLevelAssignmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CareerLevelAssignmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["personCareerLevelId"] = this.personCareerLevelId;
+        data["careerLevelId"] = this.careerLevelId;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        data["isActive"] = this.isActive;
+        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ICareerLevelAssignmentDto {
+    personCareerLevelId?: number;
+    careerLevelId?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    isActive?: boolean;
+    beginDateTime?: Date;
+    endDateTime?: Date | undefined;
 }
 
 export class PersonDetailVm implements IPersonDetailVm {

@@ -1,11 +1,14 @@
-﻿using MemberManager.Application.People.Commands.CreatePerson;
+﻿using MemberManager.Application.Models;
+using MemberManager.Application.People.Commands.CreatePerson;
 using MemberManager.Application.People.Commands.DeletePerson;
 using MemberManager.Application.People.Commands.UpdatePerson;
+using MemberManager.Application.People.Queries.GetCurrentCareerLevel;
 using MemberManager.Application.People.Queries.GetPeople;
 using MemberManager.Application.People.Queries.GetPeopleBasicInfo;
 using MemberManager.Application.People.Queries.GetPersonDetail;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace MemberManager.WebUI.Controllers
@@ -22,6 +25,14 @@ namespace MemberManager.WebUI.Controllers
         public async Task<ActionResult<PeopleBasicInfoVm>> GetWithBasicInfo()
         {
             return await Mediator.Send(new GetPeopleBasicInfoQuery());
+        }
+
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<CareerLevelAssignmentDto>> GetCurrentCareerLevel(int id, DateTime? time) {
+            return await Mediator.Send(new GetCurrentCareerLevelQuery {
+                PersonId = id,
+                Time = time,
+            });
         }
 
         [HttpGet("{id}")]

@@ -13,7 +13,6 @@ namespace MemberManager.Domain.Entities
         public string Name { get; set; }
         public string ShortName { get; set; }
         public bool IsActive { get; set; }
-
         public ICollection<PersonPosition> PersonPositions { get; set; }
     }
 }

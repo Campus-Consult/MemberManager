@@ -5,14 +5,19 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges
-} from '@angular/core';
-import { IPersonBasicInfoLookupDto, IPersonDetailVm, IPersonLookupDto, PeopleClient } from 'src/app/membermanager-api';
+  SimpleChanges,
+} from "@angular/core";
+import {
+  IPersonBasicInfoLookupDto,
+  IPersonDetailVm,
+  IPersonLookupDto,
+  PeopleClient,
+} from "src/app/membermanager-api";
 
 @Component({
-  selector: 'app-person-details',
-  templateUrl: './member-data-sheet.component.html',
-  styleUrls: ['./member-data-sheet.component.scss'],
+  selector: "app-person-details",
+  templateUrl: "./member-data-sheet.component.html",
+  styleUrls: ["./member-data-sheet.component.scss"],
 })
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
@@ -29,16 +34,17 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   constructor(private personApi: PeopleClient) {}
 
   ngOnInit(): void {
-    this.displayedName = 'No Person Selected';  }
+    this.displayedName = "No Person Selected";
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     for (const propName in changes) {
-      const chng = changes[propName];
-      if (propName === 'personId') {
+      if (propName === "personId") {
+        const chng = changes[propName];
         this.person = chng.currentValue;
       }
     }
-  
+
     // Load person Details
     if (this.person) {
       this.loadPersondata();
@@ -48,19 +54,19 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   loadPersondata() {
     this.loadingPerson = true;
-    this.personApi.get2(Number(this.person.id)).subscribe((person)=>{
-      this.personDetails = person;   
+    this.personApi.get2(Number(this.person.id)).subscribe((person) => {
+      this.personDetails = person;
       this.loadingPerson = false;
-    })
+    });
   }
 
   getFullName(): string {
-    let fullname = ''
+    let fullname = "";
     if (this.person.fistName) {
       fullname = fullname + this.person.fistName;
     }
     if (this.person.fistName) {
-      fullname = fullname + ' ' + this.person.surname
+      fullname = fullname + " " + this.person.surname;
     }
     return fullname;
   }

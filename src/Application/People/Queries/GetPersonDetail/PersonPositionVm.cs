@@ -14,7 +14,7 @@ namespace MemberManager.Application.People.Queries.GetPersonDetail
         public static PersonPositionVm fromPersonPosition(PersonPosition pp) {
             return new PersonPositionVm {
                 BeginDateTime = pp.BeginDateTime,
-                EndDateTime = pp.BeginDateTime,
+                EndDateTime = pp.EndDateTime,
                 Id = pp.Id,
                 PositionId = pp.Position.Id,
                 PositionName = pp.Position.Name,

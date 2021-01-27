@@ -18,9 +18,8 @@
             <th mat-header-cell *matHeaderCellDef>{{ "Von - Bis" }}</th>
             <td mat-cell *matCellDef="let element">
               <p class="cell-paragraph">
-                {{ dateToString(element.startDate) + " -" }}
+                {{ dateSinceUntilToString(element.startDate, element.endDate) }}
               </p>
-              <p class="cell-paragraph">{{ dateToString(element.endDate) }}</p>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

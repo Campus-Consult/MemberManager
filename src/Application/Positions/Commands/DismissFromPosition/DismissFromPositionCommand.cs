@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -6,29 +6,29 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus
+namespace MemberManager.Application.Positions.Commands.DismissFromPosition
 {
-    public class DismissFromMemberStatusCommand : IRequest
+    public class DismissFromPositionCommand : IRequest
     {
-        public int MemberStatusId { get; set; }
+        public int PositionId { get; set; }
         public int PersonId { get; set; }
         public DateTime DismissalDateTime { get; set; }
     }
 
-    public class DismissFromMemberStatusCommandHandler : IRequestHandler<DismissFromMemberStatusCommand>
+    public class DismissFromPositionCommandHandler : IRequestHandler<DismissFromPositionCommand>
     {
         private readonly IApplicationDbContext _context;
 
-        public DismissFromMemberStatusCommandHandler(IApplicationDbContext context)
+        public DismissFromPositionCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(DismissFromMemberStatusCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DismissFromPositionCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.PersonMemberStatus.FirstAsync(pms => pms.MemberStatusId == request.MemberStatusId 
-                && pms.PersonId == request.PersonId 
-                && pms.EndDateTime == null);
+            var entity = await _context.PersonPositions.FirstAsync(pp => pp.PersonId == request.PersonId
+                && pp.PositionId == request.PositionId
+                && pp.EndDateTime == null, cancellationToken);
 
             if (entity == null)
             {

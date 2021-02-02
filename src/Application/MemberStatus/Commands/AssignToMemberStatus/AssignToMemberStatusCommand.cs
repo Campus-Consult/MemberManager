@@ -13,7 +13,7 @@ namespace MemberManager.Application.MemberStatus.Commands.AssignToMemberStatus
         public int MemberStatusId { get; set; }
         public int PersonId { get; set; }
         public DateTime AssignmentDateTime { get; set; }
-        public DateTime? DismissDateTime { get; set; }
+        public DateTime? DismissalDateTime { get; set; }
     }
 
     public class AssignToMemberStatusCommandHandler : IRequestHandler<AssignToMemberStatusCommand, int>
@@ -39,7 +39,7 @@ namespace MemberManager.Application.MemberStatus.Commands.AssignToMemberStatus
                 MemberStatusId = request.MemberStatusId,
                 PersonId = request.PersonId,
                 BeginDateTime = request.AssignmentDateTime,
-                EndDateTime = request.DismissDateTime,
+                EndDateTime = request.DismissalDateTime,
             };
 
             entity.PersonMemberStatus.Add(newPersonMemberStatus);

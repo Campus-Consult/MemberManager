@@ -44,12 +44,12 @@ namespace MemberManager.Application.Positions.Commands.AssignToPosition
             return await _context.PersonPositions
                 .Where(pp => pp.PersonId == personId && pp.PositionId == model.PositionId)
                 // all person positions have to either: start and finish before the new one or start (and finish) after this one
-                .AllAsync(pp => (pp.EndDateTime < model.AssignmentDateTime) || (model.DismissDateTime != null && (pp.BeginDateTime > model.DismissDateTime)), cancellationToken);
+                .AllAsync(pp => (pp.EndDateTime < model.AssignmentDateTime) || (model.DismissalDateTime != null && (pp.BeginDateTime > model.DismissalDateTime)), cancellationToken);
                 // .AnyAsync(pp => pp.BeginDateTime <= model.AssignmentDateTime && (pp.EndDateTime == null || pp.EndDateTime >= model.AssignmentDateTime));
         }
 
         public bool AssignmentDateTimeIsBeforeEndDateTime(AssignToPositionCommand command, DateTime assignmentDateTime) {
-            return command.DismissDateTime == null || assignmentDateTime < command.DismissDateTime;
+            return command.DismissalDateTime == null || assignmentDateTime < command.DismissalDateTime;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace MemberManager.WebUI.Controllers
         [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Dismiss(int id, DismissFromMemberStatusCommand command)
         {
-            if (id != command.Id)
+            if (id != command.MemberStatusId)
             {
                 return BadRequest();
             }

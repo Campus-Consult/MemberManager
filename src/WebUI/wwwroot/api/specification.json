@@ -776,7 +776,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DismissPositionCommand"
+                "$ref": "#/components/schemas/DismissFromPositionCommand"
               }
             }
           },
@@ -1350,7 +1350,7 @@
             "type": "string",
             "format": "date-time"
           },
-          "dismissDateTime": {
+          "dismissalDateTime": {
             "type": "string",
             "format": "date-time",
             "nullable": true
@@ -1361,7 +1361,7 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "memberStatusId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1954,18 +1954,18 @@
             "type": "string",
             "format": "date-time"
           },
-          "dismissDateTime": {
+          "dismissalDateTime": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           }
         }
       },
-      "DismissPositionCommand": {
+      "DismissFromPositionCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "positionId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1973,7 +1973,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "dismissDateTime": {
+          "dismissalDateTime": {
             "type": "string",
             "format": "date-time"
           }

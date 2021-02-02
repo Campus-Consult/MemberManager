@@ -730,7 +730,7 @@ export interface IPositionClient {
     deactivate(id: number, command: DeactivatePositionCommand): Observable<FileResponse>;
     reactivate(id: number, command: ReactivatePositionCommand): Observable<FileResponse>;
     assign(id: number, command: AssignToPositionCommand): Observable<FileResponse>;
-    dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse>;
+    dismiss(id: number, command: DismissFromPositionCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -1216,7 +1216,7 @@ export class PositionClient implements IPositionClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse> {
+    dismiss(id: number, command: DismissFromPositionCommand): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Position/{id}/Dismiss";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2258,7 +2258,7 @@ export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand
     memberStatusId?: number;
     personId?: number;
     assignmentDateTime?: Date;
-    dismissDateTime?: Date | undefined;
+    dismissalDateTime?: Date | undefined;
 
     constructor(data?: IAssignToMemberStatusCommand) {
         if (data) {
@@ -2274,7 +2274,7 @@ export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand
             this.memberStatusId = _data["memberStatusId"];
             this.personId = _data["personId"];
             this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
-            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
+            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
         }
     }
 
@@ -2290,7 +2290,7 @@ export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand
         data["memberStatusId"] = this.memberStatusId;
         data["personId"] = this.personId;
         data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
-        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
+        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -2299,11 +2299,11 @@ export interface IAssignToMemberStatusCommand {
     memberStatusId?: number;
     personId?: number;
     assignmentDateTime?: Date;
-    dismissDateTime?: Date | undefined;
+    dismissalDateTime?: Date | undefined;
 }
 
 export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusCommand {
-    id?: number;
+    memberStatusId?: number;
     personId?: number;
     dismissalDateTime?: Date;
 
@@ -2318,7 +2318,7 @@ export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusC
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.memberStatusId = _data["memberStatusId"];
             this.personId = _data["personId"];
             this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
         }
@@ -2333,7 +2333,7 @@ export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusC
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["memberStatusId"] = this.memberStatusId;
         data["personId"] = this.personId;
         data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
         return data; 
@@ -2341,7 +2341,7 @@ export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusC
 }
 
 export interface IDismissFromMemberStatusCommand {
-    id?: number;
+    memberStatusId?: number;
     personId?: number;
     dismissalDateTime?: Date;
 }
@@ -3528,7 +3528,7 @@ export class AssignToPositionCommand implements IAssignToPositionCommand {
     positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
-    dismissDateTime?: Date | undefined;
+    dismissalDateTime?: Date | undefined;
 
     constructor(data?: IAssignToPositionCommand) {
         if (data) {
@@ -3544,7 +3544,7 @@ export class AssignToPositionCommand implements IAssignToPositionCommand {
             this.positionId = _data["positionId"];
             this.personId = _data["personId"];
             this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
-            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
+            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
         }
     }
 
@@ -3560,7 +3560,7 @@ export class AssignToPositionCommand implements IAssignToPositionCommand {
         data["positionId"] = this.positionId;
         data["personId"] = this.personId;
         data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
-        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
+        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -3569,15 +3569,15 @@ export interface IAssignToPositionCommand {
     positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
-    dismissDateTime?: Date | undefined;
+    dismissalDateTime?: Date | undefined;
 }
 
-export class DismissPositionCommand implements IDismissPositionCommand {
-    id?: number;
+export class DismissFromPositionCommand implements IDismissFromPositionCommand {
+    positionId?: number;
     personId?: number;
-    dismissDateTime?: Date;
+    dismissalDateTime?: Date;
 
-    constructor(data?: IDismissPositionCommand) {
+    constructor(data?: IDismissFromPositionCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3588,32 +3588,32 @@ export class DismissPositionCommand implements IDismissPositionCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.positionId = _data["positionId"];
             this.personId = _data["personId"];
-            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
+            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): DismissPositionCommand {
+    static fromJS(data: any): DismissFromPositionCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new DismissPositionCommand();
+        let result = new DismissFromPositionCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["positionId"] = this.positionId;
         data["personId"] = this.personId;
-        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
+        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
 
-export interface IDismissPositionCommand {
-    id?: number;
+export interface IDismissFromPositionCommand {
+    positionId?: number;
     personId?: number;
-    dismissDateTime?: Date;
+    dismissalDateTime?: Date;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

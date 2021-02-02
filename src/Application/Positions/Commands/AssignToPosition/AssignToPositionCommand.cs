@@ -13,7 +13,7 @@ namespace MemberManager.Application.Positions.Commands.AssignToPosition
         public int PositionId { get; set; }
         public int PersonId { get; set; }
         public DateTime AssignmentDateTime { get; set; }
-        public DateTime? DismissDateTime { get; set; }
+        public DateTime? DismissalDateTime { get; set; }
     }
 
     public class AssignToPositionCommandHandler : IRequestHandler<AssignToPositionCommand, int>
@@ -39,7 +39,7 @@ namespace MemberManager.Application.Positions.Commands.AssignToPosition
                 PositionId = request.PositionId,
                 PersonId = request.PersonId,
                 BeginDateTime = request.AssignmentDateTime,
-                EndDateTime = request.DismissDateTime,
+                EndDateTime = request.DismissalDateTime,
             };
 
             entity.PersonPositions.Add(newPersonPosition);

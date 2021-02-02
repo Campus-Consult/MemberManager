@@ -79,28 +79,28 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
-                DismissDateTime = new DateTime(2020, 1, 3),
+                DismissalDateTime = new DateTime(2020, 1, 3),
             });
 
             await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
-                DismissDateTime = new DateTime(2019, 10, 10),
+                DismissalDateTime = new DateTime(2019, 10, 10),
             });
 
             await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 10, 10),
-                DismissDateTime = new DateTime(2020, 11, 11),
+                DismissalDateTime = new DateTime(2020, 11, 11),
             });
 
             await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 4),
-                DismissDateTime = new DateTime(2020, 10, 9),
+                DismissalDateTime = new DateTime(2020, 10, 9),
             });
 
             await SendAsync(new AssignToPositionCommand {
@@ -113,7 +113,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2018, 1, 4),
-                DismissDateTime = new DateTime(2018, 10, 9),
+                DismissalDateTime = new DateTime(2018, 10, 9),
             });
         }
 
@@ -130,7 +130,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
-                DismissDateTime = new DateTime(2020, 1, 4),
+                DismissalDateTime = new DateTime(2020, 1, 4),
             });
 
             FluentActions.Invoking(() =>
@@ -138,7 +138,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
-                DismissDateTime = new DateTime(2020, 10, 10),
+                DismissalDateTime = new DateTime(2020, 10, 10),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
@@ -147,7 +147,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
-                DismissDateTime = new DateTime(2020, 1, 1),
+                DismissalDateTime = new DateTime(2020, 1, 1),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
@@ -156,7 +156,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 4),
-                DismissDateTime = new DateTime(2020, 1, 5),
+                DismissalDateTime = new DateTime(2020, 1, 5),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
@@ -165,7 +165,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 2),
-                DismissDateTime = new DateTime(2020, 1, 3),
+                DismissalDateTime = new DateTime(2020, 1, 3),
             })).Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey("PersonId"))
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
         }

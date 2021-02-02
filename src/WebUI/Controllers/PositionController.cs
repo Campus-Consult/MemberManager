@@ -1,7 +1,7 @@
 ﻿using MemberManager.Application.Positions.Commands.AssignToPosition;
 using MemberManager.Application.Positions.Commands.CreatePosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
-using MemberManager.Application.Positions.Commands.DismissPosition;
+using MemberManager.Application.Positions.Commands.DismissFromPosition;
 using MemberManager.Application.Positions.Commands.ReactivatePosition;
 using MemberManager.Application.Positions.Commands.UpdatePosition;
 using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
@@ -97,8 +97,8 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPost("{id}/[action]")]
-        public async Task<ActionResult> Dismiss(int id, DismissPositionCommand command) {
-            if (id != command.Id)
+        public async Task<ActionResult> Dismiss(int id, DismissFromPositionCommand command) {
+            if (id != command.PositionId)
             {
                 return BadRequest();
             }

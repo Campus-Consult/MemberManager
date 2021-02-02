@@ -3077,6 +3077,7 @@ export class PositionLookupDto implements IPositionLookupDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
+    countAssignees?: number;
 
     constructor(data?: IPositionLookupDto) {
         if (data) {
@@ -3093,6 +3094,7 @@ export class PositionLookupDto implements IPositionLookupDto {
             this.name = _data["name"];
             this.shortName = _data["shortName"];
             this.isActive = _data["isActive"];
+            this.countAssignees = _data["countAssignees"];
         }
     }
 
@@ -3109,6 +3111,7 @@ export class PositionLookupDto implements IPositionLookupDto {
         data["name"] = this.name;
         data["shortName"] = this.shortName;
         data["isActive"] = this.isActive;
+        data["countAssignees"] = this.countAssignees;
         return data; 
     }
 }
@@ -3118,6 +3121,7 @@ export interface IPositionLookupDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
+    countAssignees?: number;
 }
 
 export class PositionDto implements IPositionDto {

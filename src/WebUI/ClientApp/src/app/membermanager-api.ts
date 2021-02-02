@@ -20,7 +20,7 @@ export interface IMemberStatusClient {
     getHistory(id: number): Observable<MemberStatusHistoryVm>;
     getAssignSuggestions(id: number): Observable<PeopleAssignSuggestions>;
     getDismissSuggestions(id: number): Observable<PeopleDismissSuggestions>;
-    assign(id: number, command: AssignMemberStatusCommand): Observable<FileResponse>;
+    assign(id: number, command: AssignToMemberStatusCommand): Observable<FileResponse>;
     dismiss(id: number, command: DismissFromMemberStatusCommand): Observable<FileResponse>;
 }
 
@@ -289,7 +289,7 @@ export class MemberStatusClient implements IMemberStatusClient {
         return _observableOf<PeopleDismissSuggestions>(<any>null);
     }
 
-    assign(id: number, command: AssignMemberStatusCommand): Observable<FileResponse> {
+    assign(id: number, command: AssignToMemberStatusCommand): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/MemberStatus/{id}/Assign";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -729,7 +729,7 @@ export interface IPositionClient {
     assignSuggestions(id: number): Observable<PeopleAssignSuggestions2>;
     deactivate(id: number, command: DeactivatePositionCommand): Observable<FileResponse>;
     reactivate(id: number, command: ReactivatePositionCommand): Observable<FileResponse>;
-    assign(id: number, command: AssignPositionCommand): Observable<FileResponse>;
+    assign(id: number, command: AssignToPositionCommand): Observable<FileResponse>;
     dismiss(id: number, command: DismissPositionCommand): Observable<FileResponse>;
 }
 
@@ -1163,7 +1163,7 @@ export class PositionClient implements IPositionClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    assign(id: number, command: AssignPositionCommand): Observable<FileResponse> {
+    assign(id: number, command: AssignToPositionCommand): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Position/{id}/Assign";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2254,12 +2254,13 @@ export interface IPeopleDismissSuggestion {
     name?: string | undefined;
 }
 
-export class AssignMemberStatusCommand implements IAssignMemberStatusCommand {
-    id?: number;
+export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand {
+    memberStatusId?: number;
     personId?: number;
     assignmentDateTime?: Date;
+    dismissDateTime?: Date | undefined;
 
-    constructor(data?: IAssignMemberStatusCommand) {
+    constructor(data?: IAssignToMemberStatusCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2270,32 +2271,35 @@ export class AssignMemberStatusCommand implements IAssignMemberStatusCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.memberStatusId = _data["memberStatusId"];
             this.personId = _data["personId"];
             this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
+            this.dismissDateTime = _data["dismissDateTime"] ? new Date(_data["dismissDateTime"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): AssignMemberStatusCommand {
+    static fromJS(data: any): AssignToMemberStatusCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new AssignMemberStatusCommand();
+        let result = new AssignToMemberStatusCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["memberStatusId"] = this.memberStatusId;
         data["personId"] = this.personId;
         data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
+        data["dismissDateTime"] = this.dismissDateTime ? this.dismissDateTime.toISOString() : <any>undefined;
         return data; 
     }
 }
 
-export interface IAssignMemberStatusCommand {
-    id?: number;
+export interface IAssignToMemberStatusCommand {
+    memberStatusId?: number;
     personId?: number;
     assignmentDateTime?: Date;
+    dismissDateTime?: Date | undefined;
 }
 
 export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusCommand {
@@ -3520,13 +3524,13 @@ export interface IReactivatePositionCommand {
     id?: number;
 }
 
-export class AssignPositionCommand implements IAssignPositionCommand {
+export class AssignToPositionCommand implements IAssignToPositionCommand {
     positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;
     dismissDateTime?: Date | undefined;
 
-    constructor(data?: IAssignPositionCommand) {
+    constructor(data?: IAssignToPositionCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3544,9 +3548,9 @@ export class AssignPositionCommand implements IAssignPositionCommand {
         }
     }
 
-    static fromJS(data: any): AssignPositionCommand {
+    static fromJS(data: any): AssignToPositionCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new AssignPositionCommand();
+        let result = new AssignToPositionCommand();
         result.init(data);
         return result;
     }
@@ -3561,7 +3565,7 @@ export class AssignPositionCommand implements IAssignPositionCommand {
     }
 }
 
-export interface IAssignPositionCommand {
+export interface IAssignToPositionCommand {
     positionId?: number;
     personId?: number;
     assignmentDateTime?: Date;

@@ -177,7 +177,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AssignMemberStatusCommand"
+                "$ref": "#/components/schemas/AssignToMemberStatusCommand"
               }
             }
           },
@@ -731,7 +731,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AssignPositionCommand"
+                "$ref": "#/components/schemas/AssignToPositionCommand"
               }
             }
           },
@@ -1334,11 +1334,11 @@
           }
         }
       },
-      "AssignMemberStatusCommand": {
+      "AssignToMemberStatusCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "memberStatusId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1349,6 +1349,11 @@
           "assignmentDateTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "dismissDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -1933,7 +1938,7 @@
           }
         }
       },
-      "AssignPositionCommand": {
+      "AssignToPositionCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

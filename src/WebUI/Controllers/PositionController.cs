@@ -1,4 +1,4 @@
-﻿using MemberManager.Application.Positions.Commands.AssignPosition;
+﻿using MemberManager.Application.Positions.Commands.AssignToPosition;
 using MemberManager.Application.Positions.Commands.CreatePosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Application.Positions.Commands.DismissPosition;
@@ -84,7 +84,7 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPost("{id}/[action]")]
-        public async Task<ActionResult> Assign(int id, AssignPositionCommand command)
+        public async Task<ActionResult> Assign(int id, AssignToPositionCommand command)
         {
             if (id != command.PositionId)
             {

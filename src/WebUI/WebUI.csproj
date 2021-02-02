@@ -38,15 +38,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\app\modules\member-status\member-status-routing.module.ts" />
+    <None Remove="ClientApp\src\app\modules\position\position-routing.module.ts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\modules\position\pages\" />
     <Folder Include="ClientApp\src\app\modules\member-status\pages\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\modules\position\position-routing.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\modules\member-status\member-status-routing.module.ts" />
   </ItemGroup>
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">

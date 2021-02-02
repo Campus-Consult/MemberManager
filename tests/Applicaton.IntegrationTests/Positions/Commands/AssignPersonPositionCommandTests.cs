@@ -1,7 +1,7 @@
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.People.Commands.CreatePerson;
 using MemberManager.Application.Positions.Commands.CreatePosition;
-using MemberManager.Application.Positions.Commands.AssignPosition;
+using MemberManager.Application.Positions.Commands.AssignToPosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Domain.Entities;
 using FluentAssertions;
@@ -53,13 +53,13 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 ShortName = "TP2"
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos2Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
@@ -75,41 +75,41 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 ShortName = "TP"
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
                 DismissDateTime = new DateTime(2020, 1, 3),
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
                 DismissDateTime = new DateTime(2019, 10, 10),
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 10, 10),
                 DismissDateTime = new DateTime(2020, 11, 11),
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 4),
                 DismissDateTime = new DateTime(2020, 10, 9),
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 12, 4),
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2018, 1, 4),
@@ -126,7 +126,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                 ShortName = "TP"
             });
 
-            await SendAsync(new AssignPositionCommand {
+            await SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
@@ -134,7 +134,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
             });
 
             FluentActions.Invoking(() =>
-                SendAsync(new AssignPositionCommand {
+                SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
@@ -143,7 +143,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
             FluentActions.Invoking(() =>
-                SendAsync(new AssignPositionCommand {
+                SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
@@ -152,7 +152,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
             FluentActions.Invoking(() =>
-                SendAsync(new AssignPositionCommand {
+                SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 4),
@@ -161,7 +161,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
                     .And.Errors["PersonId"].Should().Contain("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
 
             FluentActions.Invoking(() =>
-                SendAsync(new AssignPositionCommand {
+                SendAsync(new AssignToPositionCommand {
                 PositionId = pos1Id,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 2),

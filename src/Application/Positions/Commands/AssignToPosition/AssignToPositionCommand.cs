@@ -6,9 +6,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.Positions.Commands.AssignPosition
+namespace MemberManager.Application.Positions.Commands.AssignToPosition
 {
-    public class AssignPositionCommand : IRequest<int>
+    public class AssignToPositionCommand : IRequest<int>
     {
         public int PositionId { get; set; }
         public int PersonId { get; set; }
@@ -16,16 +16,16 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
         public DateTime? DismissDateTime { get; set; }
     }
 
-    public class AssignPositionCommandHandler : IRequestHandler<AssignPositionCommand, int>
+    public class AssignToPositionCommandHandler : IRequestHandler<AssignToPositionCommand, int>
     {
         private readonly IApplicationDbContext _context;
 
-        public AssignPositionCommandHandler(IApplicationDbContext context)
+        public AssignToPositionCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<int> Handle(AssignPositionCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AssignToPositionCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.Positions.FindAsync(request.PositionId);
 
@@ -35,12 +35,12 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
             }
 
             var newPersonPosition = new PersonPosition()
-                {
-                    PositionId = request.PositionId,
-                    PersonId = request.PersonId,
-                    BeginDateTime = request.AssignmentDateTime,
-                    EndDateTime = request.DismissDateTime,
-                };
+            {
+                PositionId = request.PositionId,
+                PersonId = request.PersonId,
+                BeginDateTime = request.AssignmentDateTime,
+                EndDateTime = request.DismissDateTime,
+            };
 
             entity.PersonPositions.Add(newPersonPosition);
 

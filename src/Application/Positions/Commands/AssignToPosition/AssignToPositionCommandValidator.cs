@@ -6,13 +6,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.Positions.Commands.AssignPosition
+namespace MemberManager.Application.Positions.Commands.AssignToPosition
 {
-    public class AssignPositionCommandValidator : AbstractValidator<AssignPositionCommand>
+    public class AssignToPositionCommandValidator : AbstractValidator<AssignToPositionCommand>
     {
         private readonly IApplicationDbContext _context;
 
-        public AssignPositionCommandValidator(IApplicationDbContext context)
+        public AssignToPositionCommandValidator(IApplicationDbContext context)
         {
             _context = context;
 
@@ -30,16 +30,16 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
                 .Must(AssignmentDateTimeIsBeforeEndDateTime).WithMessage("Anfangszeit muss vor Endzeit sein.");
         }
 
-        public async Task<bool> PositionExists(AssignPositionCommand command1, int positionId, CancellationToken cancellationToken) {
+        public async Task<bool> PositionExists(AssignToPositionCommand command1, int positionId, CancellationToken cancellationToken) {
             return await _context.Positions.FindAsync(positionId) != null;
         }
 
-        public async Task<bool> PersonExists(AssignPositionCommand model, int personId, CancellationToken cancellationToken)
+        public async Task<bool> PersonExists(AssignToPositionCommand model, int personId, CancellationToken cancellationToken)
         {
             return await _context.People.FindAsync(personId) != null;
         }
 
-        public async Task<bool> PersonIsNotAssignedAlready(AssignPositionCommand model, int personId, CancellationToken cancellationToken)
+        public async Task<bool> PersonIsNotAssignedAlready(AssignToPositionCommand model, int personId, CancellationToken cancellationToken)
         {
             return await _context.PersonPositions
                 .Where(pp => pp.PersonId == personId && pp.PositionId == model.PositionId)
@@ -48,7 +48,7 @@ namespace MemberManager.Application.Positions.Commands.AssignPosition
                 // .AnyAsync(pp => pp.BeginDateTime <= model.AssignmentDateTime && (pp.EndDateTime == null || pp.EndDateTime >= model.AssignmentDateTime));
         }
 
-        public bool AssignmentDateTimeIsBeforeEndDateTime(AssignPositionCommand command, DateTime assignmentDateTime) {
+        public bool AssignmentDateTimeIsBeforeEndDateTime(AssignToPositionCommand command, DateTime assignmentDateTime) {
             return command.DismissDateTime == null || assignmentDateTime < command.DismissDateTime;
         }
     }

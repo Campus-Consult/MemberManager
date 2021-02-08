@@ -22,32 +22,6 @@ namespace MemberManager.Application.IntegrationTests.CareerLevel.Commands
 
     public class ChangePersonCareerLevelCommandTest : TestBase
     {
-
-        public async Task<int> SetupTestPerson(string email="test@campus-consult.org") {
-            var createPersonCommand = new CreatePersonCommand { 
-                AdressCity = "Test",
-                AdressNo = "100",
-                AdressStreet = "Test Street",
-                AdressZIP = "1234",
-                Birthdate = new DateTime(2019, 1, 1),
-                EmailAssociaton = email,
-                EmailPrivate = "test@asdf.de",
-                FirstName = "Test",
-                Gender = Gender.DIVERS,
-                MobilePrivate = "12345",
-                Surname = "Test",
-            };
-
-            return await SendAsync(createPersonCommand);
-        }
-
-        public async Task<int> SetupTestCareerLevel(string name) {
-            return await SendAsync(new CreateCareerLevelCommand {
-                Name = name,
-                ShortName = name,
-            });
-        }
-
         [Test]
         public async Task CanChangeCareerLevelMultipleTimes() {
             var personId = await SetupTestPerson();

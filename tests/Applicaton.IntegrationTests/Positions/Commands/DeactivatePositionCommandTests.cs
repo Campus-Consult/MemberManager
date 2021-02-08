@@ -21,33 +21,6 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
     public class DeactivatePositionCommandTests : TestBase
     {
 
-        public async Task<int> SetupTestPerson(string email="test@campus-consult.org") {
-            var createPersonCommand = new CreatePersonCommand { 
-                AdressCity = "Test",
-                AdressNo = "100",
-                AdressStreet = "Test Street",
-                AdressZIP = "1234",
-                Birthdate = new DateTime(2019, 1, 1),
-                EmailAssociaton = email,
-                EmailPrivate = "test@asdf.de",
-                FirstName = "Test",
-                Gender = Gender.DIVERS,
-                MobilePrivate = "12345",
-                Surname = "Test",
-            };
-
-            return await SendAsync(createPersonCommand);
-        }
-
-        public async Task<int> SetupTestPosition() {
-            var createPositionCommand = new CreatePositionCommand {
-                Name = "TestPos",
-                ShortName = "TP"
-            };
-
-            return await SendAsync(createPositionCommand);
-        }
-
         [Test]
         public async Task ShouldRequireValidPositionId()
         {

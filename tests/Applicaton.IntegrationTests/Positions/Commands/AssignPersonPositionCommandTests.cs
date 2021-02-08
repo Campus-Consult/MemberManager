@@ -21,24 +21,6 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
     public class AssignPersonPositionCommandTests : TestBase
     {
 
-        public async Task<int> SetupTestPerson(string email="test@campus-consult.org") {
-            var createPersonCommand = new CreatePersonCommand { 
-                AdressCity = "Test",
-                AdressNo = "100",
-                AdressStreet = "Test Street",
-                AdressZIP = "1234",
-                Birthdate = new DateTime(2019, 1, 1),
-                EmailAssociaton = email,
-                EmailPrivate = "test@asdf.de",
-                FirstName = "Test",
-                Gender = Gender.DIVERS,
-                MobilePrivate = "12345",
-                Surname = "Test",
-            };
-
-            return await SendAsync(createPersonCommand);
-        }
-
         [Test]
         public async Task CanAssignToMultiplePositions() {
             var personId = await SetupTestPerson();

@@ -6,7 +6,7 @@ import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { startWith, switchMap, map } from 'rxjs/operators';
 import { AssignmentOption } from '../../components/search-select/search-select.component';
-import { PositionClient, PositionLookupDto, AssignPositionCommand } from 'src/app/membermanager-api';
+import { PositionClient, IPositionLookupDto, IAssignToPositionCommand, AssignToPositionCommand } from 'src/app/membermanager-api';
 import { formatDate, getLocaleId } from '@angular/common';
 
 
@@ -24,13 +24,13 @@ import { formatDate, getLocaleId } from '@angular/common';
       private formBuilder: FormBuilder,
       private positionClient: PositionClient,
       public dialogRef: MatDialogRef<PositionAssignDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public position: PositionLookupDto) {
+      @Inject(MAT_DIALOG_DATA) public position: IPositionLookupDto) {
         this.savingBeforeClose = false;
     }
   
     ngOnInit(): void {
       this.positionClient
-        .assignSuggestions(this.position.id)
+        .getAssignSuggestions(this.position.id)
         .subscribe(suggestions => {
           this.assignSuggestions = suggestions.suggestions.map(s => {
             return {name: s.name, id: s.id};
@@ -74,7 +74,7 @@ import { formatDate, getLocaleId } from '@angular/common';
       this.savingBeforeClose = true;
       this.dialogRef.disableClose = true;
   
-      this.positionClient.assign(this.position.id, new AssignPositionCommand({
+      this.positionClient.assign(this.position.id, new AssignToPositionCommand({
         assignmentDateTime: this.assignDate.value,
         positionId: this.position.id,
         personId: this.assignPerson.value.id,

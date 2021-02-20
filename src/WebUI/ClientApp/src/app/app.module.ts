@@ -20,9 +20,8 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { PersonalModule } from './personal/personal.module';
 import { ComponentsModule } from './components/components.module';
 import { PersonalComponent } from './personal/personal.component';
-import { PositionModule } from './position/position.module';
-import { PositionComponent } from './position/position.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
+import { PositionModule } from './modules/position/position.module';
 import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -50,7 +49,6 @@ registerLocaleData(localeDe);
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'Personal', component: PersonalComponent, canActivate: [AuthorizeGuard], pathMatch: 'full' },
-      { path: 'Position', component: PositionComponent,canActivate: [AuthorizeGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },

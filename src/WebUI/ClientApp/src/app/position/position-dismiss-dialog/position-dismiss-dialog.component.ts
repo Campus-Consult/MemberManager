@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
-import { PositionClient, PositionAssignee, PositionLookupDto, DismissPositionCommand } from 'src/app/membermanager-api';
+import { PositionClient, PositionAssignee, PositionLookupDto, DismissFromPositionCommand } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-position-dismiss-dialog',
@@ -48,10 +48,10 @@ export class PositionDismissDialogComponent implements OnInit{
     this.savingBeforeClose = true;
     this.dialogRef.disableClose = true;
 
-    this.positionClient.dismiss(this.data.position.id, new DismissPositionCommand({
-      id: this.data.position.id,
+    this.positionClient.dismiss(this.data.position.id, new DismissFromPositionCommand({
+      positionId: this.data.position.id,
       personId: this.data.person.personId,
-      dismissDateTime: this.date.value,
+      dismissalDateTime: this.date.value,
     })).subscribe(val => {
       this.dialogRef.close();
     }, err => {

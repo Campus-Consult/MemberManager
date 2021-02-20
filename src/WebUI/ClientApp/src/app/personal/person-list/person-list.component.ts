@@ -12,10 +12,9 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import {
-  IPersonBasicInfoLookupDto,
-  PeopleBasicInfoVm,
+  IPersonWithBasicInfoLookupDto,
   PeopleClient,
-  PersonBasicInfoLookupDto,
+  IPeopleWithBasicInfoVm,
 } from "src/app/membermanager-api";
 
 export const PERSON_LIST_POSSIBLE_COLUMNS = [
@@ -32,15 +31,15 @@ export const PERSON_LIST_POSSIBLE_COLUMNS = [
   styleUrls: ["./person-list.component.scss"],
 })
 export class PersonListComponent implements OnInit, AfterViewInit {
-  personalData: PersonBasicInfoLookupDto[];
+  personalData: IPersonWithBasicInfoLookupDto[];
 
-  dataSource: MatTableDataSource<IPersonBasicInfoLookupDto>;
+  dataSource: MatTableDataSource<IPersonWithBasicInfoLookupDto>;
 
   @Input()
   displayedColumns?: string[];
 
   @Output()
-  detailEvent = new EventEmitter<IPersonBasicInfoLookupDto>();
+  detailEvent = new EventEmitter<IPersonWithBasicInfoLookupDto>();
 
   // propertys for handling view when no dataSource
   loadingTable: boolean = true;
@@ -52,7 +51,7 @@ export class PersonListComponent implements OnInit, AfterViewInit {
     if (this.dataSource) this.dataSource.sort = this.sort;
   }
 
-  public selectedPerson: IPersonBasicInfoLookupDto;
+  public selectedPerson: IPersonWithBasicInfoLookupDto;
 
   public isRefreshing = false;
 
@@ -68,7 +67,7 @@ export class PersonListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.loadingTable = true;
     this.personApi.getWithBasicInfo().subscribe(
-      (val: PeopleBasicInfoVm) => {
+      (val: IPeopleWithBasicInfoVm) => {
         this.personalData = val.people;
         this.dataSource = new MatTableDataSource(this.personalData);
         this.dataSource.sort = this.sort;
@@ -83,7 +82,7 @@ export class PersonListComponent implements OnInit, AfterViewInit {
 
   /** =============Person Action Methods ============== */
 
-  onSelect(person: IPersonBasicInfoLookupDto) {
+  onSelect(person: IPersonWithBasicInfoLookupDto) {
     this.selectedPerson = person;
 
     this.detailEvent.emit(this.selectedPerson);
@@ -92,7 +91,7 @@ export class PersonListComponent implements OnInit, AfterViewInit {
   refresh(): Observable<any> {
     this.isRefreshing = true;
     return this.personApi.getWithBasicInfo().pipe(
-      map((val: PeopleBasicInfoVm) => {
+      map((val: IPeopleWithBasicInfoVm) => {
         this.personalData = val.people;
         this.dataSource.data = this.personalData;
         this.isRefreshing = false;

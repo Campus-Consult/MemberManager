@@ -1,34 +1,34 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DismissFromMemberStatusCommand, MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
+import { AssignToPositionCommand, PositionClient, PositionLookupDto } from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
 
 @Component({
-  selector: 'app-member-status-dismiss-dialog',
-  templateUrl: './member-status-dismiss-dialog.component.html',
-  styleUrls: ['./member-status-dismiss-dialog.component.scss']
+  selector: 'app-position-assign-dialog',
+  templateUrl: './position-assign-dialog.component.html',
+  styleUrls: ['./position-assign-dialog.component.scss']
 })
-export class MemberStatusDismissDialogComponent implements OnInit {
+export class PositionAssignDialogComponent implements OnInit {
 
   form: FormGroup;
   description: string;
 
   suggestions: SelectOption[];
 
-  memberStatus: MemberStatusLookupDto;
+  position: PositionLookupDto;
 
   errors;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<MemberStatusDismissDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { description: string, memberStatus: MemberStatusLookupDto },
-    private memberStatusClient: MemberStatusClient
+    private dialogRef: MatDialogRef<PositionAssignDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: { description: string, position: PositionLookupDto },
+    private positionClient: PositionClient
   ) {
 
     this.description = data.description;
-    this.memberStatus = data.memberStatus;
+    this.position = data.position;
     
   }
 
@@ -40,24 +40,24 @@ export class MemberStatusDismissDialogComponent implements OnInit {
     this.fetchSuggestions();
   }
 
-  dismissForm = this.fb.group({
-    dismissedPerson: [true, Validators.required],
-    dismissalDate: [null, Validators.required],
+  assignForm = this.fb.group({
+    assignPerson: [true, Validators.required],
+    assignDate: [null, Validators.required],
   });
 
-  get dismissedPerson() {
-    return this.dismissForm.get('dismissedPerson').value;
+  get assignPerson() {
+    return this.assignForm.get('assignPerson').value;
   }
 
-  get dismissalDate() {
-    return this.dismissForm.get('dismissalDate').value;
+  get assignDate() {
+    return this.assignForm.get('assignDate').value;
   }
 
   save() {
-    this.memberStatusClient.dismiss(this.memberStatus.id, new DismissFromMemberStatusCommand({
-      dismissalDateTime: this.dismissalDate,
-      memberStatusId: this.memberStatus.id,
-      personId: this.dismissedPerson.id,
+    this.positionClient.assign(this.position.id, new AssignToPositionCommand({
+      assignmentDateTime: this.assignDate,
+      positionId: this.position.id,
+      personId: this.assignPerson.id,
     })).subscribe(val => {
       this.dialogRef.close(true);
     }, error => {
@@ -84,7 +84,7 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   }
 
   fetchSuggestions() {
-    this.memberStatusClient.getDismissSuggestions(this.memberStatus.id).subscribe(
+    this.positionClient.getAssignSuggestions(this.position.id).subscribe(
       suggestions => {
         this.suggestions = suggestions.suggestions.map(s => {
           return { name: s.name, id: s.id };

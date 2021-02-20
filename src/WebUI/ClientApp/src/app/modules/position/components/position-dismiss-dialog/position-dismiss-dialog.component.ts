@@ -1,34 +1,34 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DismissFromMemberStatusCommand, MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
+import { DismissFromPositionCommand, PositionClient, PositionLookupDto } from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
 
 @Component({
-  selector: 'app-member-status-dismiss-dialog',
-  templateUrl: './member-status-dismiss-dialog.component.html',
-  styleUrls: ['./member-status-dismiss-dialog.component.scss']
+  selector: 'app-position-dismiss-dialog',
+  templateUrl: './position-dismiss-dialog.component.html',
+  styleUrls: ['./position-dismiss-dialog.component.scss']
 })
-export class MemberStatusDismissDialogComponent implements OnInit {
+export class PositionDismissDialogComponent implements OnInit {
 
   form: FormGroup;
   description: string;
 
   suggestions: SelectOption[];
 
-  memberStatus: MemberStatusLookupDto;
+  position: PositionLookupDto;
 
   errors;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<MemberStatusDismissDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { description: string, memberStatus: MemberStatusLookupDto },
-    private memberStatusClient: MemberStatusClient
+    private dialogRef: MatDialogRef<PositionDismissDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: { description: string, position: PositionLookupDto },
+    private positionClient: PositionClient
   ) {
 
     this.description = data.description;
-    this.memberStatus = data.memberStatus;
+    this.position = data.position;
     
   }
 
@@ -54,9 +54,9 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   }
 
   save() {
-    this.memberStatusClient.dismiss(this.memberStatus.id, new DismissFromMemberStatusCommand({
+    this.positionClient.dismiss(this.position.id, new DismissFromPositionCommand({
       dismissalDateTime: this.dismissalDate,
-      memberStatusId: this.memberStatus.id,
+      positionId: this.position.id,
       personId: this.dismissedPerson.id,
     })).subscribe(val => {
       this.dialogRef.close(true);
@@ -84,7 +84,7 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   }
 
   fetchSuggestions() {
-    this.memberStatusClient.getDismissSuggestions(this.memberStatus.id).subscribe(
+    this.positionClient.getDismissSuggestions(this.position.id).subscribe(
       suggestions => {
         this.suggestions = suggestions.suggestions.map(s => {
           return { name: s.name, id: s.id };

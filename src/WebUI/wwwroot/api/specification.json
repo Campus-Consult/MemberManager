@@ -307,7 +307,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PeopleBasicInfoVm"
+                  "$ref": "#/components/schemas/PeopleWithBasicInfoVm"
                 }
               }
             }
@@ -586,12 +586,44 @@
         }
       }
     },
-    "/api/Position/{id}/AssignSuggestions": {
+    "/api/Position/{id}/GetHistory": {
       "get": {
         "tags": [
           "Position"
         ],
-        "operationId": "Position_AssignSuggestions",
+        "operationId": "Position_GetHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionsHistoryVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/GetAssignSuggestions": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_GetAssignSuggestions",
         "parameters": [
           {
             "name": "id",
@@ -611,6 +643,38 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PeopleAssignSuggestions2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/GetDismissSuggestions": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_GetDismissSuggestions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleDismissSuggestions2"
                 }
               }
             }
@@ -1406,7 +1470,7 @@
           }
         }
       },
-      "PeopleBasicInfoVm": {
+      "PeopleWithBasicInfoVm": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1414,12 +1478,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PersonBasicInfoLookupDto"
+              "$ref": "#/components/schemas/PersonWithBasicInfoLookupDto"
             }
           }
         }
       },
-      "PersonBasicInfoLookupDto": {
+      "PersonWithBasicInfoLookupDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1859,6 +1923,27 @@
           }
         }
       },
+      "PositionsHistoryVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignees": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AssigneeDto"
+            }
+          }
+        }
+      },
       "PeopleAssignSuggestions2": {
         "type": "object",
         "additionalProperties": false,
@@ -1883,6 +1968,33 @@
           "id": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "PeopleDismissSuggestions2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PeopleDismissSuggestion2"
+            }
+          }
+        }
+      },
+      "PeopleDismissSuggestion2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

@@ -26,6 +26,7 @@ import localeDe from "@angular/common/locales/de";
 import { registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { MatNativeDateModule } from '@angular/material/core';
 
 registerLocaleData(localeDe);
 
@@ -59,6 +60,7 @@ registerLocaleData(localeDe);
     PositionModule,
     MemberStatusModule,
     ComponentsModule,
+    MatNativeDateModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

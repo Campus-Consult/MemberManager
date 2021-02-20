@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 
 import { PositionLookupDto } from '../../../../membermanager-api';
-//import { PositionDetailsComponent } from '../position-details/position-details.component';
+import { PositionDetailsComponent } from '../position-details/position-details.component';
 import { PositionListComponent } from '../position-list/position-list.component';
 
 @Component({
@@ -12,7 +12,7 @@ import { PositionListComponent } from '../position-list/position-list.component'
 export class PositionComponent {
 
   @ViewChild(PositionListComponent) positionList: PositionListComponent;
-  //@ViewChild(PositionDetailsComponent) positionDetails: PositionDetailsComponent;
+  @ViewChild(PositionDetailsComponent) positionDetails: PositionDetailsComponent;
 
   debug: boolean = false;
 
@@ -30,6 +30,6 @@ export class PositionComponent {
 
   reload(): void {
     this.positionList.reload();
-    //this.positionDetails.reload();
+    this.positionDetails.reload();
   }
 }

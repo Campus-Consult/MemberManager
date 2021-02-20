@@ -8,7 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
+export class DataTableComponent<T> implements AfterViewInit, AfterContentInit, OnChanges  {
 
   @ContentChildren(MatColumnDef) columnDefs: QueryList<MatColumnDef>;
   @ContentChildren(MatRowDef) rowDefs: QueryList<MatRowDef<T>>;
@@ -38,6 +38,10 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
   }
 
   ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnChanges(): void {
     this.dataSource.paginator = this.paginator;
   }
 

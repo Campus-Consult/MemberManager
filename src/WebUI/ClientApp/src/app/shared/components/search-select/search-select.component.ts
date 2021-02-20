@@ -46,7 +46,7 @@ export class SearchSelectComponent implements ControlValueAccessor, OnInit, OnCh
 
   private buildNameToObjMap() {
     this.nameToObjectMap.clear();
-    this.selectSuggestions.forEach(suggestion => {
+    this.selectSuggestions?.forEach(suggestion => {
       this.nameToObjectMap.set(suggestion.name, suggestion);
     })
   }

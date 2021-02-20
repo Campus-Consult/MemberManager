@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using MemberManager.Application.Common.Mappings;
 using MemberManager.Domain.Entities;
 
-namespace MemberManager.Application.People.Queries.GetPeopleBasicInfo
+namespace MemberManager.Application.People.Queries.GetPeopleWithBasicInfo
 {
-    public class PersonBasicInfoLookupDto
+    public class PersonWithBasicInfoLookupDto
     {
         public int Id { get; set; }
         public string FistName { get; set; }

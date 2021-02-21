@@ -355,7 +355,7 @@ namespace MemberManager.Infrastructure.Persistence
                 {
                     IsActive = true,
                     Name = "Social-Media-Beauftragte/r",
-                    ShortName = "1V",
+                    ShortName = "SMB",
                 });
                 await context.Positions.AddAsync(new Position()
                 {

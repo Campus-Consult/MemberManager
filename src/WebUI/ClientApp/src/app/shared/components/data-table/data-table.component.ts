@@ -22,6 +22,8 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit, O
   @Input() columns: string[];
 
   @Output() onSelectEvent = new EventEmitter<T>();
+  @Output() onAddClickedEvent = new EventEmitter<T>();
+
 
   selection: SelectionModel<T>;
 
@@ -60,6 +62,18 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit, O
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  onAddClicked() {
+    this.onAddClickedEvent.emit();
+  }
+
+  onAddClickedEventHasObserver() {
+    if (this.onAddClickedEvent.observers.length > 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

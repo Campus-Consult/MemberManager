@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PositionClient, PositionLookupDto } from '../../../../membermanager-api';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
+import { PositionCreateDialogComponent } from '../position-create-dialog/position-create-dialog.component';
 
 @Component({
   selector: 'app-position-list',
@@ -23,6 +25,7 @@ export class PositionListComponent implements AfterViewInit {
   @ViewChild(DataTableComponent) dataTable: DataTableComponent<PositionLookupDto>;
 
   @Output() onSelectEvent = new EventEmitter<PositionLookupDto>();
+  @Output() onReloadRequired = new EventEmitter();
 
 
   positions: PositionLookupDto[];
@@ -31,7 +34,7 @@ export class PositionListComponent implements AfterViewInit {
 
   selected: PositionLookupDto;
 
-  constructor(private positionClient: PositionClient) { }
+  constructor(public dialog: MatDialog, private positionClient: PositionClient) { }
 
   ngAfterViewInit() {
 
@@ -59,5 +62,27 @@ export class PositionListComponent implements AfterViewInit {
       },
       error => console.error(error)
     );
+  }
+
+  private reloadRequired(): void {
+    // check if parent is bound
+    if (this.onReloadRequired.observers.length > 0) {
+      this.onReloadRequired.emit();
+    } else {
+      this.reload();
+    }
+  }
+
+  onCreate() {
+    let dialogRef = this.dialog.open(PositionCreateDialogComponent, {
+      data: { description: "Create Position" }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.reloadRequired();
+        }
+      });
   }
 }

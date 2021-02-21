@@ -47,6 +47,7 @@ import { PositionDetailsComponent } from './components/position-details/position
 import { PositionAssignDialogComponent } from './components/position-assign-dialog/position-assign-dialog.component';
 import { PositionDismissDialogComponent } from './components/position-dismiss-dialog/position-dismiss-dialog.component';
 import { PositionHistoryDialogComponent } from './components/position-history-dialog/position-history-dialog.component';
+import { PositionCreateDialogComponent } from './components/position-create-dialog/position-create-dialog.component';
 
 @NgModule({
   imports: [
@@ -95,6 +96,7 @@ import { PositionHistoryDialogComponent } from './components/position-history-di
     PositionAssignDialogComponent,
     PositionDismissDialogComponent,
     PositionHistoryDialogComponent,
+    PositionCreateDialogComponent,
   ],
   exports: [
     PositionComponent,

@@ -4,6 +4,7 @@ import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTa
 import { AssigneeDto, PositionClient, PositionDto } from '../../../../membermanager-api';
 import { PositionAssignDialogComponent } from '../position-assign-dialog/position-assign-dialog.component';
 import { PositionDismissDialogComponent } from '../position-dismiss-dialog/position-dismiss-dialog.component';
+import { PositionEditDialogComponent } from '../position-edit-dialog/position-edit-dialog.component';
 import { PositionHistoryDialogComponent } from '../position-history-dialog/position-history-dialog.component';
 
 @Component({
@@ -54,6 +55,20 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
       this.position = result;
       this.dataSource = new MatTableDataSource<AssigneeDto>(result.assignees);
     });
+  }
+
+  private onEditButtonClicked() {
+
+    let dialogRef = this.dialog.open(PositionEditDialogComponent, {
+      data: { description: "Edit " + this.position.name, position: this.position }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.reloadRequired();
+        }
+      })
   }
 
   private onAssignPersonButtonClicked() {

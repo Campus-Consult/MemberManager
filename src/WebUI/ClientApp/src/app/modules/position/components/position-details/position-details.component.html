@@ -1,5 +1,5 @@
 <mat-card *ngIf="position">
-  <div fxLayout="row" fxLayoutAlign="start start">
+  <div fxLayout="row" fxLayoutAlign="space-between start">
     <mat-card-header fxFlex="shrink">
       <mat-icon color="primary" mat-card-avatar>info</mat-icon>
       <mat-card-title>{{position.name}}</mat-card-title>
@@ -7,7 +7,7 @@
     </mat-card-header>
     <div fxFlex>
       <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle disabled>
+        <mat-button-toggle (click)="onEditButtonClicked()">
           <mat-icon>edit</mat-icon>
         </mat-button-toggle>
         <mat-button-toggle (click)="onAssignPersonButtonClicked()">

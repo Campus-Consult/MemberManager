@@ -16,9 +16,12 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface ICareerLevelClient {
     get(): Observable<CareerLevelsVm>;
+    create(command: CreateCareerLevelCommand): Observable<number>;
     get2(id: number): Observable<CareerLevelDto>;
+    update(id: number, command: UpdateCareerLevelCommand): Observable<FileResponse>;
     getHistory(id: number): Observable<CareerLevelHistoryVm>;
     changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number>;
+    removePersonCareerLevelChange(personCareerLevelId: number): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -82,6 +85,58 @@ export class CareerLevelClient implements ICareerLevelClient {
         return _observableOf<CareerLevelsVm>(<any>null);
     }
 
+    create(command: CreateCareerLevelCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/CareerLevel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+
     get2(id: number): Observable<CareerLevelDto> {
         let url_ = this.baseUrl + "/api/CareerLevel/{id}";
         if (id === undefined || id === null)
@@ -131,6 +186,59 @@ export class CareerLevelClient implements ICareerLevelClient {
             }));
         }
         return _observableOf<CareerLevelDto>(<any>null);
+    }
+
+    update(id: number, command: UpdateCareerLevelCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/CareerLevel/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
     }
 
     getHistory(id: number): Observable<CareerLevelHistoryVm> {
@@ -237,6 +345,55 @@ export class CareerLevelClient implements ICareerLevelClient {
             }));
         }
         return _observableOf<number>(<any>null);
+    }
+
+    removePersonCareerLevelChange(personCareerLevelId: number): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/CareerLevel/RemovePersonCareerLevelChange/{PersonCareerLevelId}";
+        if (personCareerLevelId === undefined || personCareerLevelId === null)
+            throw new Error("The parameter 'personCareerLevelId' must be defined.");
+        url_ = url_.replace("{PersonCareerLevelId}", encodeURIComponent("" + personCareerLevelId)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRemovePersonCareerLevelChange(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRemovePersonCareerLevelChange(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRemovePersonCareerLevelChange(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
@@ -2328,6 +2485,90 @@ export interface ICareerLevelAssignee {
     surname?: string | undefined;
     beginDateTime?: Date;
     endDateTime?: Date | undefined;
+}
+
+export class CreateCareerLevelCommand implements ICreateCareerLevelCommand {
+    name?: string | undefined;
+    shortName?: string | undefined;
+
+    constructor(data?: ICreateCareerLevelCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+        }
+    }
+
+    static fromJS(data: any): CreateCareerLevelCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCareerLevelCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        return data; 
+    }
+}
+
+export interface ICreateCareerLevelCommand {
+    name?: string | undefined;
+    shortName?: string | undefined;
+}
+
+export class UpdateCareerLevelCommand implements IUpdateCareerLevelCommand {
+    careerLevelId?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+
+    constructor(data?: IUpdateCareerLevelCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.careerLevelId = _data["careerLevelId"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+        }
+    }
+
+    static fromJS(data: any): UpdateCareerLevelCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCareerLevelCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["careerLevelId"] = this.careerLevelId;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        return data; 
+    }
+}
+
+export interface IUpdateCareerLevelCommand {
+    careerLevelId?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
 }
 
 export class CareerLevelHistoryVm implements ICareerLevelHistoryVm {

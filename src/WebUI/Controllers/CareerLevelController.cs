@@ -1,4 +1,7 @@
 using MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLevel;
+using MemberManager.Application.CareerLevels.Commands.CreateCareerLevelCommand;
+using MemberManager.Application.CareerLevels.Commands.RemovePersonCareerLevelChange;
+using MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelCommand;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelHistory;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevels;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelWithAssignees;
@@ -21,6 +24,26 @@ namespace MemberManager.WebUI.Controllers
            return await Mediator.Send(new GetCareerLevelWithAssigneesQuery { CareerLevelId = id });
         }
 
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Create(CreateCareerLevelCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, UpdateCareerLevelCommand command)
+        {
+            if (id != command.CareerLevelId)
+            {
+               return BadRequest();
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
         [HttpGet("{id}/[action]")]
         public async Task<ActionResult<CareerLevelHistoryVm>> GetHistory(int id) {
             return await Mediator.Send(new GetCareerLevelHistoryQuery{ CareerLevelId = id });
@@ -34,6 +57,12 @@ namespace MemberManager.WebUI.Controllers
                 return BadRequest();
             }
             return await Mediator.Send(command);
+        }
+
+        [HttpPost("RemovePersonCareerLevelChange/{PersonCareerLevelId}")]
+        public async Task<ActionResult> RemovePersonCareerLevelChange(int PersonCareerLevelId) {
+            await Mediator.Send(new RemovePersonCareerLevelChangeCommand{ PersonCareerLevelId = PersonCareerLevelId});
+            return NoContent();
         }
     }
 }

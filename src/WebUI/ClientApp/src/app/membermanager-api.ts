@@ -17,6 +17,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export interface ICareerLevelClient {
     get(): Observable<CareerLevelsVm>;
     get2(id: number): Observable<CareerLevelDto>;
+    getHistory(id: number): Observable<CareerLevelHistoryVm>;
     changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number>;
 }
 
@@ -130,6 +131,57 @@ export class CareerLevelClient implements ICareerLevelClient {
             }));
         }
         return _observableOf<CareerLevelDto>(<any>null);
+    }
+
+    getHistory(id: number): Observable<CareerLevelHistoryVm> {
+        let url_ = this.baseUrl + "/api/CareerLevel/{id}/GetHistory";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetHistory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetHistory(<any>response_);
+                } catch (e) {
+                    return <Observable<CareerLevelHistoryVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CareerLevelHistoryVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetHistory(response: HttpResponseBase): Observable<CareerLevelHistoryVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CareerLevelHistoryVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CareerLevelHistoryVm>(<any>null);
     }
 
     changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number> {
@@ -2276,6 +2328,50 @@ export interface ICareerLevelAssignee {
     surname?: string | undefined;
     beginDateTime?: Date;
     endDateTime?: Date | undefined;
+}
+
+export class CareerLevelHistoryVm implements ICareerLevelHistoryVm {
+    assignees?: CareerLevelAssignee[] | undefined;
+
+    constructor(data?: ICareerLevelHistoryVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["assignees"])) {
+                this.assignees = [] as any;
+                for (let item of _data["assignees"])
+                    this.assignees!.push(CareerLevelAssignee.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CareerLevelHistoryVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new CareerLevelHistoryVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.assignees)) {
+            data["assignees"] = [];
+            for (let item of this.assignees)
+                data["assignees"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICareerLevelHistoryVm {
+    assignees?: CareerLevelAssignee[] | undefined;
 }
 
 export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelCommand {

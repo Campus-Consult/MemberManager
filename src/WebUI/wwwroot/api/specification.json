@@ -58,6 +58,38 @@
         }
       }
     },
+    "/api/CareerLevel/{id}/GetHistory": {
+      "get": {
+        "tags": [
+          "CareerLevel"
+        ],
+        "operationId": "CareerLevel_GetHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CareerLevelHistoryVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/CareerLevel/{id}/ChangePersonCareerLevel": {
       "post": {
         "tags": [
@@ -1409,6 +1441,19 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "CareerLevelHistoryVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CareerLevelAssignee"
+            }
           }
         }
       },

@@ -3,9 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
 import { AssigneeDto, PositionClient, PositionDto } from '../../../../membermanager-api';
 import { PositionAssignDialogComponent } from '../position-assign-dialog/position-assign-dialog.component';
+import { PositionDeactivateDialogComponent } from '../position-deactivate-dialog/position-deactivate-dialog.component';
 import { PositionDismissDialogComponent } from '../position-dismiss-dialog/position-dismiss-dialog.component';
 import { PositionEditDialogComponent } from '../position-edit-dialog/position-edit-dialog.component';
 import { PositionHistoryDialogComponent } from '../position-history-dialog/position-history-dialog.component';
+import { PositionReactivateDialogComponent } from '../position-reactivate-dialog/position-reactivate-dialog.component';
 
 @Component({
   selector: 'app-position-details',
@@ -60,7 +62,44 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
   private onEditButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionEditDialogComponent, {
+      width: "300px",
       data: { description: "Edit " + this.position.name, position: this.position }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === "deactivate") {
+          this.onDeactivateButtonClicked();
+        }
+        else if (result === "reactivate") {
+          this.onReactivateButtonClicked();
+        }
+        else if (result) {
+          this.reloadRequired();
+        }
+      })
+  }
+
+  private onDeactivateButtonClicked() {
+
+    let dialogRef = this.dialog.open(PositionDeactivateDialogComponent, {
+      width: "300px",
+      data: { description: "Deactivate " + this.position.name, position: this.position }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.reloadRequired();
+        }
+      })
+  }
+
+  private onReactivateButtonClicked() {
+
+    let dialogRef = this.dialog.open(PositionReactivateDialogComponent, {
+      width: "300px",
+      data: { description: "Reactivate " + this.position.name, position: this.position }
     });
 
     dialogRef.afterClosed()
@@ -74,6 +113,7 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
   private onAssignPersonButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionAssignDialogComponent, {
+      width: "300px",
       data: { description: "Assign to " + this.position.name, position: this.position }
     });
 
@@ -88,6 +128,7 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
   private onDismissPersonButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionDismissDialogComponent, {
+      width: "300px",
       data: { description: "Dismiss from " + this.position.name, position: this.position }
     });
 

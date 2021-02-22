@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IPositionDto, PositionClient, UpdatePositionCommand } from '../../../../membermanager-api';
+import { DeactivatePositionCommand, IPositionDto, PositionClient } from '../../../../membermanager-api';
 
 @Component({
-  selector: 'app-position-edit-dialog',
-  templateUrl: './position-edit-dialog.component.html',
-  styleUrls: ['./position-edit-dialog.component.scss']
+  selector: 'app-position-deactivate-dialog',
+  templateUrl: './position-deactivate-dialog.component.html',
+  styleUrls: ['./position-deactivate-dialog.component.scss']
 })
-export class PositionEditDialogComponent implements OnInit {
+export class PositionDeactivateDialogComponent implements OnInit {
 
   form: FormGroup;
   description: string;
@@ -19,7 +19,7 @@ export class PositionEditDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<PositionEditDialogComponent>,
+    private dialogRef: MatDialogRef<PositionDeactivateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: { description: string, position: IPositionDto },
     private positionClient: PositionClient
   ) {
@@ -32,24 +32,18 @@ export class PositionEditDialogComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       description: [this.description, []],
-      name: [this.position.name, Validators.required],
-      shortName: [this.position.shortName, Validators.required],
+      endDateTime: new FormControl(null, Validators.required),
     });
-  }  
-
-  get name() {
-    return this.form.get('name').value;
   }
 
-  get shortName() {
-    return this.form.get('shortName').value;
+  get endDateTime() {
+    return this.form.get('endDateTime').value;
   }
 
   save() {
-    this.positionClient.update(this.position.id, new UpdatePositionCommand({
+    this.positionClient.deactivate(this.position.id, new DeactivatePositionCommand({
       id: this.position.id,
-      name: this.name,
-      shortName: this.shortName,
+      endDateTime: this.endDateTime,
     })).subscribe(val => {
       this.dialogRef.close(true);
     }, error => {
@@ -59,21 +53,15 @@ export class PositionEditDialogComponent implements OnInit {
       if (errors) {
         console.error(errors);
         this.errors = errors.title + ":"
-        this.errors += errors.errors;
+        for (var i = 0; i < errors.errors.Id.length; i++) {
+          this.errors += errors.errors.Id[i];
+        }
       }
       else {
         console.error(error);
       }
 
     });
-  }
-
-  reactivate() {
-    this.dialogRef.close("reactivate");
-  }
-
-  deactivate() {
-    this.dialogRef.close("deactivate");
   }
 
   close() {

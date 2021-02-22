@@ -49,6 +49,8 @@ import { PositionDismissDialogComponent } from './components/position-dismiss-di
 import { PositionHistoryDialogComponent } from './components/position-history-dialog/position-history-dialog.component';
 import { PositionCreateDialogComponent } from './components/position-create-dialog/position-create-dialog.component';
 import { PositionEditDialogComponent } from './components/position-edit-dialog/position-edit-dialog.component';
+import { PositionDeactivateDialogComponent } from './components/position-deactivate-dialog/position-deactivate-dialog.component';
+import { PositionReactivateDialogComponent } from './components/position-reactivate-dialog/position-reactivate-dialog.component';
 
 @NgModule({
   imports: [
@@ -99,6 +101,8 @@ import { PositionEditDialogComponent } from './components/position-edit-dialog/p
     PositionHistoryDialogComponent,
     PositionCreateDialogComponent,
     PositionEditDialogComponent,
+    PositionDeactivateDialogComponent,
+    PositionReactivateDialogComponent,
   ],
   exports: [
     PositionComponent,

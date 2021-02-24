@@ -1,7 +1,15 @@
-<mat-form-field id=filter>
-  <mat-label>Search</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
-</mat-form-field>
+<div fxLayout="row" fxLayoutAlign="space-between center" >
+  <mat-form-field id=filter fxFlex="grow">
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+  </mat-form-field>
+
+  <button *ngIf="onAddClickedEventHasObserver()" button id="addButton" mat-raised-button color="accent" fxFlex (click)="onAddClicked()">
+    <div class="icon-text">
+      <mat-icon>add</mat-icon>
+    </div>
+  </button>
+</div>
 
 <table mat-table [dataSource]="dataSource">
   <ng-content></ng-content>

@@ -8,7 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
+export class DataTableComponent<T> implements AfterViewInit, AfterContentInit, OnChanges  {
 
   @ContentChildren(MatColumnDef) columnDefs: QueryList<MatColumnDef>;
   @ContentChildren(MatRowDef) rowDefs: QueryList<MatRowDef<T>>;
@@ -22,6 +22,8 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
   @Input() columns: string[];
 
   @Output() onSelectEvent = new EventEmitter<T>();
+  @Output() onAddClickedEvent = new EventEmitter<T>();
+
 
   selection: SelectionModel<T>;
 
@@ -41,6 +43,10 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
     this.dataSource.paginator = this.paginator;
   }
 
+  ngOnChanges(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
   // after the <ng-content> has been initialized, the column definitions are available.
   // All that's left is to add them to the table ourselves:
   ngAfterContentInit() {
@@ -56,6 +62,18 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit  {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  onAddClicked() {
+    this.onAddClickedEvent.emit();
+  }
+
+  onAddClickedEventHasObserver() {
+    if (this.onAddClickedEvent.observers.length > 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

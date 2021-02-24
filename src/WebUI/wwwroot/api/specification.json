@@ -413,7 +413,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AssignMemberStatusCommand"
+                "$ref": "#/components/schemas/AssignToMemberStatusCommand"
               }
             }
           },
@@ -543,7 +543,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PeopleBasicInfoVm"
+                  "$ref": "#/components/schemas/PeopleWithBasicInfoVm"
                 }
               }
             }
@@ -864,12 +864,44 @@
         }
       }
     },
-    "/api/Position/{id}/AssignSuggestions": {
+    "/api/Position/{id}/GetHistory": {
       "get": {
         "tags": [
           "Position"
         ],
-        "operationId": "Position_AssignSuggestions",
+        "operationId": "Position_GetHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionsHistoryVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/GetAssignSuggestions": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_GetAssignSuggestions",
         "parameters": [
           {
             "name": "id",
@@ -889,6 +921,38 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PeopleAssignSuggestions2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Position/{id}/GetDismissSuggestions": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_GetDismissSuggestions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleDismissSuggestions2"
                 }
               }
             }
@@ -1009,7 +1073,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AssignPositionCommand"
+                "$ref": "#/components/schemas/AssignToPositionCommand"
               }
             }
           },
@@ -1054,7 +1118,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DismissPositionCommand"
+                "$ref": "#/components/schemas/DismissFromPositionCommand"
               }
             }
           },
@@ -1768,11 +1832,11 @@
           }
         }
       },
-      "AssignMemberStatusCommand": {
+      "AssignToMemberStatusCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "memberStatusId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1783,6 +1847,11 @@
           "assignmentDateTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "dismissalDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -1790,7 +1859,7 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "memberStatusId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1835,7 +1904,7 @@
           }
         }
       },
-      "PeopleBasicInfoVm": {
+      "PeopleWithBasicInfoVm": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1843,12 +1912,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PersonBasicInfoLookupDto"
+              "$ref": "#/components/schemas/PersonWithBasicInfoLookupDto"
             }
           }
         }
       },
-      "PersonBasicInfoLookupDto": {
+      "PersonWithBasicInfoLookupDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2243,6 +2312,10 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "countAssignees": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -2318,6 +2391,27 @@
           }
         }
       },
+      "PositionsHistoryVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignees": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AssigneeDto"
+            }
+          }
+        }
+      },
       "PeopleAssignSuggestions2": {
         "type": "object",
         "additionalProperties": false,
@@ -2342,6 +2436,33 @@
           "id": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "PeopleDismissSuggestions2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PeopleDismissSuggestion2"
+            }
+          }
+        }
+      },
+      "PeopleDismissSuggestion2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -2401,7 +2522,7 @@
           }
         }
       },
-      "AssignPositionCommand": {
+      "AssignToPositionCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2417,18 +2538,18 @@
             "type": "string",
             "format": "date-time"
           },
-          "dismissDateTime": {
+          "dismissalDateTime": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           }
         }
       },
-      "DismissPositionCommand": {
+      "DismissFromPositionCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
+          "positionId": {
             "type": "integer",
             "format": "int32"
           },
@@ -2436,7 +2557,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "dismissDateTime": {
+          "dismissalDateTime": {
             "type": "string",
             "format": "date-time"
           }

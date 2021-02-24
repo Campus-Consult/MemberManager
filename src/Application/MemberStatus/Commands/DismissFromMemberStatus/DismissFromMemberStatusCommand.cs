@@ -10,7 +10,7 @@ namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatu
 {
     public class DismissFromMemberStatusCommand : IRequest
     {
-        public int Id { get; set; }
+        public int MemberStatusId { get; set; }
         public int PersonId { get; set; }
         public DateTime DismissalDateTime { get; set; }
     }
@@ -26,7 +26,9 @@ namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatu
 
         public async Task<Unit> Handle(DismissFromMemberStatusCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.PersonMemberStatus.FirstAsync(pms => pms.MemberStatusId == request.Id && pms.PersonId == request.PersonId && pms.EndDateTime == null);
+            var entity = await _context.PersonMemberStatus.FirstAsync(pms => pms.MemberStatusId == request.MemberStatusId 
+                && pms.PersonId == request.PersonId 
+                && pms.EndDateTime == null);
 
             if (entity == null)
             {

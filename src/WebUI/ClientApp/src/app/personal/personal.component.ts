@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
-  IPersonBasicInfoLookupDto,
+  IPersonWithBasicInfoLookupDto,
   IPersonDetailVm,
 } from "../membermanager-api";
 import { CreatePersonComponent } from "./create-person/create-person.component";
@@ -18,7 +18,7 @@ export class PersonalComponent implements OnInit {
   @ViewChild(PersonListComponent) personListComp: PersonListComponent;
 
   // View
-  public selectedPerson: IPersonBasicInfoLookupDto;
+  public selectedPerson: IPersonWithBasicInfoLookupDto;
 
   refreshingList = false;
 
@@ -69,7 +69,7 @@ export class PersonalComponent implements OnInit {
     );
   }
 
-  onChangeDisplayedPerson(selectedPerson: IPersonBasicInfoLookupDto) {
+  onChangeDisplayedPerson(selectedPerson: IPersonWithBasicInfoLookupDto) {
     this.selectedPerson = selectedPerson;
   }
 

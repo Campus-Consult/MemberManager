@@ -1,7 +1,7 @@
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.People.Commands.CreatePerson;
 using MemberManager.Application.Positions.Commands.CreatePosition;
-using MemberManager.Application.Positions.Commands.AssignPosition;
+using MemberManager.Application.Positions.Commands.AssignToPosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Domain.Entities;
 using FluentAssertions;
@@ -28,7 +28,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
             var positionId = await SetupTestPosition();
 
-            var assignPersonToPositionCommand = new AssignPositionCommand {
+            var assignPersonToPositionCommand = new AssignToPositionCommand {
                 PositionId = positionId,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
@@ -57,7 +57,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
             var positionId = await SetupTestPosition();
 
-            var assignPersonToPositionCommand = new AssignPositionCommand {
+            var assignPersonToPositionCommand = new AssignToPositionCommand {
                 PositionId = positionId,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
@@ -65,7 +65,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
             await SendAsync(assignPersonToPositionCommand);
 
-            var assignPerson2ToPositionCommand = new AssignPositionCommand {
+            var assignPerson2ToPositionCommand = new AssignToPositionCommand {
                 PositionId = positionId,
                 PersonId = person2Id,
                 AssignmentDateTime = new DateTime(2019, 1, 1),
@@ -112,7 +112,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
             var positionId = await SetupTestPosition();
 
-            var assignPersonToPositionCommand = new AssignPositionCommand {
+            var assignPersonToPositionCommand = new AssignToPositionCommand {
                 PositionId = positionId,
                 PersonId = personId,
                 AssignmentDateTime = new DateTime(2020, 1, 1),
@@ -120,7 +120,7 @@ namespace MemberManager.Application.IntegrationTests.Positions.Commands
 
             await SendAsync(assignPersonToPositionCommand);
 
-            var assignPerson2ToPositionCommand = new AssignPositionCommand {
+            var assignPerson2ToPositionCommand = new AssignToPositionCommand {
                 PositionId = positionId,
                 PersonId = person2Id,
                 AssignmentDateTime = new DateTime(2019, 1, 1),

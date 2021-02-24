@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AssignMemberStatusCommand, MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
+import { AssignToMemberStatusCommand, MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
 
 @Component({
@@ -54,9 +54,9 @@ export class MemberStatusAssignDialogComponent implements OnInit {
   }
 
   save() {
-    this.memberStatusClient.assign(this.memberStatus.id, new AssignMemberStatusCommand({
+    this.memberStatusClient.assign(this.memberStatus.id, new AssignToMemberStatusCommand({
       assignmentDateTime: this.assignDate,
-      id: this.memberStatus.id,
+      memberStatusId: this.memberStatus.id,
       personId: this.assignPerson.id,
     })).subscribe(val => {
       this.dialogRef.close(true);

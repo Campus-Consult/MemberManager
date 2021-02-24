@@ -24,15 +24,15 @@ namespace MemberManager.Application.Positions.Commands.UpdatePosition
         }
 
         public async Task<bool> PositionExists(UpdatePositionCommand model, int positionId, CancellationToken cancellationToken) {
-            return await _context.Positions.FindAsync(positionId, cancellationToken) != null;
+            return await _context.Positions.FindAsync(new object[] { positionId }, cancellationToken) != null;
         }
 
         public async Task<bool> PositionNameUnique(UpdatePositionCommand model, int positionId, CancellationToken cancellationToken) {
-            return !await _context.Positions.AnyAsync(p => p.Name == model.Name);
+            return !await _context.Positions.AnyAsync(p => p.Name == model.Name && p.Id != model.Id);
         }
 
         public async Task<bool> PositionShortNameUnique(UpdatePositionCommand model, int positionId, CancellationToken cancellationToken) {
-            return !await _context.Positions.AnyAsync(p => p.ShortName == model.ShortName);
+            return !await _context.Positions.AnyAsync(p => p.ShortName == model.ShortName && p.Id != model.Id);
         }
     }
 }

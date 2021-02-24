@@ -15,16 +15,16 @@ namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatu
         {
             _context = context;
 
-            RuleFor(v => v.Id)
+            RuleFor(v => v.MemberStatusId).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
                 .MustAsync(MemberStatusExists).WithMessage("MemberStatus does not exits.");
 
-            RuleFor(v => v.PersonId)
+            RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
                 .MustAsync(PersonExists).WithMessage("Person does not exist.")
                 .MustAsync(PersonIsAssignedAlready).WithMessage("Person is not assigned.");
 
-            RuleFor(v => v.DismissalDateTime)
+            RuleFor(v => v.DismissalDateTime).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty();
         }
 
@@ -41,7 +41,7 @@ namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatu
         public async Task<bool> PersonIsAssignedAlready(DismissFromMemberStatusCommand model, int personId, CancellationToken cancellationToken)
         {
             return await _context.PersonMemberStatus
-                .Where(pms => pms.PersonId == personId && pms.MemberStatusId == model.Id)
+                .Where(pms => pms.PersonId == personId && pms.MemberStatusId == model.MemberStatusId)
                 .AnyAsync(pms => pms.BeginDateTime <= model.DismissalDateTime && (pms.EndDateTime == null || pms.EndDateTime >= model.DismissalDateTime));
         }
     }

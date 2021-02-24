@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { MemberStatusAssignDialogComponent } from './member-status-assign-dialog.component';
+import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 
 describe('MemberStatusAssignDialogComponent', () => {
   let component: MemberStatusAssignDialogComponent;

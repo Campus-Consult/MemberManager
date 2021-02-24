@@ -23,12 +23,12 @@ namespace MemberManager.Application.Positions.Commands.ReactivatePosition
 
         public async Task<bool> PositionExists(ReactivatePositionCommand model, int positionId, CancellationToken cancellationToken)
         {
-            return (await _context.Positions.FindAsync(positionId, cancellationToken) != null);
+            return (await _context.Positions.FindAsync(new object[] { positionId }, cancellationToken) != null);
         }
 
         public async Task<bool> PositionIsNotActiveAlready(ReactivatePositionCommand model, int positionId, CancellationToken cancellationToken)
         {
-            return (await _context.Positions.FindAsync(positionId, cancellationToken)).IsActive;
+            return !(await _context.Positions.FindAsync(new object[] { positionId }, cancellationToken)).IsActive;
         }
     }
 }

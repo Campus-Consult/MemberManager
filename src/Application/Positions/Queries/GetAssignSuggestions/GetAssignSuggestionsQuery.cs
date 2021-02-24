@@ -11,7 +11,7 @@ namespace MemberManager.Application.Positions.Queries.GetAssignSuggestions
 {
     public class GetAssignSuggestionsQuery : IRequest<PeopleAssignSuggestions>
     {
-        public int PositionID { get; set; }
+        public int PositionId { get; set; }
     }
 
     public class GetAssignSuggestionsQueryHandler : IRequestHandler<GetAssignSuggestionsQuery, PeopleAssignSuggestions>

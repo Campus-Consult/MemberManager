@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MemberManager.Application.MemberStatus.Commands.AssignMemberStatus;
+using MemberManager.Application.MemberStatus.Commands.AssignToMemberStatus;
 using MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions;
@@ -43,9 +43,9 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPost("{id}/[action]")]
-        public async Task<ActionResult> Assign(int id, AssignMemberStatusCommand command)
+        public async Task<ActionResult> Assign(int id, AssignToMemberStatusCommand command)
         {
-            if (id != command?.Id)
+            if (id != command?.MemberStatusId)
             {
                 return BadRequest();
             }
@@ -58,7 +58,7 @@ namespace MemberManager.WebUI.Controllers
         [HttpPost("{id}/[action]")]
         public async Task<ActionResult> Dismiss(int id, DismissFromMemberStatusCommand command)
         {
-            if (id != command.Id)
+            if (id != command.MemberStatusId)
             {
                 return BadRequest();
             }

@@ -1,25 +1,27 @@
 <mat-card *ngIf="memberStatus">
   <div fxLayout="row" fxLayoutAlign="start start">
-    <mat-card-header fxFlex>
+    <mat-card-header fxFlex="shrink">
       <mat-icon color="primary" mat-card-avatar>info</mat-icon>
       <mat-card-title>{{memberStatus.name}}</mat-card-title>
       <mat-card-subtitle>Member status</mat-card-subtitle>
     </mat-card-header>
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" fxFlex="nogrow">
-      <mat-button-toggle disabled>
-        <mat-icon>edit</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle (click)="onAssignPersonButtonClicked()">
-        <mat-icon>person_add</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle (click)="onDismissPersonButtonClicked()" [disabled]="memberStatus?.assignees.length == 0">
-        <mat-icon>person_remove</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle (click)="onShowHistoryButtonClicked()">
-        <mat-icon>history</mat-icon>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
+    <div fxFlex>
+      <mat-button-toggle-group #group="matButtonToggleGroup">
+        <mat-button-toggle disabled>
+          <mat-icon>edit</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (click)="onAssignPersonButtonClicked()">
+          <mat-icon>person_add</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (click)="onDismissPersonButtonClicked()" [disabled]="memberStatus?.assignees.length == 0">
+          <mat-icon>person_remove</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (click)="onShowHistoryButtonClicked()">
+          <mat-icon>history</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
   </div>
 
   <mat-card-content>

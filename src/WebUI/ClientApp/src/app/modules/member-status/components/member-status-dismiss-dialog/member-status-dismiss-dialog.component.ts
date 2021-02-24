@@ -56,7 +56,7 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   save() {
     this.memberStatusClient.dismiss(this.memberStatus.id, new DismissFromMemberStatusCommand({
       dismissalDateTime: this.dismissalDate,
-      id: this.memberStatus.id,
+      memberStatusId: this.memberStatus.id,
       personId: this.dismissedPerson.id,
     })).subscribe(val => {
       this.dialogRef.close(true);

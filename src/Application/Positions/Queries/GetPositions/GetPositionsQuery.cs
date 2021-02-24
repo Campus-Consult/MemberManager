@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MemberManager.Application.Common.Interfaces;
 using MediatR;
+using MemberManager.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
@@ -29,6 +29,7 @@ namespace MemberManager.Application.Positions.Queries.GetPositions
             return new PositionsVm
             {
                 Positions = await _context.Positions
+                    .Include(p => p.PersonPositions)
                     .ProjectTo<PositionLookupDto>(_mapper.ConfigurationProvider)
                     .OrderBy(p => p.Name)
                     .ToListAsync(cancellationToken)

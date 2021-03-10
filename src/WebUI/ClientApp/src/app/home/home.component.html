@@ -1,3 +1,3 @@
-<h1>Guten Tag</h1>
 <h2>Willkommen beim Member Manager</h2>
-<p>Bitte logge dich ein, um die App benutzen zu können!</p>
+<p *ngIf="!(isAuthenticated | async)">Bitte <a [routerLink]='["/authentication/login"]' >logge dich ein</a>, um die App benutzen zu können!</p>
+<p *ngIf="(isAuthenticated | async)">Du bist als <a [routerLink]='["/authentication/profile"]'>{{userName | async}}</a> angemeldet.</p>

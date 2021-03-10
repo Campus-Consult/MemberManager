@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">MemberManager.WebUI</a>
+      <a class="navbar-brand" [routerLink]="['/']">MemberManager</a>
       <button class="navbar-toggler"
               type="button"
               data-toggle="collapse"
@@ -14,6 +14,7 @@
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
            [ngClass]="{ show: isExpanded }">
         <app-login-menu></app-login-menu>
+        <span class="spacer"></span>
         <ul class="navbar-nav flex-grow">
           <li class="nav-item"
               [routerLinkActive]="['link-active']"

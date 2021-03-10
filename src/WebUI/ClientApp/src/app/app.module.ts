@@ -28,6 +28,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MemberManagementModule } from './modules/member-management/member-management.module';
 
+import {MatToolbarModule} from '@angular/material/toolbar';
+
 registerLocaleData(localeDe);
 
 @NgModule({
@@ -60,7 +62,8 @@ registerLocaleData(localeDe);
     PositionModule,
     MemberStatusModule,
     ComponentsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatToolbarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

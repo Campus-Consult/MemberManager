@@ -9,10 +9,10 @@ import { MemberFormComponent } from "./member-form/member-form.component";
  */
 @Component({
   selector: "app-create-person",
-  templateUrl: "./create-person.component.html",
-  styleUrls: ["./create-person.component.scss"],
+  templateUrl: "./create-member.component.html",
+  styleUrls: ["./create-member.component.scss"],
 })
-export class CreatePersonComponent implements AfterViewInit {
+export class CreateMemberComponent implements AfterViewInit {
   @ViewChild(MemberFormComponent) memberFormComp: MemberFormComponent;
 
   memberForm: FormGroup;
@@ -23,8 +23,8 @@ export class CreatePersonComponent implements AfterViewInit {
   lastRequestErr;
 
   constructor(
-    public dialogRef: MatDialogRef<CreatePersonComponent>,
-    protected personApi: PeopleClient
+    public dialogRef: MatDialogRef<CreateMemberComponent>,
+    protected memberApi: PeopleClient
   ) {}
 
   ngAfterViewInit() {
@@ -66,7 +66,7 @@ export class CreatePersonComponent implements AfterViewInit {
     const command = this.convertCreateFormIntoCommand(this.getResult());
     console.log(command);
 
-    this.personApi.create(command).subscribe(
+    this.memberApi.create(command).subscribe(
       (val) => {
         // Modal Output User Input in Modal
         this.dialogRef.close(this.getResult());

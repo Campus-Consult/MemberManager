@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HistoryTabComponent } from './history-tab.component';
+import { CreateMemberComponent } from './create-member.component';
 
-describe('HistoryTabComponent', () => {
-  let component: HistoryTabComponent;
-  let fixture: ComponentFixture<HistoryTabComponent>;
+describe('CreatePersonComponent', () => {
+  let component: CreateMemberComponent;
+  let fixture: ComponentFixture<CreateMemberComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HistoryTabComponent ]
+      declarations: [ CreateMemberComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HistoryTabComponent);
+    fixture = TestBed.createComponent(CreateMemberComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

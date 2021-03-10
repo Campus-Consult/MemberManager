@@ -17,9 +17,8 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PrivacyComponent } from './privacy/privacy.component';
-import { PersonalModule } from './personal/personal.module';
 import { ComponentsModule } from './components/components.module';
-import { PersonalComponent } from './personal/personal.component';
+import { MemberManagementComponent } from './modules/member-management/member-management.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
 import { PositionModule } from './modules/position/position.module';
 import localeDe from "@angular/common/locales/de";
@@ -27,6 +26,7 @@ import { registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MemberManagementModule } from './modules/member-management/member-management.module';
 
 registerLocaleData(localeDe);
 
@@ -49,14 +49,14 @@ registerLocaleData(localeDe);
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'Personal', component: PersonalComponent, canActivate: [AuthorizeGuard], pathMatch: 'full' },
+      { path: 'Personal', component: MemberManagementComponent, canActivate: [AuthorizeGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),
-    PersonalModule,
+    MemberManagementModule,
     PositionModule,
     MemberStatusModule,
     ComponentsModule,

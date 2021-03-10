@@ -6,31 +6,31 @@ import {
   PersonDetailVm,
   UpdatePersonCommand,
 } from "src/app/membermanager-api";
-import { CreatePersonComponent } from "../create-person/create-person.component";
+import { CreateMemberComponent } from "../create-member/create-member.component";
 
 /**
  * Edit People Modal
- * @extends CreatePersonComponent
+ * @extends CreateMemberComponent
  * most Logic in CreatePersonComponent
  */
 @Component({
   selector: "app-edit-pesonal-data",
-  templateUrl: "./edit-pesonal-data.component.html",
-  styleUrls: ["./edit-pesonal-data.component.scss"],
+  templateUrl: "./edit-member-data.component.html",
+  styleUrls: ["./edit-member-data.component.scss"],
 })
-export class EditPersonalDataComponent
-  extends CreatePersonComponent
+export class EditMemberDataComponent
+  extends CreateMemberComponent
   implements OnInit, AfterViewInit {
   memberdata: PersonDetailVm;
 
   errorHintTitle = "Änderungen nicht übernommen";
 
   constructor(
-    public dialogRef: MatDialogRef<CreatePersonComponent>,
+    public dialogRef: MatDialogRef<CreateMemberComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    protected personApi: PeopleClient
+    protected memberApi: PeopleClient
   ) {
-    super(dialogRef, personApi);
+    super(dialogRef, memberApi);
   }
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class EditPersonalDataComponent
    */
   protected handleFormValid() {
     const command = this.convertEditFormIntoCommand(this.getResult());
-    this.personApi.update(this.memberdata.id, command).subscribe(
+    this.memberApi.update(this.memberdata.id, command).subscribe(
       (val) => {
         // Modal Output User Input in Modal
         this.dialogRef.close(this.getResult());

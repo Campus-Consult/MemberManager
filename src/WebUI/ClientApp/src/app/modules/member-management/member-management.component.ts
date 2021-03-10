@@ -1,21 +1,21 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   IPersonWithBasicInfoLookupDto,
   IPersonDetailVm,
-} from "../membermanager-api";
-import { CreatePersonComponent } from "./create-person/create-person.component";
-import { EditPersonalDataComponent } from "./edit-pesonal-data/edit-pesonal-data.component";
-import { PersonListComponent } from "./person-list/person-list.component";
+} from '../../membermanager-api';
+import { CreateMemberComponent } from './create-member/create-member.component';
+import { EditMemberDataComponent } from './edit-member-data/edit-member-data.component';
+import { MemberListComponent } from './member-list/member-list.component';
 
 @Component({
-  selector: "app-personal",
-  templateUrl: "./personal.component.html",
-  styleUrls: ["./personal.component.scss"],
+  selector: 'app-personal',
+  templateUrl: './member-management.component.html',
+  styleUrls: ['./member-management.component.scss'],
 })
-export class PersonalComponent implements OnInit {
-  @ViewChild(PersonListComponent) personListComp: PersonListComponent;
+export class MemberManagementComponent implements OnInit {
+  @ViewChild(MemberListComponent) personListComp: MemberListComponent;
 
   // View
   public selectedPerson: IPersonWithBasicInfoLookupDto;
@@ -27,9 +27,9 @@ export class PersonalComponent implements OnInit {
   ngOnInit(): void {}
 
   onCreate() {
-    let dialogRef = this.dialog.open(CreatePersonComponent, {
-      maxHeight: "800px",
-      width: "600px",
+    const dialogRef = this.dialog.open(CreateMemberComponent, {
+      maxHeight: '800px',
+      width: '600px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -38,9 +38,9 @@ export class PersonalComponent implements OnInit {
   }
 
   onEdit(person: IPersonDetailVm) {
-    let dialogRef = this.dialog.open(EditPersonalDataComponent, {
-      maxHeight: "800px",
-      width: "600px",
+    const dialogRef = this.dialog.open(EditMemberDataComponent, {
+      maxHeight: '800px',
+      width: '600px',
       data: person,
     });
 
@@ -53,14 +53,14 @@ export class PersonalComponent implements OnInit {
     this.refreshingList = !this.refreshingList;
     this.personListComp.refresh().subscribe(
       () => {
-        this._snackBar.open('Personenliste neugeladen', 'YAY!', {
+        this._snackBar.open('Mitgliederliste neugeladen', 'YAY!', {
           duration: 2000,
         });
         this.refreshingList = !this.refreshingList;
       },
       (err) => {
-        console.error();
-        this._snackBar.open('Personenliste neuladen fehlgeschlagen', 'Nooo!', {
+        console.error(err);
+        this._snackBar.open('Mitgliederliste neuladen fehlgeschlagen', 'Nooo!', {
           duration: 2000,
         });
         this.refreshingList = !this.refreshingList;

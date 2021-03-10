@@ -27,10 +27,10 @@ export const PERSON_LIST_POSSIBLE_COLUMNS = [
 
 @Component({
   selector: "app-person-list",
-  templateUrl: "./person-list.component.html",
-  styleUrls: ["./person-list.component.scss"],
+  templateUrl: "./member-list.component.html",
+  styleUrls: ["./member-list.component.scss"],
 })
-export class PersonListComponent implements OnInit, AfterViewInit {
+export class MemberListComponent implements OnInit, AfterViewInit {
   personalData: IPersonWithBasicInfoLookupDto[];
 
   dataSource: MatTableDataSource<IPersonWithBasicInfoLookupDto>;

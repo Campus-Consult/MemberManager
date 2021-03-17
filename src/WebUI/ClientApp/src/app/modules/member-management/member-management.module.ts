@@ -28,6 +28,7 @@ import { SharedModule } from "../../shared/shared.module";
 import { ErrorHintComponent } from "./create-member/error-hint/error-hint.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     MatSelectModule,
     MatTooltipModule,
     SharedModule,
+    MatSortModule 
   ],
   entryComponents: [CreateMemberComponent, EditMemberDataComponent],
 })

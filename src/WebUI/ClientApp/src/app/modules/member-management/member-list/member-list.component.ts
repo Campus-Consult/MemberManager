@@ -15,11 +15,12 @@ import {
   IPersonWithBasicInfoLookupDto,
   PeopleClient,
   IPeopleWithBasicInfoVm,
+  PersonWithBasicInfoLookupDto,
 } from "src/app/membermanager-api";
 
 export const PERSON_LIST_POSSIBLE_COLUMNS = [
-  "firstName",
-  "lastName",
+  "fistName",
+  "surname",
   "currentMemberStatus",
   "currentCareerLevel",
   "currentPositions",
@@ -31,9 +32,9 @@ export const PERSON_LIST_POSSIBLE_COLUMNS = [
   styleUrls: ["./member-list.component.scss"],
 })
 export class MemberListComponent implements OnInit, AfterViewInit {
-  personalData: IPersonWithBasicInfoLookupDto[];
+  personalData: PersonWithBasicInfoLookupDto[];
 
-  dataSource: MatTableDataSource<IPersonWithBasicInfoLookupDto>;
+  dataSource: MatTableDataSource<PersonWithBasicInfoLookupDto>;
 
   @Input()
   displayedColumns?: string[];
@@ -69,7 +70,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     this.personApi.getWithBasicInfo().subscribe(
       (val: IPeopleWithBasicInfoVm) => {
         this.personalData = val.people;
-        this.dataSource = new MatTableDataSource(this.personalData);
+        this.dataSource = new MatTableDataSource<PersonWithBasicInfoLookupDto>(this.personalData);
         this.dataSource.sort = this.sort;
         this.loadingTable = false;
       },

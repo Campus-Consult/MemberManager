@@ -7,16 +7,19 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import {
   IPersonWithBasicInfoLookupDto,
   PeopleClient,
   IPeopleWithBasicInfoVm,
   PersonWithBasicInfoLookupDto,
 } from "src/app/membermanager-api";
+import { CreateMemberComponent } from "../create-member/create-member.component";
 
 export const PERSON_LIST_POSSIBLE_COLUMNS = [
   "fistName",
@@ -56,7 +59,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
 
   public isRefreshing = false;
 
-  constructor(private personApi: PeopleClient) {}
+  constructor(private personApi: PeopleClient, private _snackBar: MatSnackBar, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     // Loading Member
@@ -89,6 +92,33 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     this.detailEvent.emit(this.selectedPerson);
   }
 
+  onCreate() {
+    const dialogRef = this.dialog.open(CreateMemberComponent, {
+      maxHeight: '800px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.refresh();
+    });
+  }
+
+  onRefresh(){
+    this.refresh().subscribe(
+      () => {
+        this._snackBar.open('Mitgliederliste neugeladen', 'YAY!', {
+          duration: 2000,
+        });
+      },
+      (err) => {
+        console.error(err);
+        this._snackBar.open('Mitgliederliste neuladen fehlgeschlagen', 'Nooo!', {
+          duration: 2000,
+        });
+      }
+    );
+  }
+
   refresh(): Observable<any> {
     this.isRefreshing = true;
     return this.personApi.getWithBasicInfo().pipe(
@@ -100,3 +130,4 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     );
   }
 }
+

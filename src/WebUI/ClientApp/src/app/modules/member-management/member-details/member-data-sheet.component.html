@@ -1,4 +1,4 @@
-<mat-card *ngIf="personDetails; else elseTemplate">
+<mat-card *ngIf="personDetails; else toolTip">
   <div fxLayout="row" fxLayoutAlign="start start">
     <mat-card-header fxFlex="shrink">
       <mat-icon color="primary" mat-card-avatar>info</mat-icon>
@@ -23,15 +23,8 @@
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
-  <ng-template #elseTemplate>
-    <mat-card-content class="content-margin">
-      Click on person in table to show Details.
-    </mat-card-content>
-  </ng-template>
 </mat-card>
-<ng-template #elseTemplate>
-  <mat-card-content class="content-margin">
-    Click on person in table to show Details.
-  </mat-card-content>
+<ng-template #toolTip>
+    Für mehr Informationen klicke auf ein Element in der Tabelle!
 </ng-template>
 

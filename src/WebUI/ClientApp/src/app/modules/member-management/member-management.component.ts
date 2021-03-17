@@ -20,22 +20,9 @@ export class MemberManagementComponent implements OnInit {
   // View
   public selectedPerson: IPersonWithBasicInfoLookupDto;
 
-  refreshingList = false;
-
-  constructor(private dialog: MatDialog, private _snackBar: MatSnackBar) {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {}
-
-  onCreate() {
-    const dialogRef = this.dialog.open(CreateMemberComponent, {
-      maxHeight: '800px',
-      width: '600px',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      this.onRefresh();
-    });
-  }
 
   onEdit(person: IPersonDetailVm) {
     const dialogRef = this.dialog.open(EditMemberDataComponent, {
@@ -50,23 +37,7 @@ export class MemberManagementComponent implements OnInit {
   }
 
   onRefresh() {
-    this.refreshingList = !this.refreshingList;
-    this.personListComp.refresh().subscribe(
-      () => {
-        this._snackBar.open('Mitgliederliste neugeladen', 'YAY!', {
-          duration: 2000,
-        });
-        this.refreshingList = !this.refreshingList;
-      },
-      (err) => {
-        console.error(err);
-        this._snackBar.open('Mitgliederliste neuladen fehlgeschlagen', 'Nooo!', {
-          duration: 2000,
-        });
-        this.refreshingList = !this.refreshingList;
-        this.refreshingList = !this.refreshingList;
-      }
-    );
+    this.personListComp.onRefresh();
   }
 
   onChangeDisplayedPerson(selectedPerson: IPersonWithBasicInfoLookupDto) {

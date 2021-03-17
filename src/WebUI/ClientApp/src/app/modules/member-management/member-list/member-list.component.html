@@ -5,6 +5,8 @@
       [dataSource]="dataSource"
       [columns]="displayedColumns"
       (onSelectEvent)="onSelect($event)"
+      (onAddClickedEvent)="onCreate()"
+      (oneRefreshClickedEvent)="onRefresh()"
       matSort
     >
       <ng-container matColumnDef="fistName">

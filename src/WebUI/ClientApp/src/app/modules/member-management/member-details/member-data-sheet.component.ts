@@ -10,7 +10,6 @@ import {
 import {
   IPersonWithBasicInfoLookupDto,
   IPersonDetailVm,
-  IPersonLookupDto,
   PeopleClient,
 } from "src/app/membermanager-api";
 

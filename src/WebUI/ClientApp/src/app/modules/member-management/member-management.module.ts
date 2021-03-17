@@ -29,6 +29,8 @@ import { ErrorHintComponent } from "./create-member/error-hint/error-hint.compon
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatSortModule } from "@angular/material/sort";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { MatSortModule } from "@angular/material/sort";
     MatSelectModule,
     MatTooltipModule,
     SharedModule,
-    MatSortModule 
+    MatSortModule,
+    MatButtonToggleModule,
+    FlexLayoutModule,
   ],
   entryComponents: [CreateMemberComponent, EditMemberDataComponent],
 })

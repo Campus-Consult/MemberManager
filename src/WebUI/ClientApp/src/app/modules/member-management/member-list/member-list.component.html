@@ -1,49 +1,57 @@
-<ng-container *ngIf="dataSource; else loading">
-  <data-table
-    #dataTable
-    [dataSource]="dataSource"
-    [columns]="displayedColumns"
-    (onSelectEvent)="onSelect($event)"
-    matSort
-  >
-    <ng-container matColumnDef="fistName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Vorname</th>
-      <td mat-cell *matCellDef="let element">{{ element.fistName }}</td>
-    </ng-container>
+<mat-card>
+  <ng-container *ngIf="dataSource; else loading">
+    <data-table
+      #dataTable
+      [dataSource]="dataSource"
+      [columns]="displayedColumns"
+      (onSelectEvent)="onSelect($event)"
+      matSort
+    >
+      <ng-container matColumnDef="fistName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Vorname</th>
+        <td mat-cell *matCellDef="let element">{{ element.fistName }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="surname">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nachname</th>
-      <td mat-cell *matCellDef="let element">{{ element.surname }}</td>
-    </ng-container>
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nachname</th>
+        <td mat-cell *matCellDef="let element">{{ element.surname }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="currentMemberStatus">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Mitgliedsstatus</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.currentMemberStatus }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="currentMemberStatus">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Mitgliedsstatus
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.currentMemberStatus }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="currentCareerLevel" >
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Karriere Stufe</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.currentCareerLevel }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="currentCareerLevel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Karriere Stufe
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.currentCareerLevel }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="currentPositions" >
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Position</th>
-      <td mat-cell *matCellDef="let element">
-        <p *ngFor="let item of element.currentPositions" [title]="item.name">{{ item.shortName }}</p>
-      </td>
-    </ng-container>
-  </data-table>
-</ng-container>
-<ng-template #loading>
-  <ng-container *ngIf="loadingTable; else elseTemplate">
-    <h2>Mitglieder werden geladen</h2>
-    <mat-spinner color="primary"></mat-spinner>
+      <ng-container matColumnDef="currentPositions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Position</th>
+        <td mat-cell *matCellDef="let element">
+          <p *ngFor="let item of element.currentPositions" [title]="item.name">
+            {{ item.shortName }}
+          </p>
+        </td>
+      </ng-container>
+    </data-table>
   </ng-container>
-  <ng-template #elseTemplate>
-    <p class="loading-error">{{loadingError}}</p>
+  <ng-template #loading>
+    <ng-container *ngIf="loadingTable; else elseTemplate">
+      <h2>Mitglieder werden geladen</h2>
+      <mat-spinner color="primary"></mat-spinner>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <p class="loading-error">{{ loadingError }}</p>
+    </ng-template>
   </ng-template>
-</ng-template>
+</mat-card>

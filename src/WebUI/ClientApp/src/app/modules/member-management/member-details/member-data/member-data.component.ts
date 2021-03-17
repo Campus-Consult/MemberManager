@@ -4,7 +4,7 @@ import {
 import { Gender, IPersonDetailVm } from 'src/app/membermanager-api';
 
 @Component({
-  selector: 'app-personal-data',
+  selector: 'app-member-data',
   templateUrl: './member-data.component.html',
   styleUrls: ['./member-data.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

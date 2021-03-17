@@ -1,24 +1,55 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" >
-  <mat-form-field id=filter fxFlex="grow">
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-form-field id="filter" fxFlex="grow">
     <mat-label>Search</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input />
   </mat-form-field>
 
-  <button *ngIf="onAddClickedEventHasObserver()" button id="addButton" mat-raised-button color="accent" fxFlex (click)="onAddClicked()">
-    <div class="icon-text">
-      <mat-icon>add</mat-icon>
-    </div>
-  </button>
+  <div class="actionButtons">
+    <button
+      *ngIf="onAddClickedEventHasObserver()"
+      button
+      id="addButton"
+      class="actionButton"
+      mat-raised-button
+      color="accent"
+      fxFlex
+      matTooltip="Mitglied erstellen"
+      (click)="onAddClicked()"
+    >
+      <div class="icon-text">
+        <mat-icon>add</mat-icon>
+      </div>
+    </button>
+    <button
+      *ngIf="onRefreshClickedEventHasObserver()"
+      button
+      id="refreshButton"
+      class="actionButton"
+      mat-raised-button
+      color="accent"
+      fxFlex
+      matTooltip="Mitgliederliste neuladen"
+      (click)="oneRefreshClicked()"
+    >
+      <mat-icon class="icon-text" outline>refresh</mat-icon>
+    </button>
+  </div>
 </div>
 
 <table mat-table [dataSource]="dataSource">
   <ng-content></ng-content>
 
   <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: columns;"
-      [ngClass]="{ 'selected': selection.isSelected(row)}"
-      (click)="selection.select(row)">
-  </tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: columns"
+    [ngClass]="{ selected: selection.isSelected(row) }"
+    (click)="selection.select(row)"
+  ></tr>
 </table>
 
-<mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+<mat-paginator
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]"
+  showFirstLastButtons
+></mat-paginator>

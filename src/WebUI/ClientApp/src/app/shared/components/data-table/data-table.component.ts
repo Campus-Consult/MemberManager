@@ -23,6 +23,7 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit, O
 
   @Output() onSelectEvent = new EventEmitter<T>();
   @Output() onAddClickedEvent = new EventEmitter<T>();
+  @Output() oneRefreshClickedEvent = new EventEmitter<T>();
 
 
   selection: SelectionModel<T>;
@@ -71,6 +72,18 @@ export class DataTableComponent<T> implements AfterViewInit, AfterContentInit, O
 
   onAddClickedEventHasObserver() {
     if (this.onAddClickedEvent.observers.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  oneRefreshClicked() {
+    this.oneRefreshClickedEvent.emit();
+  }
+
+  onRefreshClickedEventHasObserver() {
+    if (this.oneRefreshClickedEvent.observers.length > 0) {
       return true;
     } else {
       return false;

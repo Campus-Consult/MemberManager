@@ -242,6 +242,84 @@
         }
       }
     },
+    "/api/CareerLevel/{id}/Reactivate": {
+      "post": {
+        "tags": [
+          "CareerLevel"
+        ],
+        "operationId": "CareerLevel_Reactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CareerLevel/{id}/Deactivate": {
+      "post": {
+        "tags": [
+          "CareerLevel"
+        ],
+        "operationId": "CareerLevel_Deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeactivateCareerLevelCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/MemberStatus": {
       "get": {
         "tags": [
@@ -1669,6 +1747,24 @@
             "format": "int32"
           },
           "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "changeDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DeactivateCareerLevelCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "careerLevelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "newCareerLevelId": {
             "type": "integer",
             "format": "int32"
           },

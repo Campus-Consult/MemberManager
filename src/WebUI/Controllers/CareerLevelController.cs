@@ -1,5 +1,7 @@
 using MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLevel;
 using MemberManager.Application.CareerLevels.Commands.CreateCareerLevelCommand;
+using MemberManager.Application.CareerLevels.Commands.DeactivateCareerLevel;
+using MemberManager.Application.CareerLevels.Commands.ReactivateCareerLevel;
 using MemberManager.Application.CareerLevels.Commands.RemovePersonCareerLevelChange;
 using MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelCommand;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelHistory;
@@ -64,5 +66,27 @@ namespace MemberManager.WebUI.Controllers
             await Mediator.Send(new RemovePersonCareerLevelChangeCommand{ PersonCareerLevelId = PersonCareerLevelId});
             return NoContent();
         }
+
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Reactivate(int id) {
+            await Mediator.Send(new ReactivateCareerLevelCommand{
+                CareerLevelId = id,
+            });
+            return NoContent();
+        }
+
+        [HttpPost("{id}/[action]")]
+        public async Task<ActionResult> Deactivate(int id, DeactivateCareerLevelCommand command) {
+            if (id != command.CareerLevelId)
+            {
+                return BadRequest();
+            }
+            await Mediator.Send(new DeactivateCareerLevelCommand {
+                CareerLevelId = command.CareerLevelId,
+                NewCareerLevelId = command.NewCareerLevelId,
+            });
+            return NoContent();
+        }
+
     }
 }

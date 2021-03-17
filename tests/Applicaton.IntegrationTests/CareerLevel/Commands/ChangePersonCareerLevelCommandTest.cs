@@ -1,7 +1,6 @@
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.People.Commands.CreatePerson;
 using MemberManager.Application.Positions.Commands.CreatePosition;
-using MemberManager.Application.Positions.Commands.AssignPosition;
 using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Application.CareerLevels.Commands.CreateCareerLevelCommand;
 using MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLevel;

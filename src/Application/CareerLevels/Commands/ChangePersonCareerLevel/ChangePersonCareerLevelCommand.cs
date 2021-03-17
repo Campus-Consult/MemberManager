@@ -25,10 +25,14 @@ namespace MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLeve
             _context = context;
         }
 
-        public async Task<int> Handle(ChangePersonCareerLevelCommand request, CancellationToken cancellationToken)
+        public Task<int> Handle(ChangePersonCareerLevelCommand request, CancellationToken cancellationToken)
         {
+            return changePersonCareerLevel(request, cancellationToken, _context);
+        }
+
+        public static async Task<int> changePersonCareerLevel(ChangePersonCareerLevelCommand request, CancellationToken cancellationToken, IApplicationDbContext context) {
             // get PersonCareerLevel directly before the changeTime
-            var previousPersonCareerLevel = _context.PersonCareerLevels
+            var previousPersonCareerLevel = context.PersonCareerLevels
                 // has to start before the careerlevel change
                 .Where(p => p.PersonId == request.PersonId && p.BeginDateTime < request.ChangeDateTime)
                 .ToList()
@@ -37,7 +41,7 @@ namespace MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLeve
                 // it doesn't matter if BeginDateTime or EndDateTimes are compared, because their ordering will always be the same
                 .Aggregate((latest,p) => p.BeginDateTime > latest.BeginDateTime ? p : latest);
 
-            var nextPersonCareerLevel = _context.PersonCareerLevels
+            var nextPersonCareerLevel = context.PersonCareerLevels
                 // has to start after the career level change
                 .Where(p => p.PersonId == request.PersonId && p.BeginDateTime > request.ChangeDateTime)
                 .ToList()
@@ -55,7 +59,7 @@ namespace MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLeve
             // it to start at the requested change time
             if (nextPersonCareerLevel?.CareerLevelId == request.CareerLevelId) {
                 nextPersonCareerLevel.BeginDateTime = request.ChangeDateTime;
-                await _context.SaveChangesAsync(cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
                 return nextPersonCareerLevel.Id;
             } else {
                 // if there is a next career level, end the new career level there
@@ -67,9 +71,9 @@ namespace MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLeve
                     EndDateTime = newEndDateTime,
                 };
 
-                _context.PersonCareerLevels.Add(newPersonCareerLevel);
+                context.PersonCareerLevels.Add(newPersonCareerLevel);
 
-                await _context.SaveChangesAsync(cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
 
                 return newPersonCareerLevel.Id;
             }

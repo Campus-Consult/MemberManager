@@ -12,5 +12,8 @@ namespace MemberManager.Domain.Entities
 
         public Person Person { get; set; }
         public CareerLevel CareerLevel { get; set; }
+        public bool IncludesTime(DateTime time) {
+            return time >= BeginDateTime && (EndDateTime == null || time < EndDateTime);
+        }
     }
 }

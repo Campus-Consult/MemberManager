@@ -1,4 +1,5 @@
-﻿using MemberManager.Application.Common.Interfaces;
+﻿using MemberManager.Application.Common.Exceptions;
+using MemberManager.Application.Common.Interfaces;
 using MemberManager.Infrastructure.Identity;
 using MemberManager.Infrastructure.Persistence;
 using MemberManager.WebUI;
@@ -15,6 +16,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 
 [SetUpFixture]
 public class Testing
@@ -155,6 +157,12 @@ public class Testing
         context.Add(entity);
 
         await context.SaveChangesAsync();
+    }
+
+    public static void AssertValidationError(Task task, string errorKey, string errorMessage) {
+        FluentActions.Invoking(() => task)
+            .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey))
+            .And.Errors[errorKey].Should().Contain(errorMessage);
     }
 
     [OneTimeTearDown]

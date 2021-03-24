@@ -4,21 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { TodoComponent } from './todo/todo.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
-import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PrivacyComponent } from './privacy/privacy.component';
-import { ComponentsModule } from './components/components.module';
-import { MemberManagementComponent } from './modules/member-management/member-management.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
 import { PositionModule } from './modules/position/position.module';
 import localeDe from "@angular/common/locales/de";
@@ -37,9 +30,6 @@ registerLocaleData(localeDe);
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
-    TodoComponent,
     PrivacyComponent,
   ],
   imports: [
@@ -51,17 +41,12 @@ registerLocaleData(localeDe);
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'Personal', component: MemberManagementComponent, canActivate: [AuthorizeGuard], pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),
     MemberManagementModule,
     PositionModule,
     MemberStatusModule,
-    ComponentsModule,
     MatNativeDateModule,
     MatToolbarModule
   ],

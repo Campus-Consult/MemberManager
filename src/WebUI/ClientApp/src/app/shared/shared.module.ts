@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataTableComponent } from './components/data-table/data-table.component';
+import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { SearchSelectComponent } from './components/search-select/search-select.component';
 
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
@@ -44,9 +45,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   declarations: [
     DataTableComponent,
     SearchSelectComponent,
+    SkeletonLoaderComponent
   ],
   exports: [
     DataTableComponent,
+    SkeletonLoaderComponent,
     SearchSelectComponent,
   ],
   imports: [
@@ -56,7 +59,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     FormsModule,
 
     FlexLayoutModule,
-
+    NgxSkeletonLoaderModule,
+    
     MatCheckboxModule,
     MatButtonModule,
     MatInputModule,

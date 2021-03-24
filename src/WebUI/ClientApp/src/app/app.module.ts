@@ -13,7 +13,6 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PrivacyComponent } from './privacy/privacy.component';
-import { ComponentsModule } from './components/components.module';
 import { MemberManagementComponent } from './modules/member-management/member-management.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
 import { PositionModule } from './modules/position/position.module';
@@ -51,7 +50,6 @@ registerLocaleData(localeDe);
     MemberManagementModule,
     PositionModule,
     MemberStatusModule,
-    ComponentsModule,
     MatNativeDateModule,
     MatToolbarModule
   ],

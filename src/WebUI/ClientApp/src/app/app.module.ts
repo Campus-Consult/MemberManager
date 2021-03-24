@@ -8,12 +8,10 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
-import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PrivacyComponent } from './privacy/privacy.component';
-import { MemberManagementComponent } from './modules/member-management/member-management.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
 import { PositionModule } from './modules/position/position.module';
 import localeDe from "@angular/common/locales/de";
@@ -43,7 +41,6 @@ registerLocaleData(localeDe);
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'Personal', component: MemberManagementComponent, canActivate: [AuthorizeGuard], pathMatch: 'full' },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

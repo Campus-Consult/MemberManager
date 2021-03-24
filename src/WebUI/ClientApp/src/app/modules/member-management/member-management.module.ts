@@ -30,6 +30,7 @@ import { MemberDataSheetComponent } from './member-details/member-data-sheet.com
 import { MemberDataComponent } from './member-details/member-data/member-data.component';
 import { MemberListComponent } from './member-list/member-list.component';
 import { MemberManagementComponent } from './member-management.component';
+import { MemberManagerRoutingModule } from './member-manager-routing.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { MemberManagementComponent } from './member-management.component';
   exports: [MemberManagementComponent],
   imports: [
     CommonModule,
+    MemberManagerRoutingModule,
     FormsModule,
     MatButtonModule,
     MatIconModule,

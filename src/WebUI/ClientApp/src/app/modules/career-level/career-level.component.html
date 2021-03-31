@@ -1,0 +1,10 @@
+<div fxLayout="row" fxLayoutGap="10px">
+
+    <div fxFlex="60%">
+      <app-career-level-list (onSelectEvent)="onListSelection($event)"></app-career-level-list>
+    </div>
+  
+    <div fxFlex="40%">
+      <app-career-level-details *ngIf="selectedMemberStatus" [memberStatusID]="selectedMemberStatus?.id" (onReloadRequired)="reloadRequired()"></app-career-level-details>
+    </div>
+  </div>

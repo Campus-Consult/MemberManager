@@ -1,51 +1,40 @@
-<mat-card *ngIf="position">
-  <div fxLayout="row" fxLayoutAlign="space-between start">
-    <mat-card-header fxFlex="shrink">
-      <mat-icon color="primary" mat-card-avatar>info</mat-icon>
-      <mat-card-title>{{position.name}}</mat-card-title>
-      <mat-card-subtitle>Position</mat-card-subtitle>
-    </mat-card-header>
-    <div fxFlex>
-      <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle (click)="onEditButtonClicked()">
-          <mat-icon>edit</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle (click)="onAssignPersonButtonClicked()">
-          <mat-icon>person_add</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle (click)="onDismissPersonButtonClicked()" [disabled]="position?.assignees.length == 0">
-          <mat-icon>person_remove</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle (click)="onShowHistoryButtonClicked()">
-          <mat-icon>history</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-  </div>
+<app-detail-view-wrapper
+  *ngIf="position"
+  [title]="position.name"
+  [subTitle]="'Posten'"
+  (onEdit)="onEditButtonClicked()"
+  (onAssign)="onAssignPersonButtonClicked()"
+  (onDismiss)="onDismissPersonButtonClicked()"
+  (onShowHistory)="onShowHistoryButtonClicked()"
+>
+  <table
+    *ngIf="position?.assignees.length > 0"
+    mat-table
+    id="assigneeTable"
+    [dataSource]="dataSource"
+  >
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.firstName }} {{ element.surname }}
+      </td>
+    </ng-container>
 
-  <mat-card-content>
-    <table *ngIf="position?.assignees.length > 0" mat-table id="assigneeTable" [dataSource]="dataSource">
+    <ng-container matColumnDef="since">
+      <th mat-header-cell *matHeaderCellDef>Since</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.beginDateTime?.toLocaleDateString() }}
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.firstName }} {{ element.surname }}</td>
-      </ng-container>
+    <ng-container matColumnDef="till">
+      <th mat-header-cell *matHeaderCellDef>Till</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.endDateTime?.toLocaleDateString() }}
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="since">
-        <th mat-header-cell *matHeaderCellDef>Since</th>
-        <td mat-cell *matCellDef="let element">{{ element.beginDateTime?.toLocaleDateString() }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="till">
-        <th mat-header-cell *matHeaderCellDef>Till</th>
-        <td mat-cell *matCellDef="let element">{{ element.endDateTime?.toLocaleDateString() }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-    </table>
-
-  </mat-card-content>
-</mat-card>
-
-
+    <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+</app-detail-view-wrapper>

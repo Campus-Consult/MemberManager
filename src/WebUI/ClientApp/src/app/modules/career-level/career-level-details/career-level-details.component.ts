@@ -92,4 +92,9 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
       width: '600px',
     });
   }
+
+  onEditButtonClicked() {
+    throw new Error("onEditButtonClicked not implemented!");
+    
+  }
 }

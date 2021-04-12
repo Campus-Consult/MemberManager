@@ -1,6 +1,5 @@
 import { CareerLevelLookupDto } from './../../membermanager-api';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MemberStatusLookupDto } from 'src/app/membermanager-api';
 import { CareerLevelDetailsComponent } from './career-level-details/career-level-details.component';
 import { CareerLevelListComponent } from './career-level-list/career-level-list.component';
 

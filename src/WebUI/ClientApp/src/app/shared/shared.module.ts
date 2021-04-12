@@ -5,7 +5,7 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
 import { SearchSelectComponent } from './components/search-select/search-select.component';
 
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -40,23 +40,29 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { DetailViewWrapperComponent } from './components/detail-view-wrapper/detail-view-wrapper.component';
+import { AssignDialogComponent } from './components/assign-dialog/assign-dialog.component';
 @NgModule({
   declarations: [
     DataTableComponent,
     SearchSelectComponent,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    DetailViewWrapperComponent,
+    AssignDialogComponent
   ],
   exports: [
     DataTableComponent,
     SkeletonLoaderComponent,
     SearchSelectComponent,
+    DetailViewWrapperComponent,
+    AssignDialogComponent,
   ],
   imports: [
     CommonModule,
     NgxSkeletonLoaderModule,
     MatAutocompleteModule,
     FormsModule,
+    ReactiveFormsModule,
 
     FlexLayoutModule,
     NgxSkeletonLoaderModule,

@@ -1,0 +1,33 @@
+<mat-card>
+    <div fxLayout="row" fxLayoutAlign="start start">
+      <mat-card-header fxFlex="shrink">
+        <mat-icon color="primary" mat-card-avatar>info</mat-icon>
+        <mat-card-title >{{title}}</mat-card-title>
+        <mat-card-subtitle *ngIf="subTitle">{{subTitle}}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <div fxFlex>
+        <mat-button-toggle-group #group="matButtonToggleGroup">
+          <mat-button-toggle (click)="onAssignButtonClicked()">
+            <mat-icon>edit</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle (click)="onAssignButtonClicked()" *ngIf="onAssign">
+            <mat-icon>person_add</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle (click)="onDismissButtonClicked()" [disabled]="disablePersonRemoveButton" *ngIf="onDismiss">
+            <mat-icon>person_remove</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle (click)="onShowHistoryButtonClicked()" *ngIf="onShowHistory">
+            <mat-icon>history</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+  
+    <mat-card-content>
+        <ng-content></ng-content>
+    </mat-card-content>
+  </mat-card>
+  
+  
+  

@@ -1,3 +1,4 @@
+import { HistoryPanelsComponent } from './history-panels/history-panels.component';
 import {
   Component,
   EventEmitter,
@@ -12,6 +13,7 @@ import {
   IPersonDetailVm,
   PeopleClient,
 } from "src/app/membermanager-api";
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: "app-person-details",
@@ -30,7 +32,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   public displayedName: string;
   private loadingPerson = false;
 
-  constructor(private personApi: PeopleClient) {}
+  constructor(private personApi: PeopleClient, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.displayedName = "No Person Selected";
@@ -72,5 +74,12 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   onEdit() {
     this.editEvent.emit(this.personDetails);
+  }
+
+  onShowHistoryButtonClicked() {
+    let dialogRef = this.dialog.open(HistoryPanelsComponent, {
+      data: { person: this.personDetails },
+      width: '600px',
+    });
   }
 }

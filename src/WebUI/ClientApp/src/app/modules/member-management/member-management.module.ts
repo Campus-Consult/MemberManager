@@ -31,6 +31,7 @@ import { MemberDataComponent } from './member-details/member-data/member-data.co
 import { MemberListComponent } from './member-list/member-list.component';
 import { MemberManagementComponent } from './member-management.component';
 import { MemberManagerRoutingModule } from './member-manager-routing.module';
+import { HistoryDialogComponent } from './member-details/history-dialog/history-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MemberManagerRoutingModule } from './member-manager-routing.module';
     MemberFormComponent,
     CreateMemberComponent,
     ErrorHintComponent,
+    HistoryDialogComponent,
   ],
   exports: [MemberManagementComponent],
   imports: [

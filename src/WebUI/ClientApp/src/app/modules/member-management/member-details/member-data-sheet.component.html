@@ -1,30 +1,12 @@
-<mat-card *ngIf="personDetails; else toolTip">
-  <div fxLayout="row" fxLayoutAlign="start start">
-    <mat-card-header fxFlex="shrink">
-      <mat-icon color="primary" mat-card-avatar>info</mat-icon>
-      <mat-card-title>{{ displayedName }}</mat-card-title>
-      <mat-card-subtitle>Mitglied Details</mat-card-subtitle>
-    </mat-card-header>
-    <div fxFlex>
-      <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle (click)="onEdit()">
-          <mat-icon>create</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-  </div>
-  <mat-card-content>
-    <mat-tab-group>
-      <mat-tab label="Persönliche Daten">
-        <app-member-data [memberDetails]="personDetails"></app-member-data>
-      </mat-tab>
-      <mat-tab label="Historie">
-        <app-history-panels [person]="personDetails"></app-history-panels>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-card-content>
-</mat-card>
+<app-detail-view-wrapper
+  *ngIf="personDetails; else toolTip"
+  [title]="displayedName"
+  [subTitle]="'Mitglieds Details'"
+  (onEdit)="onEdit()"
+  (onShowHistory)="onShowHistoryButtonClicked()"
+>
+  <app-member-data [memberDetails]="personDetails"></app-member-data>
+</app-detail-view-wrapper>
 <ng-template #toolTip>
-    Für mehr Informationen klicke auf ein Element in der Tabelle!
+  Für mehr Informationen klicke auf ein Element in der Tabelle!
 </ng-template>
-

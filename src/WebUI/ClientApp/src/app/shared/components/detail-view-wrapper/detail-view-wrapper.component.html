@@ -8,16 +8,16 @@
   
       <div fxFlex>
         <mat-button-toggle-group #group="matButtonToggleGroup">
-          <mat-button-toggle (click)="onAssignButtonClicked()">
+          <mat-button-toggle (click)="onAssignButtonClicked()" *ngIf="onEdit.observers.length > 0">
             <mat-icon>edit</mat-icon>
           </mat-button-toggle>
-          <mat-button-toggle (click)="onAssignButtonClicked()" *ngIf="onAssign">
+          <mat-button-toggle (click)="onAssignButtonClicked()" *ngIf="onAssign.observers.length > 0">
             <mat-icon>person_add</mat-icon>
           </mat-button-toggle>
-          <mat-button-toggle (click)="onDismissButtonClicked()" [disabled]="disablePersonRemoveButton" *ngIf="onDismiss">
+          <mat-button-toggle (click)="onDismissButtonClicked()" [disabled]="disablePersonRemoveButton" *ngIf="onDismiss.observers.length > 0">
             <mat-icon>person_remove</mat-icon>
           </mat-button-toggle>
-          <mat-button-toggle (click)="onShowHistoryButtonClicked()" *ngIf="onShowHistory">
+          <mat-button-toggle (click)="onShowHistoryButtonClicked()" *ngIf="onShowHistory.observers.length > 0">
             <mat-icon>history</mat-icon>
           </mat-button-toggle>
         </mat-button-toggle-group>

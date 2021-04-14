@@ -320,6 +320,38 @@
         }
       }
     },
+    "/api/CareerLevel/{id}/GetAssignSuggestions": {
+      "get": {
+        "tags": [
+          "CareerLevel"
+        ],
+        "operationId": "CareerLevel_GetAssignSuggestions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleAssignSuggestions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/MemberStatus": {
       "get": {
         "tags": [
@@ -428,7 +460,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PeopleAssignSuggestions"
+                  "$ref": "#/components/schemas/PeopleAssignSuggestions2"
                 }
               }
             }
@@ -998,7 +1030,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PeopleAssignSuggestions2"
+                  "$ref": "#/components/schemas/PeopleAssignSuggestions3"
                 }
               }
             }
@@ -1774,6 +1806,33 @@
           }
         }
       },
+      "PeopleAssignSuggestions": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PeopleAssignSuggestion"
+            }
+          }
+        }
+      },
+      "PeopleAssignSuggestion": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "MemberStatusVm": {
         "type": "object",
         "additionalProperties": false,
@@ -1874,7 +1933,7 @@
           }
         }
       },
-      "PeopleAssignSuggestions": {
+      "PeopleAssignSuggestions2": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1882,12 +1941,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PeopleAssignSuggestion"
+              "$ref": "#/components/schemas/PeopleAssignSuggestion2"
             }
           }
         }
       },
-      "PeopleAssignSuggestion": {
+      "PeopleAssignSuggestion2": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2508,7 +2567,7 @@
           }
         }
       },
-      "PeopleAssignSuggestions2": {
+      "PeopleAssignSuggestions3": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2516,12 +2575,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PeopleAssignSuggestion2"
+              "$ref": "#/components/schemas/PeopleAssignSuggestion3"
             }
           }
         }
       },
-      "PeopleAssignSuggestion2": {
+      "PeopleAssignSuggestion3": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

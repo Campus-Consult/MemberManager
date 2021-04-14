@@ -42,13 +42,15 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DetailViewWrapperComponent } from './components/detail-view-wrapper/detail-view-wrapper.component';
 import { AssignDialogComponent } from './components/assign-dialog/assign-dialog.component';
+import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dialog.component';
 @NgModule({
   declarations: [
     DataTableComponent,
     SearchSelectComponent,
     SkeletonLoaderComponent,
     DetailViewWrapperComponent,
-    AssignDialogComponent
+    AssignDialogComponent,
+    DismissDialogComponent
   ],
   exports: [
     DataTableComponent,
@@ -56,6 +58,7 @@ import { AssignDialogComponent } from './components/assign-dialog/assign-dialog.
     SearchSelectComponent,
     DetailViewWrapperComponent,
     AssignDialogComponent,
+    DismissDialogComponent,
   ],
   imports: [
     CommonModule,

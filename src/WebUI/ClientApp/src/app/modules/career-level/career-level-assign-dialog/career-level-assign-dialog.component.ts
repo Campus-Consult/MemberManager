@@ -99,13 +99,13 @@ export class CareerLevelAssignDialogComponent implements OnInit {
   }
 
   fetchSuggestions() {
-    /* this.careerlevelClient.getAssignSuggestions(this.position.id).subscribe(
+    this.careerlevelClient.getAssignSuggestions(this.careerLevel.id).subscribe(
       (suggestions) => {
         this.suggestions = suggestions.suggestions.map((s) => {
           return { name: s.name, id: s.id };
         });
       },
       (error) => console.error(error)
-    );*/
+    );
   }
 }

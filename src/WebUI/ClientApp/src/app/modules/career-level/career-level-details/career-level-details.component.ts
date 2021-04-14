@@ -1,3 +1,4 @@
+import { CareerLevelAssignDialogComponent } from './../career-level-assign-dialog/career-level-assign-dialog.component';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -59,8 +60,8 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
 
   onAssignPersonButtonClicked() {
 
-    let dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
-      data: { description: "Assign to " + this.careerLevel.name, memberStatus: this.careerLevel }
+    let dialogRef = this.dialog.open(CareerLevelAssignDialogComponent, {
+      data: { description: "Assign to " + this.careerLevel.name, careerLevel: this.careerLevel }
     });
 
     dialogRef.afterClosed()

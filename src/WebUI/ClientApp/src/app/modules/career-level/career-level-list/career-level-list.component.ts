@@ -11,6 +11,7 @@ import { Subscription } from "rxjs";
 import {
   CareerLevelClient,
   CareerLevelLookupDto,
+  CareerLevelsVm,
   MemberStatusLookupDto,
 } from "src/app/membermanager-api";
 import { DataTableComponent } from "src/app/shared/components/data-table/data-table.component";
@@ -53,6 +54,9 @@ export class CareerLevelListComponent implements AfterViewInit {
   reload() {
     const observer = {
       next: (result) => {
+        console.log('Success CareerLevel:');
+        console.log(result);
+        
         this.careerLevels = result.careerLevels;
         this.dataSource = new MatTableDataSource<CareerLevelLookupDto>(
           this.careerLevels

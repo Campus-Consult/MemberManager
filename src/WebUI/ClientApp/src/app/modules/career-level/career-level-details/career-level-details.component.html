@@ -15,20 +15,13 @@
   >
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.firstName + element.surname }}</td>
     </ng-container>
 
     <ng-container matColumnDef="since">
-      <th mat-header-cell *matHeaderCellDef>Since</th>
+      <th mat-header-cell *matHeaderCellDef>Seit</th>
       <td mat-cell *matCellDef="let element">
         {{ element.beginDateTime?.toLocaleDateString() }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="till">
-      <th mat-header-cell *matHeaderCellDef>Till</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.endDateTime?.toLocaleDateString() }}
       </td>
     </ng-container>
 

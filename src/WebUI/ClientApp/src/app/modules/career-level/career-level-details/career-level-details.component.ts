@@ -3,10 +3,9 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Outpu
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { CareerLevelDto } from 'src/app/membermanager-api';
-import { MemberStatusAssignDialogComponent } from '../../member-status/components/member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from '../../member-status/components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 import { MemberStatusHistoryDialogComponent } from '../../member-status/components/member-status-history-dialog/member-status-history-dialog.component';
-import { CareerLevelAssignee, CareerLevelClient } from './../../../membermanager-api';
+import { CareerLevelAssignee, CareerLevelClient, CareerLevelLookupDto } from './../../../membermanager-api';
 
 @Component({
   selector: 'app-career-level-details',
@@ -21,8 +20,8 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
   careerLevel: CareerLevelDto;
 
   assignees: CareerLevelAssignee[];
-  dataSource: MatTableDataSource<CareerLevelAssignee>;
-  columns: string[] = ['name', 'since', 'till'];
+  dataSource: MatTableDataSource<CareerLevelDto>;
+  columns: string[] = ['name', 'since'];
 
   constructor(public dialog: MatDialog, private careerLevelClient: CareerLevelClient) { }
 
@@ -54,7 +53,7 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
   private fetchCareerLevelDetails() {
     this.careerLevelClient.get2(this.careerLevelID).subscribe(result => {
       this.careerLevel = result;
-      this.dataSource = new MatTableDataSource<CareerLevelAssignee>(result.assignees);
+      this.dataSource = new MatTableDataSource<CareerLevelDto>(result.assignees);
     });
   }
 

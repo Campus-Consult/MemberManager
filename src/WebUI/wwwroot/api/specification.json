@@ -320,6 +320,38 @@
         }
       }
     },
+    "/api/CRM/{id}": {
+      "get": {
+        "tags": [
+          "CRM"
+        ],
+        "operationId": "CRM_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactDetailVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/MemberStatus": {
       "get": {
         "tags": [
@@ -1771,6 +1803,35 @@
           "changeDateTime": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "ContactDetailVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

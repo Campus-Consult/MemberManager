@@ -5,6 +5,7 @@ using System.Security.Claims;
 using MemberManager.Application.Common.Interfaces;
 using MemberManager.Infrastructure.Files;
 using MemberManager.Infrastructure.Helpers;
+using MemberManager.Infrastructure.HubSpot;
 using MemberManager.Infrastructure.Identity;
 using MemberManager.Infrastructure.Persistence;
 using MemberManager.Infrastructure.Services;
@@ -96,6 +97,7 @@ namespace MemberManager.Infrastructure
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
+            services.AddTransient<ICRMService, HubSpotService>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

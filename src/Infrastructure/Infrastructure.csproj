@@ -19,6 +19,7 @@
     <PackageReference Include="CsvHelper" Version="15.0.2" />
     <PackageReference Include="Microsoft.Graph" Version="3.18.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="HubSpot\Api\Companies\" />
+    <Folder Include="HubSpot\Api\Deals\" />
     <Folder Include="Persistence\Seeds\" />
   </ItemGroup>
 

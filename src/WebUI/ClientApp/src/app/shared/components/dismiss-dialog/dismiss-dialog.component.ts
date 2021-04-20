@@ -13,12 +13,11 @@ export class DismissDialogComponent implements OnInit {
 
   @Input() description: string;
   @Input() selectSuggestions: SelectOption[];
-  @Input() reassignSelectSuggestions: SelectOption[];
+  @Input() reassignSelectSuggestions?: SelectOption[];
   @Input() errors?;
 
   @Output() closeEvent = new EventEmitter()
   @Output() saveEvent = new EventEmitter<DismissSave>()
-  @Output() reassignEvent= new EventEmitter<any>()
 
 
   dismissForm: FormGroup;
@@ -50,16 +49,12 @@ export class DismissDialogComponent implements OnInit {
   }
 
   save(){
-    this.saveEvent.emit({dismissedElement: this.dismissedElement, dismissalDate: this.dismissalDate});
+    this.saveEvent.emit({dismissedElement: this.dismissedElement, dismissalDate: this.dismissalDate, reassignElement:this.reassignedElement });
   }
-
-  reassign(){
-    this.reassignEvent.emit(this.reassignedElement);
-  }
-
 }
 
 export interface DismissSave{
   dismissedElement: any;
   dismissalDate: any;
+  reassignElement: any;
 }

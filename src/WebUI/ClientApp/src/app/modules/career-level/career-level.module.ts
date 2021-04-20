@@ -38,11 +38,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CareerLevelAssignDialogComponent } from './career-level-assign-dialog/career-level-assign-dialog.component';
+import { CareerLevelDismissDialogComponent } from './career-level-dismiss-dialog/career-level-dismiss-dialog.component';
 
 
 
 @NgModule({
-  declarations: [CareerLevelComponent, CareerLevelListComponent, CareerLevelDetailsComponent, CareerLevelAssignDialogComponent],
+  declarations: [CareerLevelComponent, CareerLevelListComponent, CareerLevelDetailsComponent, CareerLevelAssignDialogComponent, CareerLevelDismissDialogComponent],
   imports: [
     CommonModule,
     CareerLevelRoutingModule,

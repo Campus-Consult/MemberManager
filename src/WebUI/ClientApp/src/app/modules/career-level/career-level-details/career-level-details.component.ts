@@ -3,9 +3,9 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Outpu
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { CareerLevelDto } from 'src/app/membermanager-api';
-import { MemberStatusDismissDialogComponent } from '../../member-status/components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 import { MemberStatusHistoryDialogComponent } from '../../member-status/components/member-status-history-dialog/member-status-history-dialog.component';
-import { CareerLevelAssignee, CareerLevelClient, CareerLevelLookupDto } from './../../../membermanager-api';
+import { CareerLevelAssignee, CareerLevelClient } from './../../../membermanager-api';
+import { CareerLevelDismissDialogComponent } from '../career-level-dismiss-dialog/career-level-dismiss-dialog.component';
 
 @Component({
   selector: 'app-career-level-details',
@@ -73,8 +73,8 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
 
   onDismissPersonButtonClicked() {
 
-    let dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
-      data: { description: "Dismiss from " + this.careerLevel.name, memberStatus: this.careerLevel }
+    let dialogRef = this.dialog.open(CareerLevelDismissDialogComponent, {
+      data: { description: "Dismiss from " + this.careerLevel.name, careerLevel: this.careerLevel }
     });
 
     dialogRef.afterClosed()

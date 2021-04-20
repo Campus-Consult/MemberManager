@@ -27,8 +27,8 @@ export class DetailViewWrapperComponent implements OnInit {
 
   onAssignButtonClicked() {this.onAssign.emit(undefined)}
 
-  onDismissButtonClicked() {this.onAssign.emit(undefined)}
+  onDismissButtonClicked() {this.onDismiss.emit(undefined)}
 
-  onShowHistoryButtonClicked() {this.onAssign.emit(undefined)}
+  onShowHistoryButtonClicked() {this.onShowHistory.emit(undefined)}
 
 }

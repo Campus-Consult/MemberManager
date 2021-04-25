@@ -31,6 +31,8 @@
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
     <Folder Include="Positions\Commands\UpdatePosition\" />
+    <Folder Include="ProjectManagement\Project\Commands\CreateProjectByDeal\" />
+    <Folder Include="ProjectManagement\Project\Commands\AssignToProject\" />
   </ItemGroup>
 
 </Project>

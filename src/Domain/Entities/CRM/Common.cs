@@ -13,6 +13,6 @@ namespace MemberManager.Domain.Entities.CRM
         public DateTime ArchivedAt { get; set; }
         public Boolean Archived { get; set; }
 
-        public Object Associations { get; set; }
+        //public Object Associations { get; set; }
     }
 }

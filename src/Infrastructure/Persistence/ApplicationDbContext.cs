@@ -11,6 +11,8 @@ using System.Data;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using MemberManager.Domain.Entities.Common;
+using MemberManager.Domain.Entities.ProjectManagement;
 
 namespace MemberManager.Infrastructure.Persistence
 {
@@ -30,6 +32,7 @@ namespace MemberManager.Infrastructure.Persistence
             _dateTime = dateTime;
         }
 
+        // Common
         public DbSet<Person> People { get; set; }
 
         public DbSet<CareerLevel> CareerLevels { get; set; }
@@ -44,6 +47,13 @@ namespace MemberManager.Infrastructure.Persistence
         public DbSet<TodoList> TodoLists { get; set; }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+
+        public DbSet<ApplicationLetter> ApplicationLetters { get; set; }
+
+        // ProjectManagement
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectAssignment> ProjectAssignments { get; set; }
+        public DbSet<ProjectApplicationLetter> ProjectApplicationLetters { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

@@ -1984,6 +1984,177 @@ export class PositionClient implements IPositionClient {
     }
 }
 
+export interface IProjectClient {
+    get(): Observable<ProjectsVm>;
+    create(command: CreateProjectCommand): Observable<number>;
+    get2(id: number): Observable<ProjectDetailVm>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ProjectClient implements IProjectClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    get(): Observable<ProjectsVm> {
+        let url_ = this.baseUrl + "/api/Project";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<ProjectsVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ProjectsVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<ProjectsVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProjectsVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ProjectsVm>(<any>null);
+    }
+
+    create(command: CreateProjectCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Project";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+
+    get2(id: number): Observable<ProjectDetailVm> {
+        let url_ = this.baseUrl + "/api/Project/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet2(<any>response_);
+                } catch (e) {
+                    return <Observable<ProjectDetailVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ProjectDetailVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet2(response: HttpResponseBase): Observable<ProjectDetailVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProjectDetailVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ProjectDetailVm>(<any>null);
+    }
+}
+
 export interface ITodoItemsClient {
     create(command: CreateTodoItemCommand): Observable<number>;
     update(id: number, command: UpdateTodoItemCommand): Observable<FileResponse>;
@@ -5008,6 +5179,186 @@ export interface IDismissFromPositionCommand {
     positionId?: number;
     personId?: number;
     dismissalDateTime?: Date;
+}
+
+export class ProjectsVm implements IProjectsVm {
+    projects?: ProjectLookupDto[] | undefined;
+
+    constructor(data?: IProjectsVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["projects"])) {
+                this.projects = [] as any;
+                for (let item of _data["projects"])
+                    this.projects!.push(ProjectLookupDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ProjectsVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProjectsVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.projects)) {
+            data["projects"] = [];
+            for (let item of this.projects)
+                data["projects"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IProjectsVm {
+    projects?: ProjectLookupDto[] | undefined;
+}
+
+export class ProjectLookupDto implements IProjectLookupDto {
+    id?: number;
+    number?: string | undefined;
+    title?: string | undefined;
+
+    constructor(data?: IProjectLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.number = _data["number"];
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): ProjectLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProjectLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["number"] = this.number;
+        data["title"] = this.title;
+        return data; 
+    }
+}
+
+export interface IProjectLookupDto {
+    id?: number;
+    number?: string | undefined;
+    title?: string | undefined;
+}
+
+export class ProjectDetailVm implements IProjectDetailVm {
+    id?: number;
+    number?: string | undefined;
+    title?: string | undefined;
+    summary?: string | undefined;
+
+    constructor(data?: IProjectDetailVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.number = _data["number"];
+            this.title = _data["title"];
+            this.summary = _data["summary"];
+        }
+    }
+
+    static fromJS(data: any): ProjectDetailVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProjectDetailVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["number"] = this.number;
+        data["title"] = this.title;
+        data["summary"] = this.summary;
+        return data; 
+    }
+}
+
+export interface IProjectDetailVm {
+    id?: number;
+    number?: string | undefined;
+    title?: string | undefined;
+    summary?: string | undefined;
+}
+
+export class CreateProjectCommand implements ICreateProjectCommand {
+    number?: string | undefined;
+    title?: string | undefined;
+    summary?: string | undefined;
+
+    constructor(data?: ICreateProjectCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.number = _data["number"];
+            this.title = _data["title"];
+            this.summary = _data["summary"];
+        }
+    }
+
+    static fromJS(data: any): CreateProjectCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateProjectCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["number"] = this.number;
+        data["title"] = this.title;
+        data["summary"] = this.summary;
+        return data; 
+    }
+}
+
+export interface ICreateProjectCommand {
+    number?: string | undefined;
+    title?: string | undefined;
+    summary?: string | undefined;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

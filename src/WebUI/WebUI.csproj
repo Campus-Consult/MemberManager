@@ -39,6 +39,10 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\modules\member-status\member-status-routing.module.ts" />
     <None Remove="ClientApp\src\app\modules\position\position-routing.module.ts" />
+    <None Remove="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-base.ts" />
+    <None Remove="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-control.service.ts" />
+    <None Remove="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-dropdown.ts" />
+    <None Remove="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-textbox.ts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
@@ -53,6 +57,28 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\modules\member-status\member-status-routing.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-control.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-textbox.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-dropdown.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-base.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-base - Kopieren.js">
+      <DependentUpon>field-base.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-base - Kopieren.js.map">
+      <DependentUpon>field-base.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-dropdown - Kopieren.js">
+      <DependentUpon>field-dropdown.js</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\app\shared\components\dynamic-form\dynamic-form-field\field-dropdown - Kopieren.js.map">
+      <DependentUpon>field-dropdown.js.map</DependentUpon>
+    </None>
   </ItemGroup>
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
     <Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />

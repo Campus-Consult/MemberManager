@@ -1,0 +1,20 @@
+<div [formGroup]="form">
+
+  <div [ngSwitch]="field.controlType">
+    <mat-form-field>
+      <mat-label [attr.for]="field.key">{{field.label}}</mat-label>
+
+      <input *ngSwitchCase="'textbox'" matInput [formControlName]="field.key" [id]="field.key" [type]="field.type" [placeholder]="field.placeholder" />
+      <!--<search-select *ngSwitchCase="'dropdown'" [formControlName]="field.key" [id]="field.key" [selectSuggestions]="field.options" [placeholder]="field.placeholder"></search-select>-->
+
+      <mat-select *ngSwitchCase="'dropdown'" [id]="field.key" [formControlName]="field.key">
+        <mat-option *ngFor="let opt of field.options" [value]="opt.key">{{opt.value}}</mat-option>
+      </mat-select>
+
+      <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
+      <mat-error *ngFor="let err of errors">{{ err }}</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="errorMessage" *ngIf="!isValid">{{field.label}} is required</div>
+</div>

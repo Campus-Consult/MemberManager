@@ -21,8 +21,9 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MemberManagementModule } from './modules/member-management/member-management.module';
 
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CareerLevelModule } from './modules/career-level/career-level.module';
+import { SharedModule } from './shared/shared.module';
 
 registerLocaleData(localeDe);
 
@@ -50,7 +51,8 @@ registerLocaleData(localeDe);
     MemberStatusModule,
     MatNativeDateModule,
     MatToolbarModule,
-    CareerLevelModule
+    CareerLevelModule,
+    SharedModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

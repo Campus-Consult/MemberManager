@@ -95,6 +95,8 @@ namespace MemberManager.WebUI.Areas.Identity.Pages.Account
 
                     var user = new ApplicationUser { UserName = email, Email = email };
 
+                    // TODO create person
+
                     var identityResult = await _userManager.CreateAsync(user);
 
                     if (identityResult.Succeeded)

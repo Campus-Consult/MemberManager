@@ -17,7 +17,7 @@ namespace MemberManager.Application.People.Commands.CreatePerson
                 .NotEmpty();
             RuleFor(v => v.Gender)
                 .IsInEnum()
-                .NotEmpty();
+                .NotNull();
             RuleFor(v => v.EmailPrivate)
                 .EmailAddress()
                 .NotEmpty();

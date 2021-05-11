@@ -39,11 +39,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CareerLevelAssignDialogComponent } from './career-level-assign-dialog/career-level-assign-dialog.component';
 import { CareerLevelDismissDialogComponent } from './career-level-dismiss-dialog/career-level-dismiss-dialog.component';
+import { CreateCareerLevelDialogComponent } from './create-career-level-dialog/create-career-level-dialog.component';
 
 
 
 @NgModule({
-  declarations: [CareerLevelComponent, CareerLevelListComponent, CareerLevelDetailsComponent, CareerLevelAssignDialogComponent, CareerLevelDismissDialogComponent],
+  declarations: [CareerLevelComponent, CareerLevelListComponent, CareerLevelDetailsComponent, CareerLevelAssignDialogComponent, CareerLevelDismissDialogComponent, CreateCareerLevelDialogComponent],
   imports: [
     CommonModule,
     CareerLevelRoutingModule,

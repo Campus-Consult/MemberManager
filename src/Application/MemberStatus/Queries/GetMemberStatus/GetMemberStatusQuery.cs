@@ -17,11 +17,13 @@ namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatus
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IDateTime _dateTime;
 
-        public GetMemberStatusQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetMemberStatusQueryHandler(IApplicationDbContext context, IMapper mapper, IDateTime dateTime)
         {
             _context = context;
             _mapper = mapper;
+            _dateTime = dateTime;
         }
         public async Task<MemberStatusVm> Handle(GetMemberStatusQuery request, CancellationToken cancellationToken)
         {
@@ -29,7 +31,7 @@ namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatus
             {
                 MemberStatus = await _context.MemberStatus
                     .Include(ms => ms.PersonMemberStatus)
-                    .ProjectTo<MemberStatusLookupDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<MemberStatusLookupDto>(_mapper.ConfigurationProvider, new { dateTimeNow = _dateTime.Now })
                     .OrderBy(p => p.Name)
                     .ToListAsync(cancellationToken)
             };

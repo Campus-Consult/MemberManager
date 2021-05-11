@@ -17,11 +17,13 @@ namespace MemberManager.Application.CareerLevels.Queries.GetCareerLevels
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IDateTime _dateTime;
 
-        public GetCareerLevelsQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetCareerLevelsQueryHandler(IApplicationDbContext context, IMapper mapper, IDateTime dateTime)
         {
             _context = context;
             _mapper = mapper;
+            _dateTime = dateTime;
         }
 
         public async Task<CareerLevelsVm> Handle(GetCareerLevelsQuery request, CancellationToken cancellationToken)
@@ -30,7 +32,7 @@ namespace MemberManager.Application.CareerLevels.Queries.GetCareerLevels
             {
                 CareerLevels = await _context.CareerLevels
                     .OrderBy(c => c.Name)
-                    .ProjectTo<CareerLevelLookupDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<CareerLevelLookupDto>(_mapper.ConfigurationProvider, new { dateTimeNow = _dateTime.Now })
                     .ToListAsync(cancellationToken)
             };
         }

@@ -2588,6 +2588,7 @@ export class CareerLevelLookupDto implements ICareerLevelLookupDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
+    countAssignees?: number;
 
     constructor(data?: ICareerLevelLookupDto) {
         if (data) {
@@ -2604,6 +2605,7 @@ export class CareerLevelLookupDto implements ICareerLevelLookupDto {
             this.name = _data["name"];
             this.shortName = _data["shortName"];
             this.isActive = _data["isActive"];
+            this.countAssignees = _data["countAssignees"];
         }
     }
 
@@ -2620,6 +2622,7 @@ export class CareerLevelLookupDto implements ICareerLevelLookupDto {
         data["name"] = this.name;
         data["shortName"] = this.shortName;
         data["isActive"] = this.isActive;
+        data["countAssignees"] = this.countAssignees;
         return data; 
     }
 }
@@ -2629,6 +2632,7 @@ export interface ICareerLevelLookupDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
+    countAssignees?: number;
 }
 
 export class CareerLevelDto implements ICareerLevelDto {

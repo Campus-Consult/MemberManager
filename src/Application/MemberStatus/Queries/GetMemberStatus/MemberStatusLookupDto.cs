@@ -13,8 +13,9 @@ namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatus
 
         public void Mapping(Profile profile)
         {
+            DateTime? dateTimeNow = null;
             profile.CreateMap<Domain.Entities.MemberStatus, MemberStatusLookupDto>()
-                .ForMember(d => d.CountAssignees, opt => opt.MapFrom(s => s.PersonMemberStatus.Where(x => (x.EndDateTime == null || x.EndDateTime >= DateTime.Now) && x.BeginDateTime <= DateTime.Now).Count()));
+                .ForMember(d => d.CountAssignees, opt => opt.MapFrom(s => s.PersonMemberStatus.Where(x => (x.EndDateTime == null || x.EndDateTime >= dateTimeNow) && x.BeginDateTime <= dateTimeNow).Count()));
         }
     }
 }

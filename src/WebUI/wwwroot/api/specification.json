@@ -1631,6 +1631,10 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "countAssignees": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

@@ -8,34 +8,44 @@ import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
-
 @Component({
   templateUrl: "./create-career-level-dialog.component.html",
   styleUrls: ["./create-career-level-dialog.component.scss"],
 })
 export class CreateCareerLevelDialogComponent implements OnInit {
-
   createForm = this.fb.group({
     name: [null, Validators.required],
     shortName: [null, Validators.required],
   });
-  
+
   description: string;
-  careerLevel: CareerLevelDto
+  careerLevel: CareerLevelDto;
 
   errors;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CreateCareerLevelDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { description: string, careerLevel: CareerLevelDto },
+    @Inject(MAT_DIALOG_DATA)
+    data: { description: string; careerLevel: CareerLevelDto },
     private careerLevelClient: CareerLevelClient
   ) {
     this.description = data.description;
     this.careerLevel = data.careerLevel;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    let name;
+    let shortname;
+    if (this.careerLevel) {
+      name = this.careerLevel.name;
+      shortname = this.careerLevel.shortName;
+    }
+    this.createForm = this.fb.group({
+      name: [name, Validators.required],
+      shortName: [shortname, Validators.required],
+    });
+  }
 
   get name() {
     return this.createForm.get("name").value;
@@ -46,11 +56,11 @@ export class CreateCareerLevelDialogComponent implements OnInit {
   }
 
   save() {
-   if (this.careerLevel) {
-     this.edit(this.careerLevel.id);
-   }else {
-     this.create();
-   }
+    if (this.careerLevel) {
+      this.edit(this.careerLevel.id);
+    } else {
+      this.create();
+    }
   }
 
   create() {

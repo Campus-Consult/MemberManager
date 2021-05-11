@@ -85,14 +85,6 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
       })
   }
 
-  onShowHistoryButtonClicked() {
-
-    let dialogRef = this.dialog.open(MemberStatusHistoryDialogComponent, {
-      data: { description: "History of " + this.careerLevel.name, memberStatus: this.careerLevel },
-      width: '600px',
-    });
-  }
-
   onEditButtonClicked() {
     throw new Error("onEditButtonClicked not implemented!");
     

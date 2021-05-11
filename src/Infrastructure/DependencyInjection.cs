@@ -52,6 +52,9 @@ namespace MemberManager.Infrastructure
                     options.ClientSecret = azureConf["ClientSecret"];
                     options.Authority = $"https://login.microsoftonline.com/{azureConf["TenantId"]}/v2.0";
                     options.ResponseType = OpenIdConnectResponseType.Code;
+
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
                     foreach (var scope in azureConf["Scopes"].Split(' ', StringSplitOptions.RemoveEmptyEntries)) {
                         options.Scope.Add(scope);
                     }

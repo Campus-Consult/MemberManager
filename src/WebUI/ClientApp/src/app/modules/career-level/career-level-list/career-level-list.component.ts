@@ -1,18 +1,18 @@
+import { CreateCareerLevelDialogComponent } from './../create-career-level-dialog/create-career-level-dialog.component';
 import {
   AfterViewInit,
   Component,
   EventEmitter,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { Subscription } from "rxjs";
 import {
   CareerLevelClient,
   CareerLevelLookupDto,
-  CareerLevelsVm,
-  MemberStatusLookupDto,
+  MemberStatusLookupDto
 } from "src/app/membermanager-api";
 import { DataTableComponent } from "src/app/shared/components/data-table/data-table.component";
 
@@ -40,7 +40,7 @@ export class CareerLevelListComponent implements AfterViewInit {
 
   selected: MemberStatusLookupDto;
 
-  constructor(private careerLevelClient: CareerLevelClient) {}
+  constructor(private careerLevelClient: CareerLevelClient, public dialog: MatDialog,) {}
 
   ngAfterViewInit() {
     this.reload();
@@ -49,6 +49,18 @@ export class CareerLevelListComponent implements AfterViewInit {
   onSelect(item: CareerLevelLookupDto) {
     this.selected = item;
     this.onSelectEvent.emit(item);
+  }
+
+  onCreate() {
+    let dialogRef = this.dialog.open(CreateCareerLevelDialogComponent, {
+      data: { description: "Erstelle Karrierelevel"}
+    });
+
+    const sub = dialogRef.afterClosed()
+      .subscribe(result => {
+          this.reload();
+          sub.unsubscribe();
+      })
   }
 
   reload() {

@@ -6,6 +6,7 @@ import { CareerLevelDto } from 'src/app/membermanager-api';
 import { MemberStatusHistoryDialogComponent } from '../../member-status/components/member-status-history-dialog/member-status-history-dialog.component';
 import { CareerLevelAssignee, CareerLevelClient } from './../../../membermanager-api';
 import { CareerLevelDismissDialogComponent } from '../career-level-dismiss-dialog/career-level-dismiss-dialog.component';
+import { CreateCareerLevelDialogComponent } from '../create-career-level-dialog/create-career-level-dialog.component';
 
 @Component({
   selector: 'app-career-level-details',
@@ -58,35 +59,39 @@ export class CareerLevelDetailsComponent implements OnInit, OnChanges, AfterView
   }
 
   onAssignPersonButtonClicked() {
-
     let dialogRef = this.dialog.open(CareerLevelAssignDialogComponent, {
       data: { description: "Assign to " + this.careerLevel.name, careerLevel: this.careerLevel }
     });
 
-    dialogRef.afterClosed()
+    const sub = dialogRef.afterClosed()
       .subscribe(result => {
-        if (result) {
-          this.reloadRequired();
-        }
+        this.reloadRequired();
+          sub.unsubscribe();
       })
   }
 
   onDismissPersonButtonClicked() {
-
     let dialogRef = this.dialog.open(CareerLevelDismissDialogComponent, {
       data: { description: "Dismiss from " + this.careerLevel.name, careerLevel: this.careerLevel }
     });
 
-    dialogRef.afterClosed()
+    const sub = dialogRef.afterClosed()
       .subscribe(result => {
-        if (result) {
-          this.reloadRequired();
-        }
+        this.reloadRequired();
+          sub.unsubscribe();
       })
   }
 
   onEditButtonClicked() {
-    throw new Error("onEditButtonClicked not implemented!");
+    let dialogRef = this.dialog.open(CreateCareerLevelDialogComponent, {
+      data: { description: "Edit " + this.careerLevel.name, careerLevel: this.careerLevel }
+    });
+
+    const sub = dialogRef.afterClosed()
+      .subscribe(result => {
+          this.reload();
+          sub.unsubscribe();
+      })
     
   }
 }

@@ -65,19 +65,14 @@ export class CareerLevelListComponent implements AfterViewInit {
 
   reload() {
     const observer = {
-      next: (result) => {
-        console.log('Success CareerLevel:');
-        console.log(result);
-        
+      next: (result) => {   
         this.careerLevels = result.careerLevels;
         this.dataSource = new MatTableDataSource<CareerLevelLookupDto>(
           this.careerLevels
         );
         this.dataSource.sort = this.sort;
       },
-      error: (error) => console.error(error),
-      complete: ()=> console.log('Got completed. Delet me!')
-      
+      error: (error) => console.error(error),    
     };
     this.careerLevelClient.get().subscribe(observer);
   }

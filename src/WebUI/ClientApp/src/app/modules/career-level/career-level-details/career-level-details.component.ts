@@ -3,7 +3,6 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Outpu
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { CareerLevelDto } from 'src/app/membermanager-api';
-import { MemberStatusHistoryDialogComponent } from '../../member-status/components/member-status-history-dialog/member-status-history-dialog.component';
 import { CareerLevelAssignee, CareerLevelClient } from './../../../membermanager-api';
 import { CareerLevelDismissDialogComponent } from '../career-level-dismiss-dialog/career-level-dismiss-dialog.component';
 import { CreateCareerLevelDialogComponent } from '../create-career-level-dialog/create-career-level-dialog.component';

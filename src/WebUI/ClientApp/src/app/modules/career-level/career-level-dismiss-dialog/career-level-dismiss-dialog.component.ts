@@ -1,24 +1,18 @@
 import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+} from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { DismissSave } from "src/app/shared/components/dismiss-dialog/dismiss-dialog.component";
+import { SelectOption } from "src/app/shared/components/search-select/search-select.component";
+import {
+  CareerLevelAssignee,
   CareerLevelClient,
   CareerLevelDto,
   ChangePersonCareerLevelCommand,
 } from "./../../../membermanager-api";
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Inject,
-} from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import {
-  MemberStatusLookupDto,
-  MemberStatusClient,
-  DismissFromMemberStatusCommand,
-} from "src/app/membermanager-api";
-import { SelectOption } from "src/app/shared/components/search-select/search-select.component";
-import { MemberStatusDismissDialogComponent } from "../../member-status/components/member-status-dismiss-dialog/member-status-dismiss-dialog.component";
-import { DismissSave } from "src/app/shared/components/dismiss-dialog/dismiss-dialog.component";
 
 @Component({
   selector: "app-career-level-dismiss-dialog",
@@ -40,7 +34,7 @@ export class CareerLevelDismissDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CareerLevelDismissDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    data: { description: string; careerLevel: CareerLevelDto },
+    data: { description: string; careerLevel: CareerLevelDto ,assignees: CareerLevelAssignee[]},
     private careerLevelClient: CareerLevelClient
   ) {
     this.description = data.description;
@@ -48,7 +42,10 @@ export class CareerLevelDismissDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchSuggestions();
+    // this.fetchSuggestions();
+    this.suggestions = this.careerLevel.assignees.map((s) => {
+      return { name: s.firstName + s.surname, id: s.id };
+    });
     this.fetchReassignSuggestions();
   }
 
@@ -88,16 +85,17 @@ export class CareerLevelDismissDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  fetchSuggestions() {
+/*   fetchSuggestions() {
     this.careerLevelClient.getAssignSuggestions(this.careerLevel.id).subscribe(
       (suggestions) => {
-        this.suggestions = suggestions.suggestions.map((s) => {
+        console.log(suggestions);
+          this.suggestions = suggestions.suggestions.map((s) => {
           return { name: s.name, id: s.id };
         });
       },
       (error) => console.error(error)
     );
-  }
+  } */
 
   fetchReassignSuggestions() {
     // TODO: implement business logic in backend!
@@ -107,7 +105,6 @@ export class CareerLevelDismissDialogComponent implements OnInit {
           .map((s) => {
             return { name: s.name, id: s.id };
           })
-          .filter((s) => s.id !== this.careerLevel.id);
       },
       (error) => console.error(error)
     );

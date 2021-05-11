@@ -87,7 +87,7 @@ export class MemberStatusDetailsComponent
   }
 
   onDismissPersonButtonClicked() {
-    const disabled = this.memberStatus?.assignees.length == 0;
+    const disabled = this.memberStatus?.assignees.length !== 0;
     if (disabled) {
       let dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
         data: {

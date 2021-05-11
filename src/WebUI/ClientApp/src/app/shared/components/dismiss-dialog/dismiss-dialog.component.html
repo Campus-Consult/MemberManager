@@ -4,6 +4,7 @@
 
 <mat-dialog-content *ngIf="selectSuggestions?.length" [formGroup]="dismissForm">
   <search-select [selectSuggestions]="selectSuggestions" placeholder="Select Assignee" formControlName="dismissedPerson"></search-select>
+  <search-select *ngIf="reassignSelectSuggestions" [selectSuggestions]="reassignSelectSuggestions" placeholder="Select New Assignee" formControlName="reassignedElement"></search-select>
   <br />
   <mat-form-field>
     <input matInput placeholder="Dismissal date" formControlName="dismissalDate" [matDatepicker]="picker">
@@ -12,7 +13,6 @@
     <!--<mat-error *ngIf="assignDate.hasError('required')">
       Datum ist Pflichtfeld
     </mat-error>-->
-    <search-select *ngIf="reassignSelectSuggestions" [selectSuggestions]="reassignSelectSuggestions" placeholder="Select Assignee" formControlName="reassignedElement"></search-select>
   </mat-form-field>
 
 </mat-dialog-content>

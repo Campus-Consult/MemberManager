@@ -40,7 +40,7 @@ export class MemberDataComponent implements OnInit, OnChanges {
      * because of initDataRow can be called if this.memberDetails undefined,
      * but keyList wil be used for displaying
      * 
-     * rowlables determines the display order and the labes which will be displayed
+     * rowlables determines the display order and the label which will be displayed
      */
     let label = "Vorname";
     this.rowLabels.push(label);
@@ -63,6 +63,10 @@ export class MemberDataComponent implements OnInit, OnChanges {
     this.rowLabelDateMap.set(label,!this.memberDetails ? undefined : this.emailAssociaton);
 
     label = "E-Mail (privat)";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.emailPrivate);
+
+    label = "Telefonnummer (privat)";
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.emailPrivate);
 
@@ -115,6 +119,10 @@ export class MemberDataComponent implements OnInit, OnChanges {
 
   public get emailPrivate(): string {
     return this.memberDetails.emailPrivate;
+  }
+
+  public get telefon(): string {
+    return this.memberDetails.mobilePrivate;
   }
 
   get strasseHausNr(): string {

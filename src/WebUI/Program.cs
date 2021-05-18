@@ -32,15 +32,20 @@ namespace MemberManager.WebUI
                     }
 
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                     await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
                     await ApplicationDbContextSeed.SeedSampleTodoListDataAsync(context);
                     await ApplicationDbContextSeed.SeedDefaultMemberDataAsync(context);
 
+                    var config = services.GetRequiredService<IConfiguration>();
+
+                    await ApplicationAuthSeed.CreateAdminRole(roleManager, userManager, config.GetValue<String>("DefaultAdminUser"));
+
                     #if DEBUG
                     // make sure to never seed random data in release build
-                    var config = services.GetRequiredService<IConfiguration>().GetSection("ApplicationDbContextSeedConfig").Get<ApplicationDbContextSeedConfig>();
-                    await ApplicationDbContextSeed.SeedRandomMemberDataAsync(context, config);
+                    var randomConfig = services.GetRequiredService<IConfiguration>().GetSection("ApplicationDbContextSeedConfig").Get<ApplicationDbContextSeedConfig>();
+                    await ApplicationDbContextSeed.SeedRandomMemberDataAsync(context, randomConfig);
                     #endif
                 }
                 catch (Exception ex)

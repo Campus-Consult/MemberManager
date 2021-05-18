@@ -38,6 +38,7 @@ namespace MemberManager.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
                 services.AddDefaultIdentity<ApplicationUser>()
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
             
             services.AddAuthentication()

@@ -59,7 +59,7 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
     });
   }
 
-  private onEditButtonClicked() {
+  public onEditButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionEditDialogComponent, {
       width: "300px",
@@ -110,7 +110,7 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
       })
   }
 
-  private onAssignPersonButtonClicked() {
+  onAssignPersonButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionAssignDialogComponent, {
       width: "300px",
@@ -125,7 +125,7 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
       })
   }
 
-  private onDismissPersonButtonClicked() {
+  onDismissPersonButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionDismissDialogComponent, {
       width: "300px",
@@ -140,7 +140,7 @@ export class PositionDetailsComponent implements OnInit, OnChanges, AfterViewIni
       })
   }
 
-  private onShowHistoryButtonClicked() {
+  onShowHistoryButtonClicked() {
 
     let dialogRef = this.dialog.open(PositionHistoryDialogComponent, {
       data: { description: "History of " + this.position.name, position: this.position },

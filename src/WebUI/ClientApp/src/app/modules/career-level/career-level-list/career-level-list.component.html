@@ -1,0 +1,15 @@
+<mat-card>
+    <div *ngIf="dataSource">
+      <data-table #dataTable [dataSource]="dataSource" [columns]="columns" (onSelectEvent)="onSelect($event)" (onAddClickedEvent)="onCreate()"  matSort>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="countAssignees">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Assignees</th>
+          <td mat-cell *matCellDef="let element">{{ element.countAssignees }}</td>
+        </ng-container>
+      </data-table>
+    </div>
+  </mat-card>

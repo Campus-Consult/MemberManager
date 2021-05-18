@@ -4,6 +4,7 @@ using MemberManager.Application.CareerLevels.Commands.DeactivateCareerLevel;
 using MemberManager.Application.CareerLevels.Commands.ReactivateCareerLevel;
 using MemberManager.Application.CareerLevels.Commands.RemovePersonCareerLevelChange;
 using MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelCommand;
+using MemberManager.Application.CareerLevels.Queries.GetAssignSuggestions;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelHistory;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevels;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelWithAssignees;
@@ -88,5 +89,10 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}/[action]")]
+        public async Task<ActionResult<PeopleAssignSuggestions>> GetAssignSuggestions(int id)
+        {
+            return await Mediator.Send(new GetAssignSuggestionsQuery { MemberStatusId = id });
+        }
     }
 }

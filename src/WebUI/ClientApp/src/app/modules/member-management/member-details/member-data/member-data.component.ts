@@ -68,7 +68,7 @@ export class MemberDataComponent implements OnInit, OnChanges {
 
     label = "Telefonnummer (privat)";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.emailPrivate);
+    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.telefon);
 
     label = "Straße, Hausnummer";
     this.rowLabels.push(label);

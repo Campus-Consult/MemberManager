@@ -14,6 +14,7 @@ export class DismissDialogComponent implements OnInit {
   @Input() description: string;
   @Input() selectSuggestions: SelectOption[];
   @Input() reassignSelectSuggestions?: SelectOption[];
+  @Input() reassignLabel = 'Select New Assignee'
   @Input() errors?;
 
   @Output() closeEvent = new EventEmitter()

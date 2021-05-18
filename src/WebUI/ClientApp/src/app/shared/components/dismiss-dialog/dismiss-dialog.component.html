@@ -3,8 +3,8 @@
 <p *ngIf="errors" class="error">{{errors}}</p>
 
 <mat-dialog-content *ngIf="selectSuggestions?.length" [formGroup]="dismissForm">
-  <search-select [selectSuggestions]="selectSuggestions" placeholder="Select Assignee" formControlName="dismissedPerson"></search-select>
-  <search-select *ngIf="reassignSelectSuggestions" [selectSuggestions]="reassignSelectSuggestions" placeholder="Select New Assignee" formControlName="reassignedElement"></search-select>
+  <search-select [selectSuggestions]="selectSuggestions" placeholder="Zu Entfernen" formControlName="dismissedPerson"></search-select>
+  <search-select *ngIf="reassignSelectSuggestions" [selectSuggestions]="reassignSelectSuggestions" placeholder="{{reassignLabel}}" formControlName="reassignedElement"></search-select>
   <br />
   <mat-form-field>
     <input matInput placeholder="Dismissal date" formControlName="dismissalDate" [matDatepicker]="picker">
@@ -22,6 +22,6 @@
 
 <mat-dialog-actions>
   <button class="mat-raised-button" (click)="close()">Close</button>
-  <button *ngIf="selectSuggestions?.length" class="mat-raised-button mat-primary" (click)="save()">Dismiss</button>
+  <button *ngIf="selectSuggestions?.length" class="mat-raised-button mat-primary" (click)="save()">Entfernen</button>
 </mat-dialog-actions>
 

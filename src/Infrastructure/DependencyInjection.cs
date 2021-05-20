@@ -93,6 +93,10 @@ namespace MemberManager.Infrastructure
                         // }
                     // };
                 });
+
+            services.AddAuthorization(options =>
+                options.AddPolicy("Admin", policy =>
+                    policy.RequireAssertion(a => true)));
             
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();

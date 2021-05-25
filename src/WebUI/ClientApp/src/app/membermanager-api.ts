@@ -20,7 +20,7 @@ export interface ICareerLevelClient {
     get2(id: number): Observable<CareerLevelDto>;
     update(id: number, command: UpdateCareerLevelCommand): Observable<FileResponse>;
     getHistory(id: number): Observable<CareerLevelHistoryVm>;
-    changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number>;
+    changePersonCareerLevel(command: ChangePersonCareerLevelCommand): Observable<number>;
     removePersonCareerLevelChange(personCareerLevelId: number): Observable<FileResponse>;
     reactivate(id: number): Observable<FileResponse>;
     deactivate(id: number, command: DeactivateCareerLevelCommand): Observable<FileResponse>;
@@ -295,11 +295,8 @@ export class CareerLevelClient implements ICareerLevelClient {
         return _observableOf<CareerLevelHistoryVm>(<any>null);
     }
 
-    changePersonCareerLevel(id: number, command: ChangePersonCareerLevelCommand): Observable<number> {
-        let url_ = this.baseUrl + "/api/CareerLevel/{id}/ChangePersonCareerLevel";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+    changePersonCareerLevel(command: ChangePersonCareerLevelCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/CareerLevel/ChangePersonCareerLevel";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);

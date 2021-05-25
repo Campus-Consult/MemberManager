@@ -164,24 +164,12 @@
         }
       }
     },
-    "/api/CareerLevel/{id}/ChangePersonCareerLevel": {
+    "/api/CareerLevel/ChangePersonCareerLevel": {
       "post": {
         "tags": [
           "CareerLevel"
         ],
         "operationId": "CareerLevel_ChangePersonCareerLevel",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
         "requestBody": {
           "x-name": "command",
           "content": {
@@ -192,7 +180,7 @@
             }
           },
           "required": true,
-          "x-position": 2
+          "x-position": 1
         },
         "responses": {
           "200": {

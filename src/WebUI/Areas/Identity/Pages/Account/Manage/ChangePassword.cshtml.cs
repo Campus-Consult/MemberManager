@@ -5,14 +5,14 @@ namespace MemberManager.WebUI.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
-            return RedirectToPage("Manage");
+            return RedirectToPage("Index");
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
-            return RedirectToPage("Manage");
+            return RedirectToPage("Index");
         }
     }
 }

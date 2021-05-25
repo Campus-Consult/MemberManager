@@ -26,6 +26,6 @@ export class LoginMenuComponent implements OnInit {
   }
 
   cutUserName(userName: string) {
-    return userName.slice(0, 10);
+    return userName.split('@')[0];
   }
 }

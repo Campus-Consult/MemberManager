@@ -1,0 +1,6 @@
+<div class="dialog-width">
+    <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
+    <ng-container *ngIf="errorMsgList">
+      <p class="error-culprit" *ngFor="let item of errorMsgList">{{ item }}</p>
+    </ng-container>
+  </div>

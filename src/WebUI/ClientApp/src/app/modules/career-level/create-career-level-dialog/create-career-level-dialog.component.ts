@@ -108,10 +108,6 @@ export class CreateCareerLevelDialogComponent implements OnInit {
     if (errors) {
       console.error(errors);
       this.errors = errors.title + ":";
-
-      for (var i = 0; i < errors.errors.PersonId.length; i++) {
-        this.errors += errors.errors.PersonId[i];
-      }
     } else {
       console.error(error);
     }

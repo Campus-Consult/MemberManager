@@ -65,7 +65,6 @@ export class CareerLevelAssignDialogComponent implements OnInit {
   save() {
     this.careerlevelClient
       .changePersonCareerLevel(
-        this.careerLevel.id,
         new ChangePersonCareerLevelCommand({
           changeDateTime: this.assignDate,
           careerLevelId: this.careerLevel.id,

@@ -18,7 +18,7 @@ export class MemberDataComponent implements OnInit, OnChanges {
   @Input()
   memberDetails: IPersonDetailVm;
 
-  rowLabels = new Array<string>()
+  rowLabels = new Array<string>();
 
   rowLabelDateMap = new Map<string, string>();
 
@@ -39,44 +39,71 @@ export class MemberDataComponent implements OnInit, OnChanges {
      * !this.memberDetails? undefined : value
      * because of initDataRow can be called if this.memberDetails undefined,
      * but keyList wil be used for displaying
-     * 
+     *
      * rowlables determines the display order and the label which will be displayed
      */
     let label = "Vorname";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.firstName);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.firstName
+    );
 
     label = "Nachname";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.surname);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.surname
+    );
 
     label = "Geburtstag";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.birthdate);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.birthdate
+    );
 
     label = "Geschlecht";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.gender);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.gender
+    );
 
     label = "E-Mail (Campus Consult)";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label,!this.memberDetails ? undefined : this.emailAssociaton);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.emailAssociaton
+    );
 
     label = "E-Mail (privat)";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.emailPrivate);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.emailPrivate
+    );
 
     label = "Telefonnummer (privat)";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.telefon);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.telefon
+    );
 
     label = "Straße, Hausnummer";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.strasseHausNr );
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.strasseHausNr
+    );
 
     label = "PLZ, Stadt";
     this.rowLabels.push(label);
-    this.rowLabelDateMap.set(label, !this.memberDetails ? undefined : this.plzStadt);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.plzStadt
+    );
   }
 
   public get firstName(): string {
@@ -95,22 +122,16 @@ export class MemberDataComponent implements OnInit, OnChanges {
 
   get gender(): string {
     const gender = this.memberDetails.gender;
-    let string = "Did you just assume my gender?!";
     switch (gender) {
       case Gender.MALE:
-        string = "Männlich";
-        break;
+        return "Männlich";
       case Gender.FEMALE:
-        string = "Weiblich";
-        break;
+        return "Weiblich";
       case Gender.DIVERS:
-        string = "Divers";
-        break;
+        return "Divers";
       default:
-        string = "No Gender";
-        break;
+        return "No Gender";
     }
-    return string;
   }
 
   public get emailAssociaton(): string {
@@ -126,26 +147,26 @@ export class MemberDataComponent implements OnInit, OnChanges {
   }
 
   get strasseHausNr(): string {
-    let value = "";
-    if (this.memberDetails.adressStreet && this.memberDetails.adressNo)
-      value =
-        this.memberDetails.adressStreet + ", " + this.memberDetails.adressNo;
-    else if (this.memberDetails.adressStreet)
-      value = this.memberDetails.adressNo + " -";
-    else if (this.memberDetails.adressNo)
-      value = "- , " + this.memberDetails.adressStreet;
-    return value;
+    if (this.memberDetails.adressStreet && this.memberDetails.adressNo) {
+      return (
+        this.memberDetails.adressStreet + ", " + this.memberDetails.adressNo
+      );
+    } else if (this.memberDetails.adressStreet) {
+      return this.memberDetails.adressNo + " -";
+    } else if (this.memberDetails.adressNo) {
+      return "- , " + this.memberDetails.adressStreet;
+    }
   }
 
   get plzStadt(): string {
-    let value: string;
-    if (this.memberDetails.adressZIP && this.memberDetails.adressCity)
-      value =
-        this.memberDetails.adressZIP + ", " + this.memberDetails.adressCity;
-    else if (this.memberDetails.adressZIP)
-      value = this.memberDetails.adressZIP + " -";
-    else if (this.memberDetails.adressCity)
-      value = "- , " + this.memberDetails.adressCity;
-    return value;
+    if (this.memberDetails.adressZIP && this.memberDetails.adressCity) {
+      return (
+        this.memberDetails.adressZIP + ", " + this.memberDetails.adressCity
+      );
+    } else if (this.memberDetails.adressZIP) {
+      return this.memberDetails.adressZIP + " -";
+    } else if (this.memberDetails.adressCity) {
+      return "- , " + this.memberDetails.adressCity;
+    }
   }
 }

@@ -43,6 +43,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DetailViewWrapperComponent } from './components/detail-view-wrapper/detail-view-wrapper.component';
 import { AssignDialogComponent } from './components/assign-dialog/assign-dialog.component';
 import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dialog.component';
+import { DialogErrorComponent } from './components/dialog-error/dialog-error.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -50,7 +51,8 @@ import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dial
     SkeletonLoaderComponent,
     DetailViewWrapperComponent,
     AssignDialogComponent,
-    DismissDialogComponent
+    DismissDialogComponent,
+    DialogErrorComponent
   ],
   exports: [
     DataTableComponent,
@@ -59,6 +61,7 @@ import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dial
     DetailViewWrapperComponent,
     AssignDialogComponent,
     DismissDialogComponent,
+    DialogErrorComponent,
   ],
   imports: [
     CommonModule,

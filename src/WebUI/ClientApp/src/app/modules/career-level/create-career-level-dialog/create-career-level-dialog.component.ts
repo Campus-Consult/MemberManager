@@ -20,7 +20,7 @@ export class CreateCareerLevelDialogComponent implements OnInit {
 
   description: string;
   careerLevel: CareerLevelDto;
-  error: any;
+  errors: any;
 
   constructor(
     private fb: FormBuilder,
@@ -102,7 +102,7 @@ export class CreateCareerLevelDialogComponent implements OnInit {
 
   handleError(error) {
     console.error(error);
-    this.error = error;
+    this.errors = error;
   }
 
   close() {

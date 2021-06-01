@@ -8,7 +8,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleCha
 })
 export class DialogErrorComponent implements OnInit, OnChanges {
 
-  @Input() error;
+  @Input() errors;
 
   errorMsg;
   errorMsgList: string[];
@@ -19,13 +19,12 @@ export class DialogErrorComponent implements OnInit, OnChanges {
   }
     
   ngOnChanges(changes: SimpleChanges): void {
-    this.handleError(this.error)
+    this.handleError(this.errors)
   }
 
   handleError(error) {
     let parsedErrorObject = JSON.parse(error.response);
 
-    // TODO make error component
     if (parsedErrorObject) {
       this.errorMsg = parsedErrorObject.title + ":";
       if (parsedErrorObject.errors) {

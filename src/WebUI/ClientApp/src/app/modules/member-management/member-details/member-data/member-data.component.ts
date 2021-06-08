@@ -1,85 +1,172 @@
 import {
-  ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges
-} from '@angular/core';
-import { Gender, IPersonDetailVm } from 'src/app/membermanager-api';
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core";
+import { Gender, IPersonDetailVm } from "src/app/membermanager-api";
 
 @Component({
-  selector: 'app-member-data',
-  templateUrl: './member-data.component.html',
-  styleUrls: ['./member-data.component.scss'],
+  selector: "app-member-data",
+  templateUrl: "./member-data.component.html",
+  styleUrls: ["./member-data.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemberDataComponent implements OnInit, OnChanges {
   @Input()
   memberDetails: IPersonDetailVm;
 
-  strasseHausNr: string;
+  rowLabels = new Array<string>();
 
-  stadtPLZ: string;
+  rowLabelDateMap = new Map<string, string>();
 
   constructor() {}
 
   ngOnInit(): void {
-    if (!this.memberDetails) {
-      this.memberDetails = this.getEmptypersonDetails();
-    }
-    this.strasseHausNr = this.getStrasseHausnr();
-    this.stadtPLZ = this.getPLZStadt();
+    this.initRowData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.memberDetails) {
-      this.strasseHausNr = this.getStrasseHausnr();
-    this.stadtPLZ = this.getPLZStadt(); 
-    }
+    this.initRowData();
   }
 
-  getEmptypersonDetails(): IPersonDetailVm {
-    return {
-      firstName: undefined,
-      surname: undefined,
-      id: undefined,
-    };
+  initRowData() {
+    this.rowLabels = [];
+
+    /**
+     * !this.memberDetails? undefined : value
+     * because of initDataRow can be called if this.memberDetails undefined,
+     * but keyList wil be used for displaying
+     *
+     * rowlables determines the display order and the label which will be displayed
+     */
+    let label = "Vorname";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.firstName
+    );
+
+    label = "Nachname";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.surname
+    );
+
+    label = "Geburtstag";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.birthdate
+    );
+
+    label = "Geschlecht";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.gender
+    );
+
+    label = "E-Mail (Campus Consult)";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.emailAssociaton
+    );
+
+    label = "E-Mail (privat)";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.emailPrivate
+    );
+
+    label = "Telefonnummer (privat)";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.telefon
+    );
+
+    label = "Straße, Hausnummer";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.strasseHausNr
+    );
+
+    label = "PLZ, Stadt";
+    this.rowLabels.push(label);
+    this.rowLabelDateMap.set(
+      label,
+      !this.memberDetails ? undefined : this.plzStadt
+    );
   }
 
-  private getStrasseHausnr():string {
-    let value = '';
-    if(this.memberDetails.adressStreet && this.memberDetails.adressNo)
-      value = this.memberDetails.adressStreet + ', ' + this.memberDetails.adressNo;
-    else if(this.memberDetails.adressStreet)
-      value = this.memberDetails.adressNo + ' -';
-    else if(this.memberDetails.adressNo)
-      value = '- , ' + this.memberDetails.adressStreet;
-    return value;
+  public get firstName(): string {
+    return this.memberDetails.firstName;
   }
 
-  private getPLZStadt():string {
-    let value: string;
-    if(this.memberDetails.adressZIP && this.memberDetails.adressCity)
-      value = this.memberDetails.adressZIP + ', ' + this.memberDetails.adressCity;
-    else if(this.memberDetails.adressZIP)
-      value = this.memberDetails.adressZIP + ' -';
-    else if(this.memberDetails.adressCity)
-      value = '- , ' + this.memberDetails.adressCity;
-    return value;
+  public get surname(): string {
+    return this.memberDetails.surname;
   }
 
-  getGenderString(gender: Gender): string{
-    let string = 'Did you just assume my gender?!';
+  get birthdate(): string {
+    return this.memberDetails.birthdate
+      ? this.memberDetails.birthdate.toLocaleDateString()
+      : "-";
+  }
+
+  get gender(): string {
+    const gender = this.memberDetails.gender;
     switch (gender) {
       case Gender.MALE:
-        string = 'Männlich';
-        break;
+        return "Männlich";
       case Gender.FEMALE:
-        string = "Weiblich";
-        break;
+        return "Weiblich";
       case Gender.DIVERS:
-        string = 'Divers';
-        break;
+        return "Divers";
       default:
-        string = 'No Gender'
-        break;
+        return "No Gender";
     }
-    return string
+  }
+
+  public get emailAssociaton(): string {
+    return this.memberDetails.emailAssociaton;
+  }
+
+  public get emailPrivate(): string {
+    return this.memberDetails.emailPrivate;
+  }
+
+  public get telefon(): string {
+    return this.memberDetails.mobilePrivate;
+  }
+
+  get strasseHausNr(): string {
+    if (this.memberDetails.adressStreet && this.memberDetails.adressNo) {
+      return (
+        this.memberDetails.adressStreet + ", " + this.memberDetails.adressNo
+      );
+    } else if (this.memberDetails.adressStreet) {
+      return this.memberDetails.adressNo + " -";
+    } else if (this.memberDetails.adressNo) {
+      return "- , " + this.memberDetails.adressStreet;
+    }
+  }
+
+  get plzStadt(): string {
+    if (this.memberDetails.adressZIP && this.memberDetails.adressCity) {
+      return (
+        this.memberDetails.adressZIP + ", " + this.memberDetails.adressCity
+      );
+    } else if (this.memberDetails.adressZIP) {
+      return this.memberDetails.adressZIP + " -";
+    } else if (this.memberDetails.adressCity) {
+      return "- , " + this.memberDetails.adressCity;
+    }
   }
 }

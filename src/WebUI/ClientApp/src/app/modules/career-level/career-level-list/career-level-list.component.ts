@@ -36,7 +36,7 @@ export class CareerLevelListComponent implements AfterViewInit {
 
   careerLevels: CareerLevelLookupDto[];
   dataSource: MatTableDataSource<CareerLevelLookupDto>;
-  columns: string[] = ["name", "countAssignees"];
+  columns: string[] = ["name","shortName", "countAssignees"];
 
   selected: MemberStatusLookupDto;
 

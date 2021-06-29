@@ -95,11 +95,12 @@ namespace MemberManager.Infrastructure
                 });
 
             services.AddAuthorization(options =>
-                options.AddPolicy("Admin", policy =>
-                    policy.RequireAssertion(a => true)));
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"))
+            );
             
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+                .AddProfileService<MyProfileService>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();

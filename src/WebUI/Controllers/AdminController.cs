@@ -15,8 +15,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MemberManager.WebUI.Controllers
 {
-    // [Authorize(Roles = "Admin")]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
+    // [Authorize]
     public class AdminController : ApiController
     {
         private readonly UserManager<ApplicationUser> _userMng;

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MemberManager.WebUI.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class PeopleController : ApiController
     {
         [HttpGet]

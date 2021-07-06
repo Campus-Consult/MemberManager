@@ -8,11 +8,13 @@ using MemberManager.Application.CareerLevels.Queries.GetAssignSuggestions;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelHistory;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevels;
 using MemberManager.Application.CareerLevels.Queries.GetCareerLevelWithAssignees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace MemberManager.WebUI.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class CareerLevelController : ApiController
     {
         [HttpGet]

@@ -6,10 +6,12 @@ using MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatus;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail;
 using MemberManager.Application.MemberStatus.Queries.GetMemberStatusHistory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MemberManager.WebUI.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class MemberStatusController : ApiController
     {
         [HttpGet]

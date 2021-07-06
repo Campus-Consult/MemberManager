@@ -10,11 +10,13 @@ using MemberManager.Application.Positions.Queries.GetPositionDetails;
 using MemberManager.Application.Positions.Queries.GetPositions;
 using MemberManager.Application.Positions.Queries.GetPositionsHistory;
 using MemberManager.Application.Positions.Queries.GetPositionsWithAssignees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace MemberManager.WebUI.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class PositionController : ApiController
     {
         [HttpGet]

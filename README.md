@@ -15,6 +15,7 @@ This has to be added to the secret settings:
     "ClientId": "clientid for graph",
     "ClientSecret": "client secret for graph"
   },
+  "DefaultAdminUser": "admin@admin.admin" // your email address, used at startup to give the user the admin role
 ```
 You find your user secrets in:
 - (Windows) %APPDATA%\microsoft\UserSecrets\<userSecretsId>\secrets.json 

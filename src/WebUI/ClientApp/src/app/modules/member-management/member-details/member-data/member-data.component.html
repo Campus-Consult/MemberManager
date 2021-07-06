@@ -1,76 +1,23 @@
 <table class="table table-borderless table-sm">
   <tbody>
-    <tr>
-      <td class="font-weight-bold" width="200">Vorname</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="memberDetails.firstName"
+    <ng-container *ngIf="memberDetails; else elseTemplate">
+      <tr *ngFor="let item of rowLabels">
+        <td class="font-weight-bold" width="200">{{item}}</td>
+        <td colspan="2">
+          {{rowLabelDateMap.get(item)}}
+        </td>
+      </tr>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <tr *ngFor="let item of rowLabels">
+        <td class="font-weight-bold" width="200">{{item}}</td>
+        <td colspan="2">
+          <app-skeleton-loader
+          [value]="undefined"
           type="line"
         ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">Nachname</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="memberDetails.surname"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">Geburtstag</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="memberDetails.birthdate?memberDetails.birthdate.toLocaleDateString(): memberDetails.birthdate"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">Geschlecht</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="getGenderString(memberDetails.gender)"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">E-Mail (Campus Consult)</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="memberDetails.emailAssociaton"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">E-Mail (privat)</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="memberDetails.emailPrivate"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">Straße, Hausnummer</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="strasseHausNr"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-weight-bold" width="200">PLZ, Stadt</td>
-      <td colspan="2">
-        <app-skeleton-loader
-          [value]="stadtPLZ"
-          type="line"
-        ></app-skeleton-loader>
-      </td>
-    </tr>
+        </td>
+      </tr>
+    </ng-template>
   </tbody>
 </table>

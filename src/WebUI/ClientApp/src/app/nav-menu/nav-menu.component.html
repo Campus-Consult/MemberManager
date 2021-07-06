@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">MemberManager</a>
+      <a class="navbar-brand" [routerLink]="['/']">Member Manager</a>
       <button class="navbar-toggler"
               type="button"
               data-toggle="collapse"
@@ -19,20 +19,15 @@
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
-          </li>
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/Personal']">Personal</a>
+            <a class="nav-link text-dark" [routerLink]="['/Personal']">Mitgliederverwaltung</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/member-status']">Member status</a>
+            <a class="nav-link text-dark" [routerLink]="['/member-status']">Status</a>
           </li>
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/position']">Position</a>
+            <a class="nav-link text-dark" [routerLink]="['/position']">Posten</a>
           </li>
           <li class="nav-item"
           [routerLinkActive]="['link-active']"

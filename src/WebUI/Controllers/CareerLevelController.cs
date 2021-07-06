@@ -55,12 +55,8 @@ namespace MemberManager.WebUI.Controllers
         }
 
 
-        [HttpPost("{id}/[action]")]
-        public async Task<ActionResult<int>> ChangePersonCareerLevel(int id, ChangePersonCareerLevelCommand command) {
-            if (id != command.CareerLevelId)
-            {
-                return BadRequest();
-            }
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> ChangePersonCareerLevel(ChangePersonCareerLevelCommand command) {
             return await Mediator.Send(command);
         }
 

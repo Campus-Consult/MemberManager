@@ -20,8 +20,7 @@ export class CreateCareerLevelDialogComponent implements OnInit {
 
   description: string;
   careerLevel: CareerLevelDto;
-
-  errors;
+  errors: any;
 
   constructor(
     private fb: FormBuilder,
@@ -102,19 +101,8 @@ export class CreateCareerLevelDialogComponent implements OnInit {
   }
 
   handleError(error) {
-    let errors = JSON.parse(error.response);
-
-    // TODO make error component
-    if (errors) {
-      console.error(errors);
-      this.errors = errors.title + ":";
-
-      for (var i = 0; i < errors.errors.PersonId.length; i++) {
-        this.errors += errors.errors.PersonId[i];
-      }
-    } else {
-      console.error(error);
-    }
+    console.error(error);
+    this.errors = error;
   }
 
   close() {

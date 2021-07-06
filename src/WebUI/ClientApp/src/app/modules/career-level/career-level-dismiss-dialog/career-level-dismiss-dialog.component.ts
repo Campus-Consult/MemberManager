@@ -44,7 +44,7 @@ export class CareerLevelDismissDialogComponent implements OnInit {
   ngOnInit() {
     // this.fetchSuggestions();
     this.suggestions = this.careerLevel.assignees.map((s) => {
-      return { name: s.firstName + s.surname, id: s.id };
+      return { name: s.firstName + s.surname, id: s.personId };
     });
     this.fetchReassignSuggestions();
   }
@@ -52,7 +52,6 @@ export class CareerLevelDismissDialogComponent implements OnInit {
   save(dismissEvent: DismissSave) {
     this.careerLevelClient
       .changePersonCareerLevel(
-        this.careerLevel.id,
         new ChangePersonCareerLevelCommand({
           changeDateTime: dismissEvent.dismissalDate,
           careerLevelId: dismissEvent.reassignElement.id,
@@ -64,15 +63,9 @@ export class CareerLevelDismissDialogComponent implements OnInit {
           this.dialogRef.close(true);
         },
         (error) => {
-          let errors = JSON.parse(error.response);
-
           // TODO: make error component
-          if (errors) {
-            console.error(errors);
-            this.errors = errors.title + ":";
-          } else {
             console.error(error);
-          }
+            this.errors = error
         }
       );
   }
@@ -100,7 +93,7 @@ export class CareerLevelDismissDialogComponent implements OnInit {
         this.reassignSuggestions = suggestions.careerLevels
           .map((s) => {
             return { name: s.name, id: s.id };
-          })
+          });
       },
       (error) => console.error(error)
     );

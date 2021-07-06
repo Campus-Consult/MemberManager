@@ -41,10 +41,6 @@ namespace MemberManager.Infrastructure.Persistence
         public DbSet<Position> Positions { get; set; }
         public DbSet<PersonPosition> PersonPositions { get; set; }
 
-        public DbSet<TodoList> TodoLists { get; set; }
-
-        public DbSet<TodoItem> TodoItems { get; set; }
-
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableEntity>())

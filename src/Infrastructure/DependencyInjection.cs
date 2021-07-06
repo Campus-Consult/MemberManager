@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using MemberManager.Application.Common.Interfaces;
-using MemberManager.Infrastructure.Files;
 using MemberManager.Infrastructure.Helpers;
 using MemberManager.Infrastructure.Identity;
 using MemberManager.Infrastructure.Persistence;
@@ -38,6 +37,7 @@ namespace MemberManager.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
                 services.AddDefaultIdentity<ApplicationUser>()
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
             
             services.AddAuthentication()
@@ -92,13 +92,17 @@ namespace MemberManager.Infrastructure
                         // }
                     // };
                 });
+
+            services.AddAuthorization(options =>
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"))
+            );
             
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+                .AddProfileService<MyProfileService>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

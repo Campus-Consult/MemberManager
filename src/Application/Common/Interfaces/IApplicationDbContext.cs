@@ -18,10 +18,6 @@ namespace MemberManager.Application.Common.Interfaces
         DbSet<Position> Positions { get; set; }
         DbSet<PersonPosition> PersonPositions { get; set; }
 
-        DbSet<TodoList> TodoLists { get; set; }
-
-        DbSet<TodoItem> TodoItems { get; set; }
-
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

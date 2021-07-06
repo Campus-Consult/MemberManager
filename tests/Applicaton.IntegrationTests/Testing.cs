@@ -131,8 +131,6 @@ public class Testing
         context.Positions.RemoveRange(context.Positions);
         context.CareerLevels.RemoveRange(context.CareerLevels);
         context.MemberStatus.RemoveRange(context.MemberStatus);
-        context.TodoItems.RemoveRange(context.TodoItems);
-        context.TodoLists.RemoveRange(context.TodoLists);
         await context.SaveChangesAsync();
         _currentUserId = null;
     }

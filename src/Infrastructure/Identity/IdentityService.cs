@@ -2,6 +2,7 @@
 using MemberManager.Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,6 +52,32 @@ namespace MemberManager.Infrastructure.Identity
         {
             var result = await _userManager.DeleteAsync(user);
 
+            return result.ToApplicationResult();
+        }
+
+        public async Task<List<string>> GetUserMailsForRole(string roleName)
+        {
+            return (await _userManager.GetUsersInRoleAsync(roleName))
+                .Select(u => u.Email).ToList();
+        }
+
+        public async Task<Result> AddUserToRole(string userEmail, string roleName)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null) {
+                return Result.Failure(new List<string>() {"User with this E-Mail does not exist!"});
+            }
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+            return result.ToApplicationResult();
+        }
+
+        public async Task<Result> RemoveUserFromRole(string userEmail, string roleName)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null) {
+                return Result.Failure(new List<string>() {"User with this E-Mail does not exist!"});
+            }
+            var result = await _userManager.RemoveFromRoleAsync(user, roleName);
             return result.ToApplicationResult();
         }
     }

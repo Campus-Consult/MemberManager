@@ -17,14 +17,16 @@ public class MyProfileService : IProfileService
     {
         //get role claims from ClaimsPrincipal 
         var roleClaims = context.Subject.FindAll(JwtClaimTypes.Role);
+        var emailClaims = context.Subject.FindAll(JwtClaimTypes.Email);
 
-        _logger.LogWarning("RoleClaims");
-        foreach (var claim in roleClaims) {
-            _logger.LogWarning(claim.ToString());
-        }
+        // _logger.LogWarning("RoleClaims");
+        // foreach (var claim in emailClaims) {
+        //     _logger.LogWarning(claim.ToString());
+        // }
 
         //add your role claims 
         context.IssuedClaims.AddRange(roleClaims);
+        context.IssuedClaims.AddRange(emailClaims);
         return Task.CompletedTask;
     }
 

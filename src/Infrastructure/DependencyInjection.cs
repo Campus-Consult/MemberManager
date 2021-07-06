@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using MemberManager.Application.Common.Interfaces;
-using MemberManager.Infrastructure.Files;
 using MemberManager.Infrastructure.Helpers;
 using MemberManager.Infrastructure.Identity;
 using MemberManager.Infrastructure.Persistence;
@@ -104,7 +103,6 @@ namespace MemberManager.Infrastructure
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

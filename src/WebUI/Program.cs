@@ -35,7 +35,6 @@ namespace MemberManager.WebUI
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                     await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
-                    await ApplicationDbContextSeed.SeedSampleTodoListDataAsync(context);
                     await ApplicationDbContextSeed.SeedDefaultMemberDataAsync(context);
 
                     var config = services.GetRequiredService<IConfiguration>();

@@ -23,11 +23,11 @@ namespace MemberManager.Application.People.Commands.CreatePerson
         public string AdressCity { get; set; }
     }
 
-    public class CreateTodoItemCommandHandler : IRequestHandler<CreatePersonCommand, int>
+    public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, int>
     {
         private readonly IApplicationDbContext _context;
 
-        public CreateTodoItemCommandHandler(IApplicationDbContext context)
+        public CreatePersonCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }

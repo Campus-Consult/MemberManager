@@ -380,7 +380,7 @@ namespace MemberManager.Infrastructure.Persistence
             {
                 await context.MemberStatus.AddAsync(new MemberStatus()
                 {
-                    Name = "Anwärter/in",
+                    Name = "Aktives Nichtmitglied",
                 });
                 await context.MemberStatus.AddAsync(new MemberStatus()
                 {
@@ -392,7 +392,7 @@ namespace MemberManager.Infrastructure.Persistence
                 });
                 await context.MemberStatus.AddAsync(new MemberStatus()
                 {
-                    Name = "Ehemalige/r",
+                    Name = "Alumnisiert",
                 });
             }
             await context.SaveChangesAsync();

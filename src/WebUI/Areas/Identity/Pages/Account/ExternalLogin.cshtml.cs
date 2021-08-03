@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace MemberManager.WebUI.Areas.Identity.Pages.Account
 {
@@ -24,17 +25,20 @@ namespace MemberManager.WebUI.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IConfiguration _config;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration config)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _config = config;
         }
 
         public string ProviderDisplayName { get; set; }
@@ -105,6 +109,12 @@ namespace MemberManager.WebUI.Areas.Identity.Pages.Account
                         if (identityResult.Succeeded)
                         {
                             _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+
+                            // check if user is an admin user and should get the admin role
+                            var adminUserMail = _config.GetValue<String>("DefaultAdminUser");
+                            if (user.Email == adminUserMail) {
+                                await _userManager.AddToRoleAsync(user, "Admin");
+                            }
 
                             var userId = await _userManager.GetUserIdAsync(user);
                             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

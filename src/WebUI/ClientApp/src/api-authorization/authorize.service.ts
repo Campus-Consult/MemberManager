@@ -50,6 +50,11 @@ export class AuthorizeService {
     return this.getUser().pipe(map(u => !!u));
   }
 
+  public isAuthenticatedAdminUser(): Observable<boolean> {
+    // TODO: no idea how multiple roles work, but this should work for the current case for sure
+    return this.getUser().pipe(map(u => !!u && u.roles.split(",").includes("Admin")))
+  }
+
   public getUser(): Observable<IUser | null> {
     return concat(
       this.userSubject.pipe(take(1), filter(u => !!u)),

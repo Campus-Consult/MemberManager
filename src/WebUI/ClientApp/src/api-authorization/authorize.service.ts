@@ -31,6 +31,8 @@ export enum AuthenticationResultStatus {
 
 export interface IUser {
   name: string;
+  roles: string;
+  email: string;
 }
 
 @Injectable({

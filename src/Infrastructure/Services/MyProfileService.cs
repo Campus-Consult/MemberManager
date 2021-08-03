@@ -18,6 +18,7 @@ public class MyProfileService : IProfileService
         //get role claims from ClaimsPrincipal 
         var roleClaims = context.Subject.FindAll(JwtClaimTypes.Role);
         var emailClaims = context.Subject.FindAll(JwtClaimTypes.Email);
+        var nameClaim = context.Subject.FindAll(JwtClaimTypes.Name);
 
         // _logger.LogWarning("RoleClaims");
         // foreach (var claim in emailClaims) {
@@ -27,6 +28,7 @@ public class MyProfileService : IProfileService
         //add your role claims 
         context.IssuedClaims.AddRange(roleClaims);
         context.IssuedClaims.AddRange(emailClaims);
+        context.IssuedClaims.AddRange(nameClaim);
         return Task.CompletedTask;
     }
 

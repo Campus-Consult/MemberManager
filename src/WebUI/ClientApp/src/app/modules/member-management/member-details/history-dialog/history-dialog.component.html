@@ -1,8 +1,9 @@
+<h1 mat-dialog-title>Historie {{ person.firstName + " " + person.surname }}</h1>
 <mat-dialog-content>
+  <div style="margin-bottom: 5px">
     <app-history-panels [person]="person"></app-history-panels>
+  </div>
 </mat-dialog-content>
-<mat-dialog-actions
-  ><button class="mat-raised-button" (click)="close()">
-    Close
-  </button></mat-dialog-actions
->
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+</mat-dialog-actions>

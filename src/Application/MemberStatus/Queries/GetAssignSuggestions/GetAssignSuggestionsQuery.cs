@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions
+namespace MemberManager.Application.MemberStatuss.Queries.GetAssignSuggestions
 {
     public class GetAssignSuggestionsQuery : IRequest<PeopleAssignSuggestions>
     {

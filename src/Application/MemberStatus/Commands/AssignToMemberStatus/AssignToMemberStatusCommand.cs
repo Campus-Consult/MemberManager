@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Commands.AssignToMemberStatus
+namespace MemberManager.Application.MemberStatuss.Commands.AssignToMemberStatus
 {
     public class AssignToMemberStatusCommand : IRequest<int>
     {

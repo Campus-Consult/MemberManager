@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
+namespace MemberManager.Application.MemberStatuss.Queries.GetMemberStatusDetail
 {
     public class MemberStatusDetailVm : IMapFrom<Domain.Entities.MemberStatus>
     {

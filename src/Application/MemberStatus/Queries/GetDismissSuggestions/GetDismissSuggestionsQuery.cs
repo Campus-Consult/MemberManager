@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
+using MemberManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions
+namespace MemberManager.Application.MemberStatuss.Queries.GetDismissSuggestions
 {
     public class GetDismissSuggestionsQuery : IRequest<PeopleDismissSuggestions>
     {

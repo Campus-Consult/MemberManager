@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions
+namespace MemberManager.Application.MemberStatuss.Queries.GetDismissSuggestions
 {
     public class PeopleDismissSuggestions
     {

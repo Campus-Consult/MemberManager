@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatus
+namespace MemberManager.Application.MemberStatuss.Queries.GetMemberStatus
 {
     public class GetMemberStatusQuery : IRequest<MemberStatusVm>
     {

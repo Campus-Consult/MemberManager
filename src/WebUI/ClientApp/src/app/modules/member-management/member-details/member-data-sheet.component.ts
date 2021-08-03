@@ -1,3 +1,4 @@
+import { HistoryDialogComponent } from './history-dialog/history-dialog.component';
 import { HistoryPanelsComponent } from './history-panels/history-panels.component';
 import {
   Component,
@@ -77,7 +78,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   onShowHistoryButtonClicked() {
-    let dialogRef = this.dialog.open(HistoryPanelsComponent, {
+    let dialogRef = this.dialog.open(HistoryDialogComponent, {
       data: { person: this.personDetails },
       width: '600px',
     });

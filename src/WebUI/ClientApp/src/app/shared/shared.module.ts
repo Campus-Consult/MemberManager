@@ -44,6 +44,7 @@ import { DetailViewWrapperComponent } from './components/detail-view-wrapper/det
 import { AssignDialogComponent } from './components/assign-dialog/assign-dialog.component';
 import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dialog.component';
 import { DialogErrorComponent } from './components/dialog-error/dialog-error.component';
+import { PageForbiddenComponent } from './components/page-forbidden/page-forbidden.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -52,7 +53,8 @@ import { DialogErrorComponent } from './components/dialog-error/dialog-error.com
     DetailViewWrapperComponent,
     AssignDialogComponent,
     DismissDialogComponent,
-    DialogErrorComponent
+    DialogErrorComponent,
+    PageForbiddenComponent
   ],
   exports: [
     DataTableComponent,

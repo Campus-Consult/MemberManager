@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
+using MemberManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus
+namespace MemberManager.Application.MemberStatuss.Commands.DismissFromMemberStatus
 {
     public class DismissFromMemberStatusCommand : IRequest
     {

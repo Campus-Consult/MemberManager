@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusHistory
+namespace MemberManager.Application.MemberStatuss.Queries.GetMemberStatusHistory
 {
     public class MemberStatusHistoryVm : IMapFrom<Domain.Entities.MemberStatus>
     {

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
+using MemberManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
@@ -33,7 +34,7 @@ namespace MemberManager.Application.Positions.Queries.GetDismissSuggestions
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(MemberStatus));
+                throw new NotFoundException(nameof(Position));
             }
 
             return new PeopleDismissSuggestions

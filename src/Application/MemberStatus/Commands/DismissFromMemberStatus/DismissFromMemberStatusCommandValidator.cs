@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus
+namespace MemberManager.Application.MemberStatuss.Commands.DismissFromMemberStatus
 {
     public class DismissFromMemberStatusCommandValidator : AbstractValidator<DismissFromMemberStatusCommand>
     {

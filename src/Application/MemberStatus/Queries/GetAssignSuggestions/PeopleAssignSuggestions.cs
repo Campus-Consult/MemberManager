@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions
+namespace MemberManager.Application.MemberStatuss.Queries.GetAssignSuggestions
 {
     public class PeopleAssignSuggestions
     {

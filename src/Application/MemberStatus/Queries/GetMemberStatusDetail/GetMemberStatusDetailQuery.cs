@@ -2,11 +2,12 @@
 using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
+using MemberManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail
+namespace MemberManager.Application.MemberStatuss.Queries.GetMemberStatusDetail
 {
     public class GetMemberStatusDetailQuery : IRequest<MemberStatusDetailVm>
     {

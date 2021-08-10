@@ -1,6 +1,7 @@
 using MediatR;
 using MemberManager.Application.Common.Exceptions;
 using MemberManager.Application.Common.Interfaces;
+using MemberManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
@@ -32,7 +33,7 @@ namespace MemberManager.Application.Positions.Commands.DismissFromPosition
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(MemberStatus));
+                throw new NotFoundException(nameof(Position));
             }
 
             entity.EndDateTime = request.DismissalDateTime;

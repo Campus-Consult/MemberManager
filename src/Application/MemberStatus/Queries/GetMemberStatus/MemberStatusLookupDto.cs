@@ -3,7 +3,7 @@ using MemberManager.Application.Common.Mappings;
 using System;
 using System.Linq;
 
-namespace MemberManager.Application.MemberStatus.Queries.GetMemberStatus
+namespace MemberManager.Application.MemberStatuss.Queries.GetMemberStatus
 {
     public class MemberStatusLookupDto : IMapFrom<Domain.Entities.MemberStatus>
     {

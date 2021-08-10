@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
-using MemberManager.Application.MemberStatus.Commands.AssignToMemberStatus;
-using MemberManager.Application.MemberStatus.Commands.DismissFromMemberStatus;
-using MemberManager.Application.MemberStatus.Queries.GetAssignSuggestions;
-using MemberManager.Application.MemberStatus.Queries.GetDismissSuggestions;
-using MemberManager.Application.MemberStatus.Queries.GetMemberStatus;
-using MemberManager.Application.MemberStatus.Queries.GetMemberStatusDetail;
-using MemberManager.Application.MemberStatus.Queries.GetMemberStatusHistory;
+using MemberManager.Application.MemberStatuss.Commands.AssignToMemberStatus;
+using MemberManager.Application.MemberStatuss.Commands.CreateMemberStatus;
+using MemberManager.Application.MemberStatuss.Commands.DismissFromMemberStatus;
+using MemberManager.Application.MemberStatuss.Commands.UpdateMemberStatus;
+using MemberManager.Application.MemberStatuss.Queries.GetAssignSuggestions;
+using MemberManager.Application.MemberStatuss.Queries.GetDismissSuggestions;
+using MemberManager.Application.MemberStatuss.Queries.GetMemberStatus;
+using MemberManager.Application.MemberStatuss.Queries.GetMemberStatusDetail;
+using MemberManager.Application.MemberStatuss.Queries.GetMemberStatusHistory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,10 +22,28 @@ namespace MemberManager.WebUI.Controllers
             return await Mediator.Send(new GetMemberStatusQuery());
         }
 
+        [HttpPost]
+        public async Task<ActionResult<int>> Create(CreateMemberStatusCommand createCommand)
+        {
+            return await Mediator.Send(createCommand);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberStatusDetailVm>> Get(int id)
         {
             return await Mediator.Send(new GetMemberStatusDetailQuery { Id = id });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, UpdateMemberStatusCommand updateCommand)
+        {
+            if (id != updateCommand.MemberStatusId)
+            {
+               return BadRequest();
+            }
+
+            await Mediator.Send(updateCommand);
+            return NoContent();
         }
 
         [HttpGet("{id}/[action]")]

@@ -1,3 +1,4 @@
+import { AdminGuard } from './../../guards/admin.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
@@ -6,7 +7,7 @@ import { PageForbiddenComponent } from 'src/app/shared/components/page-forbidden
 import { PositionComponent } from './components/position/position.component';
 
 const routes: Routes = [
-  { path: 'position', component: PositionComponent, canActivate: [AuthorizeGuard] },
+  { path: 'position', component: PositionComponent, canActivate: [AuthorizeGuard, AdminGuard] },
   { path: FORBIDDEN_ROUTE_STRING, component: PageForbiddenComponent }
 ];
 

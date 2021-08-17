@@ -52,4 +52,4 @@ jobs:
         path: |
           build
     - name: Deploy with rsync
-      run: rsync -avz ./build/ ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }}:/home/${{ secrets.CAMPUS_CONSULT_SERVER_USER }}/test-deployment/
+      run: rsync -avz ./build/ ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }}:/var/www/membermanager/publish/

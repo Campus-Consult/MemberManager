@@ -70,9 +70,9 @@ export class MemberStatusListComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      const command = new CreateMemberStatusCommand(result);
-      
-      this.memberStatusClient.create(command)
+      if (result) {
+        this.reload()
+      }
     });
   }
 }

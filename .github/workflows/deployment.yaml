@@ -30,7 +30,7 @@ jobs:
       with:
         name: membermanager-build
         path: |
-          src/WebUI/bin/Release/netcoreapp${{ env.dotnet-version }}/publish**
+          src/WebUI/bin/Release/netcoreapp${{ env.dotnet-version }}/publish/**
 
   deploy:
     needs: build

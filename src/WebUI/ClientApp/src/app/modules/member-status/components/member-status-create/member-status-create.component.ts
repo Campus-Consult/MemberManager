@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-
-export interface MemberStatusCreateData {name: string}
+import { ICreateMemberStatusCommand } from "src/app/membermanager-api";
 
 @Component({
   selector: "app-member-status-create",
@@ -10,7 +9,7 @@ export interface MemberStatusCreateData {name: string}
 })
 export class MemberStatusCreateComponent implements OnInit {
 
-  fromData: MemberStatusCreateData;
+  fromData: ICreateMemberStatusCommand;
 
   constructor(public dialogRef: MatDialogRef<MemberStatusCreateComponent>) {
     this.fromData = {name:''};

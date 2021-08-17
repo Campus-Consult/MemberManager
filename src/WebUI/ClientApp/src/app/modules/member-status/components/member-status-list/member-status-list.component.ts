@@ -64,11 +64,7 @@ export class MemberStatusListComponent implements AfterViewInit {
     );
   }
 
-  openCreateDialog() {
-
-  }
-
-  openDialog(): void {
+  openCreateDialog(): void  {
     const dialogRef = this.dialog.open(MemberStatusCreateComponent, {
       width: '250px'
     });

@@ -4005,6 +4005,9 @@ export class CreatePersonCommand implements ICreatePersonCommand {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
+    initialCareerLevelId?: number | undefined;
+    initialMemberStatusId?: number | undefined;
+    joinDate?: Date | undefined;
 
     constructor(data?: ICreatePersonCommand) {
         if (data) {
@@ -4028,6 +4031,9 @@ export class CreatePersonCommand implements ICreatePersonCommand {
             this.adressNo = _data["adressNo"];
             this.adressZIP = _data["adressZIP"];
             this.adressCity = _data["adressCity"];
+            this.initialCareerLevelId = _data["initialCareerLevelId"];
+            this.initialMemberStatusId = _data["initialMemberStatusId"];
+            this.joinDate = _data["joinDate"] ? new Date(_data["joinDate"].toString()) : <any>undefined;
         }
     }
 
@@ -4051,6 +4057,9 @@ export class CreatePersonCommand implements ICreatePersonCommand {
         data["adressNo"] = this.adressNo;
         data["adressZIP"] = this.adressZIP;
         data["adressCity"] = this.adressCity;
+        data["initialCareerLevelId"] = this.initialCareerLevelId;
+        data["initialMemberStatusId"] = this.initialMemberStatusId;
+        data["joinDate"] = this.joinDate ? this.joinDate.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -4067,6 +4076,9 @@ export interface ICreatePersonCommand {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
+    initialCareerLevelId?: number | undefined;
+    initialMemberStatusId?: number | undefined;
+    joinDate?: Date | undefined;
 }
 
 export class UpdatePersonCommand implements IUpdatePersonCommand {

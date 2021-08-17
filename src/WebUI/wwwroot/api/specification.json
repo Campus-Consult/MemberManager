@@ -2405,6 +2405,21 @@
           "adressCity": {
             "type": "string",
             "nullable": true
+          },
+          "initialCareerLevelId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "initialMemberStatusId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "joinDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

@@ -1,4 +1,4 @@
-name: Deploy To Server
+name: Deploy
 
 on:
   push:
@@ -6,7 +6,10 @@ on:
       - main
   
   workflow_dispatch:
-  
+
+env:
+  dotnet-version: 3.1
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,17 +19,17 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1
+        dotnet-version: ${{ env.dotnet-version }}
     - name: Install dependencies
       run: dotnet restore src/WebUI
     - name: Build
-      run: dotnet build --configuration Release --no-restore src/WebUI
+      run: dotnet publish --packages ./.nuget --configuration Release
     - name: Upload MemberManager Build Artifact
       uses: actions/download-artifact@master
       with:
         name: membermanager-build
         path: |
-          src/WebUI/bin/Release/netcoreapp3.1/**
+          src/WebUI/bin/Release/netcoreapp${{ env.dotnet-version }}/publish**
 
   deploy:
     needs: build

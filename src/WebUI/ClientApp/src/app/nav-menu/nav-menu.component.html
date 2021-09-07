@@ -16,24 +16,27 @@
         <app-login-menu></app-login-menu>
         <span class="spacer"></span>
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/Personal']">Mitgliederverwaltung</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/member-status']">Status</a>
-          </li>
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/position']">Posten</a>
-          </li>
-          <li class="nav-item"
-          [routerLinkActive]="['link-active']"
-          [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/career-level']">Karrierestufen</a>
-          </li>
+          <ng-container *ngIf="isAuthenticated" class="admin-links"></ng-container>
+          <ng-container *ngIf="isAdmin" class="admin-links">
+            <li class="nav-item"
+                [routerLinkActive]="['link-active']"
+                [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link text-dark" [routerLink]="['/Personal']">Mitgliederverwaltung</a>
+            </li>
+            <li class="nav-item" [routerLinkActive]="['link-active']">
+              <a class="nav-link text-dark" [routerLink]="['/member-status']">Status</a>
+            </li>
+            <li class="nav-item"
+                [routerLinkActive]="['link-active']"
+                [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link text-dark" [routerLink]="['/position']">Posten</a>
+            </li>
+            <li class="nav-item"
+            [routerLinkActive]="['link-active']"
+            [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link text-dark" [routerLink]="['/career-level']">Karrierestufen</a>
+            </li>
+          </ng-container>
           <li class="nav-item">
             <a class="nav-link text-dark" href="/api" target="_blank">API</a>
           </li>

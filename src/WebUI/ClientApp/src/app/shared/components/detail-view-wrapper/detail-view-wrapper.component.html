@@ -20,6 +20,9 @@
           <mat-button-toggle (click)="onShowHistoryButtonClicked()" *ngIf="onShowHistory.observers.length > 0">
             <mat-icon>history</mat-icon>
           </mat-button-toggle>
+          <mat-button-toggle (click)="onDeleteButtonClicked()" *ngIf="onDelete.observers.length > 0">
+            <mat-icon>delete</mat-icon>
+          </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     </div>

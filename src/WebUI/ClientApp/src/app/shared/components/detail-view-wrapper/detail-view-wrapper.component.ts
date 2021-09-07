@@ -16,6 +16,7 @@ export class DetailViewWrapperComponent implements OnInit {
   @Output() onAssign = new EventEmitter();
   @Output() onDismiss = new EventEmitter();
   @Output() onShowHistory = new EventEmitter();
+  @Output() onDelete = new EventEmitter();
 
 
   constructor() { }
@@ -30,5 +31,7 @@ export class DetailViewWrapperComponent implements OnInit {
   onDismissButtonClicked() {this.onDismiss.emit(undefined)}
 
   onShowHistoryButtonClicked() {this.onShowHistory.emit(undefined)}
+
+  onDeleteButtonClicked() {this.onDelete.emit(undefined)}
 
 }

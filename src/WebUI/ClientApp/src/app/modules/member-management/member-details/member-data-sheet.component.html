@@ -4,9 +4,14 @@
   [subTitle]="'Mitglieds Details'"
   (onEdit)="onEdit()"
   (onShowHistory)="onShowHistoryButtonClicked()"
+  (onDelete)="onDelete()"
 >
   <app-member-data [memberDetails]="personDetails"></app-member-data>
 </app-detail-view-wrapper>
 <ng-template #toolTip>
   Für mehr Informationen klicke auf ein Element in der Tabelle!
 </ng-template>
+<div *ngIf="showLoadingText" #loading>
+  <mat-spinner></mat-spinner>
+  <h3>{{showLoadingText}}</h3>
+</div>

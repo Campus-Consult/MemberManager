@@ -31,7 +31,7 @@ export enum AuthenticationResultStatus {
 
 export interface IUser {
   name: string;
-  roles: string;
+  role: string;
   email: string;
 }
 
@@ -52,7 +52,7 @@ export class AuthorizeService {
 
   public isAuthenticatedAdminUser(): Observable<boolean> {
     // TODO: no idea how multiple roles work, but this should work for the current case for sure
-    return this.getUser().pipe(map(u => !!u && u.roles.split(",").includes("Admin")))
+    return this.getUser().pipe(tap(val=>console.log(val)),map(u => !!u && u.role.split(",").includes("Admin")))
   }
 
   public getUser(): Observable<IUser | null> {

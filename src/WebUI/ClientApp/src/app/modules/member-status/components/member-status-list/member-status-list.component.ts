@@ -1,4 +1,7 @@
+import { CreateMemberStatusCommand } from './../../../../membermanager-api';
+import { MemberStatusCreateComponent } from './../member-status-create/member-status-create.component';
 import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
@@ -31,7 +34,7 @@ export class MemberStatusListComponent implements AfterViewInit {
 
   selected: MemberStatusLookupDto;
 
-  constructor(private memberStatusClient: MemberStatusClient) { }
+  constructor(private memberStatusClient: MemberStatusClient, public dialog: MatDialog) { }
 
   ngAfterViewInit() {
 
@@ -59,5 +62,17 @@ export class MemberStatusListComponent implements AfterViewInit {
       },
       error => console.error(error)
     );
+  }
+
+  openCreateDialog(): void  {
+    const dialogRef = this.dialog.open(MemberStatusCreateComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.reload()
+      }
+    });
   }
 }

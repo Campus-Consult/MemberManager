@@ -35,8 +35,6 @@ export const PERSON_LIST_POSSIBLE_COLUMNS = [
   styleUrls: ["./member-list.component.scss"],
 })
 export class MemberListComponent implements OnInit, AfterViewInit {
-  personalData: PersonWithBasicInfoLookupDto[];
-
   dataSource: MatTableDataSource<PersonWithBasicInfoLookupDto>;
 
   @Input()
@@ -72,8 +70,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     this.loadingTable = true;
     this.personApi.getWithBasicInfo().subscribe(
       (val: IPeopleWithBasicInfoVm) => {
-        this.personalData = val.people;
-        this.dataSource = new MatTableDataSource<PersonWithBasicInfoLookupDto>(this.personalData);
+        this.dataSource = new MatTableDataSource<PersonWithBasicInfoLookupDto>(val.people);
         this.dataSource.sort = this.sort;
         this.loadingTable = false;
       },
@@ -123,8 +120,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     this.isRefreshing = true;
     return this.personApi.getWithBasicInfo().pipe(
       map((val: IPeopleWithBasicInfoVm) => {
-        this.personalData = val.people;
-        this.dataSource.data = this.personalData;
+        this.dataSource.data = val.people;
         this.isRefreshing = false;
       })
     );

@@ -1,5 +1,4 @@
 import { HistoryDialogComponent } from './history-dialog/history-dialog.component';
-import { HistoryPanelsComponent } from './history-panels/history-panels.component';
 import {
   Component,
   EventEmitter,
@@ -15,6 +14,7 @@ import {
   PeopleClient,
 } from "src/app/membermanager-api";
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: "app-person-details",
@@ -28,12 +28,19 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Output()
   editEvent = new EventEmitter<IPersonDetailVm>();
 
+  @Output()
+  deleteEvent = new EventEmitter<void>();
+
   public personDetails: IPersonDetailVm;
 
   public displayedName: string;
-  private loadingPerson = false;
 
-  constructor(private personApi: PeopleClient, public dialog: MatDialog) {}
+  /**
+   * if set text will be displayed, below loading
+   */
+  showLoadingText?: string
+
+  constructor(private personApi: PeopleClient, public dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.displayedName = "No Person Selected";
@@ -55,10 +62,10 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   loadPersondata() {
-    this.loadingPerson = true;
+    this.showLoadingText = 'Laden Mitglieder Details';
     this.personApi.get2(Number(this.person.id)).subscribe((person) => {
       this.personDetails = person;
-      this.loadingPerson = false;
+      this.showLoadingText = undefined;
     });
   }
 
@@ -80,7 +87,16 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   onShowHistoryButtonClicked() {
     let dialogRef = this.dialog.open(HistoryDialogComponent, {
       data: { person: this.personDetails },
-      width: '600px',
+      width: "600px",
     });
+  }
+
+  onDelete() {
+    this.personApi.delete(this.personDetails.id).subscribe(() => {
+      this.deleteEvent.emit();
+      this.showLoadingText = undefined;
+    });
+    this.personDetails = undefined;
+    this.showLoadingText = 'Lösche Nutzer';
   }
 }

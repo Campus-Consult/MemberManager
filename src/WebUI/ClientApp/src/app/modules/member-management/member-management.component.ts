@@ -40,6 +40,11 @@ export class MemberManagementComponent implements OnInit {
     this.personListComp.onRefresh();
   }
 
+  onDelete() {
+    this.onChangeDisplayedPerson(undefined);
+    this.onRefresh();
+  }
+
   onChangeDisplayedPerson(selectedPerson: IPersonWithBasicInfoLookupDto) {
     this.selectedPerson = selectedPerson;
   }

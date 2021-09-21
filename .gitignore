@@ -236,3 +236,4 @@ _Pvt_Extensions
 .angulardoc.json
 
 appsettings.Production.json
+.nuget/

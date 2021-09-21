@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  
+  workflow_dispatch:
+
+env:
+  dotnet-version: 3.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.dotnet-version }}
+    - name: Install dependencies
+      run: dotnet restore src/WebUI
+    - name: Build
+      run: dotnet publish --packages ./.nuget --configuration Release
+    - name: Upload MemberManager Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: membermanager-build
+        path: |
+          src/WebUI/bin/Release/netcoreapp${{ env.dotnet-version }}/publish/**
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }} 
+        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+        if_key_exists: replace
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.CAMPUS_CONSULT_SERVER_IP }} >> ~/.ssh/known_hosts
+    - name: Download MemberManager Build Artifact
+      uses: actions/download-artifact@master
+      with:
+        name: membermanager-build
+        path: |
+          build
+    - name: Deploy with rsync
+      run: rsync -avz ./build/ ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }}:/var/www/membermanager/publish/

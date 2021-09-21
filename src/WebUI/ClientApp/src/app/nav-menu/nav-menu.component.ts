@@ -1,4 +1,6 @@
+import { AuthorizeService } from './../../api-authorization/authorize.service';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +9,13 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  isAuthenticated = false;
+  isAdmin = false;
+
+  constructor(private authService: AuthorizeService) {
+    this.authService.isAuthenticated().subscribe((val)=>{this.isAuthenticated = val});
+    this.authService.isAuthenticatedAdminUser().subscribe((val)=>{this.isAdmin = val});
+  }
 
   collapse() {
     this.isExpanded = false;

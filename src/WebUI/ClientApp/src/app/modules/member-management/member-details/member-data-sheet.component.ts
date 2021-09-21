@@ -38,7 +38,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   /**
    * if set text will be displayed, below loading
    */
-  showLoadingText: string
+  showLoadingText?: string
 
   constructor(private personApi: PeopleClient, public dialog: MatDialog, private snackBar: MatSnackBar) {}
 
@@ -92,14 +92,9 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   onDelete() {
-    const name = `${this.personDetails.firstName} ${this.personDetails.surname}`;
     this.personApi.delete(this.personDetails.id).subscribe(() => {
       this.deleteEvent.emit();
       this.showLoadingText = undefined;
-      // snackbar wird überschrieben von reload. :(
-      /* this.snackBar.open(`${name} gelöscht`,'OK', {
-        duration: 4000, // table reload sbackbar will displayed 2s
-      }); */
     });
     this.personDetails = undefined;
     this.showLoadingText = 'Lösche Nutzer';

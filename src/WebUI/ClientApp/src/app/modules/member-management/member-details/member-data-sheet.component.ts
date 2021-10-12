@@ -1,3 +1,4 @@
+import { DeleteDialogComponent } from './../../../shared/components/delete-dialog/delete-dialog.component';
 import { HistoryDialogComponent } from './history-dialog/history-dialog.component';
 import {
   Component,
@@ -91,12 +92,21 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     });
   }
 
-  onDelete() {
+  private onDelete() {
     this.personApi.delete(this.personDetails.id).subscribe(() => {
       this.deleteEvent.emit();
       this.showLoadingText = undefined;
     });
     this.personDetails = undefined;
     this.showLoadingText = 'Lösche Nutzer';
+  }
+
+  openDeleteDialog() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent,{role: 'alertdialog'});
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.onDelete()
+      }
+    });
   }
 }

@@ -4,7 +4,7 @@
   </mat-card-header>
   <mat-card-content>
     <div id="form-container">
-      <app-member-form></app-member-form>
+      <app-member-form [isCreate]="true"></app-member-form>
     </div>
     <div class="error-hint" *ngIf="invalidHints">
       <app-error-hint

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import { CreatePersonCommand, PeopleClient } from "src/app/membermanager-api";
+import { CareerLevelDto, CareerLevelLookupDto, CreatePersonCommand, ICreatePersonCommand, MemberStatusLookupDto, PeopleClient } from "src/app/membermanager-api";
 import { MemberFormComponent } from "./member-form/member-form.component";
 
 /**
@@ -64,10 +64,9 @@ export class CreateMemberComponent implements AfterViewInit {
    */
   protected handleFormValid() {
     const command = this.convertCreateFormIntoCommand(this.getResult());
-    console.log(command);
 
     this.memberApi.create(command).subscribe(
-      (val) => {
+      () => {
         // Modal Output User Input in Modal
         this.dialogRef.close(this.getResult());
         // TODO: Succesfull Toast
@@ -110,7 +109,9 @@ export class CreateMemberComponent implements AfterViewInit {
       }
     } */
 
-    const iCommand = {
+    console.log(formResult);
+
+    const iCommand: ICreatePersonCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
@@ -123,6 +124,9 @@ export class CreateMemberComponent implements AfterViewInit {
       adressNo: formResult.adressNr,
       adressZIP: formResult.adressZIP,
       adressCity: formResult.adressCity,
+      initialCareerLevelId: formResult.initialCareerLevelId,
+      initialMemberStatusId: formResult.initialMemberStatusId,
+      joinDate: formResult.joinDate,
     };
     return new CreatePersonCommand(iCommand);
   }

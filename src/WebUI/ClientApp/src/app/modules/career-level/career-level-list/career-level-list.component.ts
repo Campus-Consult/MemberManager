@@ -1,4 +1,3 @@
-import { CreateCareerLevelDialogComponent } from './../create-career-level-dialog/create-career-level-dialog.component';
 import {
   AfterViewInit,
   Component,
@@ -15,6 +14,7 @@ import {
   MemberStatusLookupDto
 } from "src/app/membermanager-api";
 import { DataTableComponent } from "src/app/shared/components/data-table/data-table.component";
+import { CreateCareerLevelDialogComponent } from "./../create-career-level-dialog/create-career-level-dialog.component";
 
 @Component({
   selector: "app-career-level-list",
@@ -23,6 +23,17 @@ import { DataTableComponent } from "src/app/shared/components/data-table/data-ta
 })
 export class CareerLevelListComponent implements AfterViewInit {
   private sort: MatSort;
+
+  // CarreerLevel order Trainee < Associate < Junior Consultant < Consultant < Senior Consultant < Partner
+  // Change order here uses name and compares string 
+  public careerLevelOrder = [
+    "Trainee",
+    "Associate",
+    "Junior Consultant",
+    "Consultant",
+    "Senior Consultant",
+    "Partner",
+  ];
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -36,11 +47,14 @@ export class CareerLevelListComponent implements AfterViewInit {
 
   careerLevels: CareerLevelLookupDto[];
   dataSource: MatTableDataSource<CareerLevelLookupDto>;
-  columns: string[] = ["name","shortName", "countAssignees"];
+  columns: string[] = ["name", "shortName", "countAssignees"];
 
   selected: MemberStatusLookupDto;
 
-  constructor(private careerLevelClient: CareerLevelClient, public dialog: MatDialog,) {}
+  constructor(
+    private careerLevelClient: CareerLevelClient,
+    public dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.reload();
@@ -53,27 +67,49 @@ export class CareerLevelListComponent implements AfterViewInit {
 
   onCreate() {
     let dialogRef = this.dialog.open(CreateCareerLevelDialogComponent, {
-      data: { description: "Erstelle Karrierelevel"}
+      data: { description: "Erstelle Karrierelevel" },
     });
 
-    const sub = dialogRef.afterClosed()
-      .subscribe(result => {
-          this.reload();
-          sub.unsubscribe();
-      })
+    const sub = dialogRef.afterClosed().subscribe((result) => {
+      this.reload();
+      sub.unsubscribe();
+    });
   }
 
   reload() {
     const observer = {
-      next: (result) => {   
+      next: (result) => {
         this.careerLevels = result.careerLevels;
         this.dataSource = new MatTableDataSource<CareerLevelLookupDto>(
-          this.careerLevels
+          this.getCareerLevelOrdered(this.careerLevels)
         );
         this.dataSource.sort = this.sort;
       },
-      error: (error) => console.error(error),    
+      error: (error) => console.error(error),
     };
     this.careerLevelClient.get().subscribe(observer);
+  }
+
+  getCareerLevelOrdered(
+    careerList: CareerLevelLookupDto[],
+    newList: CareerLevelLookupDto[] = [],
+    index = 0
+  ): CareerLevelLookupDto[] {
+    // Quick and dirrty order
+    const sequenz = this.careerLevelOrder;
+    // Abort Condition
+    const seqItem = sequenz[index];
+    if (index >= sequenz.length) {
+      // return carerLevel ordered newList with rest carerLevel
+      return newList.concat(careerList);
+    }
+
+    for (let indexFor = 0; indexFor < careerList.length; indexFor++) {
+      if (seqItem === careerList[indexFor].name) {
+        newList = newList.concat(careerList.splice(indexFor, 1));
+        return this.getCareerLevelOrdered(careerList, newList, index + 1);
+      }
+    }
+    return this.getCareerLevelOrdered(careerList, newList, index + 1);
   }
 }

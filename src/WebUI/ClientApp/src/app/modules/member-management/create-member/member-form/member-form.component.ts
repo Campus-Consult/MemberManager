@@ -70,7 +70,7 @@ export class MemberFormComponent implements OnInit {
         firstName: this.memberData.firstName,
         lastName: this.memberData.surname,
         birthdate: this.memberData.birthdate || '',
-        gender: this.memberData.gender || '',
+        gender: this.memberData.gender,
         emailPrivate: this.memberData.emailPrivate || '',
         emailAssociaton: this.memberData.emailAssociaton || '',
         mobilePrivate: this.memberData.mobilePrivate || '',

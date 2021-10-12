@@ -19,16 +19,21 @@ export class DialogErrorComponent implements OnInit, OnChanges {
   }
     
   ngOnChanges(changes: SimpleChanges): void {
-    this.handleError(this.errors)
+    if (this.errors) {
+      this.handleError(this.errors)
+    }
   }
 
   handleError(error) {
-    let parsedErrorObject = JSON.parse(error.response);
+    let parsedErrorObject: any;
+    // Intercept Normal Error
+    if (error && error.response) {
+      parsedErrorObject = JSON.parse(error.response);
+    }
 
     if (parsedErrorObject) {
-      this.errorMsg = parsedErrorObject.title + ":";
+      this.errorMsg = parsedErrorObject?.title + ":";
       if (parsedErrorObject.errors) {
-        console.log('Werde ausgeführt');
         this.errorMsgList = [];
         for (const key in parsedErrorObject.errors) {
           if (Object.prototype.hasOwnProperty.call(parsedErrorObject.errors, key)) {

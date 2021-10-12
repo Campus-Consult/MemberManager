@@ -64,7 +64,6 @@ export class CreateMemberComponent implements AfterViewInit {
    */
   protected handleFormValid() {
     const command = this.convertCreateFormIntoCommand(this.getResult());
-    console.log(command);
 
     this.memberApi.create(command).subscribe(
       () => {

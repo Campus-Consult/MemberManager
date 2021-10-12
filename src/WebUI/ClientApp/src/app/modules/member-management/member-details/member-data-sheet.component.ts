@@ -102,7 +102,8 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   openDeleteDialog() {
-    const dialogRef = this.dialog.open(DeleteDialogComponent,{role: 'alertdialog'});
+    const memberToDelete = `Entität: ${this.personDetails.firstName} ${this.personDetails.surname}` ;
+    const dialogRef = this.dialog.open(DeleteDialogComponent,{role: 'alertdialog',data: { name: memberToDelete },});
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.onDelete()

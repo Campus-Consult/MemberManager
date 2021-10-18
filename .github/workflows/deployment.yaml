@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/ci_cd_permission_fix
   
   workflow_dispatch:
 
@@ -52,3 +53,4 @@ jobs:
           build
     - name: Deploy with rsync
       run: rsync -avz ./build/ ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }}:/var/www/membermanager/publish/
+      run: ssh ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }} chmod +x /var/www/membermanager/publish/MemberManager.WebUI

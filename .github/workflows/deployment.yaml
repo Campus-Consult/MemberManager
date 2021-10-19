@@ -50,5 +50,7 @@ jobs:
         name: membermanager-build
         path: |
           build
+    - name: Set executable permission
+      run: chmod +x ./build/MemberManager.WebUI
     - name: Deploy with rsync
       run: rsync -avz ./build/ ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }}:/var/www/membermanager/publish/

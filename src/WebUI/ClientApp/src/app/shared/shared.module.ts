@@ -45,6 +45,7 @@ import { AssignDialogComponent } from './components/assign-dialog/assign-dialog.
 import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dialog.component';
 import { DialogErrorComponent } from './components/dialog-error/dialog-error.component';
 import { PageForbiddenComponent } from './components/page-forbidden/page-forbidden.component';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -54,7 +55,8 @@ import { PageForbiddenComponent } from './components/page-forbidden/page-forbidd
     AssignDialogComponent,
     DismissDialogComponent,
     DialogErrorComponent,
-    PageForbiddenComponent
+    PageForbiddenComponent,
+    DeleteDialogComponent
   ],
   exports: [
     DataTableComponent,

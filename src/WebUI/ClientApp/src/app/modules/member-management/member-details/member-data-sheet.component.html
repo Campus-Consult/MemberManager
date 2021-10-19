@@ -4,7 +4,7 @@
   [subTitle]="'Mitglieds Details'"
   (onEdit)="onEdit()"
   (onShowHistory)="onShowHistoryButtonClicked()"
-  (onDelete)="onDelete()"
+  (onDelete)="openDeleteDialog()"
 >
   <app-member-data [memberDetails]="personDetails"></app-member-data>
 </app-detail-view-wrapper>

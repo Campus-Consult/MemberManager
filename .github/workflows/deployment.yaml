@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/ci_cd_permission_fix
   
   workflow_dispatch:
 

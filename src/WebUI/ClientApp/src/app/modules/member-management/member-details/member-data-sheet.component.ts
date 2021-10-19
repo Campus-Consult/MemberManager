@@ -102,8 +102,9 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   openDeleteDialog() {
-    const memberToDelete = `Entität: ${this.personDetails.firstName} ${this.personDetails.surname}` ;
-    const dialogRef = this.dialog.open(DeleteDialogComponent,{role: 'alertdialog',data: { name: memberToDelete },});
+    const memberName = `${this.personDetails.firstName} ${this.personDetails.surname}`;
+    const content = `Willst du Mitglied ${memberName} unwiederuflich löschen?` ;
+    const dialogRef = this.dialog.open(DeleteDialogComponent,{role: 'alertdialog', data: { title: `${memberName} löschen?`, content: content },});
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.onDelete()

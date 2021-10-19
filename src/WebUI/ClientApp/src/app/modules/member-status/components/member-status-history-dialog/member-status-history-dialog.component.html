@@ -9,12 +9,12 @@
 
   <ng-container matColumnDef="since">
     <th mat-header-cell *matHeaderCellDef>Since</th>
-    <td mat-cell *matCellDef="let element">{{ element.beginDateTime?.toLocaleDateString() }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.beginDateTime | date }}</td>
   </ng-container>
 
   <ng-container matColumnDef="till">
     <th mat-header-cell *matHeaderCellDef>Till</th>
-    <td mat-cell *matCellDef="let element">{{ element.endDateTime?.toLocaleDateString() }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.endDateTime | date }}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>

@@ -67,7 +67,7 @@
       "useSingletonProvider": true,
       "injectionTokenType": "InjectionToken",
       "rxJsVersion": 6.0,
-      "dateTimeType": "Date",
+      "dateTimeType": "string",
       "nullValue": "Undefined",
       "generateClientClasses": true,
       "generateClientInterfaces": true,

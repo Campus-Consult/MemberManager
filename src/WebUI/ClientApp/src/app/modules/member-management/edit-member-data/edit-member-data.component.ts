@@ -56,17 +56,12 @@ export class EditMemberDataComponent
   }
 
   private convertEditFormIntoCommand(formResult: any): UpdatePersonCommand {
-    // Casting
-    let birthday: Date;
-    if (formResult.birthdate) {
-      birthday = new Date(formResult.birthdate);
-    }
     const iCommand: IUpdatePersonCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       id: this.memberdata.id,
       firstName: formResult.firstName,
       surname: formResult.lastName,
-      birthdate: birthday,
+      birthdate: formResult.birthdate,
       gender: formResult.gender,
       emailPrivate: formResult.emailPrivate,
       emailAssociaton: formResult.emailAssociaton,

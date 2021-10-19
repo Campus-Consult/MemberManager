@@ -4,9 +4,7 @@
 
 <mat-dialog-content [formGroup]="form" fxLayout="column" fxLayoutAlign="space-between start">
   <mat-form-field appearance="fill" fxFlex>
-    <input matInput placeholder="Deactivation date" formControlName="endDateTime" [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <input matInput placeholder="Deactivation date" formControlName="endDateTime" type="date">
   </mat-form-field>
   <label class="mat-warn" fxFlex>
     Warning: All current assignements will be ended and future assignements will be deleted! You can reactivate the position later.

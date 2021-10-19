@@ -115,9 +115,11 @@ export class MemberDataComponent implements OnInit, OnChanges {
   }
 
   get birthdate(): string {
-    return this.memberDetails.birthdate
-      ? this.memberDetails.birthdate.toLocaleDateString()
-      : "-";
+    if (this.memberDetails.birthdate) {
+      return new Date(this.memberDetails.birthdate).toLocaleDateString();
+    } else {
+      return "-";
+    }
   }
 
   get gender(): string {

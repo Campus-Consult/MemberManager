@@ -95,27 +95,13 @@ export class CreateMemberComponent implements AfterViewInit {
   }
 
   private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
-    // Casting
-    let birthday: Date;
-    if (formResult.birthdate) {
-      birthday = new Date(formResult.birthdate);
-    }
-    // do propertys undefined if blank string, because backend intepret value is set and checks format 
-/*     const commandPrep = {};
-    for (const key in formResult) {
-      if (Object.prototype.hasOwnProperty.call(formResult, key) && formResult[key] !== '') {
-        commandPrep[key] = ;
-        
-      }
-    } */
-
     console.log(formResult);
 
     const iCommand: ICreatePersonCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
-      birthdate: birthday,
+      birthdate: formResult.birthdate,
       gender: formResult.gender,
       emailPrivate: formResult.emailPrivate,
       emailAssociaton: formResult.emailAssociaton,

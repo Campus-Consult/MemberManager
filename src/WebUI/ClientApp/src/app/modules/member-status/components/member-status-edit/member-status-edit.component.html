@@ -1,0 +1,13 @@
+
+<h1 mat-dialog-title>Erstelle Mitgliedsstatus</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Name*</mat-label>
+    <input matInput [(ngModel)]="fromData.name">
+  </mat-form-field>
+</div>
+<p *ngIf="errmsg">errmsg</p>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]>Abbruch</button>
+  <button mat-button (click)="editMemberStatus()" [disabled]="disableEdit()">Erstellen</button>
+</div>

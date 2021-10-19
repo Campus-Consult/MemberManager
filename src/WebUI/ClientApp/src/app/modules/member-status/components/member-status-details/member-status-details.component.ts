@@ -1,3 +1,4 @@
+import { MemberStatusEditComponent } from './../member-status-edit/member-status-edit.component';
 import {
   AfterViewInit,
   Component,
@@ -117,6 +118,16 @@ export class MemberStatusDetailsComponent
   }
 
   onEditButtonClicked() {
-    alert("OnEdit is not implemented");
+    let dialogRef = this.dialog.open(MemberStatusEditComponent, {
+      data: {
+        memberStatus: this.memberStatus,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.reloadRequired();
+      }
+    });
   }
 }

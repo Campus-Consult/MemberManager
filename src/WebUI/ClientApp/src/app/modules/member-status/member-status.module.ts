@@ -48,6 +48,7 @@ import { MemberStatusAssignDialogComponent } from './components/member-status-as
 import { MemberStatusDismissDialogComponent } from './components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 import { MemberStatusHistoryDialogComponent } from './components/member-status-history-dialog/member-status-history-dialog.component';
 import { MemberStatusCreateComponent } from './components/member-status-create/member-status-create.component';
+import { MemberStatusEditComponent } from './components/member-status-edit/member-status-edit.component';
 
 @NgModule({
   imports: [
@@ -96,7 +97,8 @@ import { MemberStatusCreateComponent } from './components/member-status-create/m
     MemberStatusAssignDialogComponent,
     MemberStatusDismissDialogComponent,
     MemberStatusHistoryDialogComponent,
-    MemberStatusCreateComponent
+    MemberStatusCreateComponent,
+    MemberStatusEditComponent
   ],
   exports: [
     MemberStatusComponent,

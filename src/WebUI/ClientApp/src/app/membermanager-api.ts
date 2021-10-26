@@ -1215,7 +1215,7 @@ export interface IPeopleClient {
     get(): Observable<PeopleVm>;
     create(command: CreatePersonCommand): Observable<number>;
     getWithBasicInfo(): Observable<PeopleWithBasicInfoVm>;
-    getCurrentCareerLevel(id: number, time: Date | null | undefined): Observable<CareerLevelAssignmentDto>;
+    getCurrentCareerLevel(id: number, time: string | null | undefined): Observable<CareerLevelAssignmentDto>;
     get2(id: number): Observable<PersonDetailVm>;
     update(id: number, command: UpdatePersonCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
@@ -1382,13 +1382,13 @@ export class PeopleClient implements IPeopleClient {
         return _observableOf<PeopleWithBasicInfoVm>(<any>null);
     }
 
-    getCurrentCareerLevel(id: number, time: Date | null | undefined): Observable<CareerLevelAssignmentDto> {
+    getCurrentCareerLevel(id: number, time: string | null | undefined): Observable<CareerLevelAssignmentDto> {
         let url_ = this.baseUrl + "/api/People/{id}/GetCurrentCareerLevel?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         if (time !== undefined)
-            url_ += "time=" + encodeURIComponent(time ? "" + time.toJSON() : "") + "&"; 
+            url_ += "time=" + encodeURIComponent("" + time) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2476,8 +2476,8 @@ export class CareerLevelAssignee implements ICareerLevelAssignee {
     personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: ICareerLevelAssignee) {
         if (data) {
@@ -2494,8 +2494,8 @@ export class CareerLevelAssignee implements ICareerLevelAssignee {
             this.personId = _data["personId"];
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -2512,8 +2512,8 @@ export class CareerLevelAssignee implements ICareerLevelAssignee {
         data["personId"] = this.personId;
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -2523,8 +2523,8 @@ export interface ICareerLevelAssignee {
     personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class CreateCareerLevelCommand implements ICreateCareerLevelCommand {
@@ -2658,7 +2658,7 @@ export interface ICareerLevelHistoryVm {
 export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelCommand {
     careerLevelId?: number;
     personId?: number;
-    changeDateTime?: Date;
+    changeDateTime?: string;
 
     constructor(data?: IChangePersonCareerLevelCommand) {
         if (data) {
@@ -2673,7 +2673,7 @@ export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelC
         if (_data) {
             this.careerLevelId = _data["careerLevelId"];
             this.personId = _data["personId"];
-            this.changeDateTime = _data["changeDateTime"] ? new Date(_data["changeDateTime"].toString()) : <any>undefined;
+            this.changeDateTime = _data["changeDateTime"];
         }
     }
 
@@ -2688,7 +2688,7 @@ export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelC
         data = typeof data === 'object' ? data : {};
         data["careerLevelId"] = this.careerLevelId;
         data["personId"] = this.personId;
-        data["changeDateTime"] = this.changeDateTime ? this.changeDateTime.toISOString() : <any>undefined;
+        data["changeDateTime"] = this.changeDateTime;
         return data; 
     }
 }
@@ -2696,13 +2696,13 @@ export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelC
 export interface IChangePersonCareerLevelCommand {
     careerLevelId?: number;
     personId?: number;
-    changeDateTime?: Date;
+    changeDateTime?: string;
 }
 
 export class DeactivateCareerLevelCommand implements IDeactivateCareerLevelCommand {
     careerLevelId?: number;
     newCareerLevelId?: number;
-    changeDateTime?: Date;
+    changeDateTime?: string;
 
     constructor(data?: IDeactivateCareerLevelCommand) {
         if (data) {
@@ -2717,7 +2717,7 @@ export class DeactivateCareerLevelCommand implements IDeactivateCareerLevelComma
         if (_data) {
             this.careerLevelId = _data["careerLevelId"];
             this.newCareerLevelId = _data["newCareerLevelId"];
-            this.changeDateTime = _data["changeDateTime"] ? new Date(_data["changeDateTime"].toString()) : <any>undefined;
+            this.changeDateTime = _data["changeDateTime"];
         }
     }
 
@@ -2732,7 +2732,7 @@ export class DeactivateCareerLevelCommand implements IDeactivateCareerLevelComma
         data = typeof data === 'object' ? data : {};
         data["careerLevelId"] = this.careerLevelId;
         data["newCareerLevelId"] = this.newCareerLevelId;
-        data["changeDateTime"] = this.changeDateTime ? this.changeDateTime.toISOString() : <any>undefined;
+        data["changeDateTime"] = this.changeDateTime;
         return data; 
     }
 }
@@ -2740,7 +2740,7 @@ export class DeactivateCareerLevelCommand implements IDeactivateCareerLevelComma
 export interface IDeactivateCareerLevelCommand {
     careerLevelId?: number;
     newCareerLevelId?: number;
-    changeDateTime?: Date;
+    changeDateTime?: string;
 }
 
 export class PeopleAssignSuggestions implements IPeopleAssignSuggestions {
@@ -3010,8 +3010,8 @@ export interface IMemberStatusDetailVm {
 export class AssigneeDto implements IAssigneeDto {
     personId?: number;
     name?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: IAssigneeDto) {
         if (data) {
@@ -3026,8 +3026,8 @@ export class AssigneeDto implements IAssigneeDto {
         if (_data) {
             this.personId = _data["personId"];
             this.name = _data["name"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -3042,8 +3042,8 @@ export class AssigneeDto implements IAssigneeDto {
         data = typeof data === 'object' ? data : {};
         data["personId"] = this.personId;
         data["name"] = this.name;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -3051,8 +3051,8 @@ export class AssigneeDto implements IAssigneeDto {
 export interface IAssigneeDto {
     personId?: number;
     name?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class UpdateMemberStatusCommand implements IUpdateMemberStatusCommand {
@@ -3318,8 +3318,8 @@ export interface IPeopleDismissSuggestion {
 export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand {
     memberStatusId?: number;
     personId?: number;
-    assignmentDateTime?: Date;
-    dismissalDateTime?: Date | undefined;
+    assignmentDateTime?: string;
+    dismissalDateTime?: string | undefined;
 
     constructor(data?: IAssignToMemberStatusCommand) {
         if (data) {
@@ -3334,8 +3334,8 @@ export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand
         if (_data) {
             this.memberStatusId = _data["memberStatusId"];
             this.personId = _data["personId"];
-            this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
-            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
+            this.assignmentDateTime = _data["assignmentDateTime"];
+            this.dismissalDateTime = _data["dismissalDateTime"];
         }
     }
 
@@ -3350,8 +3350,8 @@ export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand
         data = typeof data === 'object' ? data : {};
         data["memberStatusId"] = this.memberStatusId;
         data["personId"] = this.personId;
-        data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
-        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
+        data["assignmentDateTime"] = this.assignmentDateTime;
+        data["dismissalDateTime"] = this.dismissalDateTime;
         return data; 
     }
 }
@@ -3359,14 +3359,14 @@ export class AssignToMemberStatusCommand implements IAssignToMemberStatusCommand
 export interface IAssignToMemberStatusCommand {
     memberStatusId?: number;
     personId?: number;
-    assignmentDateTime?: Date;
-    dismissalDateTime?: Date | undefined;
+    assignmentDateTime?: string;
+    dismissalDateTime?: string | undefined;
 }
 
 export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusCommand {
     memberStatusId?: number;
     personId?: number;
-    dismissalDateTime?: Date;
+    dismissalDateTime?: string;
 
     constructor(data?: IDismissFromMemberStatusCommand) {
         if (data) {
@@ -3381,7 +3381,7 @@ export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusC
         if (_data) {
             this.memberStatusId = _data["memberStatusId"];
             this.personId = _data["personId"];
-            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
+            this.dismissalDateTime = _data["dismissalDateTime"];
         }
     }
 
@@ -3396,7 +3396,7 @@ export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusC
         data = typeof data === 'object' ? data : {};
         data["memberStatusId"] = this.memberStatusId;
         data["personId"] = this.personId;
-        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
+        data["dismissalDateTime"] = this.dismissalDateTime;
         return data; 
     }
 }
@@ -3404,7 +3404,7 @@ export class DismissFromMemberStatusCommand implements IDismissFromMemberStatusC
 export interface IDismissFromMemberStatusCommand {
     memberStatusId?: number;
     personId?: number;
-    dismissalDateTime?: Date;
+    dismissalDateTime?: string;
 }
 
 export class PeopleVm implements IPeopleVm {
@@ -3653,8 +3653,8 @@ export class CareerLevelAssignmentDto implements ICareerLevelAssignmentDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: ICareerLevelAssignmentDto) {
         if (data) {
@@ -3672,8 +3672,8 @@ export class CareerLevelAssignmentDto implements ICareerLevelAssignmentDto {
             this.name = _data["name"];
             this.shortName = _data["shortName"];
             this.isActive = _data["isActive"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -3691,8 +3691,8 @@ export class CareerLevelAssignmentDto implements ICareerLevelAssignmentDto {
         data["name"] = this.name;
         data["shortName"] = this.shortName;
         data["isActive"] = this.isActive;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -3703,15 +3703,15 @@ export interface ICareerLevelAssignmentDto {
     name?: string | undefined;
     shortName?: string | undefined;
     isActive?: boolean;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class PersonDetailVm implements IPersonDetailVm {
     id?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    birthdate?: Date;
+    birthdate?: string;
     gender?: Gender;
     emailPrivate?: string | undefined;
     emailAssociaton?: string | undefined;
@@ -3738,7 +3738,7 @@ export class PersonDetailVm implements IPersonDetailVm {
             this.id = _data["id"];
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
-            this.birthdate = _data["birthdate"] ? new Date(_data["birthdate"].toString()) : <any>undefined;
+            this.birthdate = _data["birthdate"];
             this.gender = _data["gender"];
             this.emailPrivate = _data["emailPrivate"];
             this.emailAssociaton = _data["emailAssociaton"];
@@ -3777,7 +3777,7 @@ export class PersonDetailVm implements IPersonDetailVm {
         data["id"] = this.id;
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
-        data["birthdate"] = this.birthdate ? this.birthdate.toISOString() : <any>undefined;
+        data["birthdate"] = this.birthdate;
         data["gender"] = this.gender;
         data["emailPrivate"] = this.emailPrivate;
         data["emailAssociaton"] = this.emailAssociaton;
@@ -3809,7 +3809,7 @@ export interface IPersonDetailVm {
     id?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    birthdate?: Date;
+    birthdate?: string;
     gender?: Gender;
     emailPrivate?: string | undefined;
     emailAssociaton?: string | undefined;
@@ -3834,8 +3834,8 @@ export class PersonCareerLevelVm implements IPersonCareerLevelVm {
     careerLevelId?: number;
     careerLevelName?: string | undefined;
     careerLevelShortName?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: IPersonCareerLevelVm) {
         if (data) {
@@ -3852,8 +3852,8 @@ export class PersonCareerLevelVm implements IPersonCareerLevelVm {
             this.careerLevelId = _data["careerLevelId"];
             this.careerLevelName = _data["careerLevelName"];
             this.careerLevelShortName = _data["careerLevelShortName"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -3870,8 +3870,8 @@ export class PersonCareerLevelVm implements IPersonCareerLevelVm {
         data["careerLevelId"] = this.careerLevelId;
         data["careerLevelName"] = this.careerLevelName;
         data["careerLevelShortName"] = this.careerLevelShortName;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -3881,16 +3881,16 @@ export interface IPersonCareerLevelVm {
     careerLevelId?: number;
     careerLevelName?: string | undefined;
     careerLevelShortName?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class PersonMemberStatusVm implements IPersonMemberStatusVm {
     id?: number;
     memberStatusId?: number;
     memberStatusName?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: IPersonMemberStatusVm) {
         if (data) {
@@ -3906,8 +3906,8 @@ export class PersonMemberStatusVm implements IPersonMemberStatusVm {
             this.id = _data["id"];
             this.memberStatusId = _data["memberStatusId"];
             this.memberStatusName = _data["memberStatusName"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -3923,8 +3923,8 @@ export class PersonMemberStatusVm implements IPersonMemberStatusVm {
         data["id"] = this.id;
         data["memberStatusId"] = this.memberStatusId;
         data["memberStatusName"] = this.memberStatusName;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -3933,8 +3933,8 @@ export interface IPersonMemberStatusVm {
     id?: number;
     memberStatusId?: number;
     memberStatusName?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class PersonPositionVm implements IPersonPositionVm {
@@ -3942,8 +3942,8 @@ export class PersonPositionVm implements IPersonPositionVm {
     positionId?: number;
     positionName?: string | undefined;
     positionShortName?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: IPersonPositionVm) {
         if (data) {
@@ -3960,8 +3960,8 @@ export class PersonPositionVm implements IPersonPositionVm {
             this.positionId = _data["positionId"];
             this.positionName = _data["positionName"];
             this.positionShortName = _data["positionShortName"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -3978,8 +3978,8 @@ export class PersonPositionVm implements IPersonPositionVm {
         data["positionId"] = this.positionId;
         data["positionName"] = this.positionName;
         data["positionShortName"] = this.positionShortName;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -3989,14 +3989,14 @@ export interface IPersonPositionVm {
     positionId?: number;
     positionName?: string | undefined;
     positionShortName?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class CreatePersonCommand implements ICreatePersonCommand {
     firstName?: string | undefined;
     surname?: string | undefined;
-    birthdate?: Date;
+    birthdate?: string;
     gender?: Gender;
     emailPrivate?: string | undefined;
     emailAssociaton?: string | undefined;
@@ -4007,7 +4007,7 @@ export class CreatePersonCommand implements ICreatePersonCommand {
     adressCity?: string | undefined;
     initialCareerLevelId?: number | undefined;
     initialMemberStatusId?: number | undefined;
-    joinDate?: Date | undefined;
+    joinDate?: string | undefined;
 
     constructor(data?: ICreatePersonCommand) {
         if (data) {
@@ -4022,7 +4022,7 @@ export class CreatePersonCommand implements ICreatePersonCommand {
         if (_data) {
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
-            this.birthdate = _data["birthdate"] ? new Date(_data["birthdate"].toString()) : <any>undefined;
+            this.birthdate = _data["birthdate"];
             this.gender = _data["gender"];
             this.emailPrivate = _data["emailPrivate"];
             this.emailAssociaton = _data["emailAssociaton"];
@@ -4033,7 +4033,7 @@ export class CreatePersonCommand implements ICreatePersonCommand {
             this.adressCity = _data["adressCity"];
             this.initialCareerLevelId = _data["initialCareerLevelId"];
             this.initialMemberStatusId = _data["initialMemberStatusId"];
-            this.joinDate = _data["joinDate"] ? new Date(_data["joinDate"].toString()) : <any>undefined;
+            this.joinDate = _data["joinDate"];
         }
     }
 
@@ -4048,7 +4048,7 @@ export class CreatePersonCommand implements ICreatePersonCommand {
         data = typeof data === 'object' ? data : {};
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
-        data["birthdate"] = this.birthdate ? this.birthdate.toISOString() : <any>undefined;
+        data["birthdate"] = this.birthdate;
         data["gender"] = this.gender;
         data["emailPrivate"] = this.emailPrivate;
         data["emailAssociaton"] = this.emailAssociaton;
@@ -4059,7 +4059,7 @@ export class CreatePersonCommand implements ICreatePersonCommand {
         data["adressCity"] = this.adressCity;
         data["initialCareerLevelId"] = this.initialCareerLevelId;
         data["initialMemberStatusId"] = this.initialMemberStatusId;
-        data["joinDate"] = this.joinDate ? this.joinDate.toISOString() : <any>undefined;
+        data["joinDate"] = this.joinDate;
         return data; 
     }
 }
@@ -4067,7 +4067,7 @@ export class CreatePersonCommand implements ICreatePersonCommand {
 export interface ICreatePersonCommand {
     firstName?: string | undefined;
     surname?: string | undefined;
-    birthdate?: Date;
+    birthdate?: string;
     gender?: Gender;
     emailPrivate?: string | undefined;
     emailAssociaton?: string | undefined;
@@ -4078,14 +4078,14 @@ export interface ICreatePersonCommand {
     adressCity?: string | undefined;
     initialCareerLevelId?: number | undefined;
     initialMemberStatusId?: number | undefined;
-    joinDate?: Date | undefined;
+    joinDate?: string | undefined;
 }
 
 export class UpdatePersonCommand implements IUpdatePersonCommand {
     id?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    birthdate?: Date;
+    birthdate?: string;
     gender?: Gender;
     emailPrivate?: string | undefined;
     emailAssociaton?: string | undefined;
@@ -4109,7 +4109,7 @@ export class UpdatePersonCommand implements IUpdatePersonCommand {
             this.id = _data["id"];
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
-            this.birthdate = _data["birthdate"] ? new Date(_data["birthdate"].toString()) : <any>undefined;
+            this.birthdate = _data["birthdate"];
             this.gender = _data["gender"];
             this.emailPrivate = _data["emailPrivate"];
             this.emailAssociaton = _data["emailAssociaton"];
@@ -4133,7 +4133,7 @@ export class UpdatePersonCommand implements IUpdatePersonCommand {
         data["id"] = this.id;
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
-        data["birthdate"] = this.birthdate ? this.birthdate.toISOString() : <any>undefined;
+        data["birthdate"] = this.birthdate;
         data["gender"] = this.gender;
         data["emailPrivate"] = this.emailPrivate;
         data["emailAssociaton"] = this.emailAssociaton;
@@ -4150,7 +4150,7 @@ export interface IUpdatePersonCommand {
     id?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    birthdate?: Date;
+    birthdate?: string;
     gender?: Gender;
     emailPrivate?: string | undefined;
     emailAssociaton?: string | undefined;
@@ -4322,8 +4322,8 @@ export class PositionAssignee implements IPositionAssignee {
     personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 
     constructor(data?: IPositionAssignee) {
         if (data) {
@@ -4340,8 +4340,8 @@ export class PositionAssignee implements IPositionAssignee {
             this.personId = _data["personId"];
             this.firstName = _data["firstName"];
             this.surname = _data["surname"];
-            this.beginDateTime = _data["beginDateTime"] ? new Date(_data["beginDateTime"].toString()) : <any>undefined;
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -4358,8 +4358,8 @@ export class PositionAssignee implements IPositionAssignee {
         data["personId"] = this.personId;
         data["firstName"] = this.firstName;
         data["surname"] = this.surname;
-        data["beginDateTime"] = this.beginDateTime ? this.beginDateTime.toISOString() : <any>undefined;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
@@ -4369,8 +4369,8 @@ export interface IPositionAssignee {
     personId?: number;
     firstName?: string | undefined;
     surname?: string | undefined;
-    beginDateTime?: Date;
-    endDateTime?: Date | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class PositionsWAVm implements IPositionsWAVm {
@@ -4723,7 +4723,7 @@ export interface IUpdatePositionCommand {
 
 export class DeactivatePositionCommand implements IDeactivatePositionCommand {
     id?: number;
-    endDateTime?: Date;
+    endDateTime?: string;
 
     constructor(data?: IDeactivatePositionCommand) {
         if (data) {
@@ -4737,7 +4737,7 @@ export class DeactivatePositionCommand implements IDeactivatePositionCommand {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.endDateTime = _data["endDateTime"] ? new Date(_data["endDateTime"].toString()) : <any>undefined;
+            this.endDateTime = _data["endDateTime"];
         }
     }
 
@@ -4751,14 +4751,14 @@ export class DeactivatePositionCommand implements IDeactivatePositionCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["endDateTime"] = this.endDateTime ? this.endDateTime.toISOString() : <any>undefined;
+        data["endDateTime"] = this.endDateTime;
         return data; 
     }
 }
 
 export interface IDeactivatePositionCommand {
     id?: number;
-    endDateTime?: Date;
+    endDateTime?: string;
 }
 
 export class ReactivatePositionCommand implements IReactivatePositionCommand {
@@ -4800,8 +4800,8 @@ export interface IReactivatePositionCommand {
 export class AssignToPositionCommand implements IAssignToPositionCommand {
     positionId?: number;
     personId?: number;
-    assignmentDateTime?: Date;
-    dismissalDateTime?: Date | undefined;
+    assignmentDateTime?: string;
+    dismissalDateTime?: string | undefined;
 
     constructor(data?: IAssignToPositionCommand) {
         if (data) {
@@ -4816,8 +4816,8 @@ export class AssignToPositionCommand implements IAssignToPositionCommand {
         if (_data) {
             this.positionId = _data["positionId"];
             this.personId = _data["personId"];
-            this.assignmentDateTime = _data["assignmentDateTime"] ? new Date(_data["assignmentDateTime"].toString()) : <any>undefined;
-            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
+            this.assignmentDateTime = _data["assignmentDateTime"];
+            this.dismissalDateTime = _data["dismissalDateTime"];
         }
     }
 
@@ -4832,8 +4832,8 @@ export class AssignToPositionCommand implements IAssignToPositionCommand {
         data = typeof data === 'object' ? data : {};
         data["positionId"] = this.positionId;
         data["personId"] = this.personId;
-        data["assignmentDateTime"] = this.assignmentDateTime ? this.assignmentDateTime.toISOString() : <any>undefined;
-        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
+        data["assignmentDateTime"] = this.assignmentDateTime;
+        data["dismissalDateTime"] = this.dismissalDateTime;
         return data; 
     }
 }
@@ -4841,14 +4841,14 @@ export class AssignToPositionCommand implements IAssignToPositionCommand {
 export interface IAssignToPositionCommand {
     positionId?: number;
     personId?: number;
-    assignmentDateTime?: Date;
-    dismissalDateTime?: Date | undefined;
+    assignmentDateTime?: string;
+    dismissalDateTime?: string | undefined;
 }
 
 export class DismissFromPositionCommand implements IDismissFromPositionCommand {
     positionId?: number;
     personId?: number;
-    dismissalDateTime?: Date;
+    dismissalDateTime?: string;
 
     constructor(data?: IDismissFromPositionCommand) {
         if (data) {
@@ -4863,7 +4863,7 @@ export class DismissFromPositionCommand implements IDismissFromPositionCommand {
         if (_data) {
             this.positionId = _data["positionId"];
             this.personId = _data["personId"];
-            this.dismissalDateTime = _data["dismissalDateTime"] ? new Date(_data["dismissalDateTime"].toString()) : <any>undefined;
+            this.dismissalDateTime = _data["dismissalDateTime"];
         }
     }
 
@@ -4878,7 +4878,7 @@ export class DismissFromPositionCommand implements IDismissFromPositionCommand {
         data = typeof data === 'object' ? data : {};
         data["positionId"] = this.positionId;
         data["personId"] = this.personId;
-        data["dismissalDateTime"] = this.dismissalDateTime ? this.dismissalDateTime.toISOString() : <any>undefined;
+        data["dismissalDateTime"] = this.dismissalDateTime;
         return data; 
     }
 }
@@ -4886,7 +4886,7 @@ export class DismissFromPositionCommand implements IDismissFromPositionCommand {
 export interface IDismissFromPositionCommand {
     positionId?: number;
     personId?: number;
-    dismissalDateTime?: Date;
+    dismissalDateTime?: string;
 }
 
 export interface FileResponse {

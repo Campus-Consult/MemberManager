@@ -35,11 +35,11 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
 
   emitOpenDetails(event: MouseEvent) {}
 
-  dateSinceUntilToString(since: Date, until: Date | undefined) {
+  dateSinceUntilToString(since: string, until: string | undefined) {
     if (!until) {
-      return "Seit " + since.toLocaleDateString();
+      return "Seit " + new Date(since).toLocaleDateString();
     } else {
-      return since.toLocaleDateString() + " - " + until.toLocaleDateString();
+      return new Date(since).toLocaleDateString() + " - " + new Date(until).toLocaleDateString();
     }
   }
 
@@ -100,6 +100,6 @@ export interface HistoryData {
   /** ID of the Element, for Details */
   id: number;
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
 }

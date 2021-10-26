@@ -20,7 +20,7 @@
     <ng-container matColumnDef="since">
       <th mat-header-cell *matHeaderCellDef>Seit</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.beginDateTime?.toLocaleDateString() }}
+        {{ element.beginDateTime | date : shortDate }}
       </td>
     </ng-container>
 

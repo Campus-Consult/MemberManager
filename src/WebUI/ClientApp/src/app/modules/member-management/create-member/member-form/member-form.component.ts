@@ -69,7 +69,8 @@ export class MemberFormComponent implements OnInit {
       this.personalForm.setValue({
         firstName: this.memberData.firstName,
         lastName: this.memberData.surname,
-        birthdate: this.memberData.birthdate || '',
+        // hack to remove the time
+        birthdate: this.memberData.birthdate?.slice(0,10) || '',
         gender: this.memberData.gender,
         emailPrivate: this.memberData.emailPrivate || '',
         emailAssociaton: this.memberData.emailAssociaton || '',

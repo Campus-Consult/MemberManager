@@ -7,9 +7,7 @@
   <search-select *ngIf="reassignSelectSuggestions" [selectSuggestions]="reassignSelectSuggestions" placeholder="{{reassignLabel}}" formControlName="reassignedElement"></search-select>
   <br />
   <mat-form-field>
-    <input matInput placeholder="Dismissal date" formControlName="dismissalDate" [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <input matInput placeholder="Dismissal date" formControlName="dismissalDate" type="date">
     <!--<mat-error *ngIf="assignDate.hasError('required')">
       Datum ist Pflichtfeld
     </mat-error>-->

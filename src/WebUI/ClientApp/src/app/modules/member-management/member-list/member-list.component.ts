@@ -102,11 +102,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.refresh().subscribe(() => {
-        this._snackBar.open("Mitgliederliste neugeladen", "YAY!", {
-          duration: 2000,
-        });
-      });
+      this.onRefresh();
     });
   }
 

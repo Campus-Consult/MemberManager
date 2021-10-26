@@ -10,9 +10,8 @@ describe('PositionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      declarations: [ PositionComponent ]
-    })
-    .compileComponents();
+      declarations: [PositionComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

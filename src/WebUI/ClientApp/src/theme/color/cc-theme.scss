@@ -7,10 +7,12 @@
 $cc-primary: mat-palette($md-ccblau, 500);
 $cc-accent: mat-palette($md-ccgruen, 500);
 $cc-warn: mat-palette($md-warncolor);
-$cc-theme: mat-light-theme((
-  color: (
-    primary: $cc-primary,
-    accent: $cc-accent,
-    warn: $cc-warn,
+$cc-theme: mat-light-theme(
+  (
+    color: (
+      primary: $cc-primary,
+      accent: $cc-accent,
+      warn: $cc-warn,
+    ),
   )
-));
+);

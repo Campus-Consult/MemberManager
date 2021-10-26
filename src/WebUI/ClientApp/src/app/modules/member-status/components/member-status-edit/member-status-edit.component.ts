@@ -1,18 +1,16 @@
-import {
-  ChangeDetectionStrategy, Component, Inject
-} from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   IUpdateMemberStatusCommand,
   MemberStatusClient,
-  UpdateMemberStatusCommand
-} from "src/app/membermanager-api";
+  UpdateMemberStatusCommand,
+} from 'src/app/membermanager-api';
 import { MemberStatusDetailVm } from './../../../../membermanager-api';
 
 @Component({
-  selector: "app-member-status-edit",
-  templateUrl: "./member-status-edit.component.html",
-  styleUrls: ["./member-status-edit.component.scss"],
+  selector: 'app-member-status-edit',
+  templateUrl: './member-status-edit.component.html',
+  styleUrls: ['./member-status-edit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemberStatusEditComponent {
@@ -25,7 +23,10 @@ export class MemberStatusEditComponent {
     private memberStatusClient: MemberStatusClient,
     @Inject(MAT_DIALOG_DATA) public data: { memberStatus: MemberStatusDetailVm }
   ) {
-    this.fromData = { memberStatusId: data.memberStatus.id, name: data.memberStatus.name };
+    this.fromData = {
+      memberStatusId: data.memberStatus.id,
+      name: data.memberStatus.name,
+    };
   }
 
   onNoClick(): void {
@@ -34,15 +35,17 @@ export class MemberStatusEditComponent {
 
   editMemberStatus() {
     const command = new UpdateMemberStatusCommand(this.fromData);
-    this.errmsg = "";
-    this.memberStatusClient.update(this.data.memberStatus.id,command).subscribe(
-      (response) => {
-        this.dialogRef.close(this.fromData);
-      },
-      (error) => {
-        this.handleError(error);
-      }
-    );
+    this.errmsg = '';
+    this.memberStatusClient
+      .update(this.data.memberStatus.id, command)
+      .subscribe(
+        (response) => {
+          this.dialogRef.close(this.fromData);
+        },
+        (error) => {
+          this.handleError(error);
+        }
+      );
   }
 
   disableEdit(): boolean {
@@ -51,10 +54,10 @@ export class MemberStatusEditComponent {
 
   handleError(error) {
     console.error(error);
-    if (typeof error == "string") {
+    if (typeof error == 'string') {
       this.errmsg = error;
     } else {
-      this.errmsg = "Failed to edit Member Status";
+      this.errmsg = 'Failed to edit Member Status';
     }
   }
 }

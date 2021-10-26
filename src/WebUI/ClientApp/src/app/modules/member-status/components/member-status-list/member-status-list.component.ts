@@ -1,21 +1,27 @@
 import { CreateMemberStatusCommand } from './../../../../membermanager-api';
 import { MemberStatusCreateComponent } from './../member-status-create/member-status-create.component';
-import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
+import {
+  MemberStatusClient,
+  MemberStatusLookupDto,
+} from '../../../../membermanager-api';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 
 @Component({
   selector: 'app-member-status-list',
   templateUrl: './member-status-list.component.html',
-  styleUrls: [
-    './member-status-list.component.scss']
+  styleUrls: ['./member-status-list.component.scss'],
 })
-
 export class MemberStatusListComponent implements AfterViewInit {
-
   private sort: MatSort;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
@@ -23,10 +29,10 @@ export class MemberStatusListComponent implements AfterViewInit {
     if (this.dataSource) this.dataSource.sort = this.sort;
   }
 
-  @ViewChild(DataTableComponent) dataTable: DataTableComponent<MemberStatusLookupDto>;
+  @ViewChild(DataTableComponent)
+  dataTable: DataTableComponent<MemberStatusLookupDto>;
 
   @Output() onSelectEvent = new EventEmitter<MemberStatusLookupDto>();
-
 
   memberStatus: MemberStatusLookupDto[];
   dataSource: MatTableDataSource<MemberStatusLookupDto>;
@@ -34,17 +40,21 @@ export class MemberStatusListComponent implements AfterViewInit {
 
   selected: MemberStatusLookupDto;
 
-  constructor(private memberStatusClient: MemberStatusClient, public dialog: MatDialog) { }
+  constructor(
+    private memberStatusClient: MemberStatusClient,
+    public dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
-
     this.memberStatusClient.get().subscribe(
-      result => {
+      (result) => {
         this.memberStatus = result.memberStatus;
-        this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(result.memberStatus);
+        this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(
+          result.memberStatus
+        );
         this.dataSource.sort = this.sort;
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 
@@ -55,23 +65,25 @@ export class MemberStatusListComponent implements AfterViewInit {
 
   reload() {
     this.memberStatusClient.get().subscribe(
-      result => {
+      (result) => {
         this.memberStatus = result.memberStatus;
-        this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(result.memberStatus);
+        this.dataSource = new MatTableDataSource<MemberStatusLookupDto>(
+          result.memberStatus
+        );
         this.dataSource.sort = this.sort;
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 
-  openCreateDialog(): void  {
+  openCreateDialog(): void {
     const dialogRef = this.dialog.open(MemberStatusCreateComponent, {
-      width: '250px'
+      width: '250px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.reload()
+        this.reload();
       }
     });
   }

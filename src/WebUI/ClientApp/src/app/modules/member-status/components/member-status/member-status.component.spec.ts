@@ -10,9 +10,8 @@ describe('MemberStatusComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      declarations: [ MemberStatusComponent ]
-    })
-    .compileComponents();
+      declarations: [MemberStatusComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

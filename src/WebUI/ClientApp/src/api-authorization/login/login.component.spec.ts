@@ -1,6 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, convertToParamMap, Params, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  UrlSegment,
+  convertToParamMap,
+  Params,
+  Router,
+} from '@angular/router';
 import { of } from 'rxjs';
 import { LoginActions } from '../api-authorization.constants';
 import { HttpParams } from '@angular/common/http';
@@ -12,7 +19,7 @@ import { LoginComponent } from './login.component';
 
 class RouterStub {
   url = '';
-  navigate(commands: any[], extras?: any) { }
+  navigate(commands: any[], extras?: any) {}
 }
 
 describe('LoginComponent', () => {
@@ -33,18 +40,22 @@ describe('LoginComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([
-          { path: 'authentication/login-failed', component: HomeComponent }
-        ])],
+          { path: 'authentication/login-failed', component: HomeComponent },
+        ]),
+      ],
       declarations: [LoginComponent, HomeComponent],
-      providers: [{
-        provide: ActivatedRoute, useValue: {
-          snapshot: {
-            paramMap: convertToParamMap(tempParams),
-            url: urlSegments,
-            queryParams: tempParams
-          }
-        }
-      }]
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap(tempParams),
+              url: urlSegments,
+              queryParams: tempParams,
+            },
+          },
+        },
+      ],
     }).compileComponents();
 
     router = TestBed.get(Router);
@@ -57,7 +68,8 @@ describe('LoginComponent', () => {
     let authService = TestBed.get(AuthorizeService);
 
     spyOn(authService, 'ensureUserManagerInitialized').and.returnValue(
-      Promise.resolve());
+      Promise.resolve()
+    );
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;

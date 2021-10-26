@@ -10,9 +10,8 @@ fdescribe('PositionDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PositionDetailsComponent],
-      imports: [HttpClientTestingModule]
-    })
-    .compileComponents();
+      imports: [HttpClientTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

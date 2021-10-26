@@ -3,14 +3,14 @@ import {
   CareerLevelDto,
   CreateCareerLevelCommand,
   UpdateCareerLevelCommand,
-} from "./../../../membermanager-api";
-import { Component, Inject, Input, OnInit } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+} from './../../../membermanager-api';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  templateUrl: "./create-career-level-dialog.component.html",
-  styleUrls: ["./create-career-level-dialog.component.scss"],
+  templateUrl: './create-career-level-dialog.component.html',
+  styleUrls: ['./create-career-level-dialog.component.scss'],
 })
 export class CreateCareerLevelDialogComponent implements OnInit {
   createForm = this.fb.group({
@@ -47,11 +47,11 @@ export class CreateCareerLevelDialogComponent implements OnInit {
   }
 
   get name() {
-    return this.createForm.get("name").value;
+    return this.createForm.get('name').value;
   }
 
   get shortName() {
-    return this.createForm.get("shortName").value;
+    return this.createForm.get('shortName').value;
   }
 
   save() {

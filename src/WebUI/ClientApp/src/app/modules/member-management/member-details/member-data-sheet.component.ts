@@ -8,19 +8,19 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-} from "@angular/core";
+} from '@angular/core';
 import {
   IPersonWithBasicInfoLookupDto,
   IPersonDetailVm,
   PeopleClient,
-} from "src/app/membermanager-api";
+} from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: "app-person-details",
-  templateUrl: "./member-data-sheet.component.html",
-  styleUrls: ["./member-data-sheet.component.scss"],
+  selector: 'app-person-details',
+  templateUrl: './member-data-sheet.component.html',
+  styleUrls: ['./member-data-sheet.component.scss'],
 })
 export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Input()
@@ -39,17 +39,21 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   /**
    * if set text will be displayed, below loading
    */
-  showLoadingText?: string
+  showLoadingText?: string;
 
-  constructor(private personApi: PeopleClient, public dialog: MatDialog, private snackBar: MatSnackBar) {}
+  constructor(
+    private personApi: PeopleClient,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.displayedName = "No Person Selected";
+    this.displayedName = 'No Person Selected';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     for (const propName in changes) {
-      if (propName === "personId") {
+      if (propName === 'personId') {
         const chng = changes[propName];
         this.person = chng.currentValue;
       }
@@ -71,12 +75,12 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   }
 
   getFullName(): string {
-    let fullname = "";
+    let fullname = '';
     if (this.person.fistName) {
       fullname = fullname + this.person.fistName;
     }
     if (this.person.fistName) {
-      fullname = fullname + " " + this.person.surname;
+      fullname = fullname + ' ' + this.person.surname;
     }
     return fullname;
   }
@@ -88,7 +92,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   onShowHistoryButtonClicked() {
     let dialogRef = this.dialog.open(HistoryDialogComponent, {
       data: { person: this.personDetails },
-      width: "600px",
+      width: '600px',
     });
   }
 
@@ -103,11 +107,14 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   openDeleteDialog() {
     const memberName = `${this.personDetails.firstName} ${this.personDetails.surname}`;
-    const content = `Willst du Mitglied ${memberName} unwiederuflich löschen?` ;
-    const dialogRef = this.dialog.open(DeleteDialogComponent,{role: 'alertdialog', data: { title: `${memberName} löschen?`, content: content },});
-    dialogRef.afterClosed().subscribe(result => {
+    const content = `Willst du Mitglied ${memberName} unwiederuflich löschen?`;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      role: 'alertdialog',
+      data: { title: `${memberName} löschen?`, content: content },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.onDelete()
+        this.onDelete();
       }
     });
   }

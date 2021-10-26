@@ -7,25 +7,26 @@ import {
   OnChanges,
   OnInit,
   Output,
-} from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   AssigneeDto,
   MemberStatusClient,
   MemberStatusDetailVm,
-} from "../../../../membermanager-api";
-import { MemberStatusAssignDialogComponent } from "../member-status-assign-dialog/member-status-assign-dialog.component";
-import { MemberStatusDismissDialogComponent } from "../member-status-dismiss-dialog/member-status-dismiss-dialog.component";
-import { MemberStatusHistoryDialogComponent } from "../member-status-history-dialog/member-status-history-dialog.component";
+} from '../../../../membermanager-api';
+import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
+import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
+import { MemberStatusHistoryDialogComponent } from '../member-status-history-dialog/member-status-history-dialog.component';
 
 @Component({
-  selector: "app-member-status-details",
-  templateUrl: "./member-status-details.component.html",
-  styleUrls: ["./member-status-details.component.scss"],
+  selector: 'app-member-status-details',
+  templateUrl: './member-status-details.component.html',
+  styleUrls: ['./member-status-details.component.scss'],
 })
 export class MemberStatusDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit {
+  implements OnInit, OnChanges, AfterViewInit
+{
   @Input() memberStatusID: number;
   @Output() onReloadRequired = new EventEmitter();
 
@@ -33,7 +34,7 @@ export class MemberStatusDetailsComponent
 
   assignees: AssigneeDto[];
   dataSource: MatTableDataSource<AssigneeDto>;
-  columns: string[] = ["name", "since", "till"];
+  columns: string[] = ['name', 'since', 'till'];
 
   constructor(
     public dialog: MatDialog,
@@ -75,7 +76,7 @@ export class MemberStatusDetailsComponent
   onAssignPersonButtonClicked() {
     let dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
       data: {
-        description: "Assign to " + this.memberStatus.name,
+        description: 'Assign to ' + this.memberStatus.name,
         memberStatus: this.memberStatus,
       },
     });
@@ -92,7 +93,7 @@ export class MemberStatusDetailsComponent
     if (disabled) {
       let dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
         data: {
-          description: "Dismiss from " + this.memberStatus.name,
+          description: 'Dismiss from ' + this.memberStatus.name,
           memberStatus: this.memberStatus,
         },
       });
@@ -103,17 +104,17 @@ export class MemberStatusDetailsComponent
         }
       });
     } else {
-      alert("Nothing to dismiss");
+      alert('Nothing to dismiss');
     }
   }
 
   onShowHistoryButtonClicked() {
     let dialogRef = this.dialog.open(MemberStatusHistoryDialogComponent, {
       data: {
-        description: "History of " + this.memberStatus.name,
+        description: 'History of ' + this.memberStatus.name,
         memberStatus: this.memberStatus,
       },
-      width: "600px",
+      width: '600px',
     });
   }
 

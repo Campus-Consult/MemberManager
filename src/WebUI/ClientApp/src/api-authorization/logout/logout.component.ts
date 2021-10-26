@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationResultStatus, AuthorizeService } from '../authorize.service';
+import {
+  AuthenticationResultStatus,
+  AuthorizeService,
+} from '../authorize.service';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
+import {
+  LogoutActions,
+  ApplicationPaths,
+  ReturnUrlType,
+} from '../api-authorization.constants';
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -11,7 +18,7 @@ import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authoriza
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.scss']
+  styleUrls: ['./logout.component.scss'],
 })
 export class LogoutComponent implements OnInit {
   public message = new BehaviorSubject<string>(null);
@@ -19,7 +26,8 @@ export class LogoutComponent implements OnInit {
   constructor(
     private authorizeService: AuthorizeService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
@@ -29,7 +37,9 @@ export class LogoutComponent implements OnInit {
           await this.logout(this.getReturnUrl());
         } else {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
-          this.message.next('The logout was not initiated from within the page.');
+          this.message.next(
+            'The logout was not initiated from within the page.'
+          );
         }
 
         break;
@@ -46,9 +56,10 @@ export class LogoutComponent implements OnInit {
 
   private async logout(returnUrl: string): Promise<void> {
     const state: INavigationState = { returnUrl };
-    const isauthenticated = await this.authorizeService.isAuthenticated().pipe(
-      take(1)
-    ).toPromise();
+    const isauthenticated = await this.authorizeService
+      .isAuthenticated()
+      .pipe(take(1))
+      .toPromise();
     if (isauthenticated) {
       const result = await this.authorizeService.signOut(state);
       switch (result.status) {
@@ -89,23 +100,31 @@ export class LogoutComponent implements OnInit {
 
   private async navigateToReturnUrl(returnUrl: string) {
     await this.router.navigateByUrl(returnUrl, {
-      replaceUrl: true
+      replaceUrl: true,
     });
   }
 
   private getReturnUrl(state?: INavigationState): string {
-    const fromQuery = (this.activatedRoute.snapshot.queryParams as INavigationState).returnUrl;
+    const fromQuery = (
+      this.activatedRoute.snapshot.queryParams as INavigationState
+    ).returnUrl;
     // If the url is comming from the query string, check that is either
     // a relative url or an absolute url
-    if (fromQuery &&
-      !(fromQuery.startsWith(`${window.location.origin}/`) ||
-        /\/[^\/].*/.test(fromQuery))) {
+    if (
+      fromQuery &&
+      !(
+        fromQuery.startsWith(`${window.location.origin}/`) ||
+        /\/[^\/].*/.test(fromQuery)
+      )
+    ) {
       // This is an extra check to prevent open redirects.
-      throw new Error('Invalid return url. The return url needs to have the same origin as the current page.');
+      throw new Error(
+        'Invalid return url. The return url needs to have the same origin as the current page.'
+      );
     }
-    return (state && state.returnUrl) ||
-      fromQuery ||
-      ApplicationPaths.LoggedOut;
+    return (
+      (state && state.returnUrl) || fromQuery || ApplicationPaths.LoggedOut
+    );
   }
 }
 

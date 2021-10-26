@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, Inject, OnInit } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   IUpdatePersonCommand,
   PeopleClient,
   PersonDetailVm,
   UpdatePersonCommand,
-} from "src/app/membermanager-api";
-import { CreateMemberComponent } from "../create-member/create-member.component";
+} from 'src/app/membermanager-api';
+import { CreateMemberComponent } from '../create-member/create-member.component';
 
 /**
  * Edit People Modal
@@ -14,16 +14,17 @@ import { CreateMemberComponent } from "../create-member/create-member.component"
  * most Logic in CreatePersonComponent
  */
 @Component({
-  selector: "app-edit-pesonal-data",
-  templateUrl: "./edit-member-data.component.html",
-  styleUrls: ["./edit-member-data.component.scss"],
+  selector: 'app-edit-pesonal-data',
+  templateUrl: './edit-member-data.component.html',
+  styleUrls: ['./edit-member-data.component.scss'],
 })
 export class EditMemberDataComponent
   extends CreateMemberComponent
-  implements OnInit, AfterViewInit {
+  implements OnInit, AfterViewInit
+{
   memberdata: PersonDetailVm;
 
-  errorHintTitle = "Änderungen nicht übernommen";
+  errorHintTitle = 'Änderungen nicht übernommen';
 
   constructor(
     public dialogRef: MatDialogRef<CreateMemberComponent>,

@@ -8,6 +8,8 @@ The application is a asp.net core web-api with an Angular frontend.
 
 The projects architecture is based on the clean architecture solution template by Jason Tayler (https://jasontaylor.dev/clean-architecture-getting-started/)
 
+The angular code is formatted using prettier, to apply this format use `npm run format:fix` in the frontend directory (src/WebUI/ClientApp)
+
 ## Configuration
 This has to be added to the secret settings:
 ```

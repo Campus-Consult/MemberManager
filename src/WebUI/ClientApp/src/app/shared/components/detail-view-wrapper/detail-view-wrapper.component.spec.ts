@@ -8,9 +8,8 @@ describe('DetailViewWrapperComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DetailViewWrapperComponent ]
-    })
-    .compileComponents();
+      declarations: [DetailViewWrapperComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

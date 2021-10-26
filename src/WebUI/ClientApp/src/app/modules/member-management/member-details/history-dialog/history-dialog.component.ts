@@ -3,15 +3,15 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Inject,
-} from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { IPersonDetailVm } from "src/app/membermanager-api";
-import { HistoryPanelsComponent } from "../history-panels/history-panels.component";
+} from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IPersonDetailVm } from 'src/app/membermanager-api';
+import { HistoryPanelsComponent } from '../history-panels/history-panels.component';
 
 @Component({
-  selector: "app-history-dialog",
-  templateUrl: "./history-dialog.component.html",
-  styleUrls: ["./history-dialog.component.scss"],
+  selector: 'app-history-dialog',
+  templateUrl: './history-dialog.component.html',
+  styleUrls: ['./history-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistoryDialogComponent implements OnInit {
@@ -25,7 +25,7 @@ export class HistoryDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  close(){
+  close() {
     this.dialogRef.close();
   }
 }

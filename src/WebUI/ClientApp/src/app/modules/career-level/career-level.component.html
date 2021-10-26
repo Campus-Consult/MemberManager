@@ -1,10 +1,15 @@
 <div fxLayout="row" fxLayoutGap="10px">
-
-    <div fxFlex="60%">
-      <app-career-level-list (onSelectEvent)="onListSelection($event)"></app-career-level-list>
-    </div>
-  
-    <div fxFlex="40%">
-      <app-career-level-details *ngIf="selectedCareerLevel" [careerLevelID]="selectedCareerLevel?.id" (onReloadRequired)="reloadRequired()"></app-career-level-details>
-    </div>
+  <div fxFlex="60%">
+    <app-career-level-list
+      (onSelectEvent)="onListSelection($event)"
+    ></app-career-level-list>
   </div>
+
+  <div fxFlex="40%">
+    <app-career-level-details
+      *ngIf="selectedCareerLevel"
+      [careerLevelID]="selectedCareerLevel?.id"
+      (onReloadRequired)="reloadRequired()"
+    ></app-career-level-details>
+  </div>
+</div>

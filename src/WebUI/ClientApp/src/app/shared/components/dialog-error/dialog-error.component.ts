@@ -1,26 +1,31 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-dialog-error',
   templateUrl: './dialog-error.component.html',
   styleUrls: ['./dialog-error.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogErrorComponent implements OnInit, OnChanges {
-
   @Input() errors;
 
   errorMsg;
   errorMsgList: string[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-    
+  ngOnInit(): void {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.errors) {
-      this.handleError(this.errors)
+      this.handleError(this.errors);
     }
   }
 
@@ -32,12 +37,14 @@ export class DialogErrorComponent implements OnInit, OnChanges {
     }
 
     if (parsedErrorObject) {
-      this.errorMsg = parsedErrorObject?.title + ":";
+      this.errorMsg = parsedErrorObject?.title + ':';
       if (parsedErrorObject.errors) {
         this.errorMsgList = [];
         for (const key in parsedErrorObject.errors) {
-          if (Object.prototype.hasOwnProperty.call(parsedErrorObject.errors, key)) {
-            this.errorMsgList.push( key + ': '+ parsedErrorObject.errors[key]);
+          if (
+            Object.prototype.hasOwnProperty.call(parsedErrorObject.errors, key)
+          ) {
+            this.errorMsgList.push(key + ': ' + parsedErrorObject.errors[key]);
           }
         }
       }
@@ -45,5 +52,4 @@ export class DialogErrorComponent implements OnInit, OnChanges {
       console.error(error);
     }
   }
-
 }

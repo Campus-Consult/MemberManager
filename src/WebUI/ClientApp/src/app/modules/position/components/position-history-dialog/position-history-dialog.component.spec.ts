@@ -8,9 +8,8 @@ describe('PositionAssignDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PositionHistoryDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [PositionHistoryDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

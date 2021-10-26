@@ -2,20 +2,20 @@
   <tbody>
     <ng-container *ngIf="memberDetails; else elseTemplate">
       <tr *ngFor="let item of rowLabels">
-        <td class="font-weight-bold" width="200">{{item}}</td>
+        <td class="font-weight-bold" width="200">{{ item }}</td>
         <td colspan="2">
-          {{rowLabelDateMap.get(item)}}
+          {{ rowLabelDateMap.get(item) }}
         </td>
       </tr>
     </ng-container>
     <ng-template #elseTemplate>
       <tr *ngFor="let item of rowLabels">
-        <td class="font-weight-bold" width="200">{{item}}</td>
+        <td class="font-weight-bold" width="200">{{ item }}</td>
         <td colspan="2">
           <app-skeleton-loader
-          [value]="undefined"
-          type="line"
-        ></app-skeleton-loader>
+            [value]="undefined"
+            type="line"
+          ></app-skeleton-loader>
         </td>
       </tr>
     </ng-template>

@@ -1,7 +1,11 @@
-<h2 mat-dialog-title>{{description}}</h2>
+<h2 mat-dialog-title>{{ description }}</h2>
 
-<table *ngIf="history?.assignees.length > 0" mat-table id="historyTable" [dataSource]="dataSource">
-
+<table
+  *ngIf="history?.assignees.length > 0"
+  mat-table
+  id="historyTable"
+  [dataSource]="dataSource"
+>
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Name</th>
     <td mat-cell *matCellDef="let element">{{ element.name }}</td>
@@ -9,14 +13,18 @@
 
   <ng-container matColumnDef="since">
     <th mat-header-cell *matHeaderCellDef>Since</th>
-    <td mat-cell *matCellDef="let element">{{ element.beginDateTime?.toLocaleDateString() }}</td>
+    <td mat-cell *matCellDef="let element">
+      {{ element.beginDateTime?.toLocaleDateString() }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="till">
     <th mat-header-cell *matHeaderCellDef>Till</th>
-    <td mat-cell *matCellDef="let element">{{ element.endDateTime?.toLocaleDateString() }}</td>
+    <td mat-cell *matCellDef="let element">
+      {{ element.endDateTime?.toLocaleDateString() }}
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
 </table>

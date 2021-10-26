@@ -6,33 +6,33 @@ import {
   OnInit,
   Output,
   ViewChild,
-} from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { Observable } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import {
   IPersonWithBasicInfoLookupDto,
   PeopleClient,
   IPeopleWithBasicInfoVm,
   PersonWithBasicInfoLookupDto,
-} from "src/app/membermanager-api";
-import { CreateMemberComponent } from "../create-member/create-member.component";
+} from 'src/app/membermanager-api';
+import { CreateMemberComponent } from '../create-member/create-member.component';
 
 export const PERSON_LIST_POSSIBLE_COLUMNS = [
-  "fistName",
-  "surname",
-  "currentMemberStatus",
-  "currentCareerLevel",
-  "currentPositions",
+  'fistName',
+  'surname',
+  'currentMemberStatus',
+  'currentCareerLevel',
+  'currentPositions',
 ];
 
 @Component({
-  selector: "app-person-list",
-  templateUrl: "./member-list.component.html",
-  styleUrls: ["./member-list.component.scss"],
+  selector: 'app-person-list',
+  templateUrl: './member-list.component.html',
+  styleUrls: ['./member-list.component.scss'],
 })
 export class MemberListComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<PersonWithBasicInfoLookupDto>;
@@ -45,7 +45,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
 
   // propertys for handling view when no dataSource
   loadingTable: boolean = true;
-  loadingError = "Error Happened";
+  loadingError = 'Error Happened';
 
   private sort: MatSort;
   @ViewChild(MatSort) set matSort(ms: MatSort) {
@@ -97,8 +97,8 @@ export class MemberListComponent implements OnInit, AfterViewInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(CreateMemberComponent, {
-      maxHeight: "800px",
-      width: "600px",
+      maxHeight: '800px',
+      width: '600px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -109,15 +109,15 @@ export class MemberListComponent implements OnInit, AfterViewInit {
   onRefresh() {
     this.refresh().subscribe(
       () => {
-        this._snackBar.open("Mitgliederliste neugeladen", "YAY!", {
+        this._snackBar.open('Mitgliederliste neugeladen', 'YAY!', {
           duration: 2000,
         });
       },
       (err) => {
         console.error(err);
         this._snackBar.open(
-          "Mitgliederliste neuladen fehlgeschlagen",
-          "Nooo!",
+          'Mitgliederliste neuladen fehlgeschlagen',
+          'Nooo!',
           {
             duration: 2000,
           }

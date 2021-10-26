@@ -1,16 +1,27 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
-import { MemberStatusClient, MemberStatusLookupDto, MemberStatusHistoryVm, AssigneeDto } from '../../../../membermanager-api';
+import {
+  MatColumnDef,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {
+  MemberStatusClient,
+  MemberStatusLookupDto,
+  MemberStatusHistoryVm,
+  AssigneeDto,
+} from '../../../../membermanager-api';
 
 @Component({
   selector: 'app-member-status-history-dialog',
   templateUrl: './member-status-history-dialog.component.html',
-  styleUrls: ['./member-status-history-dialog.component.scss']
+  styleUrls: ['./member-status-history-dialog.component.scss'],
 })
 export class MemberStatusHistoryDialogComponent implements OnInit {
-
   description: string;
 
   memberStatus: MemberStatusLookupDto;
@@ -19,18 +30,17 @@ export class MemberStatusHistoryDialogComponent implements OnInit {
   dataSource: MatTableDataSource<AssigneeDto>;
   columns: string[] = ['name', 'since', 'till'];
 
-
   constructor(
     private dialogRef: MatDialogRef<MemberStatusHistoryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { description: string, memberStatus: MemberStatusLookupDto },
+    @Inject(MAT_DIALOG_DATA)
+    data: { description: string; memberStatus: MemberStatusLookupDto },
     private memberStatusClient: MemberStatusClient
   ) {
-
     this.description = data.description;
-    this.memberStatus = data.memberStatus;    
+    this.memberStatus = data.memberStatus;
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.fetchHistory();
   }
 
@@ -40,11 +50,11 @@ export class MemberStatusHistoryDialogComponent implements OnInit {
 
   fetchHistory() {
     this.memberStatusClient.getHistory(this.memberStatus.id).subscribe(
-      result => {
+      (result) => {
         this.history = result;
         this.dataSource = new MatTableDataSource<AssigneeDto>(result.assignees);
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 }

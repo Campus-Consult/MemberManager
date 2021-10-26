@@ -1,20 +1,26 @@
-import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { PositionClient, PositionLookupDto } from '../../../../membermanager-api';
+import {
+  PositionClient,
+  PositionLookupDto,
+} from '../../../../membermanager-api';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { PositionCreateDialogComponent } from '../position-create-dialog/position-create-dialog.component';
 
 @Component({
   selector: 'app-position-list',
   templateUrl: './position-list.component.html',
-  styleUrls: [
-    './position-list.component.scss']
+  styleUrls: ['./position-list.component.scss'],
 })
-
 export class PositionListComponent implements AfterViewInit {
-
   private sort: MatSort;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
@@ -22,11 +28,11 @@ export class PositionListComponent implements AfterViewInit {
     if (this.dataSource) this.dataSource.sort = this.sort;
   }
 
-  @ViewChild(DataTableComponent) dataTable: DataTableComponent<PositionLookupDto>;
+  @ViewChild(DataTableComponent)
+  dataTable: DataTableComponent<PositionLookupDto>;
 
   @Output() onSelectEvent = new EventEmitter<PositionLookupDto>();
   @Output() onReloadRequired = new EventEmitter();
-
 
   positions: PositionLookupDto[];
   dataSource: MatTableDataSource<PositionLookupDto>;
@@ -34,17 +40,21 @@ export class PositionListComponent implements AfterViewInit {
 
   selected: PositionLookupDto;
 
-  constructor(public dialog: MatDialog, private positionClient: PositionClient) { }
+  constructor(
+    public dialog: MatDialog,
+    private positionClient: PositionClient
+  ) {}
 
   ngAfterViewInit() {
-
     this.positionClient.get().subscribe(
-      result => {
+      (result) => {
         this.positions = result.positions;
-        this.dataSource = new MatTableDataSource<PositionLookupDto>(result.positions);
+        this.dataSource = new MatTableDataSource<PositionLookupDto>(
+          result.positions
+        );
         this.dataSource.sort = this.sort;
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 
@@ -55,12 +65,14 @@ export class PositionListComponent implements AfterViewInit {
 
   reload() {
     this.positionClient.get().subscribe(
-      result => {
+      (result) => {
         this.positions = result.positions;
-        this.dataSource = new MatTableDataSource<PositionLookupDto>(result.positions);
+        this.dataSource = new MatTableDataSource<PositionLookupDto>(
+          result.positions
+        );
         this.dataSource.sort = this.sort;
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 
@@ -75,14 +87,13 @@ export class PositionListComponent implements AfterViewInit {
 
   onCreate() {
     let dialogRef = this.dialog.open(PositionCreateDialogComponent, {
-      data: { description: "Create Position" }
+      data: { description: 'Create Position' },
     });
 
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          this.reloadRequired();
-        }
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.reloadRequired();
+      }
+    });
   }
 }

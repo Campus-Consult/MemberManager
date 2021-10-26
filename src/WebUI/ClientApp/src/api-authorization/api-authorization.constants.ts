@@ -4,13 +4,13 @@ export const ReturnUrlType = 'returnUrl';
 
 export const QueryParameterNames = {
   ReturnUrl: ReturnUrlType,
-  Message: 'message'
+  Message: 'message',
 };
 
 export const LogoutActions = {
   LogoutCallback: 'logout-callback',
   Logout: 'logout',
-  LoggedOut: 'logged-out'
+  LoggedOut: 'logged-out',
 };
 
 export const LoginActions = {
@@ -18,7 +18,7 @@ export const LoginActions = {
   LoginCallback: 'login-callback',
   LoginFailed: 'login-failed',
   Profile: 'profile',
-  Register: 'register'
+  Register: 'register',
 };
 
 let applicationPaths: ApplicationPathsType = {
@@ -41,7 +41,7 @@ let applicationPaths: ApplicationPathsType = {
   LoggedOutPathComponents: [],
   LogOutCallbackPathComponents: [],
   IdentityRegisterPath: '/Identity/Account/Register',
-  IdentityManagePath: '/Identity/Account/Manage'
+  IdentityManagePath: '/Identity/Account/Manage',
 };
 
 applicationPaths = {
@@ -52,7 +52,7 @@ applicationPaths = {
   ProfilePathComponents: applicationPaths.Profile.split('/'),
   LogOutPathComponents: applicationPaths.LogOut.split('/'),
   LoggedOutPathComponents: applicationPaths.LoggedOut.split('/'),
-  LogOutCallbackPathComponents: applicationPaths.LogOutCallback.split('/')
+  LogOutCallbackPathComponents: applicationPaths.LogOutCallback.split('/'),
 };
 
 interface ApplicationPathsType {

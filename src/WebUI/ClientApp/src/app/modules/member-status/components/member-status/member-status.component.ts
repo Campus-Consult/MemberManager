@@ -7,18 +7,19 @@ import { MemberStatusListComponent } from '../member-status-list/member-status-l
 @Component({
   selector: 'app-member-status',
   templateUrl: './member-status.component.html',
-  styleUrls: ['./member-status.component.scss']
+  styleUrls: ['./member-status.component.scss'],
 })
 export class MemberStatusComponent {
-
-  @ViewChild(MemberStatusListComponent) memberStatusList: MemberStatusListComponent;
-  @ViewChild(MemberStatusDetailsComponent) memberStatusDetails: MemberStatusDetailsComponent;
+  @ViewChild(MemberStatusListComponent)
+  memberStatusList: MemberStatusListComponent;
+  @ViewChild(MemberStatusDetailsComponent)
+  memberStatusDetails: MemberStatusDetailsComponent;
 
   debug: boolean = false;
 
   selectedMemberStatus: MemberStatusLookupDto;
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onListSelection(selectedMemberStatus: MemberStatusLookupDto) {
     this.selectedMemberStatus = selectedMemberStatus;

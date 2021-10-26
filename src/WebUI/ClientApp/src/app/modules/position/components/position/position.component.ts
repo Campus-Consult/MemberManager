@@ -7,18 +7,18 @@ import { PositionListComponent } from '../position-list/position-list.component'
 @Component({
   selector: 'app-position',
   templateUrl: './position.component.html',
-  styleUrls: ['./position.component.scss']
+  styleUrls: ['./position.component.scss'],
 })
 export class PositionComponent {
-
   @ViewChild(PositionListComponent) positionList: PositionListComponent;
-  @ViewChild(PositionDetailsComponent) positionDetails: PositionDetailsComponent;
+  @ViewChild(PositionDetailsComponent)
+  positionDetails: PositionDetailsComponent;
 
   debug: boolean = false;
 
   selectedPosition: PositionLookupDto;
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onListSelection(selectedPosition: PositionLookupDto) {
     this.selectedPosition = selectedPosition;

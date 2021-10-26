@@ -8,9 +8,8 @@ describe('PositionDismissDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PositionDismissDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [PositionDismissDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -7,13 +7,17 @@ import { PageForbiddenComponent } from 'src/app/shared/components/page-forbidden
 import { MemberStatusComponent } from './components/member-status/member-status.component';
 
 const routes: Routes = [
-  { path: 'member-status', component: MemberStatusComponent, canActivate: [AuthorizeGuard, AdminGuard] },
-  { path: FORBIDDEN_ROUTE_STRING, component: PageForbiddenComponent }
+  {
+    path: 'member-status',
+    component: MemberStatusComponent,
+    canActivate: [AuthorizeGuard, AdminGuard],
+  },
+  { path: FORBIDDEN_ROUTE_STRING, component: PageForbiddenComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
-export class MemberStatusRoutingModule { }
+export class MemberStatusRoutingModule {}

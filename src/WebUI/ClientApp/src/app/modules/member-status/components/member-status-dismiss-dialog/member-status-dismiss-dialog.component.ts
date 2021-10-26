@@ -1,16 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DismissFromMemberStatusCommand, MemberStatusClient, MemberStatusLookupDto } from '../../../../membermanager-api';
+import {
+  DismissFromMemberStatusCommand,
+  MemberStatusClient,
+  MemberStatusLookupDto,
+} from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
 
 @Component({
   selector: 'app-member-status-dismiss-dialog',
   templateUrl: './member-status-dismiss-dialog.component.html',
-  styleUrls: ['./member-status-dismiss-dialog.component.scss']
+  styleUrls: ['./member-status-dismiss-dialog.component.scss'],
 })
 export class MemberStatusDismissDialogComponent implements OnInit {
-
   form: FormGroup;
   description: string;
 
@@ -23,18 +26,17 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<MemberStatusDismissDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { description: string, memberStatus: MemberStatusLookupDto },
+    @Inject(MAT_DIALOG_DATA)
+    data: { description: string; memberStatus: MemberStatusLookupDto },
     private memberStatusClient: MemberStatusClient
   ) {
-
     this.description = data.description;
     this.memberStatus = data.memberStatus;
-    
   }
 
   ngOnInit() {
     this.form = this.fb.group({
-      description: [this.description, []]
+      description: [this.description, []],
     });
 
     this.fetchSuggestions();
@@ -54,29 +56,35 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   }
 
   save() {
-    this.memberStatusClient.dismiss(this.memberStatus.id, new DismissFromMemberStatusCommand({
-      dismissalDateTime: this.dismissalDate,
-      memberStatusId: this.memberStatus.id,
-      personId: this.dismissedPerson.id,
-    })).subscribe(val => {
-      this.dialogRef.close(true);
-    }, error => {
-        let errors = JSON.parse(error.response);
+    this.memberStatusClient
+      .dismiss(
+        this.memberStatus.id,
+        new DismissFromMemberStatusCommand({
+          dismissalDateTime: this.dismissalDate,
+          memberStatusId: this.memberStatus.id,
+          personId: this.dismissedPerson.id,
+        })
+      )
+      .subscribe(
+        (val) => {
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          let errors = JSON.parse(error.response);
 
-        // TODO make error component
-        if (errors) {
-          console.error(errors);
-          this.errors = errors.title + ":"
+          // TODO make error component
+          if (errors) {
+            console.error(errors);
+            this.errors = errors.title + ':';
 
-          for (var i = 0; i < errors.errors.PersonId.length; i++) {
-            this.errors += errors.errors.PersonId[i];
+            for (var i = 0; i < errors.errors.PersonId.length; i++) {
+              this.errors += errors.errors.PersonId[i];
+            }
+          } else {
+            console.error(error);
           }
         }
-        else {
-          console.error(error);
-        }
-
-    });
+      );
   }
 
   close() {
@@ -84,13 +92,15 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   }
 
   fetchSuggestions() {
-    this.memberStatusClient.getDismissSuggestions(this.memberStatus.id).subscribe(
-      suggestions => {
-        this.suggestions = suggestions.suggestions.map(s => {
-          return { name: s.name, id: s.id };
-        });
-      },
-      error => console.error(error)
-    );
+    this.memberStatusClient
+      .getDismissSuggestions(this.memberStatus.id)
+      .subscribe(
+        (suggestions) => {
+          this.suggestions = suggestions.suggestions.map((s) => {
+            return { name: s.name, id: s.id };
+          });
+        },
+        (error) => console.error(error)
+      );
   }
 }

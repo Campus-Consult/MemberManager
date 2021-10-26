@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.scss']
+  styleUrls: ['./nav-menu.component.scss'],
 })
 export class NavMenuComponent {
   isExpanded = false;
@@ -13,8 +13,12 @@ export class NavMenuComponent {
   isAdmin = false;
 
   constructor(private authService: AuthorizeService) {
-    this.authService.isAuthenticated().subscribe((val)=>{this.isAuthenticated = val});
-    this.authService.isAuthenticatedAdminUser().subscribe((val)=>{this.isAdmin = val});
+    this.authService.isAuthenticated().subscribe((val) => {
+      this.isAuthenticated = val;
+    });
+    this.authService.isAuthenticatedAdminUser().subscribe((val) => {
+      this.isAdmin = val;
+    });
   }
 
   collapse() {

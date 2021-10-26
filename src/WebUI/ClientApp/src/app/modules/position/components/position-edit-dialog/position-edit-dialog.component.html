@@ -1,26 +1,54 @@
-<h2 mat-dialog-title>{{description}}</h2>
+<h2 mat-dialog-title>{{ description }}</h2>
 
-<p *ngIf="errors" class="error">{{errors}}</p>
+<p *ngIf="errors" class="error">{{ errors }}</p>
 
-<mat-dialog-content [formGroup]="form" fxLayout="column" fxLayoutAlign="space-between">
+<mat-dialog-content
+  [formGroup]="form"
+  fxLayout="column"
+  fxLayoutAlign="space-between"
+>
   <mat-form-field appearance="fill" fxFlex>
     <mat-label>Name</mat-label>
-    <input matInput formControlName="name">
+    <input matInput formControlName="name" />
   </mat-form-field>
   <mat-form-field appearance="fill" fxFlex>
     <mat-label>Short name</mat-label>
-    <input matInput formControlName="shortName">
+    <input matInput formControlName="shortName" />
   </mat-form-field>
 
   <div fxFlex="nogrow" fxLayout="column" fxLayoutAlign="space-between center">
-    <p *ngIf="position.isActive" class="mat-warn">Please rename the position only in case of typos or similar. If you want to replace this position, deactivate this position first and then create an new one!</p>
-    <button *ngIf="position.isActive" class="mat-raised-button mat-warn" (click)="deactivate()">Deactivate position</button>
-    <button *ngIf="!position.isActive" class="mat-raised-button" (click)="reactivate()">Reactivate position</button>
+    <p *ngIf="position.isActive" class="mat-warn">
+      Please rename the position only in case of typos or similar. If you want
+      to replace this position, deactivate this position first and then create
+      an new one!
+    </p>
+    <button
+      *ngIf="position.isActive"
+      class="mat-raised-button mat-warn"
+      (click)="deactivate()"
+    >
+      Deactivate position
+    </button>
+    <button
+      *ngIf="!position.isActive"
+      class="mat-raised-button"
+      (click)="reactivate()"
+    >
+      Reactivate position
+    </button>
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
-  <button class="mat-raised-button" fxFlex="nogrow" (click)="close()">Cancel</button>
+  <button class="mat-raised-button" fxFlex="nogrow" (click)="close()">
+    Cancel
+  </button>
 
-  <button class="mat-raised-button mat-primary" fxFlex="nogrow" (click)="save()">Save</button>
+  <button
+    class="mat-raised-button mat-primary"
+    fxFlex="nogrow"
+    (click)="save()"
+  >
+    Save
+  </button>
 </mat-dialog-actions>

@@ -8,9 +8,8 @@ describe('DialogErrorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogErrorComponent ]
-    })
-    .compileComponents();
+      declarations: [DialogErrorComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

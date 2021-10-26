@@ -41,10 +41,15 @@ import { CareerLevelAssignDialogComponent } from './career-level-assign-dialog/c
 import { CareerLevelDismissDialogComponent } from './career-level-dismiss-dialog/career-level-dismiss-dialog.component';
 import { CreateCareerLevelDialogComponent } from './create-career-level-dialog/create-career-level-dialog.component';
 
-
-
 @NgModule({
-  declarations: [CareerLevelComponent, CareerLevelListComponent, CareerLevelDetailsComponent, CareerLevelAssignDialogComponent, CareerLevelDismissDialogComponent, CreateCareerLevelDialogComponent],
+  declarations: [
+    CareerLevelComponent,
+    CareerLevelListComponent,
+    CareerLevelDetailsComponent,
+    CareerLevelAssignDialogComponent,
+    CareerLevelDismissDialogComponent,
+    CreateCareerLevelDialogComponent,
+  ],
   imports: [
     CommonModule,
     CareerLevelRoutingModule,
@@ -83,6 +88,6 @@ import { CreateCareerLevelDialogComponent } from './create-career-level-dialog/c
     MatPaginatorModule,
     FormsModule,
     ReactiveFormsModule,
-  ]
+  ],
 })
-export class CareerLevelModule { }
+export class CareerLevelModule {}

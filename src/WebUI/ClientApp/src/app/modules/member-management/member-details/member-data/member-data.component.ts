@@ -5,13 +5,13 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
-} from "@angular/core";
-import { Gender, IPersonDetailVm } from "src/app/membermanager-api";
+} from '@angular/core';
+import { Gender, IPersonDetailVm } from 'src/app/membermanager-api';
 
 @Component({
-  selector: "app-member-data",
-  templateUrl: "./member-data.component.html",
-  styleUrls: ["./member-data.component.scss"],
+  selector: 'app-member-data',
+  templateUrl: './member-data.component.html',
+  styleUrls: ['./member-data.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemberDataComponent implements OnInit, OnChanges {
@@ -42,63 +42,63 @@ export class MemberDataComponent implements OnInit, OnChanges {
      *
      * rowlables determines the display order and the label which will be displayed
      */
-    let label = "Vorname";
+    let label = 'Vorname';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.firstName
     );
 
-    label = "Nachname";
+    label = 'Nachname';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.surname
     );
 
-    label = "Geburtstag";
+    label = 'Geburtstag';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.birthdate
     );
 
-    label = "Geschlecht";
+    label = 'Geschlecht';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.gender
     );
 
-    label = "E-Mail (Campus Consult)";
+    label = 'E-Mail (Campus Consult)';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.emailAssociaton
     );
 
-    label = "E-Mail (privat)";
+    label = 'E-Mail (privat)';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.emailPrivate
     );
 
-    label = "Telefonnummer (privat)";
+    label = 'Telefonnummer (privat)';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.telefon
     );
 
-    label = "Straße, Hausnummer";
+    label = 'Straße, Hausnummer';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
       !this.memberDetails ? undefined : this.strasseHausNr
     );
 
-    label = "PLZ, Stadt";
+    label = 'PLZ, Stadt';
     this.rowLabels.push(label);
     this.rowLabelDateMap.set(
       label,
@@ -118,7 +118,7 @@ export class MemberDataComponent implements OnInit, OnChanges {
     if (this.memberDetails.birthdate) {
       return new Date(this.memberDetails.birthdate).toLocaleDateString();
     } else {
-      return "-";
+      return '-';
     }
   }
 
@@ -126,13 +126,13 @@ export class MemberDataComponent implements OnInit, OnChanges {
     const gender = this.memberDetails.gender;
     switch (gender) {
       case Gender.MALE:
-        return "Männlich";
+        return 'Männlich';
       case Gender.FEMALE:
-        return "Weiblich";
+        return 'Weiblich';
       case Gender.DIVERS:
-        return "Divers";
+        return 'Divers';
       default:
-        return "No Gender";
+        return 'No Gender';
     }
   }
 
@@ -151,24 +151,24 @@ export class MemberDataComponent implements OnInit, OnChanges {
   get strasseHausNr(): string {
     if (this.memberDetails.adressStreet && this.memberDetails.adressNo) {
       return (
-        this.memberDetails.adressStreet + ", " + this.memberDetails.adressNo
+        this.memberDetails.adressStreet + ', ' + this.memberDetails.adressNo
       );
     } else if (this.memberDetails.adressStreet) {
-      return this.memberDetails.adressNo + " -";
+      return this.memberDetails.adressNo + ' -';
     } else if (this.memberDetails.adressNo) {
-      return "- , " + this.memberDetails.adressStreet;
+      return '- , ' + this.memberDetails.adressStreet;
     }
   }
 
   get plzStadt(): string {
     if (this.memberDetails.adressZIP && this.memberDetails.adressCity) {
       return (
-        this.memberDetails.adressZIP + ", " + this.memberDetails.adressCity
+        this.memberDetails.adressZIP + ', ' + this.memberDetails.adressCity
       );
     } else if (this.memberDetails.adressZIP) {
-      return this.memberDetails.adressZIP + " -";
+      return this.memberDetails.adressZIP + ' -';
     } else if (this.memberDetails.adressCity) {
-      return "- , " + this.memberDetails.adressCity;
+      return '- , ' + this.memberDetails.adressCity;
     }
   }
 }

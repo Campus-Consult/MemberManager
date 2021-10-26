@@ -30,11 +30,11 @@ namespace MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelComma
         }
 
         public async Task<bool> PositioNameUnique(UpdateCareerLevelCommand model, string name, CancellationToken cancellationToken) {
-            return await _context.CareerLevels.AllAsync(c => c.Name != name, cancellationToken);
+            return await _context.CareerLevels.AllAsync(c => c.Name != name || c.Id == model.CareerLevelId, cancellationToken);
         }
 
         public async Task<bool> PositionShortNameUnique(UpdateCareerLevelCommand model, string shortName, CancellationToken cancellationToken) {
-            return await _context.CareerLevels.AllAsync(c => c.ShortName != shortName, cancellationToken);
+            return await _context.CareerLevels.AllAsync(c => c.ShortName != shortName || c.Id == model.CareerLevelId, cancellationToken);
         }
     }
 }

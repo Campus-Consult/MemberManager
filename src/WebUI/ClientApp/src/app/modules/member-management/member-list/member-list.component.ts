@@ -45,7 +45,7 @@ export class MemberListComponent implements OnInit, AfterViewInit {
 
   // propertys for handling view when no dataSource
   loadingTable: boolean = true;
-  loadingError = 'Error Happened';
+  loadingError = "Error Happened";
 
   private sort: MatSort;
   @ViewChild(MatSort) set matSort(ms: MatSort) {
@@ -57,7 +57,11 @@ export class MemberListComponent implements OnInit, AfterViewInit {
 
   public isRefreshing = false;
 
-  constructor(private personApi: PeopleClient, private _snackBar: MatSnackBar, private dialog: MatDialog) {}
+  constructor(
+    private personApi: PeopleClient,
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     // Loading Member
@@ -70,7 +74,9 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     this.loadingTable = true;
     this.personApi.getWithBasicInfo().subscribe(
       (val: IPeopleWithBasicInfoVm) => {
-        this.dataSource = new MatTableDataSource<PersonWithBasicInfoLookupDto>(val.people);
+        this.dataSource = new MatTableDataSource<PersonWithBasicInfoLookupDto>(
+          val.people
+        );
         this.dataSource.sort = this.sort;
         this.loadingTable = false;
       },
@@ -91,27 +97,35 @@ export class MemberListComponent implements OnInit, AfterViewInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(CreateMemberComponent, {
-      maxHeight: '800px',
-      width: '600px',
+      maxHeight: "800px",
+      width: "600px",
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.refresh();
+      this.refresh().subscribe(() => {
+        this._snackBar.open("Mitgliederliste neugeladen", "YAY!", {
+          duration: 2000,
+        });
+      });
     });
   }
 
-  onRefresh(){
+  onRefresh() {
     this.refresh().subscribe(
       () => {
-        this._snackBar.open('Mitgliederliste neugeladen', 'YAY!', {
+        this._snackBar.open("Mitgliederliste neugeladen", "YAY!", {
           duration: 2000,
         });
       },
       (err) => {
         console.error(err);
-        this._snackBar.open('Mitgliederliste neuladen fehlgeschlagen', 'Nooo!', {
-          duration: 2000,
-        });
+        this._snackBar.open(
+          "Mitgliederliste neuladen fehlgeschlagen",
+          "Nooo!",
+          {
+            duration: 2000,
+          }
+        );
       }
     );
   }
@@ -126,4 +140,3 @@ export class MemberListComponent implements OnInit, AfterViewInit {
     );
   }
 }
-

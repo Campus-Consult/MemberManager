@@ -8,9 +8,8 @@ describe('CareerLevelAssignDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CareerLevelAssignDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [CareerLevelAssignDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

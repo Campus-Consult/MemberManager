@@ -20,3 +20,5 @@ jobs:
       run: dotnet build --configuration Release --no-restore src/WebUI
     - name: Test
       run: dotnet test --verbosity normal tests/Applicaton.IntegrationTests
+    - name: Check Format
+      run: cd src/WebUI/ClientApp && npm ci && npm run format:check

@@ -37,7 +37,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PositionRoutingModule } from './position-routing.module';
 
@@ -104,8 +104,6 @@ import { PositionReactivateDialogComponent } from './components/position-reactiv
     PositionDeactivateDialogComponent,
     PositionReactivateDialogComponent,
   ],
-  exports: [
-    PositionComponent,
-  ]
+  exports: [PositionComponent],
 })
-export class PositionModule { }
+export class PositionModule {}

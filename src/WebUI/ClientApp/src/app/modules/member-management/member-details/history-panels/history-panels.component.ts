@@ -1,15 +1,15 @@
-import { Component, Input, OnChanges, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import {
   IPersonDetailVm,
   PersonCareerLevelVm,
   PersonMemberStatusVm,
   PersonPositionVm,
-} from "src/app/membermanager-api";
+} from 'src/app/membermanager-api';
 
 @Component({
-  selector: "app-history-panels",
-  templateUrl: "./history-panels.component.html",
-  styleUrls: ["./history-panels.component.scss"],
+  selector: 'app-history-panels',
+  templateUrl: './history-panels.component.html',
+  styleUrls: ['./history-panels.component.scss'],
 })
 export class HistoryPanelsComponent implements OnInit, OnChanges {
   @Input() person: IPersonDetailVm;
@@ -17,12 +17,12 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
   /** key = title of expansionPanel, item = historyData */
   historyPanels = new Map<string, HistoryData[]>();
 
-  displayedColumns: string[] = ["name", "time-span"];
+  displayedColumns: string[] = ['name', 'time-span'];
 
   constructor() {}
 
   ngOnChanges(chng) {
-    if ("person" in chng && this.person) {
+    if ('person' in chng && this.person) {
       this.initHistoryData();
     }
   }
@@ -37,9 +37,13 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
 
   dateSinceUntilToString(since: string, until: string | undefined) {
     if (!until) {
-      return "Seit " + new Date(since).toLocaleDateString();
+      return 'Seit ' + new Date(since).toLocaleDateString();
     } else {
-      return new Date(since).toLocaleDateString() + " - " + new Date(until).toLocaleDateString();
+      return (
+        new Date(since).toLocaleDateString() +
+        ' - ' +
+        new Date(until).toLocaleDateString()
+      );
     }
   }
 
@@ -47,13 +51,13 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
     const memberStateHistory = this.getMemberStatusHistory(
       this.person.memberStatus
     );
-    this.historyPanels.set("Mitglieds-Status", memberStateHistory);
+    this.historyPanels.set('Mitglieds-Status', memberStateHistory);
     const careerLevelHistory = this.getCareerLevelHistory(
       this.person.careerLevels
     );
-    this.historyPanels.set("Karriere-Level", careerLevelHistory);
+    this.historyPanels.set('Karriere-Level', careerLevelHistory);
     const positionsHistory = this.getPositionHistory(this.person.positions);
-    this.historyPanels.set("Posten", positionsHistory);
+    this.historyPanels.set('Posten', positionsHistory);
   }
 
   getCareerLevelHistory(careerLevels: PersonCareerLevelVm[]): HistoryData[] {
@@ -61,7 +65,11 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
     for (const carerLevel of careerLevels) {
       historyArr.push({
         id: carerLevel.id,
-        name: carerLevel.careerLevelName + ' (' + carerLevel.careerLevelShortName + ')',
+        name:
+          carerLevel.careerLevelName +
+          ' (' +
+          carerLevel.careerLevelShortName +
+          ')',
         startDate: carerLevel.beginDateTime,
         endDate: carerLevel.endDateTime,
       });
@@ -74,7 +82,7 @@ export class HistoryPanelsComponent implements OnInit, OnChanges {
     for (const position of positions) {
       historyArr.push({
         id: position.id,
-        name: position.positionName + ' (' + position.positionShortName  + ')',
+        name: position.positionName + ' (' + position.positionShortName + ')',
         startDate: position.beginDateTime,
         endDate: position.endDateTime,
       });

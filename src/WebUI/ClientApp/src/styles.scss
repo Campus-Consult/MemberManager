@@ -1,8 +1,11 @@
-// Import global assets 
+// Import global assets
 @import 'assets/fonts/_fonts.scss';
 
 // Import Angular Material Theme
 @import 'theme/theme.scss';
 
-html, body { height: 100% }
+html,
+body {
+  height: 100%;
+}
 /* Theming should be done with the material theme*/

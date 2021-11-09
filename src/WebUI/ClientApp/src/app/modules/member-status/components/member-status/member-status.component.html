@@ -1,10 +1,15 @@
 <div fxLayout="row" fxLayoutGap="10px">
-
   <div fxFlex="60%">
-    <app-member-status-list (onSelectEvent)="onListSelection($event)"></app-member-status-list>
+    <app-member-status-list
+      (onSelectEvent)="onListSelection($event)"
+    ></app-member-status-list>
   </div>
 
   <div fxFlex="40%">
-    <app-member-status-details *ngIf="selectedMemberStatus" [memberStatusID]="selectedMemberStatus?.id" (onReloadRequired)="reloadRequired()"></app-member-status-details>
+    <app-member-status-details
+      *ngIf="selectedMemberStatus"
+      [memberStatusID]="selectedMemberStatus?.id"
+      (onReloadRequired)="reloadRequired()"
+    ></app-member-status-details>
   </div>
 </div>

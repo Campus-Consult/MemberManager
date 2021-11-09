@@ -56,7 +56,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
     DismissDialogComponent,
     DialogErrorComponent,
     PageForbiddenComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
   ],
   exports: [
     DataTableComponent,
@@ -76,7 +76,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
 
     FlexLayoutModule,
     NgxSkeletonLoaderModule,
-    
+
     MatCheckboxModule,
     MatButtonModule,
     MatInputModule,
@@ -107,6 +107,6 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-  ]
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

@@ -8,9 +8,8 @@ describe('SkeletonLoaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SkeletonLoaderComponent ]
-    })
-    .compileComponents();
+      declarations: [SkeletonLoaderComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

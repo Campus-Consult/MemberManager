@@ -1,25 +1,25 @@
 $table-width: 60%;
 
 .table-part {
-    width: $table-width;
-    justify-self: flex-start;
-  }
+  width: $table-width;
+  justify-self: flex-start;
+}
 
 .right-section {
-    width: 100% - $table-width;
-    justify-self: flex-end;
-    margin-left: 15px; // padding from div in highest hierachie 
+  width: 100% - $table-width;
+  justify-self: flex-end;
+  margin-left: 15px; // padding from div in highest hierachie
 }
 
 .flex-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 #buttons {
-    margin-bottom: 5px;
-    button{
-        margin-right: 10px;
-    }
+  margin-bottom: 5px;
+  button {
+    margin-right: 10px;
+  }
 }

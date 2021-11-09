@@ -6,16 +6,17 @@ import { CareerLevelListComponent } from './career-level-list/career-level-list.
 @Component({
   selector: 'app-career-level',
   templateUrl: './career-level.component.html',
-  styleUrls: ['./career-level.component.scss']
+  styleUrls: ['./career-level.component.scss'],
 })
 export class CareerLevelComponent implements OnInit {
-
-  @ViewChild(CareerLevelListComponent) careerLevelList: CareerLevelListComponent;
-  @ViewChild(CareerLevelDetailsComponent) careerLevelDetails: CareerLevelDetailsComponent;
+  @ViewChild(CareerLevelListComponent)
+  careerLevelList: CareerLevelListComponent;
+  @ViewChild(CareerLevelDetailsComponent)
+  careerLevelDetails: CareerLevelDetailsComponent;
 
   selectedCareerLevel: CareerLevelLookupDto;
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onListSelection(selectedCareerLevel: CareerLevelLookupDto) {
     this.selectedCareerLevel = selectedCareerLevel;
@@ -29,5 +30,4 @@ export class CareerLevelComponent implements OnInit {
     this.careerLevelList.reload();
     this.careerLevelDetails.reload();
   }
-
 }

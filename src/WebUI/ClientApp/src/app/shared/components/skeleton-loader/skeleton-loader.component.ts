@@ -1,28 +1,35 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-skeleton-loader',
   templateUrl: './skeleton-loader.component.html',
-  styleUrls: ['./skeleton-loader.component.scss']
+  styleUrls: ['./skeleton-loader.component.scss'],
 })
 export class SkeletonLoaderComponent implements OnInit, OnChanges {
-
   @Input()
-  type:SkeletonTypes;
+  type: SkeletonTypes;
 
   @Input()
   value: any;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     switch (this.type) {
-      case SkeletonTypes.CIRCLE:  
+      case SkeletonTypes.CIRCLE:
         break;
       case SkeletonTypes.LINE:
         break;
       default:
-        console.warn('Warning Input Skeleton Type: " '+this.type + '" is not supported!');
+        console.warn(
+          'Warning Input Skeleton Type: " ' + this.type + '" is not supported!'
+        );
         break;
     }
   }
@@ -31,15 +38,12 @@ export class SkeletonLoaderComponent implements OnInit, OnChanges {
     for (const key in changes) {
       if (key === 'value') {
         this.value = changes[key].currentValue;
-        
       }
     }
   }
-
 }
 
 export enum SkeletonTypes {
-  LINE= 'line',
-  CIRCLE= 'circle',
-
+  LINE = 'line',
+  CIRCLE = 'circle',
 }

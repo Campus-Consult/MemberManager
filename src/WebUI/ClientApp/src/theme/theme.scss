@@ -11,7 +11,7 @@
 @include mat-core($cc-typography);
 
 @mixin custom-component-theme($theme) {
-  @include data-table-theme($theme)
+  @include data-table-theme($theme);
 }
 
 .cc-theme {
@@ -23,4 +23,3 @@
   @include angular-material-theme($cc-dark-theme);
   @include custom-component-theme($cc-dark-theme);
 }
-

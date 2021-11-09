@@ -14,14 +14,14 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MemberStatusModule } from './modules/member-status/member-status.module';
 import { PositionModule } from './modules/position/position.module';
-import localeDe from "@angular/common/locales/de";
+import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MemberManagementModule } from './modules/member-management/member-management.module';
 
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CareerLevelModule } from './modules/career-level/career-level.module';
 
 registerLocaleData(localeDe);
@@ -50,16 +50,16 @@ registerLocaleData(localeDe);
     MemberStatusModule,
     MatNativeDateModule,
     MatToolbarModule,
-    CareerLevelModule
+    CareerLevelModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-    {provide: LOCALE_ID, useValue: 'de-DE'},
+    { provide: LOCALE_ID, useValue: 'de-DE' },
     // workaround for dates, the date picker actually uses a datetime with 00:00 as time and with timezone this makes it
     // wrap around to the previou day
     // {provide: MAT_NATIVE_DATE_FORMATS, useValue: {useUtc: true}},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   constructor(overlayContainer: OverlayContainer) {

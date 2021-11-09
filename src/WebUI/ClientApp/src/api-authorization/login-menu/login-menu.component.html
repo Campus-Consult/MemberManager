@@ -1,16 +1,30 @@
 <ul class="navbar-nav" *ngIf="isAuthenticated | async">
-    <li class="nav-item">
-        <a  class="nav-link text-dark" [routerLink]='["/authentication/profile"]' title="Manage">Angemeldet als <span style="font-style: oblique;">{{userName | async}}</span></a>
-    </li>
-    <li class="nav-item">
-        <a  class="nav-link text-dark" [routerLink]='["/authentication/logout"]' [state]='{ local: true }' title="Logout">Logout</a>
-    </li>
+  <li class="nav-item">
+    <a
+      class="nav-link text-dark"
+      [routerLink]="['/authentication/profile']"
+      title="Manage"
+      >Angemeldet als
+      <span style="font-style: oblique">{{ userName | async }}</span></a
+    >
+  </li>
+  <li class="nav-item">
+    <a
+      class="nav-link text-dark"
+      [routerLink]="['/authentication/logout']"
+      [state]="{ local: true }"
+      title="Logout"
+      >Logout</a
+    >
+  </li>
 </ul>
 <ul class="navbar-nav" *ngIf="!(isAuthenticated | async)">
-<!--   <li class="nav-item">
+  <!--   <li class="nav-item">
         <a class="nav-link text-dark" [routerLink]='["/authentication/register"]'>Register</a>
     </li> -->
-    <li class="nav-item">
-        <a class="nav-link text-dark" [routerLink]='["/authentication/login"]'>Login</a>
-    </li>
+  <li class="nav-item">
+    <a class="nav-link text-dark" [routerLink]="['/authentication/login']"
+      >Login</a
+    >
+  </li>
 </ul>

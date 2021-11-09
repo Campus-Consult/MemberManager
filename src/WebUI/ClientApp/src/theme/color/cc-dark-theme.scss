@@ -7,10 +7,12 @@
 $cc-dark-primary: mat-palette($md-ccblau, 100);
 $cc-dark-accent: mat-palette($md-ccgruen, 100);
 $cc-dark-warn: mat-palette($md-warncolor, 100);
-$cc-dark-theme: mat-dark-theme((
-  color: (
-    primary: $cc-dark-primary,
-    accent: $cc-dark-accent,
-    warn: $cc-dark-warn,
+$cc-dark-theme: mat-dark-theme(
+  (
+    color: (
+      primary: $cc-dark-primary,
+      accent: $cc-dark-accent,
+      warn: $cc-dark-warn,
+    ),
   )
-));
+);

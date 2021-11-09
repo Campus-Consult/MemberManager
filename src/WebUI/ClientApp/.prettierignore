@@ -1,0 +1,4 @@
+dist
+node_modules
+package*.json
+src/app/membermanager-api.ts

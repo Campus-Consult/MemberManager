@@ -8,9 +8,8 @@ describe('PositionReactivateDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PositionReactivateDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [PositionReactivateDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

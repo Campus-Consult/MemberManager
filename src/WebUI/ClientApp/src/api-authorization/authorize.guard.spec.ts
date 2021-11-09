@@ -7,7 +7,7 @@ describe('AuthorizeGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      providers: [AuthorizeGuard]
+      providers: [AuthorizeGuard],
     });
   });
 

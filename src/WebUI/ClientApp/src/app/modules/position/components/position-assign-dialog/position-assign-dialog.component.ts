@@ -1,16 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AssignToPositionCommand, PositionClient, PositionLookupDto } from '../../../../membermanager-api';
+import {
+  AssignToPositionCommand,
+  PositionClient,
+  PositionLookupDto,
+} from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
 
 @Component({
   selector: 'app-position-assign-dialog',
   templateUrl: './position-assign-dialog.component.html',
-  styleUrls: ['./position-assign-dialog.component.scss']
+  styleUrls: ['./position-assign-dialog.component.scss'],
 })
 export class PositionAssignDialogComponent implements OnInit {
-
   form: FormGroup;
   description: string;
 
@@ -23,18 +26,17 @@ export class PositionAssignDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<PositionAssignDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: { description: string, position: PositionLookupDto },
+    @Inject(MAT_DIALOG_DATA)
+    data: { description: string; position: PositionLookupDto },
     private positionClient: PositionClient
   ) {
-
     this.description = data.description;
     this.position = data.position;
-    
   }
 
   ngOnInit() {
     this.form = this.fb.group({
-      description: [this.description, []]
+      description: [this.description, []],
     });
 
     this.fetchSuggestions();
@@ -54,17 +56,25 @@ export class PositionAssignDialogComponent implements OnInit {
   }
 
   save() {
-    this.positionClient.assign(this.position.id, new AssignToPositionCommand({
-      assignmentDateTime: this.assignDate,
-      positionId: this.position.id,
-      personId: this.assignPerson.id,
-    })).subscribe(val => {
-      this.dialogRef.close(true);
-    }, error => {
+    this.positionClient
+      .assign(
+        this.position.id,
+        new AssignToPositionCommand({
+          assignmentDateTime: this.assignDate,
+          positionId: this.position.id,
+          personId: this.assignPerson.id,
+        })
+      )
+      .subscribe(
+        (val) => {
+          this.dialogRef.close(true);
+        },
+        (error) => {
           // TODO: make error component
           console.error(error);
           this.errors = error;
-    });
+        }
+      );
   }
 
   close() {
@@ -73,12 +83,12 @@ export class PositionAssignDialogComponent implements OnInit {
 
   fetchSuggestions() {
     this.positionClient.getAssignSuggestions(this.position.id).subscribe(
-      suggestions => {
-        this.suggestions = suggestions.suggestions.map(s => {
+      (suggestions) => {
+        this.suggestions = suggestions.suggestions.map((s) => {
           return { name: s.name, id: s.id };
         });
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 }

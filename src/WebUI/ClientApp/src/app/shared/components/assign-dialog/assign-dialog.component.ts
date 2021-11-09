@@ -1,5 +1,11 @@
 import { FormGroup } from '@angular/forms';
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+} from '@angular/core';
 import { SelectOption } from '../search-select/search-select.component';
 import { EventEmitter } from '@angular/core';
 
@@ -7,29 +13,26 @@ import { EventEmitter } from '@angular/core';
   selector: 'app-assign-dialog',
   templateUrl: './assign-dialog.component.html',
   styleUrls: ['./assign-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssignDialogComponent implements OnInit {
-
   @Input() description: string;
   @Input() assignForm: FormGroup;
   @Input() selectSuggestions: SelectOption[];
   @Input() errors?;
 
-  @Output() closeEvent = new EventEmitter()
-  @Output() saveEvent= new EventEmitter()
+  @Output() closeEvent = new EventEmitter();
+  @Output() saveEvent = new EventEmitter();
 
+  constructor() {}
 
-  constructor() { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-  }
-
-  close(){
+  close() {
     this.closeEvent.emit(undefined);
   }
 
-  save(){
+  save() {
     this.saveEvent.emit(undefined);
   }
 }

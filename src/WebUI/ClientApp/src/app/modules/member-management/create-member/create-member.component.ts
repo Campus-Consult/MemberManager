@@ -1,16 +1,23 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
-import { CareerLevelDto, CareerLevelLookupDto, CreatePersonCommand, ICreatePersonCommand, MemberStatusLookupDto, PeopleClient } from "src/app/membermanager-api";
-import { MemberFormComponent } from "./member-form/member-form.component";
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import {
+  CareerLevelDto,
+  CareerLevelLookupDto,
+  CreatePersonCommand,
+  ICreatePersonCommand,
+  MemberStatusLookupDto,
+  PeopleClient,
+} from 'src/app/membermanager-api';
+import { MemberFormComponent } from './member-form/member-form.component';
 
 /**
  * Create People Modal
  */
 @Component({
-  selector: "app-create-person",
-  templateUrl: "./create-member.component.html",
-  styleUrls: ["./create-member.component.scss"],
+  selector: 'app-create-person',
+  templateUrl: './create-member.component.html',
+  styleUrls: ['./create-member.component.scss'],
 })
 export class CreateMemberComponent implements AfterViewInit {
   @ViewChild(MemberFormComponent) memberFormComp: MemberFormComponent;
@@ -18,7 +25,7 @@ export class CreateMemberComponent implements AfterViewInit {
   memberForm: FormGroup;
 
   // For backend validation
-  errorHintTitle = "Person nicht erstellt:";
+  errorHintTitle = 'Person nicht erstellt:';
   invalidHints: Array<string>;
   lastRequestErr;
 
@@ -40,7 +47,7 @@ export class CreateMemberComponent implements AfterViewInit {
 
   onSubmit() {
     const isvalid = this.validateForm();
-    console.log("Form valid:" + isvalid);
+    console.log('Form valid:' + isvalid);
 
     if (isvalid) {
       this.handleFormValid();
@@ -120,22 +127,20 @@ export class CreateMemberComponent implements AfterViewInit {
     try {
       this.lastRequestErr = JSON.parse(err.response);
       // Prepare input-invalid-msg
-      this.invalidHints.push(
-        "ERROR-STATUS " + this.lastRequestErr.status
-      );
+      this.invalidHints.push('ERROR-STATUS ' + this.lastRequestErr.status);
       const errors = this.lastRequestErr.errors;
       for (const key in errors) {
         if (Object.prototype.hasOwnProperty.call(errors, key)) {
-            const msg = errors[key];
+          const msg = errors[key];
           this.invalidHints.push(msg);
         }
-      }    
+      }
     } catch (parseErr) {
-      console.warn("ERROR: Probably could not parse Request");
+      console.warn('ERROR: Probably could not parse Request');
       console.error(parseErr);
     } finally {
       if (this.invalidHints.length < 1) {
-        this.invalidHints.push("Ein unbekannter Fehler ist aufgetreten!");
+        this.invalidHints.push('Ein unbekannter Fehler ist aufgetreten!');
       }
     }
   }

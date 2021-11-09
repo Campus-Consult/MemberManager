@@ -3,21 +3,21 @@ import {
   Component,
   Inject,
   OnInit,
-} from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   CareerLevelClient,
   CareerLevelDto,
   ChangePersonCareerLevelCommand,
-} from "src/app/membermanager-api";
-import { SelectOption } from "src/app/shared/components/search-select/search-select.component";
-import { CareerLevelLookupDto } from "./../../../membermanager-api";
+} from 'src/app/membermanager-api';
+import { SelectOption } from 'src/app/shared/components/search-select/search-select.component';
+import { CareerLevelLookupDto } from './../../../membermanager-api';
 
 @Component({
-  selector: "app-career-level-assign-dialog",
-  templateUrl: "./career-level-assign-dialog.component.html",
-  styleUrls: ["./career-level-assign-dialog.component.scss"],
+  selector: 'app-career-level-assign-dialog',
+  templateUrl: './career-level-assign-dialog.component.html',
+  styleUrls: ['./career-level-assign-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CareerLevelAssignDialogComponent implements OnInit {
@@ -55,11 +55,11 @@ export class CareerLevelAssignDialogComponent implements OnInit {
   });
 
   get assignPerson() {
-    return this.assignForm.get("assignPerson").value;
+    return this.assignForm.get('assignPerson').value;
   }
 
   get assignDate() {
-    return this.assignForm.get("assignDate").value;
+    return this.assignForm.get('assignDate').value;
   }
 
   save() {
@@ -81,7 +81,7 @@ export class CareerLevelAssignDialogComponent implements OnInit {
           // TODO make error component
           if (errors) {
             console.error(errors);
-            this.errors = errors.title + ":";
+            this.errors = errors.title + ':';
           } else {
             console.error(error);
           }

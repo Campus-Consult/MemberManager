@@ -8,9 +8,8 @@ describe('MemberStatusAssignDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MemberStatusAssignDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [MemberStatusAssignDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

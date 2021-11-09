@@ -37,7 +37,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MemberStatusRoutingModule } from './member-status-routing.module';
 
@@ -98,10 +98,8 @@ import { MemberStatusEditComponent } from './components/member-status-edit/membe
     MemberStatusDismissDialogComponent,
     MemberStatusHistoryDialogComponent,
     MemberStatusCreateComponent,
-    MemberStatusEditComponent
+    MemberStatusEditComponent,
   ],
-  exports: [
-    MemberStatusComponent,
-  ]
+  exports: [MemberStatusComponent],
 })
-export class MemberStatusModule { }
+export class MemberStatusModule {}

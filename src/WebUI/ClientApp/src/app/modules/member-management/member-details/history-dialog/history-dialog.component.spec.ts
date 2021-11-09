@@ -8,9 +8,8 @@ describe('HistoryDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HistoryDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [HistoryDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

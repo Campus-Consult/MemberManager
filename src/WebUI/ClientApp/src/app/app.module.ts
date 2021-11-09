@@ -42,6 +42,7 @@ registerLocaleData(localeDe);
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'admin-center', loadChildren: () => import('./modules/admin-center/admin-center.module').then(m => m.AdminCenterModule) },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

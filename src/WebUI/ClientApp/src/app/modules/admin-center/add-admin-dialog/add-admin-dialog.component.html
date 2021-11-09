@@ -1,0 +1,17 @@
+<h2>Admin hinzufügen</h2>
+
+<mat-dialog-content>
+  <p>
+    Füge hier die @campus-consult.org Addresse desjenigen ein, der Admin sein
+    soll.
+  </p>
+  <mat-form-field>
+    <label matLable>E-Mail Addresse</label>
+    <input matInput placeholder="label" value="value" [(ngModel)]="email" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-button [mat-dialog-close]="email">Delete</button>
+</mat-dialog-actions>

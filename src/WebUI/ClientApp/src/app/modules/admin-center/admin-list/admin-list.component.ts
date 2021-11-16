@@ -2,23 +2,30 @@ import { AddAdminDialogComponent } from './../add-admin-dialog/add-admin-dialog.
 import { DeleteDialogComponent } from './../../../shared/components/delete-dialog/delete-dialog.component';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { AddAdminUserCommand, AdminClient, CareerLevelLookupDto, FileResponse, IAddAdminUserCommand, RemoveAdminUserCommand } from './../../../membermanager-api';
+import {
+  AddAdminUserCommand,
+  AdminClient,
+  CareerLevelLookupDto,
+  FileResponse,
+  IAddAdminUserCommand,
+  RemoveAdminUserCommand,
+} from './../../../membermanager-api';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 
 export interface AdminListItem {
-  name: string;
+  email: string;
+  test: string;
 }
 
 @Component({
   selector: 'app-admin-list',
   templateUrl: './admin-list.component.html',
-  styleUrls: ['./admin-list.component.scss']
+  styleUrls: ['./admin-list.component.scss'],
 })
 export class AdminListComponent implements OnInit {
-
   private sort: MatSort;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
@@ -26,63 +33,77 @@ export class AdminListComponent implements OnInit {
     if (this.dataSource) this.dataSource.sort = this.sort;
   }
 
+  amdinListItems: AdminListItem[];
+
   @ViewChild(DataTableComponent)
   dataTable: DataTableComponent<AdminListItem>;
 
   dataSource: MatTableDataSource<AdminListItem>;
-  columns: string[] = ['name'];
+  columnList: string[] = ['email', 'delete'];
 
-
-  constructor(protected adminClient: AdminClient, protected dialog: MatDialog) { }
+  constructor(
+    protected adminClient: AdminClient,
+    protected dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadAdmins();
   }
 
-  onCreate(){
+  onCreate() {
     const dialogRef = this.dialog.open(AddAdminDialogComponent, {
       width: '250px',
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       let obs$ = this.addAdmin(result);
-      obs$.subscribe(()=> this.loadAdmins())
+      obs$.subscribe(() => this.loadAdmins());
     });
   }
 
-  onDelete(name: string){
+  onDelete(name: string) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '250px',
-      data: {description: `Willst du ${name} als Admin entfernen`},
+      data: {title: 'Admin entfernen', content: `Willst du ${name} als Admin entfernen` },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.removeAdmin(result).subscribe(()=> this.loadAdmins());  
+        this.removeAdmin(result).subscribe(() => this.loadAdmins());
       }
     });
   }
 
-  loadAdmins(){
-    this.adminClient.getCurrentAdmins().subscribe((admins)=>{
-      const adminItemLists = new Array<AdminListItem>(); 
-      for (const item of admins) {
-        adminItemLists.push({name:item});
-      }
-      this.dataSource = new MatTableDataSource<AdminListItem>(adminItemLists);
-      this.dataSource.sort = this.sort;
-    }, err=> console.error(err));
+  loadAdmins() {
+    console.log('loadAdmins');
+    this.adminClient.getCurrentAdmins().subscribe(
+      (admins) => {
+        this.amdinListItems = new Array<AdminListItem>();
+        for (const item of admins) {
+          // test because, 
+          this.amdinListItems.push({ email: item, test: 'test' });
+        }
+        console.log('getCurrentAdmins:', admins);
+
+        this.dataSource = new MatTableDataSource<AdminListItem>(this.amdinListItems);
+        this.dataSource.sort = this.sort;
+      },
+      (err) => console.error(err)
+    );
   }
 
-  addAdmin(email: string): Observable<FileResponse>{
-    const command: AddAdminUserCommand = new AddAdminUserCommand({email:email });
+  addAdmin(email: string): Observable<FileResponse> {
+    const command: AddAdminUserCommand = new AddAdminUserCommand({
+      email: email,
+    });
     return this.adminClient.addAdmin(command);
   }
 
-  removeAdmin(email: string): Observable<FileResponse>{
-    const command: RemoveAdminUserCommand = new RemoveAdminUserCommand({email:email });
+  removeAdmin(email: string): Observable<FileResponse> {
+    const command: RemoveAdminUserCommand = new RemoveAdminUserCommand({
+      email: email,
+    });
     return this.adminClient.removeAdmin(command);
   }
-
 }

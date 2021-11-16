@@ -61,10 +61,10 @@ export class AdminListComponent implements OnInit {
     });
   }
 
-  onDelete(name: string) {
+  onDelete(email: string) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '250px',
-      data: {title: 'Admin entfernen', content: `Willst du ${name} als Admin entfernen` },
+      data: {title: 'Admin entfernen', content: `Willst du ${email} als Admin entfernen` },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

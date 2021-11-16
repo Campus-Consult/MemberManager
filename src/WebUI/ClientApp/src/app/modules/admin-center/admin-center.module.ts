@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +27,8 @@ const routes: Routes = [
     MatInputModule,
     FormsModule,
     MatTableModule,
+    MatButtonModule,
+    MatIconModule,
     MatButtonModule
   ]
 })

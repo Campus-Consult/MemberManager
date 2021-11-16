@@ -69,7 +69,7 @@ export class AdminListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.removeAdmin(result).subscribe(() => this.loadAdmins());
+        this.removeAdmin(result).subscribe(() => this.loadAdmins(), (error)=> {console.error(error)});
       }
     });
   }

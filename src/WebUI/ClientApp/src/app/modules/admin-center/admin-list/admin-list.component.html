@@ -14,8 +14,8 @@
     <ng-container matColumnDef="delete">
       <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
       <td mat-cell *matCellDef="let element">
-        <button (click)="onDelete(element.email)" mat-icon-button>
-          <mat-icon>delete</mat-icon>
+        <button mat-raised-button color="warn" (click)="onDelete(element.email)" >
+          <mat-icon >delete</mat-icon>
         </button>
       </td>
     </ng-container>

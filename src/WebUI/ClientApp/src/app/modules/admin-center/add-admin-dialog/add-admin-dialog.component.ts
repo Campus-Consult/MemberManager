@@ -23,7 +23,7 @@ export class AddAdminDialogComponent {
     });
     this.adminClient.addAdmin(command).subscribe(()=>{
       this.dialogRef.close(this.email);
-    });
+    }, (error)=> console.error(error));
   }
 
   onNoClick(): void {

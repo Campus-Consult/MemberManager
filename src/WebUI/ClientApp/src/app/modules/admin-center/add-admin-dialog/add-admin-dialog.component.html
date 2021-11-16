@@ -7,11 +7,11 @@
   </p>
   <mat-form-field>
     <label matLable>E-Mail Addresse</label>
-    <input matInput placeholder="label" value="value" [(ngModel)]="email" />
+    <input matInput [(ngModel)]="email" />
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button mat-dialog-close>Abbruch</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button [mat-dialog-close]="email">Delete</button>
+  <button mat-button (click)="addAdmin()">Hinzufügen</button>
 </mat-dialog-actions>

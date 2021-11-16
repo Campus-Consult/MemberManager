@@ -57,8 +57,7 @@ export class AdminListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      let obs$ = this.addAdmin(result);
-      obs$.subscribe(() => this.loadAdmins());
+      this.loadAdmins();
     });
   }
 
@@ -91,13 +90,6 @@ export class AdminListComponent implements OnInit {
       },
       (err) => console.error(err)
     );
-  }
-
-  addAdmin(email: string): Observable<FileResponse> {
-    const command: AddAdminUserCommand = new AddAdminUserCommand({
-      email: email,
-    });
-    return this.adminClient.addAdmin(command);
   }
 
   removeAdmin(email: string): Observable<FileResponse> {

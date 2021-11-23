@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MemberManager.Application.Common.Exceptions
 {
-    class MultiErrorException : Exception
+    public class MultiErrorException : Exception
     {
         public MultiErrorException(IList<string> errors)
             : base("One or more errors have occurred.")

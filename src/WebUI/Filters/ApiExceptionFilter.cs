@@ -19,6 +19,7 @@ namespace MemberManager.WebUI.Filters
             {
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
+                { typeof(MultiErrorException), HandleMultiErrorException }
             };
         }
 
@@ -65,6 +66,23 @@ namespace MemberManager.WebUI.Filters
             var details = new ValidationProblemDetails(exception.Errors)
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            };
+
+            context.Result = new BadRequestObjectResult(details);
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleMultiErrorException(ExceptionContext context)
+        {
+            var exception = context.Exception as MultiErrorException;
+
+            var details = new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "An error occurred while processing your request.",
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Detail = exception.Message
             };
 
             context.Result = new BadRequestObjectResult(details);

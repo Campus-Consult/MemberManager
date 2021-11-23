@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MemberManager.Application.Common.Exceptions;
 
 namespace MemberManager.Application.Administration.Commands.AddAdminUser
 {
@@ -26,7 +27,11 @@ namespace MemberManager.Application.Administration.Commands.AddAdminUser
 
         public async Task<Unit> Handle(AddAdminUserCommand request, CancellationToken cancellationToken)
         {
-            await _identityService.AddUserToRole(request.Email, "Admin");
+            var result = await _identityService.AddUserToRole(request.Email, "Admin");
+            if(!result.Succeeded)
+            {
+                throw new MultiErrorException(result.Errors);
+            }
             return Unit.Value;
         }
     }

@@ -65,6 +65,15 @@
                 >Karrierestufen</a
               >
             </li>
+            <li
+              class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <a class="nav-link text-dark" [routerLink]="['admin-center']"
+                >Admin Center</a
+              >
+            </li>
           </ng-container>
           <li class="nav-item">
             <a class="nav-link text-dark" href="/api" target="_blank">API</a>

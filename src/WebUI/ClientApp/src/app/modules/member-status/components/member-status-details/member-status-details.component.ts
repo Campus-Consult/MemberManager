@@ -1,4 +1,4 @@
-import { MemberStatusEditComponent } from './../member-status-edit/member-status-edit.component';
+import { MemberStatusEditDialogComponent, MemberStatusEditDialogData } from '../member-status-edit-dialog/member-status-edit-dialog.component';
 import {
   AfterViewInit,
   Component,
@@ -25,8 +25,7 @@ import { MemberStatusHistoryDialogComponent } from '../member-status-history-dia
   styleUrls: ['./member-status-details.component.scss'],
 })
 export class MemberStatusDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit
-{
+  implements OnInit, OnChanges, AfterViewInit {
   @Input() memberStatusID: number;
   @Output() onReloadRequired = new EventEmitter();
 
@@ -74,7 +73,7 @@ export class MemberStatusDetailsComponent
   }
 
   onAssignPersonButtonClicked() {
-    let dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
+    const dialogRef = this.dialog.open(MemberStatusAssignDialogComponent, {
       data: {
         description: 'Assign to ' + this.memberStatus.name,
         memberStatus: this.memberStatus,
@@ -91,7 +90,7 @@ export class MemberStatusDetailsComponent
   onDismissPersonButtonClicked() {
     const disabled = this.memberStatus?.assignees.length !== 0;
     if (disabled) {
-      let dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
+      const dialogRef = this.dialog.open(MemberStatusDismissDialogComponent, {
         data: {
           description: 'Dismiss from ' + this.memberStatus.name,
           memberStatus: this.memberStatus,
@@ -109,7 +108,7 @@ export class MemberStatusDetailsComponent
   }
 
   onShowHistoryButtonClicked() {
-    let dialogRef = this.dialog.open(MemberStatusHistoryDialogComponent, {
+    const dialogRef = this.dialog.open(MemberStatusHistoryDialogComponent, {
       data: {
         description: 'History of ' + this.memberStatus.name,
         memberStatus: this.memberStatus,
@@ -119,10 +118,11 @@ export class MemberStatusDetailsComponent
   }
 
   onEditButtonClicked() {
-    let dialogRef = this.dialog.open(MemberStatusEditComponent, {
+    const dialogRef = this.dialog.open(MemberStatusEditDialogComponent, {
       data: {
-        memberStatus: this.memberStatus,
-      },
+        memberStatusId: this.memberStatus.id,
+        name: this.memberStatus.name
+      } as MemberStatusEditDialogData,
     });
 
     dialogRef.afterClosed().subscribe((result) => {

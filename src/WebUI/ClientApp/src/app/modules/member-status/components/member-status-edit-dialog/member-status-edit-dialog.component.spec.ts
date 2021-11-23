@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MemberStatusEditComponent } from './member-status-edit.component';
+import { MemberStatusEditDialogComponent } from './member-status-edit-dialog.component';
 
 describe('MemberStatusEditComponent', () => {
-  let component: MemberStatusEditComponent;
-  let fixture: ComponentFixture<MemberStatusEditComponent>;
+  let component: MemberStatusEditDialogComponent;
+  let fixture: ComponentFixture<MemberStatusEditDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MemberStatusEditComponent],
+      declarations: [MemberStatusEditDialogComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MemberStatusEditComponent);
+    fixture = TestBed.createComponent(MemberStatusEditDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

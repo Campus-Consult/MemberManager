@@ -57,7 +57,9 @@ export class AdminListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.loadAdmins();
+      if(result){
+        this.loadAdmins();
+      }
     });
   }
 
@@ -68,23 +70,20 @@ export class AdminListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.removeAdmin(result).subscribe(() => this.loadAdmins(), (error)=> {console.error(error)});
+      if (result) {      
+        this.removeAdmin(email).subscribe(() => this.loadAdmins(), (error)=> {console.error(error)});
       }
     });
   }
 
   loadAdmins() {
-    console.log('loadAdmins');
     this.adminClient.getCurrentAdmins().subscribe(
       (admins) => {
         this.amdinListItems = new Array<AdminListItem>();
         for (const item of admins) {
-          // test because, 
+          // test property is existent, because data table does not like objects with only one property 
           this.amdinListItems.push({ email: item, test: 'test' });
         }
-        console.log('getCurrentAdmins:', admins);
-
         this.dataSource = new MatTableDataSource<AdminListItem>(this.amdinListItems);
         this.dataSource.sort = this.sort;
       },

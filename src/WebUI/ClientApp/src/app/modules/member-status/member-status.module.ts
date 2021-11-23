@@ -5,7 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-//Angular Material Components
+// Angular Material Components
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -48,7 +48,7 @@ import { MemberStatusAssignDialogComponent } from './components/member-status-as
 import { MemberStatusDismissDialogComponent } from './components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
 import { MemberStatusHistoryDialogComponent } from './components/member-status-history-dialog/member-status-history-dialog.component';
 import { MemberStatusCreateComponent } from './components/member-status-create/member-status-create.component';
-import { MemberStatusEditComponent } from './components/member-status-edit/member-status-edit.component';
+import { MemberStatusEditDialogComponent } from './components/member-status-edit-dialog/member-status-edit-dialog.component';
 
 @NgModule({
   imports: [
@@ -98,7 +98,7 @@ import { MemberStatusEditComponent } from './components/member-status-edit/membe
     MemberStatusDismissDialogComponent,
     MemberStatusHistoryDialogComponent,
     MemberStatusCreateComponent,
-    MemberStatusEditComponent,
+    MemberStatusEditDialogComponent,
   ],
   exports: [MemberStatusComponent],
 })

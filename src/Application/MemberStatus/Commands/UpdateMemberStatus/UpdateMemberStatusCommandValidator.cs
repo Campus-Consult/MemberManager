@@ -26,7 +26,7 @@ namespace MemberManager.Application.MemberStatuss.Commands.UpdateMemberStatus
         }
 
         public async Task<bool> MemberStatusNameUnique(UpdateMemberStatusCommand model, string name, CancellationToken cancellationToken) {
-            return await _context.MemberStatus.AllAsync(c => c.Name != name, cancellationToken);
+            return !await _context.MemberStatus.AnyAsync(c => c.Name == name && c.Id != model.MemberStatusId, cancellationToken);
         }
     }
 }

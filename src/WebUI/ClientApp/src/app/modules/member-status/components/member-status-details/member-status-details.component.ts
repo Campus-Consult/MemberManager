@@ -1,4 +1,7 @@
-import { MemberStatusEditDialogComponent, MemberStatusEditDialogData } from '../member-status-edit-dialog/member-status-edit-dialog.component';
+import {
+  MemberStatusEditDialogComponent,
+  MemberStatusEditDialogData,
+} from '../member-status-edit-dialog/member-status-edit-dialog.component';
 import {
   AfterViewInit,
   Component,
@@ -25,7 +28,8 @@ import { MemberStatusHistoryDialogComponent } from '../member-status-history-dia
   styleUrls: ['./member-status-details.component.scss'],
 })
 export class MemberStatusDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit {
+  implements OnInit, OnChanges, AfterViewInit
+{
   @Input() memberStatusID: number;
   @Output() onReloadRequired = new EventEmitter();
 
@@ -121,7 +125,7 @@ export class MemberStatusDetailsComponent
     const dialogRef = this.dialog.open(MemberStatusEditDialogComponent, {
       data: {
         memberStatusId: this.memberStatus.id,
-        name: this.memberStatus.name
+        name: this.memberStatus.name,
       } as MemberStatusEditDialogData,
     });
 

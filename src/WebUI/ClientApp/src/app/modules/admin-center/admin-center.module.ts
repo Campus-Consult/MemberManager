@@ -12,13 +12,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { AddAdminDialogComponent } from './add-admin-dialog/add-admin-dialog.component';
 import { MatTableModule } from '@angular/material/table';
 
-
-const routes: Routes = [
-  { path: '', component: AdminCenterComponent }
-];
+const routes: Routes = [{ path: '', component: AdminCenterComponent }];
 
 @NgModule({
-  declarations: [AdminCenterComponent, AdminListComponent, AddAdminDialogComponent],
+  declarations: [
+    AdminCenterComponent,
+    AdminListComponent,
+    AddAdminDialogComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -29,7 +30,7 @@ const routes: Routes = [
     MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+  ],
 })
-export class AdminCenterModule { }
+export class AdminCenterModule {}

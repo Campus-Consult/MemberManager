@@ -57,7 +57,7 @@ export class AdminListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if(result){
+      if (result) {
         this.loadAdmins();
       }
     });
@@ -66,12 +66,20 @@ export class AdminListComponent implements OnInit {
   onDelete(email: string) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '250px',
-      data: {title: 'Admin entfernen', content: `Willst du ${email} als Admin entfernen` },
+      data: {
+        title: 'Admin entfernen',
+        content: `Willst du ${email} als Admin entfernen`,
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {      
-        this.removeAdmin(email).subscribe(() => this.loadAdmins(), (error)=> {console.error(error)});
+      if (result) {
+        this.removeAdmin(email).subscribe(
+          () => this.loadAdmins(),
+          (error) => {
+            console.error(error);
+          }
+        );
       }
     });
   }
@@ -81,10 +89,12 @@ export class AdminListComponent implements OnInit {
       (admins) => {
         this.amdinListItems = new Array<AdminListItem>();
         for (const item of admins) {
-          // test property is existent, because data table does not like objects with only one property 
+          // test property is existent, because data table does not like objects with only one property
           this.amdinListItems.push({ email: item, test: 'test' });
         }
-        this.dataSource = new MatTableDataSource<AdminListItem>(this.amdinListItems);
+        this.dataSource = new MatTableDataSource<AdminListItem>(
+          this.amdinListItems
+        );
         this.dataSource.sort = this.sort;
       },
       (err) => console.error(err)

@@ -8,9 +8,8 @@ describe('AdminCenterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminCenterComponent ]
-    })
-    .compileComponents();
+      declarations: [AdminCenterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,13 +1,14 @@
 // Define the dark color theme
+@use '~@angular/material' as mat;
 
 // For more information: https://material.angular.io/guide/theming
 @import '~@angular/material/theming';
 @import 'palettes/cc-colors.scss';
 
-$cc-dark-primary: mat-palette($md-ccblau, 100);
-$cc-dark-accent: mat-palette($md-ccgruen, 100);
-$cc-dark-warn: mat-palette($md-warncolor, 100);
-$cc-dark-theme: mat-dark-theme(
+$cc-dark-primary: mat.define-palette($md-ccblau, 100);
+$cc-dark-accent: mat.define-palette($md-ccgruen, 100);
+$cc-dark-warn: mat.define-palette($md-warncolor, 100);
+$cc-dark-theme: mat.define-dark-theme(
   (
     color: (
       primary: $cc-dark-primary,

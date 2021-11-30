@@ -1,4 +1,5 @@
-@import '~@angular/material/theming';
+@use '@angular/material' as mat;
+@import '@angular/material/theming';
 
 // mixin name will be used in main theme.scss
 @mixin data-table-theme($config-or-theme) {
@@ -37,10 +38,10 @@
       min-height: 65px;
 
       &.selected {
-        background: mat-color($primary, default);
+        background: mat.get-color-from-palette($primary, default);
 
         .mat-cell {
-          color: mat-color($primary, default-contrast);
+          color: mat.get-color-from-palette($primary, default-contrast);
         }
       }
     }

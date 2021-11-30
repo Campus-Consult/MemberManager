@@ -1,5 +1,5 @@
-@use '~@angular/material' as mat;
-@import '~@angular/material/theming';
+@use '@angular/material' as mat;
+@import '@angular/material/theming';
 
 // Define a custom typography config that overrides the font-family as well as the
 // `headlines` and `body-1` levels.

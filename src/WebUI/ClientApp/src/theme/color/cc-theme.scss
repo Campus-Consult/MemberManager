@@ -1,8 +1,8 @@
 // Define the default color theme
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 @import 'palettes/cc-colors.scss';
 
 $cc-primary: mat.define-palette($md-ccblau, 500);

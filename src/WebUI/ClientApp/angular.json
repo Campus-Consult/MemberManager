@@ -59,20 +59,24 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
-            }
+            },
+            "development": {}
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "MemberManager.WebUI:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "MemberManager.WebUI:build:production"
+            },
+            "development": {
+              "browserTarget": "MemberManager.WebUI:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -126,9 +130,10 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true
-            }
+            },
+            "development": {}
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         }
       }
     },
@@ -141,7 +146,8 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "MemberManager.WebUI:serve"
-          }
+          },
+          "configurations": {}
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",

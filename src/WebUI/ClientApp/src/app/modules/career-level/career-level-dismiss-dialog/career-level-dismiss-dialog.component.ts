@@ -67,7 +67,6 @@ export class CareerLevelDismissDialogComponent implements OnInit {
           this.dialogRef.close(true);
         },
         (error) => {
-          // TODO: make error component
           console.error(error);
           this.errors = error;
         }

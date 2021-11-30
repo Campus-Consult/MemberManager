@@ -1,7 +1,4 @@
 <h2 mat-dialog-title>{{ description }}</h2>
-
-<app-dialog-error [errors]="errors"></app-dialog-error>
-
 <mat-dialog-content [formGroup]="assignForm">
   <search-select
     [selectSuggestions]="selectSuggestions"
@@ -16,6 +13,8 @@
   </mat-form-field>
 
   <ng-content></ng-content>
+
+  <app-dialog-error [errors]="errors"></app-dialog-error>
 </mat-dialog-content>
 
 <mat-dialog-actions>

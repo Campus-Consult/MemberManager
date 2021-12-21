@@ -60,18 +60,7 @@ export class PositionReactivateDialogComponent implements OnInit {
           this.dialogRef.close(true);
         },
         (error) => {
-          let errors = JSON.parse(error.response);
-
-          // TODO make error component
-          if (errors) {
-            console.error(errors);
-            this.errors = errors.title + ':';
-            for (var i = 0; i < errors.errors.Id.length; i++) {
-              this.errors += errors.errors.Id[i];
-            }
-          } else {
-            console.error(error);
-          }
+          this.errors = error;
         }
       );
   }

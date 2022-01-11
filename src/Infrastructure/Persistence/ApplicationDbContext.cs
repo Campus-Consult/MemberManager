@@ -115,6 +115,13 @@ namespace MemberManager.Infrastructure.Persistence
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             base.OnModelCreating(builder);
+
+            builder.Entity<Person>()
+                .Property(p => p.EmailAssociaton)
+                .IsRequired();
+            builder.Entity<Person>()
+                .HasIndex(p => p.EmailAssociaton)
+                .IsUnique();
         }
     }
 }

@@ -1766,8 +1766,31 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/CareerLevelAssignee"
+              "$ref": "#/components/schemas/AssigneeDto"
             }
+          }
+        }
+      },
+      "AssigneeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "beginDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -1897,29 +1920,6 @@
             "items": {
               "$ref": "#/components/schemas/AssigneeDto"
             }
-          }
-        }
-      },
-      "AssigneeDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "personId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "beginDateTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDateTime": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         }
       },

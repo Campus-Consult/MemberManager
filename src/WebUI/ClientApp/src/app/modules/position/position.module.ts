@@ -46,7 +46,6 @@ import { PositionListComponent } from './components/position-list/position-list.
 import { PositionDetailsComponent } from './components/position-details/position-details.component';
 import { PositionAssignDialogComponent } from './components/position-assign-dialog/position-assign-dialog.component';
 import { PositionDismissDialogComponent } from './components/position-dismiss-dialog/position-dismiss-dialog.component';
-import { PositionHistoryDialogComponent } from './components/position-history-dialog/position-history-dialog.component';
 import { PositionCreateDialogComponent } from './components/position-create-dialog/position-create-dialog.component';
 import { PositionEditDialogComponent } from './components/position-edit-dialog/position-edit-dialog.component';
 import { PositionDeactivateDialogComponent } from './components/position-deactivate-dialog/position-deactivate-dialog.component';
@@ -98,7 +97,6 @@ import { PositionReactivateDialogComponent } from './components/position-reactiv
     PositionDetailsComponent,
     PositionAssignDialogComponent,
     PositionDismissDialogComponent,
-    PositionHistoryDialogComponent,
     PositionCreateDialogComponent,
     PositionEditDialogComponent,
     PositionDeactivateDialogComponent,

@@ -16,6 +16,7 @@ import {
   MatTable,
   MatTableDataSource,
 } from '@angular/material/table';
+import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
 import {
   AssigneeDto,
   PositionClient,
@@ -25,7 +26,6 @@ import { PositionAssignDialogComponent } from '../position-assign-dialog/positio
 import { PositionDeactivateDialogComponent } from '../position-deactivate-dialog/position-deactivate-dialog.component';
 import { PositionDismissDialogComponent } from '../position-dismiss-dialog/position-dismiss-dialog.component';
 import { PositionEditDialogComponent } from '../position-edit-dialog/position-edit-dialog.component';
-import { PositionHistoryDialogComponent } from '../position-history-dialog/position-history-dialog.component';
 import { PositionReactivateDialogComponent } from '../position-reactivate-dialog/position-reactivate-dialog.component';
 
 @Component({
@@ -167,12 +167,17 @@ export class PositionDetailsComponent
   }
 
   onShowHistoryButtonClicked() {
-    let dialogRef = this.dialog.open(PositionHistoryDialogComponent, {
-      data: {
-        description: 'History of ' + this.position.name,
-        position: this.position,
+    this.positionClient.getHistory(this.position.id).subscribe(
+      (result) => {
+        this.dialog.open(HistoryDialogComponent, {
+          data: {
+            description: 'History of ' + this.position.name,
+            assignees: result.assignees,
+          },
+          width: '600px',
+        });
       },
-      width: '600px',
-    });
+      (error) => console.error(error)
+    );
   }
 }

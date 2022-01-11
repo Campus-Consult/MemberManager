@@ -2612,7 +2612,7 @@ export interface IUpdateCareerLevelCommand {
 }
 
 export class CareerLevelHistoryVm implements ICareerLevelHistoryVm {
-    assignees?: CareerLevelAssignee[] | undefined;
+    assignees?: AssigneeDto[] | undefined;
 
     constructor(data?: ICareerLevelHistoryVm) {
         if (data) {
@@ -2628,7 +2628,7 @@ export class CareerLevelHistoryVm implements ICareerLevelHistoryVm {
             if (Array.isArray(_data["assignees"])) {
                 this.assignees = [] as any;
                 for (let item of _data["assignees"])
-                    this.assignees!.push(CareerLevelAssignee.fromJS(item));
+                    this.assignees!.push(AssigneeDto.fromJS(item));
             }
         }
     }
@@ -2652,7 +2652,55 @@ export class CareerLevelHistoryVm implements ICareerLevelHistoryVm {
 }
 
 export interface ICareerLevelHistoryVm {
-    assignees?: CareerLevelAssignee[] | undefined;
+    assignees?: AssigneeDto[] | undefined;
+}
+
+export class AssigneeDto implements IAssigneeDto {
+    personId?: number;
+    name?: string | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
+
+    constructor(data?: IAssigneeDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.personId = _data["personId"];
+            this.name = _data["name"];
+            this.beginDateTime = _data["beginDateTime"];
+            this.endDateTime = _data["endDateTime"];
+        }
+    }
+
+    static fromJS(data: any): AssigneeDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AssigneeDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["personId"] = this.personId;
+        data["name"] = this.name;
+        data["beginDateTime"] = this.beginDateTime;
+        data["endDateTime"] = this.endDateTime;
+        return data; 
+    }
+}
+
+export interface IAssigneeDto {
+    personId?: number;
+    name?: string | undefined;
+    beginDateTime?: string;
+    endDateTime?: string | undefined;
 }
 
 export class ChangePersonCareerLevelCommand implements IChangePersonCareerLevelCommand {
@@ -3005,54 +3053,6 @@ export interface IMemberStatusDetailVm {
     name?: string | undefined;
     countAssignees?: number;
     assignees?: AssigneeDto[] | undefined;
-}
-
-export class AssigneeDto implements IAssigneeDto {
-    personId?: number;
-    name?: string | undefined;
-    beginDateTime?: string;
-    endDateTime?: string | undefined;
-
-    constructor(data?: IAssigneeDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.personId = _data["personId"];
-            this.name = _data["name"];
-            this.beginDateTime = _data["beginDateTime"];
-            this.endDateTime = _data["endDateTime"];
-        }
-    }
-
-    static fromJS(data: any): AssigneeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AssigneeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["personId"] = this.personId;
-        data["name"] = this.name;
-        data["beginDateTime"] = this.beginDateTime;
-        data["endDateTime"] = this.endDateTime;
-        return data; 
-    }
-}
-
-export interface IAssigneeDto {
-    personId?: number;
-    name?: string | undefined;
-    beginDateTime?: string;
-    endDateTime?: string | undefined;
 }
 
 export class UpdateMemberStatusCommand implements IUpdateMemberStatusCommand {

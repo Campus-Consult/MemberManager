@@ -46,6 +46,7 @@ import { DismissDialogComponent } from './components/dismiss-dialog/dismiss-dial
 import { DialogErrorComponent } from './components/dialog-error/dialog-error.component';
 import { PageForbiddenComponent } from './components/page-forbidden/page-forbidden.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
+import { HistoryDialogComponent } from './components/history-dialog/history-dialog.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -57,6 +58,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
     DialogErrorComponent,
     PageForbiddenComponent,
     DeleteDialogComponent,
+    HistoryDialogComponent,
   ],
   exports: [
     DataTableComponent,

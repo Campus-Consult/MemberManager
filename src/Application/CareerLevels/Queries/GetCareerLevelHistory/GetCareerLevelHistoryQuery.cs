@@ -37,9 +37,7 @@ namespace MemberManager.Application.CareerLevels.Queries.GetCareerLevelHistory
             {
                 throw new NotFoundException(nameof(careerLevel), request.CareerLevelId);
             }
-            return new CareerLevelHistoryVm {
-                Assignees = _mapper.ProjectTo<CareerLevelAssignee>(careerLevel.PersonCareerLevels.AsQueryable()).ToList(),
-            };
+            return _mapper.Map<CareerLevelHistoryVm>(careerLevel);
         }
     }
 }

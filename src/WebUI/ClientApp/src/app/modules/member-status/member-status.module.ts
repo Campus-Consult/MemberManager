@@ -46,7 +46,6 @@ import { MemberStatusListComponent } from './components/member-status-list/membe
 import { MemberStatusDetailsComponent } from './components/member-status-details/member-status-details.component';
 import { MemberStatusAssignDialogComponent } from './components/member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from './components/member-status-dismiss-dialog/member-status-dismiss-dialog.component';
-import { MemberStatusHistoryDialogComponent } from './components/member-status-history-dialog/member-status-history-dialog.component';
 import { MemberStatusCreateComponent } from './components/member-status-create/member-status-create.component';
 import { MemberStatusEditDialogComponent } from './components/member-status-edit-dialog/member-status-edit-dialog.component';
 
@@ -96,7 +95,6 @@ import { MemberStatusEditDialogComponent } from './components/member-status-edit
     MemberStatusDetailsComponent,
     MemberStatusAssignDialogComponent,
     MemberStatusDismissDialogComponent,
-    MemberStatusHistoryDialogComponent,
     MemberStatusCreateComponent,
     MemberStatusEditDialogComponent,
   ],

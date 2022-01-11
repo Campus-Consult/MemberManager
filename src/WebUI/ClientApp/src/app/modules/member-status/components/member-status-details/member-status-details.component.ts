@@ -20,7 +20,7 @@ import {
 } from '../../../../membermanager-api';
 import { MemberStatusAssignDialogComponent } from '../member-status-assign-dialog/member-status-assign-dialog.component';
 import { MemberStatusDismissDialogComponent } from '../member-status-dismiss-dialog/member-status-dismiss-dialog.component';
-import { MemberStatusHistoryDialogComponent } from '../member-status-history-dialog/member-status-history-dialog.component';
+import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
 
 @Component({
   selector: 'app-member-status-details',
@@ -112,13 +112,18 @@ export class MemberStatusDetailsComponent
   }
 
   onShowHistoryButtonClicked() {
-    const dialogRef = this.dialog.open(MemberStatusHistoryDialogComponent, {
-      data: {
-        description: 'History of ' + this.memberStatus.name,
-        memberStatus: this.memberStatus,
+    this.memberStatusClient.getHistory(this.memberStatus.id).subscribe(
+      (result) => {
+        this.dialog.open(HistoryDialogComponent, {
+          data: {
+            description: 'History of ' + this.memberStatus.name,
+            assignees: result.assignees,
+          },
+          width: '600px',
+        });
       },
-      width: '600px',
-    });
+      (error) => console.error(error)
+    );
   }
 
   onEditButtonClicked() {

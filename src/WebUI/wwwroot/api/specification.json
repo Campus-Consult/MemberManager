@@ -984,6 +984,43 @@
         ]
       }
     },
+    "/api/People/GetBirthdays": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "operationId": "People_GetBirthdays",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BirthdayPeopleDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/People/{id}": {
       "get": {
         "tags": [
@@ -2179,6 +2216,41 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "BirthdayPeopleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "people": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PersonWithBirthdateDto"
+            }
+          }
+        }
+      },
+      "PersonWithBirthdateDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

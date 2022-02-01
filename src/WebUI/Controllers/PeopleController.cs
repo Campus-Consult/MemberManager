@@ -2,6 +2,7 @@
 using MemberManager.Application.People.Commands.CreatePerson;
 using MemberManager.Application.People.Commands.DeletePerson;
 using MemberManager.Application.People.Commands.UpdatePerson;
+using MemberManager.Application.People.Queries.GetBirthdayPeople;
 using MemberManager.Application.People.Queries.GetCurrentCareerLevel;
 using MemberManager.Application.People.Queries.GetPeople;
 using MemberManager.Application.People.Queries.GetPeopleWithBasicInfo;
@@ -9,6 +10,7 @@ using MemberManager.Application.People.Queries.GetPersonDetail;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MemberManager.WebUI.Controllers
@@ -32,6 +34,13 @@ namespace MemberManager.WebUI.Controllers
         public async Task<ActionResult<CareerLevelAssignmentDto>> GetCurrentCareerLevel(int id, DateTime? time) {
             return await Mediator.Send(new GetCurrentCareerLevelQuery {
                 PersonId = id,
+                Time = time,
+            });
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<BirthdayPeopleDto>> GetBirthdays(DateTime? time) {
+            return await Mediator.Send(new GetBirthdayPeopleQuery {
                 Time = time,
             });
         }

@@ -1216,6 +1216,7 @@ export interface IPeopleClient {
     create(command: CreatePersonCommand): Observable<number>;
     getWithBasicInfo(): Observable<PeopleWithBasicInfoVm>;
     getCurrentCareerLevel(id: number, time: string | null | undefined): Observable<CareerLevelAssignmentDto>;
+    getBirthdays(time: string | null | undefined): Observable<BirthdayPeopleDto>;
     get2(id: number): Observable<PersonDetailVm>;
     update(id: number, command: UpdatePersonCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
@@ -1433,6 +1434,56 @@ export class PeopleClient implements IPeopleClient {
             }));
         }
         return _observableOf<CareerLevelAssignmentDto>(<any>null);
+    }
+
+    getBirthdays(time: string | null | undefined): Observable<BirthdayPeopleDto> {
+        let url_ = this.baseUrl + "/api/People/GetBirthdays?";
+        if (time !== undefined)
+            url_ += "time=" + encodeURIComponent("" + time) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetBirthdays(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetBirthdays(<any>response_);
+                } catch (e) {
+                    return <Observable<BirthdayPeopleDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<BirthdayPeopleDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetBirthdays(response: HttpResponseBase): Observable<BirthdayPeopleDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BirthdayPeopleDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<BirthdayPeopleDto>(<any>null);
     }
 
     get2(id: number): Observable<PersonDetailVm> {
@@ -3705,6 +3756,98 @@ export interface ICareerLevelAssignmentDto {
     isActive?: boolean;
     beginDateTime?: string;
     endDateTime?: string | undefined;
+}
+
+export class BirthdayPeopleDto implements IBirthdayPeopleDto {
+    people?: PersonWithBirthdateDto[] | undefined;
+
+    constructor(data?: IBirthdayPeopleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["people"])) {
+                this.people = [] as any;
+                for (let item of _data["people"])
+                    this.people!.push(PersonWithBirthdateDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): BirthdayPeopleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new BirthdayPeopleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.people)) {
+            data["people"] = [];
+            for (let item of this.people)
+                data["people"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IBirthdayPeopleDto {
+    people?: PersonWithBirthdateDto[] | undefined;
+}
+
+export class PersonWithBirthdateDto implements IPersonWithBirthdateDto {
+    id?: string | undefined;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    birthdate?: string;
+
+    constructor(data?: IPersonWithBirthdateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.surname = _data["surname"];
+            this.birthdate = _data["birthdate"];
+        }
+    }
+
+    static fromJS(data: any): PersonWithBirthdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonWithBirthdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["surname"] = this.surname;
+        data["birthdate"] = this.birthdate;
+        return data; 
+    }
+}
+
+export interface IPersonWithBirthdateDto {
+    id?: string | undefined;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    birthdate?: string;
 }
 
 export class PersonDetailVm implements IPersonDetailVm {

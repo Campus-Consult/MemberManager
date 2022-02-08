@@ -31,7 +31,6 @@ export class HistoryDialogComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<IAssigneeDto>(this.assignees);
     this.assigneeCount = this.assignees.length;
-    console.log(this.assignees);
   }
 
   close() {

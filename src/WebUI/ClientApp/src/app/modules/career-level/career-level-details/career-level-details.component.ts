@@ -17,6 +17,7 @@ import {
 } from './../../../membermanager-api';
 import { CareerLevelDismissDialogComponent } from '../career-level-dismiss-dialog/career-level-dismiss-dialog.component';
 import { CreateCareerLevelDialogComponent } from '../create-career-level-dialog/create-career-level-dialog.component';
+import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
 
 @Component({
   selector: 'app-career-level-details',
@@ -114,5 +115,20 @@ export class CareerLevelDetailsComponent
       this.reload();
       sub.unsubscribe();
     });
+  }
+
+  onShowHistoryButtonClicked() {
+    this.careerLevelClient.getHistory(this.careerLevel.id).subscribe(
+      (result) => {
+        this.dialog.open(HistoryDialogComponent, {
+          data: {
+            description: 'History of ' + this.careerLevel.name,
+            assignees: result.assignees,
+          },
+          width: '600px',
+        });
+      },
+      (error) => console.error(error)
+    );
   }
 }

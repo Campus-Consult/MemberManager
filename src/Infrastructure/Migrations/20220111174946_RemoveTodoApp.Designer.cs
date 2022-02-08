@@ -3,14 +3,16 @@ using System;
 using MemberManager.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MemberManager.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220111174946_RemoveTodoApp")]
+    partial class RemoveTodoApp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,8 +157,7 @@ namespace MemberManager.Infrastructure.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("EmailAssociaton")
-                        .IsRequired()
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("EmailPrivate")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -178,9 +179,6 @@ namespace MemberManager.Infrastructure.Migrations
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmailAssociaton")
-                        .IsUnique();
 
                     b.ToTable("People");
                 });

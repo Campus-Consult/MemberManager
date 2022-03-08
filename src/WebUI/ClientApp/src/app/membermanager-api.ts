@@ -2243,6 +2243,72 @@ export class PositionClient implements IPositionClient {
     }
 }
 
+export interface ISelfManagementClient {
+    getOverview(): Observable<BasicInfoVm>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SelfManagementClient implements ISelfManagementClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getOverview(): Observable<BasicInfoVm> {
+        let url_ = this.baseUrl + "/api/self";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetOverview(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetOverview(<any>response_);
+                } catch (e) {
+                    return <Observable<BasicInfoVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<BasicInfoVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetOverview(response: HttpResponseBase): Observable<BasicInfoVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BasicInfoVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<BasicInfoVm>(<any>null);
+    }
+}
+
 export class AddAdminUserCommand implements IAddAdminUserCommand {
     email?: string | undefined;
 
@@ -4887,6 +4953,86 @@ export interface IDismissFromPositionCommand {
     positionId?: number;
     personId?: number;
     dismissalDateTime?: string;
+}
+
+export class BasicInfoVm implements IBasicInfoVm {
+    id?: number;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    birthdate?: string;
+    gender?: Gender;
+    emailPrivate?: string | undefined;
+    emailAssociaton?: string | undefined;
+    mobilePrivate?: string | undefined;
+    adressStreet?: string | undefined;
+    adressNo?: string | undefined;
+    adressZIP?: string | undefined;
+    adressCity?: string | undefined;
+
+    constructor(data?: IBasicInfoVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.surname = _data["surname"];
+            this.birthdate = _data["birthdate"];
+            this.gender = _data["gender"];
+            this.emailPrivate = _data["emailPrivate"];
+            this.emailAssociaton = _data["emailAssociaton"];
+            this.mobilePrivate = _data["mobilePrivate"];
+            this.adressStreet = _data["adressStreet"];
+            this.adressNo = _data["adressNo"];
+            this.adressZIP = _data["adressZIP"];
+            this.adressCity = _data["adressCity"];
+        }
+    }
+
+    static fromJS(data: any): BasicInfoVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new BasicInfoVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["surname"] = this.surname;
+        data["birthdate"] = this.birthdate;
+        data["gender"] = this.gender;
+        data["emailPrivate"] = this.emailPrivate;
+        data["emailAssociaton"] = this.emailAssociaton;
+        data["mobilePrivate"] = this.mobilePrivate;
+        data["adressStreet"] = this.adressStreet;
+        data["adressNo"] = this.adressNo;
+        data["adressZIP"] = this.adressZIP;
+        data["adressCity"] = this.adressCity;
+        return data; 
+    }
+}
+
+export interface IBasicInfoVm {
+    id?: number;
+    firstName?: string | undefined;
+    surname?: string | undefined;
+    birthdate?: string;
+    gender?: Gender;
+    emailPrivate?: string | undefined;
+    emailAssociaton?: string | undefined;
+    mobilePrivate?: string | undefined;
+    adressStreet?: string | undefined;
+    adressNo?: string | undefined;
+    adressZIP?: string | undefined;
+    adressCity?: string | undefined;
 }
 
 export interface FileResponse {

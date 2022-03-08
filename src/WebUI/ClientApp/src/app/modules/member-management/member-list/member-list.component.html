@@ -33,7 +33,9 @@
           Karriere Stufe
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.currentCareerLevel }}
+          <p [title]="element.currentCareerLevel">
+            {{ element.currentCareerLevelShort }}
+          </p>
         </td>
       </ng-container>
 

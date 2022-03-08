@@ -3545,6 +3545,7 @@ export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupD
     surname?: string | undefined;
     currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
+    currentCareerLevelShort?: string | undefined;
     currentMemberStatus?: string | undefined;
 
     constructor(data?: IPersonWithBasicInfoLookupDto) {
@@ -3567,6 +3568,7 @@ export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupD
                     this.currentPositions!.push(SimplePositionDto.fromJS(item));
             }
             this.currentCareerLevel = _data["currentCareerLevel"];
+            this.currentCareerLevelShort = _data["currentCareerLevelShort"];
             this.currentMemberStatus = _data["currentMemberStatus"];
         }
     }
@@ -3589,6 +3591,7 @@ export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupD
                 data["currentPositions"].push(item.toJSON());
         }
         data["currentCareerLevel"] = this.currentCareerLevel;
+        data["currentCareerLevelShort"] = this.currentCareerLevelShort;
         data["currentMemberStatus"] = this.currentMemberStatus;
         return data; 
     }
@@ -3600,6 +3603,7 @@ export interface IPersonWithBasicInfoLookupDto {
     surname?: string | undefined;
     currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
+    currentCareerLevelShort?: string | undefined;
     currentMemberStatus?: string | undefined;
 }
 

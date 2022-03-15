@@ -1,0 +1,28 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Deine Daten</mat-card-title>
+      <mat-card-subtitle>{{
+        memberData.firstName + memberData.surname
+      }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div id="form-container">
+        <app-member-form [formDisabled]="!isEditing" [memberData]="memberData"></app-member-form>
+      </div>
+      <div class="error-hint" *ngIf="invalidHints">
+        <app-error-hint
+          [invalidHints]="invalidHints"
+          [title]="errorHintTitle"
+        ></app-error-hint>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+       <ng-container *ngIf="isEditing; else editButton">
+        <button mat-button color="accent" (click)="onSubmit()">Anwenden</button>
+        <button mat-button color="primary" (click)="onCancel()">Verwerfen</button>
+      </ng-container>
+      <ng-template #editButton>
+        <button mat-button color="accent" (click)="isEditing = !isEditing">Eigene Daten Bearbeiten</button>
+      </ng-template>
+    </mat-card-actions>
+  </mat-card>

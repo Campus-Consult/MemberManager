@@ -47,6 +47,7 @@ import { DialogErrorComponent } from './components/dialog-error/dialog-error.com
 import { PageForbiddenComponent } from './components/page-forbidden/page-forbidden.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { HistoryDialogComponent } from './components/history-dialog/history-dialog.component';
+import { MemberFormComponent } from './components/member-form/member-form.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -59,6 +60,7 @@ import { HistoryDialogComponent } from './components/history-dialog/history-dial
     PageForbiddenComponent,
     DeleteDialogComponent,
     HistoryDialogComponent,
+    MemberFormComponent,
   ],
   exports: [
     DataTableComponent,
@@ -68,6 +70,7 @@ import { HistoryDialogComponent } from './components/history-dialog/history-dial
     AssignDialogComponent,
     DismissDialogComponent,
     DialogErrorComponent,
+    MemberFormComponent,
   ],
   imports: [
     CommonModule,

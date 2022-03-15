@@ -24,7 +24,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '../../shared/shared.module';
 import { CreateMemberComponent } from './create-member/create-member.component';
 import { ErrorHintComponent } from './create-member/error-hint/error-hint.component';
-import { MemberFormComponent } from './create-member/member-form/member-form.component';
 import { EditMemberDataComponent } from './edit-member-data/edit-member-data.component';
 import { HistoryPanelsComponent } from './member-details/history-panels/history-panels.component';
 import { MemberDataSheetComponent } from './member-details/member-data-sheet.component';
@@ -42,7 +41,6 @@ import { HistoryDialogComponent } from './member-details/history-dialog/history-
     MemberDataComponent,
     EditMemberDataComponent,
     HistoryPanelsComponent,
-    MemberFormComponent,
     CreateMemberComponent,
     ErrorHintComponent,
     HistoryDialogComponent,

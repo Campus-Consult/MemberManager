@@ -9,7 +9,7 @@ import {
   MemberStatusLookupDto,
   PeopleClient,
 } from 'src/app/membermanager-api';
-import { MemberFormComponent } from './member-form/member-form.component';
+import { MemberFormComponent } from '../../../shared/components/member-form/member-form.component';
 
 /**
  * Create People Modal

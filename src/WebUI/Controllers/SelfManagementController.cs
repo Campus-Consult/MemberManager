@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 using IdentityModel;
 using MemberManager.Application.SelfManagement.Queries.GetBasic;
 using System;
+using MemberManager.Application.People.Queries.GetPersonDetail;
+using MemberManager.Application.People.Commands.UpdatePerson;
+using MemberManager.Application.People.Commands.CreatePerson;
 
 namespace MemberManager.WebUI.Controllers
 {
@@ -30,11 +33,28 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BasicInfoVm>> GetOverview()
+        public async Task<ActionResult<PersonDetailVm>> GetOverview()
         {
-            var MAIL_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
-            var email = _httpContextAccessor.HttpContext.User.FindFirst(c => c.Type == MAIL_CLAIM).Value;
-            return await Mediator.Send(new GetBasicQuery{ Email = email});
-        } 
+            return await Mediator.Send(new GetBasicQuery{ Email = Util.GetAssociationEmailOrError(_httpContextAccessor)});
+        }
+
+        [HttpPut("[action]")]
+        public async Task<ActionResult> Update(UpdatePersonCommand command)
+        {
+            var userMail = Util.GetAssociationEmailOrError(_httpContextAccessor);
+            if (command.EmailAssociaton != userMail) {
+                return BadRequest("bad association email!");
+            }
+            var basicInfo = await Mediator.Send(new GetBasicQuery{ Email = userMail});
+
+            if (command.Id != basicInfo.Id)
+            {
+                return BadRequest("id mismatch!");
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
     }
 }

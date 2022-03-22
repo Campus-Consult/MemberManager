@@ -1618,7 +1618,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BasicInfoVm"
+                  "$ref": "#/components/schemas/PersonDetailVm"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/self/Update": {
+      "put": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "SelfManagement_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePersonCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -2780,59 +2818,6 @@
           "dismissalDateTime": {
             "type": "string",
             "format": "date-time"
-          }
-        }
-      },
-      "BasicInfoVm": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "surname": {
-            "type": "string",
-            "nullable": true
-          },
-          "birthdate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "gender": {
-            "$ref": "#/components/schemas/Gender"
-          },
-          "emailPrivate": {
-            "type": "string",
-            "nullable": true
-          },
-          "emailAssociaton": {
-            "type": "string",
-            "nullable": true
-          },
-          "mobilePrivate": {
-            "type": "string",
-            "nullable": true
-          },
-          "adressStreet": {
-            "type": "string",
-            "nullable": true
-          },
-          "adressNo": {
-            "type": "string",
-            "nullable": true
-          },
-          "adressZIP": {
-            "type": "string",
-            "nullable": true
-          },
-          "adressCity": {
-            "type": "string",
-            "nullable": true
           }
         }
       }

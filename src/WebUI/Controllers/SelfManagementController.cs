@@ -20,6 +20,8 @@ using System;
 using MemberManager.Application.People.Queries.GetPersonDetail;
 using MemberManager.Application.People.Commands.UpdatePerson;
 using MemberManager.Application.People.Commands.CreatePerson;
+using MemberManager.Application.SelfManagement.Commands.UpdateSelf;
+using MemberManager.Application.SelfManagement.Commands.CreateSelf;
 
 namespace MemberManager.WebUI.Controllers
 {
@@ -38,21 +40,30 @@ namespace MemberManager.WebUI.Controllers
             return await Mediator.Send(new GetSelfQuery{ Email = Util.GetAssociationEmailOrError(_httpContextAccessor)});
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Create(CreatePersonCommand command)
+        {
+            var userMail = Util.GetAssociationEmailOrError(_httpContextAccessor);
+            var selfCommand = new CreateSelfCommand {
+                CreateCommand = command,
+                Email = userMail,
+            };
+
+            await Mediator.Send(selfCommand);
+
+            return NoContent();
+        }
+
         [HttpPut("[action]")]
         public async Task<ActionResult> Update(UpdatePersonCommand command)
         {
             var userMail = Util.GetAssociationEmailOrError(_httpContextAccessor);
-            if (command.EmailAssociaton != userMail) {
-                return BadRequest("bad association email!");
-            }
-            var basicInfo = await Mediator.Send(new GetSelfQuery{ Email = userMail});
+            var selfCommand = new UpdateSelfCommand {
+                UpdateCommand = command,
+                Email = userMail,
+            };
 
-            if (command.Id != basicInfo.Id)
-            {
-                return BadRequest("id mismatch!");
-            }
-
-            await Mediator.Send(command);
+            await Mediator.Send(selfCommand);
 
             return NoContent();
         }

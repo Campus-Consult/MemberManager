@@ -2245,6 +2245,7 @@ export class PositionClient implements IPositionClient {
 
 export interface ISelfManagementClient {
     getOverview(): Observable<PersonDetailVm>;
+    create(command: CreatePersonCommand): Observable<FileResponse>;
     update(command: UpdatePersonCommand): Observable<FileResponse>;
 }
 
@@ -2307,6 +2308,56 @@ export class SelfManagementClient implements ISelfManagementClient {
             }));
         }
         return _observableOf<PersonDetailVm>(<any>null);
+    }
+
+    create(command: CreatePersonCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/self/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
     }
 
     update(command: UpdatePersonCommand): Observable<FileResponse> {

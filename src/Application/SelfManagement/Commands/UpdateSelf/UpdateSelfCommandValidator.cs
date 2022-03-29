@@ -17,8 +17,8 @@ namespace MemberManager.Application.SelfManagement.Commands.UpdateSelf
 
             RuleFor(c => c.Email)
                 .NotEmpty()
-                .Equal(c => c.UpdateCommand.EmailAssociaton)
-                .MustAsync(PersonIdMatches);
+                .Equal(c => c.UpdateCommand.EmailAssociaton).WithMessage("EMailAssociation geändert!")
+                .MustAsync(PersonIdMatches).WithMessage("ID geändert");
         }
 
         public async Task<bool> PersonIdMatches(UpdateSelfCommand command, string email, CancellationToken token) {
@@ -26,7 +26,7 @@ namespace MemberManager.Application.SelfManagement.Commands.UpdateSelf
             if (foundPerson == null) {
                 return false;
             } else {
-                return foundPerson.EmailAssociaton == email;
+                return foundPerson.Id == command.UpdateCommand.Id;
             }
         }
     }

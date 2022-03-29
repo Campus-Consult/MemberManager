@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using IdentityModel;
-using MemberManager.Application.SelfManagement.Queries.GetBasic;
+using MemberManager.Application.SelfManagement.Queries.GetSelf;
 using System;
 using MemberManager.Application.People.Queries.GetPersonDetail;
 using MemberManager.Application.People.Commands.UpdatePerson;
@@ -35,7 +35,7 @@ namespace MemberManager.WebUI.Controllers
         [HttpGet]
         public async Task<ActionResult<PersonDetailVm>> GetOverview()
         {
-            return await Mediator.Send(new GetBasicQuery{ Email = Util.GetAssociationEmailOrError(_httpContextAccessor)});
+            return await Mediator.Send(new GetSelfQuery{ Email = Util.GetAssociationEmailOrError(_httpContextAccessor)});
         }
 
         [HttpPut("[action]")]
@@ -45,7 +45,7 @@ namespace MemberManager.WebUI.Controllers
             if (command.EmailAssociaton != userMail) {
                 return BadRequest("bad association email!");
             }
-            var basicInfo = await Mediator.Send(new GetBasicQuery{ Email = userMail});
+            var basicInfo = await Mediator.Send(new GetSelfQuery{ Email = userMail});
 
             if (command.Id != basicInfo.Id)
             {

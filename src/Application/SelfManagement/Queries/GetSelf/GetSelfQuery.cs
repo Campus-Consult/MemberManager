@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using MemberManager.Application.People.Queries.GetPersonDetail;
 
-namespace MemberManager.Application.SelfManagement.Queries.GetBasic
+namespace MemberManager.Application.SelfManagement.Queries.GetSelf
 {
 
-    public class GetBasicQuery : IRequest<PersonDetailVm>
+    public class GetSelfQuery : IRequest<PersonDetailVm>
     {
         public string Email { get; set; }
     }
 
-    public class GetBasicQueryHandler : IRequestHandler<GetBasicQuery, PersonDetailVm>
+    public class GetSelfQueryHandler : IRequestHandler<GetSelfQuery, PersonDetailVm>
     {
 
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
-        public GetBasicQueryHandler(IApplicationDbContext context, IMapper mapper, IMediator mediator)
+        public GetSelfQueryHandler(IApplicationDbContext context, IMapper mapper, IMediator mediator)
         {
             _context = context;
             _mapper = mapper;
             _mediator = mediator;
         }
 
-        public async Task<PersonDetailVm> Handle(GetBasicQuery request, CancellationToken cancellationToken)
+        public async Task<PersonDetailVm> Handle(GetSelfQuery request, CancellationToken cancellationToken)
         {
             var foundPerson = await _context.People.Where(p => p.EmailAssociaton == request.Email).FirstOrDefaultAsync();
             if (foundPerson == null) {

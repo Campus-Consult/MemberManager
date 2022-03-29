@@ -1213,7 +1213,7 @@ export class MemberStatusClient implements IMemberStatusClient {
 
 export interface IPeopleClient {
     get(): Observable<PeopleVm>;
-    create(command: CreatePersonCommand): Observable<number>;
+    create(command: CreatePersonWithLevelStatusCommand): Observable<number>;
     getWithBasicInfo(): Observable<PeopleWithBasicInfoVm>;
     getCurrentCareerLevel(id: number, time: string | null | undefined): Observable<CareerLevelAssignmentDto>;
     get2(id: number): Observable<PersonDetailVm>;
@@ -1282,7 +1282,7 @@ export class PeopleClient implements IPeopleClient {
         return _observableOf<PeopleVm>(<any>null);
     }
 
-    create(command: CreatePersonCommand): Observable<number> {
+    create(command: CreatePersonWithLevelStatusCommand): Observable<number> {
         let url_ = this.baseUrl + "/api/People";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4122,9 +4122,6 @@ export class CreatePersonCommand implements ICreatePersonCommand {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
-    initialCareerLevelId?: number | undefined;
-    initialMemberStatusId?: number | undefined;
-    joinDate?: string | undefined;
 
     constructor(data?: ICreatePersonCommand) {
         if (data) {
@@ -4148,9 +4145,6 @@ export class CreatePersonCommand implements ICreatePersonCommand {
             this.adressNo = _data["adressNo"];
             this.adressZIP = _data["adressZIP"];
             this.adressCity = _data["adressCity"];
-            this.initialCareerLevelId = _data["initialCareerLevelId"];
-            this.initialMemberStatusId = _data["initialMemberStatusId"];
-            this.joinDate = _data["joinDate"];
         }
     }
 
@@ -4174,9 +4168,6 @@ export class CreatePersonCommand implements ICreatePersonCommand {
         data["adressNo"] = this.adressNo;
         data["adressZIP"] = this.adressZIP;
         data["adressCity"] = this.adressCity;
-        data["initialCareerLevelId"] = this.initialCareerLevelId;
-        data["initialMemberStatusId"] = this.initialMemberStatusId;
-        data["joinDate"] = this.joinDate;
         return data; 
     }
 }
@@ -4193,8 +4184,46 @@ export interface ICreatePersonCommand {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
-    initialCareerLevelId?: number | undefined;
-    initialMemberStatusId?: number | undefined;
+}
+
+export class CreatePersonWithLevelStatusCommand extends CreatePersonCommand implements ICreatePersonWithLevelStatusCommand {
+    initialCareerLevelId?: number;
+    initialMemberStatusId?: number;
+    joinDate?: string | undefined;
+
+    constructor(data?: ICreatePersonWithLevelStatusCommand) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.initialCareerLevelId = _data["initialCareerLevelId"];
+            this.initialMemberStatusId = _data["initialMemberStatusId"];
+            this.joinDate = _data["joinDate"];
+        }
+    }
+
+    static fromJS(data: any): CreatePersonWithLevelStatusCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreatePersonWithLevelStatusCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["initialCareerLevelId"] = this.initialCareerLevelId;
+        data["initialMemberStatusId"] = this.initialMemberStatusId;
+        data["joinDate"] = this.joinDate;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ICreatePersonWithLevelStatusCommand extends ICreatePersonCommand {
+    initialCareerLevelId?: number;
+    initialMemberStatusId?: number;
     joinDate?: string | undefined;
 }
 

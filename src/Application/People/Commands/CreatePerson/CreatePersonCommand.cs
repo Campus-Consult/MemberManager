@@ -21,10 +21,6 @@ namespace MemberManager.Application.People.Commands.CreatePerson
         public string AdressNo { get; set; }
         public string AdressZIP { get; set; }
         public string AdressCity { get; set; }
-        // TODO: they are only made optional until the UI for this is changed
-        public int? InitialCareerLevelId { get; set; }
-        public int? InitialMemberStatusId { get; set; }
-        public DateTime? JoinDate { get; set; }
     }
 
     public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, int>
@@ -56,26 +52,6 @@ namespace MemberManager.Application.People.Commands.CreatePerson
             };
 
             _context.People.Add(entity);
-
-            var joinDateTime = request.JoinDate ?? _dateTimeService.Now;
-
-            if (request.InitialMemberStatusId != null) {
-                _context.PersonMemberStatus.Add(new PersonMemberStatus {
-                    BeginDateTime = joinDateTime,
-                    EndDateTime = null,
-                    MemberStatusId = request.InitialMemberStatusId.Value,
-                    Person = entity,
-                });
-            }
-
-            if (request.InitialCareerLevelId != null) {
-                _context.PersonCareerLevels.Add(new PersonCareerLevel {
-                    BeginDateTime = joinDateTime,
-                    EndDateTime = null,
-                    CareerLevelId = request.InitialCareerLevelId.Value,
-                    Person = entity,
-                });
-            }
 
             await _context.SaveChangesAsync(cancellationToken);
 

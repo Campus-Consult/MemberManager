@@ -885,7 +885,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePersonCommand"
+                "$ref": "#/components/schemas/CreatePersonWithLevelStatusCommand"
               }
             }
           },
@@ -2422,6 +2422,32 @@
           }
         }
       },
+      "CreatePersonWithLevelStatusCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CreatePersonCommand"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "initialCareerLevelId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "initialMemberStatusId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "joinDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
       "CreatePersonCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -2467,21 +2493,6 @@
           },
           "adressCity": {
             "type": "string",
-            "nullable": true
-          },
-          "initialCareerLevelId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "initialMemberStatusId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "joinDate": {
-            "type": "string",
-            "format": "date-time",
             "nullable": true
           }
         }

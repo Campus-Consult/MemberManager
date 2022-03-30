@@ -103,7 +103,9 @@ export class CreateMemberComponent implements AfterViewInit {
     }
   }
 
-  private convertCreateFormIntoCommand(formResult: any): CreatePersonWithLevelStatusCommand {
+  private convertCreateFormIntoCommand(
+    formResult: any
+  ): CreatePersonWithLevelStatusCommand {
     const iCommand: ICreatePersonWithLevelStatusCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,

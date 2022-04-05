@@ -27,7 +27,6 @@ import { ErrorHintComponent } from './create-member/error-hint/error-hint.compon
 import { EditMemberDataComponent } from './edit-member-data/edit-member-data.component';
 import { HistoryPanelsComponent } from './member-details/history-panels/history-panels.component';
 import { MemberDataSheetComponent } from './member-details/member-data-sheet.component';
-import { MemberDataComponent } from './member-details/member-data/member-data.component';
 import { MemberListComponent } from './member-list/member-list.component';
 import { MemberManagementComponent } from './member-management.component';
 import { MemberManagerRoutingModule } from './member-manager-routing.module';
@@ -38,7 +37,6 @@ import { HistoryDialogComponent } from './member-details/history-dialog/history-
     MemberManagementComponent,
     MemberDataSheetComponent,
     MemberListComponent,
-    MemberDataComponent,
     EditMemberDataComponent,
     HistoryPanelsComponent,
     CreateMemberComponent,

@@ -48,6 +48,7 @@ import { PageForbiddenComponent } from './components/page-forbidden/page-forbidd
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { HistoryDialogComponent } from './components/history-dialog/history-dialog.component';
 import { MemberFormComponent } from './components/member-form/member-form.component';
+import { MemberDataComponent } from './components/member-data/member-data.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -61,6 +62,7 @@ import { MemberFormComponent } from './components/member-form/member-form.compon
     DeleteDialogComponent,
     HistoryDialogComponent,
     MemberFormComponent,
+    MemberDataComponent
   ],
   exports: [
     DataTableComponent,
@@ -101,6 +103,7 @@ import { MemberFormComponent } from './components/member-form/member-form.compon
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MemberDataComponent
   ],
   imports: [
     CommonModule,

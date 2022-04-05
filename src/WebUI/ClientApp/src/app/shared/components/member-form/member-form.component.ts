@@ -6,6 +6,7 @@ import {
   Gender,
   ICareerLevelLookupDto,
   IMemberStatusLookupDto,
+  IPersonDetailVm,
   MemberStatusLookupDto,
   PersonDetailVm,
 } from 'src/app/membermanager-api';
@@ -20,7 +21,7 @@ import { MemberstatusCareerlevelService } from 'src/app/memberstatus-careerlevel
   styleUrls: ['./member-form.component.scss'],
 })
 export class MemberFormComponent implements OnInit,OnChanges {
-  @Input() memberData?: PersonDetailVm;
+  @Input() memberData?: IPersonDetailVm;
   @Input() formDisabled?: boolean;
 
   // we only have to show the controls for initial status/career level on create
@@ -37,7 +38,7 @@ export class MemberFormComponent implements OnInit,OnChanges {
   personalForm: FormGroup;
 
   constructor(
-    private memberStatusCareerLevelService: MemberstatusCareerlevelService
+    protected memberStatusCareerLevelService: MemberstatusCareerlevelService
   ) {
     const formGroupInputs = {
       firstName: new FormControl('', Validators.required),
@@ -55,8 +56,8 @@ export class MemberFormComponent implements OnInit,OnChanges {
       mobilePrivate: new FormControl(),
       adressStreet: new FormControl(),
       adressNr: new FormControl(),
-      adressZIP: new FormControl(),
-      adressCity: new FormControl(),
+      adressZIP: new FormControl('33100'),
+      adressCity: new FormControl('Paderborn'),
     };
 
     this.personalForm = new FormGroup(formGroupInputs);

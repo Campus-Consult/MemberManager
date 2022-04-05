@@ -1,3 +1,6 @@
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from './../../shared/shared.module';
 import { NgModule } from '@angular/core';
@@ -10,7 +13,7 @@ import { MemberSelfManagedComponent } from './member-self-managed.component';
     MemberSelfManagedComponent,
   ],
   imports: [
-    CommonModule, SharedModule, MatCardModule
+    CommonModule, ReactiveFormsModule, SharedModule, MatCardModule, MatButtonModule, MatFormFieldModule
   ],
   exports: [MemberSelfManagedComponent]
 })

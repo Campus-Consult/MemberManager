@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { CreatePersonCommand, ICreatePersonCommand, PersonDetailVm } from 'src/app/membermanager-api';
+import { CreatePersonCommand, Gender, ICreatePersonCommand, PersonDetailVm } from 'src/app/membermanager-api';
+import { MemberstatusCareerlevelService } from 'src/app/memberstatus-careerlevel.service';
 import { MemberFormComponent } from 'src/app/shared/components/member-form/member-form.component';
 
 @Component({
@@ -7,9 +8,10 @@ import { MemberFormComponent } from 'src/app/shared/components/member-form/membe
   templateUrl: './member-self-managed.component.html',
   styleUrls: ['./member-self-managed.component.scss']
 })
-export class MemberSelfManagedComponent implements OnInit {
-  @Input() memberData?: PersonDetailVm;
-
+export class MemberSelfManagedComponent
+  extends MemberFormComponent
+  implements OnInit
+{
   @ViewChild(MemberFormComponent) memberFormComp: MemberFormComponent;
 
   isEditing = false;
@@ -18,18 +20,44 @@ export class MemberSelfManagedComponent implements OnInit {
   errorHintTitle = 'Person nicht erstellt:';
   invalidHints: Array<string>;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(protected memberStatusCareerLevelService: MemberstatusCareerlevelService) {
+    super(memberStatusCareerLevelService);
   }
 
-  onSubmit(){
-    const command = this.convertCreateFormIntoCommand(this.memberFormComp.personalForm.value);
+  ngOnInit(): void {
+    this.loadMemberData();
+    this.addPersonalDataToForm();
+  }
+
+  loadMemberData() {
+    this.memberData = {
+      id: 0,
+      firstName: 'Adrian',
+      surname: 'Alfermann',
+      birthdate: '28.05.1996',
+      gender: Gender.MALE,
+      emailPrivate: 'alfsmail@web.de',
+      emailAssociaton: 'aalfermann@campus-consult.org',
+      mobilePrivate: '+49 12345 12345',
+      adressStreet: 'Kettenweg',
+      adressNo: '17',
+      adressZIP: '33106',
+      adressCity: 'Paderborn',
+      careerLevels: undefined,
+      memberStatus: undefined,
+      positions: undefined,
+    };
+  }
+
+  onSubmit() {
+    const command = this.convertCreateFormIntoCommand(
+      this.memberFormComp.personalForm.value
+    );
 
     this.isEditing = false;
   }
 
-  onCancel(){
+  onCancel() {
     this.isEditing = false;
   }
 

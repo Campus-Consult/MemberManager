@@ -1,7 +1,9 @@
 ﻿using MemberManager.Application.Common.Exceptions;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
@@ -44,6 +46,8 @@ namespace MemberManager.WebUI.Filters
 
         private void HandleUnknownException(ExceptionContext context)
         {
+            var logger = context.HttpContext.RequestServices.GetService<ILogger<ApiExceptionFilter>>();
+            logger.LogError(context.Exception, "Unknown error processing request");
             var details = new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,

@@ -1,5 +1,6 @@
 ﻿using MemberManager.Application.Models;
 using MemberManager.Application.People.Commands.CreatePerson;
+using MemberManager.Application.People.Commands.CreatePersonWithLevelStatus;
 using MemberManager.Application.People.Commands.DeletePerson;
 using MemberManager.Application.People.Commands.UpdatePerson;
 using MemberManager.Application.People.Queries.GetCurrentCareerLevel;
@@ -43,7 +44,7 @@ namespace MemberManager.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreatePersonCommand command)
+        public async Task<ActionResult<int>> Create(CreatePersonWithLevelStatusCommand command)
         {
             return await Mediator.Send(command);
         }

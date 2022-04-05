@@ -5,7 +5,9 @@ import {
   CareerLevelDto,
   CareerLevelLookupDto,
   CreatePersonCommand,
+  CreatePersonWithLevelStatusCommand,
   ICreatePersonCommand,
+  ICreatePersonWithLevelStatusCommand,
   MemberStatusLookupDto,
   PeopleClient,
 } from 'src/app/membermanager-api';
@@ -101,8 +103,10 @@ export class CreateMemberComponent implements AfterViewInit {
     }
   }
 
-  private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
-    const iCommand: ICreatePersonCommand = {
+  private convertCreateFormIntoCommand(
+    formResult: any
+  ): CreatePersonWithLevelStatusCommand {
+    const iCommand: ICreatePersonWithLevelStatusCommand = {
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
@@ -119,7 +123,7 @@ export class CreateMemberComponent implements AfterViewInit {
       initialMemberStatusId: formResult.initialMemberStatusId,
       joinDate: formResult.joinDate,
     };
-    return new CreatePersonCommand(iCommand);
+    return new CreatePersonWithLevelStatusCommand(iCommand);
   }
 
   protected handleError(err) {

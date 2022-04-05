@@ -885,7 +885,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePersonCommand"
+                "$ref": "#/components/schemas/CreatePersonWithLevelStatusCommand"
               }
             }
           },
@@ -1585,6 +1585,107 @@
           },
           "required": true,
           "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/self": {
+      "get": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "SelfManagement_GetOverview",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDetailVm"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/self/Create": {
+      "post": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "SelfManagement_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePersonCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/self/Update": {
+      "put": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "SelfManagement_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePersonCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
         },
         "responses": {
           "200": {
@@ -2359,6 +2460,32 @@
           }
         }
       },
+      "CreatePersonWithLevelStatusCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CreatePersonCommand"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "initialCareerLevelId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "initialMemberStatusId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "joinDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
       "CreatePersonCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -2404,21 +2531,6 @@
           },
           "adressCity": {
             "type": "string",
-            "nullable": true
-          },
-          "initialCareerLevelId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "initialMemberStatusId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "joinDate": {
-            "type": "string",
-            "format": "date-time",
             "nullable": true
           }
         }

@@ -1213,7 +1213,7 @@ export class MemberStatusClient implements IMemberStatusClient {
 
 export interface IPeopleClient {
     get(): Observable<PeopleVm>;
-    create(command: CreatePersonCommand): Observable<number>;
+    create(command: CreatePersonWithLevelStatusCommand): Observable<number>;
     getWithBasicInfo(): Observable<PeopleWithBasicInfoVm>;
     getCurrentCareerLevel(id: number, time: string | null | undefined): Observable<CareerLevelAssignmentDto>;
     get2(id: number): Observable<PersonDetailVm>;
@@ -1282,7 +1282,7 @@ export class PeopleClient implements IPeopleClient {
         return _observableOf<PeopleVm>(<any>null);
     }
 
-    create(command: CreatePersonCommand): Observable<number> {
+    create(command: CreatePersonWithLevelStatusCommand): Observable<number> {
         let url_ = this.baseUrl + "/api/People";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2223,6 +2223,174 @@ export class PositionClient implements IPositionClient {
     }
 
     protected processDismiss(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+}
+
+export interface ISelfManagementClient {
+    getOverview(): Observable<PersonDetailVm>;
+    create(command: CreatePersonCommand): Observable<FileResponse>;
+    update(command: UpdatePersonCommand): Observable<FileResponse>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SelfManagementClient implements ISelfManagementClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getOverview(): Observable<PersonDetailVm> {
+        let url_ = this.baseUrl + "/api/self";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetOverview(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetOverview(<any>response_);
+                } catch (e) {
+                    return <Observable<PersonDetailVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PersonDetailVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetOverview(response: HttpResponseBase): Observable<PersonDetailVm> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PersonDetailVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PersonDetailVm>(<any>null);
+    }
+
+    create(command: CreatePersonCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/self/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    update(command: UpdatePersonCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/self/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -4005,9 +4173,6 @@ export class CreatePersonCommand implements ICreatePersonCommand {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
-    initialCareerLevelId?: number | undefined;
-    initialMemberStatusId?: number | undefined;
-    joinDate?: string | undefined;
 
     constructor(data?: ICreatePersonCommand) {
         if (data) {
@@ -4031,9 +4196,6 @@ export class CreatePersonCommand implements ICreatePersonCommand {
             this.adressNo = _data["adressNo"];
             this.adressZIP = _data["adressZIP"];
             this.adressCity = _data["adressCity"];
-            this.initialCareerLevelId = _data["initialCareerLevelId"];
-            this.initialMemberStatusId = _data["initialMemberStatusId"];
-            this.joinDate = _data["joinDate"];
         }
     }
 
@@ -4057,9 +4219,6 @@ export class CreatePersonCommand implements ICreatePersonCommand {
         data["adressNo"] = this.adressNo;
         data["adressZIP"] = this.adressZIP;
         data["adressCity"] = this.adressCity;
-        data["initialCareerLevelId"] = this.initialCareerLevelId;
-        data["initialMemberStatusId"] = this.initialMemberStatusId;
-        data["joinDate"] = this.joinDate;
         return data; 
     }
 }
@@ -4076,8 +4235,46 @@ export interface ICreatePersonCommand {
     adressNo?: string | undefined;
     adressZIP?: string | undefined;
     adressCity?: string | undefined;
-    initialCareerLevelId?: number | undefined;
-    initialMemberStatusId?: number | undefined;
+}
+
+export class CreatePersonWithLevelStatusCommand extends CreatePersonCommand implements ICreatePersonWithLevelStatusCommand {
+    initialCareerLevelId?: number;
+    initialMemberStatusId?: number;
+    joinDate?: string | undefined;
+
+    constructor(data?: ICreatePersonWithLevelStatusCommand) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.initialCareerLevelId = _data["initialCareerLevelId"];
+            this.initialMemberStatusId = _data["initialMemberStatusId"];
+            this.joinDate = _data["joinDate"];
+        }
+    }
+
+    static fromJS(data: any): CreatePersonWithLevelStatusCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreatePersonWithLevelStatusCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["initialCareerLevelId"] = this.initialCareerLevelId;
+        data["initialMemberStatusId"] = this.initialMemberStatusId;
+        data["joinDate"] = this.joinDate;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ICreatePersonWithLevelStatusCommand extends ICreatePersonCommand {
+    initialCareerLevelId?: number;
+    initialMemberStatusId?: number;
     joinDate?: string | undefined;
 }
 

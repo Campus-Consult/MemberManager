@@ -11,4 +11,6 @@
   </p>
 </div>
 
-<div><app-member-self-managed></app-member-self-managed></div>
+<div *ngIf="isAuthenticated | async">
+  <app-member-self-managed></app-member-self-managed>
+</div>

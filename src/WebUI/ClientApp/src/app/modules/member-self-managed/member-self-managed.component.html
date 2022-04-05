@@ -7,7 +7,6 @@
     </mat-card-header>
     <mat-card-content>
       <div id="form-container">
-        <app-member-form [formDisabled]="!isEditing" [memberData]="memberData"></app-member-form>
       </div>
       <div class="error-hint" *ngIf="invalidHints">
         <app-error-hint

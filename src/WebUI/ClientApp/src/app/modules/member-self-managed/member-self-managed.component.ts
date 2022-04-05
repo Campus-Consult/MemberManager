@@ -1,12 +1,22 @@
+import {
+  IUpdatePersonCommand,
+  SelfManagementClient,
+  UpdatePersonCommand,
+} from './../../membermanager-api';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { CreatePersonCommand, Gender, ICreatePersonCommand, PersonDetailVm } from 'src/app/membermanager-api';
+import {
+  CreatePersonCommand,
+  Gender,
+  ICreatePersonCommand,
+  PersonDetailVm,
+} from 'src/app/membermanager-api';
 import { MemberstatusCareerlevelService } from 'src/app/memberstatus-careerlevel.service';
 import { MemberFormComponent } from 'src/app/shared/components/member-form/member-form.component';
 
 @Component({
   selector: 'app-member-self-managed',
   templateUrl: './member-self-managed.component.html',
-  styleUrls: ['./member-self-managed.component.scss']
+  styleUrls: ['./member-self-managed.component.scss'],
 })
 export class MemberSelfManagedComponent
   extends MemberFormComponent
@@ -20,13 +30,16 @@ export class MemberSelfManagedComponent
   errorHintTitle = 'Person nicht erstellt:';
   invalidHints: Array<string>;
 
-  constructor(protected memberStatusCareerLevelService: MemberstatusCareerlevelService) {
+  constructor(
+    protected memberStatusCareerLevelService: MemberstatusCareerlevelService,
+    protected selfManagementClient: SelfManagementClient
+  ) {
     super(memberStatusCareerLevelService);
   }
 
   ngOnInit(): void {
     this.loadMemberData();
-    this.addPersonalDataToForm();
+    this.personalForm.disable();
   }
 
   loadMemberData() {
@@ -47,22 +60,37 @@ export class MemberSelfManagedComponent
       memberStatus: undefined,
       positions: undefined,
     };
+
+    this.selfManagementClient
+      .getOverview()
+      .subscribe((value: PersonDetailVm) => {
+        this.memberData = value;
+        this.addPersonalDataToForm();
+      });
   }
 
   onSubmit() {
     const command = this.convertCreateFormIntoCommand(
-      this.memberFormComp.personalForm.value
+      this.personalForm.value
     );
-
-    this.isEditing = false;
+    this.selfManagementClient.update(command).subscribe(
+      () => {
+        this.isEditing = false;
+      },
+      (error) => {}
+    );
   }
 
-  onCancel() {
-    this.isEditing = false;
+  changeEditMode() {
+    this.isEditing = !this.isEditing;
+    this.isEditing ? this.personalForm.enable() :  this.personalForm.disable() 
   }
 
-  private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
-    const iCommand: ICreatePersonCommand = {
+
+
+  private convertCreateFormIntoCommand(formResult: any): UpdatePersonCommand {
+    const iCommand: IUpdatePersonCommand = {
+      id: this.memberData.id,
       // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
@@ -75,11 +103,10 @@ export class MemberSelfManagedComponent
       adressNo: formResult.adressNr,
       adressZIP: formResult.adressZIP,
       adressCity: formResult.adressCity,
-      initialCareerLevelId: formResult.initialCareerLevelId,
-      initialMemberStatusId: formResult.initialMemberStatusId,
-      joinDate: formResult.joinDate,
+      // initialCareerLevelId: formResult.initialCareerLevelId,
+      // initialMemberStatusId: formResult.initialMemberStatusId,
+      // joinDate: formResult.joinDate,
     };
     return new CreatePersonCommand(iCommand);
   }
-
 }

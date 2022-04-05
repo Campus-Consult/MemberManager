@@ -29,9 +29,7 @@
       </ng-container>
 
       <ng-container matColumnDef="currentCareerLevel">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Karrierestufe
-        </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Karrierestufe</th>
         <td mat-cell *matCellDef="let element">
           <p [title]="element.currentCareerLevel">
             {{ element.currentCareerLevelShort }}

@@ -39,34 +39,21 @@ export class MemberSelfManagedComponent
 
   ngOnInit(): void {
     this.loadMemberData();
-    this.personalForm.disable();
+    this.personalForm.disable();    
   }
 
   loadMemberData() {
-    this.memberData = {
-      id: 0,
-      firstName: 'Adrian',
-      surname: 'Alfermann',
-      birthdate: '28.05.1996',
-      gender: Gender.MALE,
-      emailPrivate: 'alfsmail@web.de',
-      emailAssociaton: 'aalfermann@campus-consult.org',
-      mobilePrivate: '+49 12345 12345',
-      adressStreet: 'Kettenweg',
-      adressNo: '17',
-      adressZIP: '33106',
-      adressCity: 'Paderborn',
-      careerLevels: undefined,
-      memberStatus: undefined,
-      positions: undefined,
-    };
 
     this.selfManagementClient
       .getOverview()
       .subscribe((value: PersonDetailVm) => {
-        this.memberData = value;
-        this.addPersonalDataToForm();
-      });
+        if(value) {
+          this.memberData = value;
+          this.addPersonalDataToForm();
+        } else {
+          console.warn('MLoaded Member is undefined');
+        }
+      }, error => console.error(error));
   }
 
   onSubmit() {

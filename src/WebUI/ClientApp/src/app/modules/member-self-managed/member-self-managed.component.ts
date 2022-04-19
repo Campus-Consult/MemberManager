@@ -51,7 +51,7 @@ export class MemberSelfManagedComponent
           this.memberData = value;
           this.addPersonalDataToForm();
         } else {
-          console.warn('MLoaded Member is undefined');
+          console.warn('Loaded Member is undefined');
         }
       }, error => console.error(error));
   }
@@ -61,7 +61,8 @@ export class MemberSelfManagedComponent
       this.personalForm.value
     );
     this.selfManagementClient.update(command).subscribe(
-      () => {
+      (value) => {
+                
         this.isEditing = false;
       },
       (error) => {}
@@ -94,6 +95,6 @@ export class MemberSelfManagedComponent
       // initialMemberStatusId: formResult.initialMemberStatusId,
       // joinDate: formResult.joinDate,
     };
-    return new CreatePersonCommand(iCommand);
+    return new UpdatePersonCommand(iCommand);
   }
 }

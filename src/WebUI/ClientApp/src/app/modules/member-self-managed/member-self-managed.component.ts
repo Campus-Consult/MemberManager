@@ -61,8 +61,8 @@ export class MemberSelfManagedComponent
       this.personalForm.value
     );
     this.selfManagementClient.update(command).subscribe(
-      (value) => {
-                
+      () => {
+        this.loadMemberData();     
         this.isEditing = false;
       },
       (error) => {}

@@ -3,7 +3,7 @@
     <mat-card-title>Deine Daten</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="memberData; else noDataMessage">
+    <ng-container *ngIf="memberData && !isEditing; else noDataMessage">
       <div class="heading-margin">
         <app-member-data
           [memberDetails]="memberData"

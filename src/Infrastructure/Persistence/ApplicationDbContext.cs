@@ -40,6 +40,8 @@ namespace MemberManager.Infrastructure.Persistence
 
         public DbSet<Position> Positions { get; set; }
         public DbSet<PersonPosition> PersonPositions { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventAnswer> EventAnwers { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -122,6 +124,41 @@ namespace MemberManager.Infrastructure.Persistence
             builder.Entity<Person>()
                 .HasIndex(p => p.EmailAssociaton)
                 .IsUnique();
+            
+            builder.Entity<EventAnswer>()
+                .HasOne<Event>(p => p.Event)
+                .WithMany(a => a.EventAnswers)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<EventAnswer>()
+                .HasOne<Person>(p => p.Person)
+                .WithMany(a => a.EventAnswers)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Event>()
+                .HasOne<Person>(e => e.Organizer)
+                .WithMany(p => p.OrganizedEvents)
+                .OnDelete(DeleteBehavior.SetNull);
+            
+            builder.Entity<Event>()
+                .Property(e => e.Name)
+                .IsRequired();
+            
+            builder.Entity<Event>()
+                .Property(e => e.Start)
+                .IsRequired();
+            
+            builder.Entity<Event>()
+                .Property(e => e.End)
+                .IsRequired();
+            
+            builder.Entity<Event>()
+                .Property(e => e.SecretKey)
+                .IsRequired();
+            
+            builder.Entity<EventAnswer>()
+                .Property(e => e.AnswerKind)
+                .IsRequired();
         }
     }
 }

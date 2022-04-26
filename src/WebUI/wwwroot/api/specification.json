@@ -494,6 +494,34 @@
         ]
       }
     },
+    "/api/Event": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventLookupDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/MemberStatus": {
       "get": {
         "tags": [
@@ -1955,6 +1983,28 @@
           "id": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "EventLookupDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

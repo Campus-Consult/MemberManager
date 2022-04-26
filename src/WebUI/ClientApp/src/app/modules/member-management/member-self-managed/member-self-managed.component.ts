@@ -18,11 +18,11 @@ import { MemberFormComponent } from 'src/app/shared/components/member-form/membe
   templateUrl: './member-self-managed.component.html',
   styleUrls: ['./member-self-managed.component.scss'],
 })
-export class MemberSelfManagedComponent
-  extends MemberFormComponent
-  implements OnInit
+export class MemberSelfManagedComponent implements OnInit
 {
   @ViewChild(MemberFormComponent) memberFormComp: MemberFormComponent;
+
+  memberData: PersonDetailVm;
 
   isEditing = false;
 
@@ -31,15 +31,13 @@ export class MemberSelfManagedComponent
   invalidHints: Array<string>;
 
   constructor(
-    protected memberStatusCareerLevelService: MemberstatusCareerlevelService,
     protected selfManagementClient: SelfManagementClient
   ) {
-    super(memberStatusCareerLevelService);
   }
 
   ngOnInit(): void {
     this.loadMemberData();
-    this.personalForm.disable();    
+    this.memberFormComp.personalForm.disable();    
   }
 
   loadMemberData() {
@@ -47,39 +45,33 @@ export class MemberSelfManagedComponent
     this.selfManagementClient
       .getOverview()
       .subscribe((value: PersonDetailVm) => {
-        if(value) {
           this.memberData = value;
-          this.addPersonalDataToForm();
-        } else {
-          console.warn('Loaded Member is undefined');
-        }
       }, error => console.error(error));
   }
 
   onSubmit() {
     const command = this.convertCreateFormIntoCommand(
-      this.personalForm.value
+      this.memberFormComp.personalForm.value
     );
     this.selfManagementClient.update(command).subscribe(
       () => {
-        this.loadMemberData();     
+        this.loadMemberData(); // TODO: Passe API an, dass die aktuelle Version vom Server kommt. 
         this.isEditing = false;
       },
-      (error) => {}
+      (error) => {
+        // TODO: show user error Message!
+        console.error(error);
+      }
     );
   }
 
   changeEditMode() {
     this.isEditing = !this.isEditing;
-    this.isEditing ? this.personalForm.enable() :  this.personalForm.disable() 
   }
-
-
 
   private convertCreateFormIntoCommand(formResult: any): UpdatePersonCommand {
     const iCommand: IUpdatePersonCommand = {
       id: this.memberData.id,
-      // formresult is fromgroup.value, get value by fromgrou.<nameoFormControl> See personalForm (Formgruop) of memberFormComp
       firstName: formResult.firstName,
       surname: formResult.lastName,
       birthdate: formResult.birthdate,
@@ -91,9 +83,6 @@ export class MemberSelfManagedComponent
       adressNo: formResult.adressNr,
       adressZIP: formResult.adressZIP,
       adressCity: formResult.adressCity,
-      // initialCareerLevelId: formResult.initialCareerLevelId,
-      // initialMemberStatusId: formResult.initialMemberStatusId,
-      // joinDate: formResult.joinDate,
     };
     return new UpdatePersonCommand(iCommand);
   }

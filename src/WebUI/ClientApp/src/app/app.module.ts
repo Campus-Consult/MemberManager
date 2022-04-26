@@ -57,7 +57,7 @@ registerLocaleData(localeDe);
     MemberStatusModule,
     MatNativeDateModule,
     MatToolbarModule,
-    CareerLevelModule
+    CareerLevelModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

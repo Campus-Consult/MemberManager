@@ -43,7 +43,7 @@ import { HistoryDialogComponent } from './member-details/history-dialog/history-
     CreateMemberComponent,
     ErrorHintComponent,
     HistoryDialogComponent,
-    MemberSelfManagedComponent
+    MemberSelfManagedComponent,
   ],
   exports: [MemberManagementComponent, MemberSelfManagedComponent],
   imports: [

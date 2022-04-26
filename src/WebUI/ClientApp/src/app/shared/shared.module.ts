@@ -62,7 +62,7 @@ import { MemberDataComponent } from './components/member-data/member-data.compon
     DeleteDialogComponent,
     HistoryDialogComponent,
     MemberFormComponent,
-    MemberDataComponent
+    MemberDataComponent,
   ],
   exports: [
     DataTableComponent,
@@ -103,7 +103,7 @@ import { MemberDataComponent } from './components/member-data/member-data.compon
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MemberDataComponent
+    MemberDataComponent,
   ],
   imports: [
     CommonModule,

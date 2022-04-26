@@ -2,8 +2,8 @@
 <section class="userinfo">
   <div>
     <p *ngIf="!(isAuthenticated | async)">
-      Bitte <a [routerLink]="['/authentication/login']">logge dich ein</a>, um die
-      App benutzen zu können!
+      Bitte <a [routerLink]="['/authentication/login']">logge dich ein</a>, um
+      die App benutzen zu können!
     </p>
     <p *ngIf="isAuthenticated | async">
       Du bist als
@@ -11,9 +11,8 @@
       angemeldet.
     </p>
   </div>
-  
+
   <div *ngIf="isAuthenticated | async">
     <app-member-self-managed></app-member-self-managed>
   </div>
 </section>
-

@@ -6,7 +6,9 @@ import { AuthorizeService } from 'src/api-authorization/authorize.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styles:[".userinfo { display: flex; align-items: flex-start; justify-content: space-between;}",]
+  styles: [
+    '.userinfo { display: flex; align-items: flex-start; justify-content: space-between;}',
+  ],
 })
 export class HomeComponent {
   public isAuthenticated: Observable<boolean>;

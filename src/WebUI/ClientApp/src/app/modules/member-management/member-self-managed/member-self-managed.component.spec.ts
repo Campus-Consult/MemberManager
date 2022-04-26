@@ -8,9 +8,8 @@ describe('MemberSelfManagedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MemberSelfManagedComponent ]
-    })
-    .compileComponents();
+      declarations: [MemberSelfManagedComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

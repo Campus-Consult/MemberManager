@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   CareerLevelDto,
@@ -20,7 +26,7 @@ import { MemberstatusCareerlevelService } from 'src/app/memberstatus-careerlevel
   templateUrl: './member-form.component.html',
   styleUrls: ['./member-form.component.scss'],
 })
-export class MemberFormComponent implements OnInit,OnChanges {
+export class MemberFormComponent implements OnInit, OnChanges {
   @Input() memberData?: IPersonDetailVm;
   @Input() formDisabled?: boolean;
 
@@ -87,10 +93,9 @@ export class MemberFormComponent implements OnInit,OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
-    if(this.formDisabled && this.personalForm.enabled){
-      this.personalForm.disable()
-    } else if(this.personalForm.disabled)
-      this.personalForm.enable()     
+    if (this.formDisabled && this.personalForm.enabled) {
+      this.personalForm.disable();
+    } else if (this.personalForm.disabled) this.personalForm.enable();
   }
 
   addPersonalDataToForm() {

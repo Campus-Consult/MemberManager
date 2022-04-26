@@ -10,13 +10,15 @@
         </div>
       </ng-container>
       <ng-template #MemberDetails>
-        <app-member-form [memberData]="MemberDetails"></app-member-form>
+        <div id="form-container">
+        <app-member-form [memberData]="memberData"></app-member-form>
         <div class="error-hint" *ngIf="invalidHints">
           <app-error-hint
             [invalidHints]="invalidHints"
             [title]="errorHintTitle"
           ></app-error-hint>
         </div>
+      </div>
       </ng-template>
     </mat-card-content>
     <mat-card-actions>

@@ -36,8 +36,7 @@ export class MemberSelfManagedComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.loadMemberData();
-    this.memberFormComp.personalForm.disable();    
+    this.loadMemberData();  
   }
 
   loadMemberData() {

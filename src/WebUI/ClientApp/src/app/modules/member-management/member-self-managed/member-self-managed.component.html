@@ -48,48 +48,6 @@
                 <input type="date" matInput formControlName="birthdate" />
               </mat-form-field>
             </div>
-            <ng-container *ngIf="isCreate">
-              <p><mat-label>Initiale Mitgliedsränge</mat-label></p>
-              <mat-form-field appearance="outline">
-                <mat-label>Start Memberstatus</mat-label>
-                <mat-select
-                  formControlName="initialMemberStatusId"
-                  name="initialMemberStatusId"
-                  required
-                >
-                  <mat-option
-                    *ngFor="let status of memberStatus"
-                    [value]="status.id"
-                  >
-                    {{ status.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Start Karrierelevel</mat-label>
-                <mat-select
-                  formControlName="initialCareerLevelId"
-                  name="initialCareerLevelId"
-                  required
-                >
-                  <mat-option
-                    *ngFor="let level of careerLevels"
-                    [value]="level.id"
-                  >
-                    {{ level.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Eintrittsdatum</mat-label>
-                <input
-                  matInput
-                  type="date"
-                  formControlName="joinDate"
-                  required
-                />
-              </mat-form-field>
-            </ng-container>
             <div class="form-group">
               <p><mat-label>Kontakt</mat-label></p>
               <mat-form-field appearance="outline">

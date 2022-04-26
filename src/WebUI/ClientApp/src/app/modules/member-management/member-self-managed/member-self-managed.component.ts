@@ -2,7 +2,7 @@ import {
   IUpdatePersonCommand,
   SelfManagementClient,
   UpdatePersonCommand,
-} from './../../membermanager-api';
+} from '../../../membermanager-api';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   CreatePersonCommand,

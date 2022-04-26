@@ -1,3 +1,4 @@
+import { MemberSelfManagedComponent } from './member-self-managed/member-self-managed.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -42,8 +43,9 @@ import { HistoryDialogComponent } from './member-details/history-dialog/history-
     CreateMemberComponent,
     ErrorHintComponent,
     HistoryDialogComponent,
+    MemberSelfManagedComponent
   ],
-  exports: [MemberManagementComponent],
+  exports: [MemberManagementComponent, MemberSelfManagedComponent],
   imports: [
     CommonModule,
     MemberManagerRoutingModule,

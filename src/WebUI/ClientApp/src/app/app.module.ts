@@ -23,7 +23,6 @@ import { MemberManagementModule } from './modules/member-management/member-manag
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CareerLevelModule } from './modules/career-level/career-level.module';
-import { MemberSelfManagedModule } from './modules/member-self-managed/member-self-managed.module';
 
 registerLocaleData(localeDe);
 
@@ -58,8 +57,7 @@ registerLocaleData(localeDe);
     MemberStatusModule,
     MatNativeDateModule,
     MatToolbarModule,
-    CareerLevelModule,
-    MemberSelfManagedModule,
+    CareerLevelModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

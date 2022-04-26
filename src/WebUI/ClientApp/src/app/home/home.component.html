@@ -1,16 +1,19 @@
-<h2>Willkommen beim Member Manager</h2>
-<div>
-  <p *ngIf="!(isAuthenticated | async)">
-    Bitte <a [routerLink]="['/authentication/login']">logge dich ein</a>, um die
-    App benutzen zu können!
-  </p>
-  <p *ngIf="isAuthenticated | async">
-    Du bist als
-    <a [routerLink]="['/authentication/profile']">{{ userName | async }}</a>
-    angemeldet.
-  </p>
-</div>
+<h2>Willkommen beim Campus Consult Member Manager</h2>
+<section class="userinfo">
+  <div>
+    <p *ngIf="!(isAuthenticated | async)">
+      Bitte <a [routerLink]="['/authentication/login']">logge dich ein</a>, um die
+      App benutzen zu können!
+    </p>
+    <p *ngIf="isAuthenticated | async">
+      Du bist als
+      <a [routerLink]="['/authentication/profile']">{{ userName | async }}</a>
+      angemeldet.
+    </p>
+  </div>
+  
+  <div *ngIf="isAuthenticated | async">
+    <app-member-self-managed></app-member-self-managed>
+  </div>
+</section>
 
-<div *ngIf="isAuthenticated | async">
-  <app-member-self-managed></app-member-self-managed>
-</div>

@@ -2,15 +2,18 @@
   <mat-card-header>
     <mat-card-title>Deine Daten</mat-card-title>
   </mat-card-header>
-  <ng-container *ngIf="memberData; else noData">
-    <mat-card-content>
-      <ng-container *ngIf="!isEditing; else MemberDetails">
-        <div class="heading-margin">
-          <app-member-data [memberDetails]="memberData" [formDisabled]="isEditing"> </app-member-data>
-        </div>
-      </ng-container>
-      <ng-template #MemberDetails>
-        <div id="form-container">
+  <mat-card-content>
+    <ng-container *ngIf="memberData; else noDataMessage">
+      <div class="heading-margin">
+        <app-member-data
+          [memberDetails]="memberData"
+          [formDisabled]="isEditing"
+        >
+        </app-member-data>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isEditing">
+      <div class="mat-card-content-margin">
         <app-member-form [memberData]="memberData"></app-member-form>
         <div class="error-hint" *ngIf="invalidHints">
           <app-error-hint
@@ -19,32 +22,46 @@
           ></app-error-hint>
         </div>
       </div>
-      </ng-template>
-    </mat-card-content>
-    <mat-card-actions>
-      <div>
-        <ng-container *ngIf="isEditing; else editButton">
-          <button mat-button color="accent" (click)="onSubmit()">
+    </ng-container>
+  </mat-card-content>
+  <mat-card-actions>
+    <div>
+      <ng-container *ngIf="isEditing; else editButton">
+        <ng-container *ngIf="memberData; else isCreation">
+          <button mat-raised-button color="accent" (click)="onEditSubmit()">
             Anwenden
           </button>
-          <button mat-button color="primary" (click)="changeEditMode()">
-            Verwerfen
-          </button>
         </ng-container>
-        <ng-template #editButton>
+        <button mat-button color="warn" (click)="changeEditMode()">
+          Verwerfen
+        </button>
+      </ng-container>
+      <ng-template #editButton>
+        <ng-container *ngIf="memberData; else noDataButton">
           <button mat-raised-button color="accent" (click)="changeEditMode()">
             Eigene Daten Bearbeiten
           </button>
-        </ng-template>
-      </div>
-    </mat-card-actions>
-  </ng-container>
-  <ng-template #noData>
-    <mat-card-content>
-      <p>
-        Deine Daten sind aktuell nicht abrufbar. Versuche es später erneut oder
-        benachrichtige einen Administrator.
-      </p>
-    </mat-card-content>
-  </ng-template>
+        </ng-container>
+      </ng-template>
+    </div>
+  </mat-card-actions>
 </mat-card>
+
+<!-- Else Templates -->
+<ng-template #isCreation>
+  <button mat-raised-button color="accent" (click)="onCreateSubmit()">
+    Erstellen
+  </button>
+</ng-template>
+
+<ng-template #noDataMessage>
+  <div class="mat-card-content-margin">
+    <p>Für diesen Nutzer sind keine Daten verfügbar. <br> Möglicherweise wurde für dich noch kein Datensatz angelegt.</p>
+  </div>
+</ng-template>
+
+<ng-template #noDataButton>
+  <button color="accent" mat-raised-button (click)="changeEditMode()">
+    Eigenen Datensatz anlegen
+  </button>
+</ng-template>

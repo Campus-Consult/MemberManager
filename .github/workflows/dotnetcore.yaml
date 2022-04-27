@@ -13,7 +13,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.0
+        dotnet-version: "6.0"
     - name: Install dependencies
       run: dotnet restore src/WebUI
     - name: Build

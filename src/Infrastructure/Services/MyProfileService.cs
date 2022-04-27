@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using IdentityModel;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
+using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Models;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 

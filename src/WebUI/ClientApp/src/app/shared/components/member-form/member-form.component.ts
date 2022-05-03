@@ -31,7 +31,7 @@ export class MemberFormComponent implements OnInit, OnChanges {
   @Input() formDisabled?: boolean;
 
   // we only have to show the controls for initial status/career level on create
-  @Input() isCreate?: boolean = false;
+  @Input() isCreate: boolean = false;
   careerLevels: ICareerLevelLookupDto[];
   memberStatus: IMemberStatusLookupDto[];
 

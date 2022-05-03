@@ -28,10 +28,9 @@ namespace MemberManager.Infrastructure
             }
             else
             {
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseMySql(
-                        configuration.GetConnectionString("DefaultConnection"),
-                        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             }
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());

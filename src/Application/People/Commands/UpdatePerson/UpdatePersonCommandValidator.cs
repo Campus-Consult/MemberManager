@@ -25,7 +25,7 @@ namespace MemberManager.Application.People.Commands.UpdatePerson
                 .EmailAddress()
                 .NotEmpty();
             RuleFor(v => v.MobilePrivate)
-                .SetValidator(new RegularExpressionValidator(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$"));
+                .SetValidator(new RegularExpressionValidator<UpdatePersonCommand>(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$"));
             RuleFor(v => v.AdressStreet)
                 .MaximumLength(200);
             RuleFor(v => v.AdressNo)

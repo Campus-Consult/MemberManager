@@ -32,6 +32,8 @@ namespace MemberManager.WebUI
         {
             services.AddApplication();
             services.AddInfrastructure(Configuration);
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
@@ -78,7 +80,7 @@ namespace MemberManager.WebUI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

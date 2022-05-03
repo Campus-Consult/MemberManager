@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore src/WebUI
     - name: Build
-      run: dotnet publish --packages ./.nuget --configuration Release
+      run: dotnet publish src/WebUI --packages ./.nuget --configuration Release
     - name: Upload MemberManager Build Artifact
       uses: actions/upload-artifact@v2
       with:

@@ -28,7 +28,7 @@ import { MemberstatusCareerlevelService } from 'src/app/memberstatus-careerlevel
 })
 export class MemberFormComponent implements OnInit, OnChanges {
   @Input() memberData?: IPersonDetailVm;
-  @Input() formDisabled?: boolean;
+  @Input() formDisabled: boolean = true
 
   // we only have to show the controls for initial status/career level on create
   @Input() isCreate: boolean = false;

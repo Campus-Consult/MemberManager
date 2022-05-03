@@ -12,6 +12,14 @@
         </app-member-data>
       </div>
     </ng-container>
+    <ng-template #noDataMessage>
+      <div class="mat-card-content-margin">
+        <p>
+          Für diesen Nutzer sind keine Daten verfügbar. <br />
+          Möglicherweise wurde für dich noch kein Datensatz angelegt.
+        </p>
+      </div>
+    </ng-template>
     <ng-container *ngIf="isEditing">
       <div class="mat-card-content-margin">
         <app-member-form [memberData]="memberData"></app-member-form>
@@ -32,6 +40,11 @@
             Anwenden
           </button>
         </ng-container>
+        <ng-template #isCreation>
+          <button mat-raised-button color="accent" (click)="onCreateSubmit()">
+            Erstellen
+          </button>
+        </ng-template>
         <button mat-button color="warn" (click)="changeEditMode()">
           Verwerfen
         </button>
@@ -42,29 +55,14 @@
             Eigene Daten Bearbeiten
           </button>
         </ng-container>
+        <ng-template #noDataButton>
+          <button color="accent" mat-raised-button (click)="changeEditMode()">
+            Eigenen Datensatz anlegen
+          </button>
+        </ng-template>
       </ng-template>
     </div>
   </mat-card-actions>
 </mat-card>
 
-<!-- Else Templates -->
-<ng-template #isCreation>
-  <button mat-raised-button color="accent" (click)="onCreateSubmit()">
-    Erstellen
-  </button>
-</ng-template>
 
-<ng-template #noDataMessage>
-  <div class="mat-card-content-margin">
-    <p>
-      Für diesen Nutzer sind keine Daten verfügbar. <br />
-      Möglicherweise wurde für dich noch kein Datensatz angelegt.
-    </p>
-  </div>
-</ng-template>
-
-<ng-template #noDataButton>
-  <button color="accent" mat-raised-button (click)="changeEditMode()">
-    Eigenen Datensatz anlegen
-  </button>
-</ng-template>

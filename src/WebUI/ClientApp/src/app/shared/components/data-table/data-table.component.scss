@@ -26,13 +26,19 @@
       }
     }
 
+    .mat-cell {
+      padding-left: 10px;
+    }
+
+    .mat-header-cell {
+      padding-left: 10px;
+    }
+
     .mat-column-select {
       overflow: initial;
     }
 
-    .mat-row {
-      min-height: 65px;
-    }
+    
 
     .mat-row {
       min-height: 65px;

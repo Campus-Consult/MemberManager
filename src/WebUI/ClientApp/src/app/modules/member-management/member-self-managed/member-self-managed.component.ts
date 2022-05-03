@@ -95,7 +95,7 @@ export class MemberSelfManagedComponent implements OnInit {
     return new UpdatePersonCommand(iCommand);
   }
 
-  private convertCreateFormIntoCommand(formResult: any): UpdatePersonCommand {
+  private convertCreateFormIntoCommand(formResult: any): CreatePersonCommand {
     const iCommand: ICreatePersonCommand = {
       firstName: formResult.firstName,
       surname: formResult.lastName,

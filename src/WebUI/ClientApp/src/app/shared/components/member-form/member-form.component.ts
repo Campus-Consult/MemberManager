@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   CareerLevelDto,
@@ -6,6 +12,7 @@ import {
   Gender,
   ICareerLevelLookupDto,
   IMemberStatusLookupDto,
+  IPersonDetailVm,
   MemberStatusLookupDto,
   PersonDetailVm,
 } from 'src/app/membermanager-api';
@@ -19,8 +26,9 @@ import { MemberstatusCareerlevelService } from 'src/app/memberstatus-careerlevel
   templateUrl: './member-form.component.html',
   styleUrls: ['./member-form.component.scss'],
 })
-export class MemberFormComponent implements OnInit {
-  @Input() memberData?: PersonDetailVm;
+export class MemberFormComponent implements OnInit, OnChanges {
+  @Input() memberData?: IPersonDetailVm;
+  @Input() formDisabled: boolean = false;
 
   // we only have to show the controls for initial status/career level on create
   @Input() isCreate: boolean = false;
@@ -36,7 +44,7 @@ export class MemberFormComponent implements OnInit {
   personalForm: FormGroup;
 
   constructor(
-    private memberStatusCareerLevelService: MemberstatusCareerlevelService
+    protected memberStatusCareerLevelService: MemberstatusCareerlevelService
   ) {
     const formGroupInputs = {
       firstName: new FormControl('', Validators.required),
@@ -54,8 +62,8 @@ export class MemberFormComponent implements OnInit {
       mobilePrivate: new FormControl(),
       adressStreet: new FormControl(),
       adressNr: new FormControl(),
-      adressZIP: new FormControl(),
-      adressCity: new FormControl(),
+      adressZIP: new FormControl('33100'),
+      adressCity: new FormControl('Paderborn'),
     };
 
     this.personalForm = new FormGroup(formGroupInputs);
@@ -80,6 +88,14 @@ export class MemberFormComponent implements OnInit {
           });
         });
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    if (this.formDisabled && this.personalForm.enabled) {
+      this.personalForm.disable();
+    } else if (this.personalForm.disabled) this.personalForm.enable();
   }
 
   addPersonalDataToForm() {

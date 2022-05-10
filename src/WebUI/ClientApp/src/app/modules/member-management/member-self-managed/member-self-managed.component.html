@@ -1,0 +1,66 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Deine Daten</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="memberData && !isEditing; else noDataMessage">
+      <div class="heading-margin">
+        <app-member-data
+          [memberDetails]="memberData"
+          [formDisabled]="isEditing"
+        >
+        </app-member-data>
+      </div>
+    </ng-container>
+    <ng-template #noDataMessage>
+      <div class="mat-card-content-margin">
+        <p>
+          Für diesen Nutzer sind keine Daten verfügbar. <br />
+          Möglicherweise wurde für dich noch kein Datensatz angelegt.
+        </p>
+      </div>
+    </ng-template>
+    <ng-container *ngIf="isEditing">
+      <div class="mat-card-content-margin">
+        <app-member-form [memberData]="memberData"></app-member-form>
+        <div class="error-hint" *ngIf="invalidHints">
+          <app-error-hint
+            [invalidHints]="invalidHints"
+            [title]="errorHintTitle"
+          ></app-error-hint>
+        </div>
+      </div>
+    </ng-container>
+  </mat-card-content>
+  <mat-card-actions>
+    <div>
+      <ng-container *ngIf="isEditing; else editButton">
+        <ng-container *ngIf="memberData; else isCreation">
+          <button mat-raised-button color="accent" (click)="onEditSubmit()">
+            Anwenden
+          </button>
+        </ng-container>
+        <ng-template #isCreation>
+          <button mat-raised-button color="accent" (click)="onCreateSubmit()">
+            Erstellen
+          </button>
+        </ng-template>
+        <button mat-button color="warn" (click)="changeEditMode()">
+          Verwerfen
+        </button>
+      </ng-container>
+      <ng-template #editButton>
+        <ng-container *ngIf="memberData; else noDataButton">
+          <button mat-raised-button color="accent" (click)="changeEditMode()">
+            Eigene Daten Bearbeiten
+          </button>
+        </ng-container>
+        <ng-template #noDataButton>
+          <button color="accent" mat-raised-button (click)="changeEditMode()">
+            Eigenen Datensatz anlegen
+          </button>
+        </ng-template>
+      </ng-template>
+    </div>
+  </mat-card-actions>
+</mat-card>

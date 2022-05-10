@@ -47,6 +47,8 @@ import { DialogErrorComponent } from './components/dialog-error/dialog-error.com
 import { PageForbiddenComponent } from './components/page-forbidden/page-forbidden.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { HistoryDialogComponent } from './components/history-dialog/history-dialog.component';
+import { MemberFormComponent } from './components/member-form/member-form.component';
+import { MemberDataComponent } from './components/member-data/member-data.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -59,6 +61,8 @@ import { HistoryDialogComponent } from './components/history-dialog/history-dial
     PageForbiddenComponent,
     DeleteDialogComponent,
     HistoryDialogComponent,
+    MemberFormComponent,
+    MemberDataComponent,
   ],
   exports: [
     DataTableComponent,
@@ -68,6 +72,38 @@ import { HistoryDialogComponent } from './components/history-dialog/history-dial
     AssignDialogComponent,
     DismissDialogComponent,
     DialogErrorComponent,
+    MemberFormComponent,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatMenuModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatStepperModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatButtonToggleModule,
+    MatChipsModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MemberDataComponent,
   ],
   imports: [
     CommonModule,

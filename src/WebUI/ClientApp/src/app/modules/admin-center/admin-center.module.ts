@@ -1,3 +1,4 @@
+import { EventTrackingModule } from './../event-tracking/event-tracking.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -31,6 +32,7 @@ const routes: Routes = [{ path: '', component: AdminCenterComponent }];
     MatButtonModule,
     MatIconModule,
     MatButtonModule,
+    EventTrackingModule
   ],
 })
 export class AdminCenterModule {}

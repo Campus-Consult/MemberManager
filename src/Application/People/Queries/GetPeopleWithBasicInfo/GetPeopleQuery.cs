@@ -35,6 +35,8 @@ namespace MemberManager.Application.People.Queries.GetPeopleWithBasicInfo
                     FistName = person.FirstName,
                     Surname = person.Surname,
                     CurrentCareerLevel = person.PersonCareerLevels
+                        .Where(cl => cl.EndDateTime == null).Select(pc => pc.CareerLevel.Name).FirstOrDefault(),
+                    CurrentCareerLevelShort = person.PersonCareerLevels
                         .Where(cl => cl.EndDateTime == null).Select(pc => pc.CareerLevel.ShortName).FirstOrDefault(),
                     CurrentMemberStatus = person.PersonMemberStatus
                         .Where(cl => cl.EndDateTime == null).Select(pm => pm.MemberStatus.Name).FirstOrDefault(),

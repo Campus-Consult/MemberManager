@@ -2225,6 +2225,10 @@
             "type": "string",
             "nullable": true
           },
+          "currentCareerLevelShort": {
+            "type": "string",
+            "nullable": true
+          },
           "currentMemberStatus": {
             "type": "string",
             "nullable": true

@@ -15,6 +15,8 @@ namespace MemberManager.Application.People.Queries.GetPeopleWithBasicInfo
 
         public string CurrentCareerLevel { get; set; }
 
+        public string CurrentCareerLevelShort{get; set;}
+
         public string CurrentMemberStatus { get; set; }
     }
 }

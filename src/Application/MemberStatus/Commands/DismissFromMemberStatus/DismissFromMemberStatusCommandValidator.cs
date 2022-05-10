@@ -15,16 +15,17 @@ namespace MemberManager.Application.MemberStatuss.Commands.DismissFromMemberStat
         {
             _context = context;
 
-            RuleFor(v => v.MemberStatusId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.MemberStatusId)
                 .NotEmpty()
                 .MustAsync(MemberStatusExists).WithMessage("MemberStatus does not exits.");
 
-            RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.PersonId)
                 .NotEmpty()
                 .MustAsync(PersonExists).WithMessage("Person does not exist.")
                 .MustAsync(PersonIsAssignedAlready).WithMessage("Person is not assigned.");
 
-            RuleFor(v => v.DismissalDateTime).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.DismissalDateTime)
                 .NotEmpty();
         }
 

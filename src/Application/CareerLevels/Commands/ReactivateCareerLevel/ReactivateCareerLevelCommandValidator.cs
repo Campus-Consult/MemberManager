@@ -12,7 +12,8 @@ namespace MemberManager.Application.CareerLevels.Commands.ReactivateCareerLevel
         public ReactivateCareerLevelCommandHandlerValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.CareerLevelId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.CareerLevelId)
                 .NotEmpty()
                 .MustAsync(CareerLevelExists).WithMessage("Karrierelevel existiert nicht!")
                 .MustAsync(CareerLevelNotActive).WithMessage("Das Karrierelevel ist aktiv!");

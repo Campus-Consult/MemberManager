@@ -14,7 +14,8 @@ namespace MemberManager.Application.CareerLevels.Commands.RemovePersonCareerLeve
         public RemovePersonCareerLevelChangeCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.PersonCareerLevelId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.PersonCareerLevelId)
                 .NotNull()
                 .MustAsync(PersonCareerLevelExists).WithMessage("Zuordnung von Person zu Karrierelevel existiert nicht!");
         }

@@ -12,11 +12,12 @@ namespace MemberManager.Application.CareerLevels.Commands.CreateCareerLevelComma
         public CreateCareerLevelCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.Name).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.Name)
                 .MaximumLength(200)
                 .NotEmpty()
                 .MustAsync(CareerLevelNameUnique).WithMessage("Name des Karrierelevels wird bereits verwendet!");
-            RuleFor(v => v.ShortName).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.ShortName)
                 .MaximumLength(200)
                 .NotEmpty()
                 .MustAsync(CareerLevelShortNameUnique).WithMessage("Kurzbezeichnung des Karrierelevels wird bereits verwendet!");

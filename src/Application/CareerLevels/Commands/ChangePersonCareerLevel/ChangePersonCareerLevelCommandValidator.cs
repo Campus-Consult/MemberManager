@@ -14,14 +14,15 @@ namespace MemberManager.Application.CareerLevels.Commands.ChangePersonCareerLeve
         public ChangePersonCareerLevelCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.CareerLevelId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.CareerLevelId)
                 .NotEmpty()
                 .MustAsync(CareerLevelExists).WithMessage("Karrierelevel existiert nicht!");
-            RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.PersonId)
                 .NotEmpty()
                 .MustAsync(PersonExists).WithMessage("Person existiert nicht!");
             
-            RuleFor(v => v.ChangeDateTime).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.ChangeDateTime)
                 .NotEmpty()
                 .MustAsync(CheckAlreadyHasCareerLevel).WithMessage("Person ist bereits diesem Karrierelevel zugeordnet!");
         }

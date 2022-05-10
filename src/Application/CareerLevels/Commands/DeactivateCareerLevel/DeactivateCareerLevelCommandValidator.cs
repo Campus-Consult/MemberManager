@@ -12,12 +12,13 @@ namespace MemberManager.Application.CareerLevels.Commands.DeactivateCareerLevel
         public DeactivateCareerLevelCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.CareerLevelId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.CareerLevelId)
                 .NotEmpty()
                 .MustAsync(CareerLevelExists).WithMessage("Karrierelevel existiert nicht!")
                 .MustAsync(CareerLevelActive).WithMessage("Das Karrierelevel ist nicht aktiv!");
             
-            RuleFor(v => v.NewCareerLevelId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.NewCareerLevelId)
                 .NotEmpty()
                 .Must(NewCareerLevelDifferent).WithMessage("Neues Karriereleves das Gleiche wie das Alte!")
                 .MustAsync(CareerLevelExists).WithMessage("Neues Karrierelevel existiert nicht!");

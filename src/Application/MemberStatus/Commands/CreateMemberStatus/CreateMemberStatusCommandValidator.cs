@@ -12,7 +12,8 @@ namespace MemberManager.Application.MemberStatuss.Commands.CreateMemberStatus
         public CreateMemberStatusCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.Name).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.Name)
                 .MaximumLength(200)
                 .NotEmpty()
                 .MustAsync(MemberStatusNameUnique).WithMessage("Name des Mitgliederstatus wird bereits verwendet!");

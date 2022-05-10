@@ -16,16 +16,17 @@ namespace MemberManager.Application.Positions.Commands.AssignToPosition
         {
             _context = context;
 
-            RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.PersonId)
                 .NotEmpty()
                 .MustAsync(PersonExists).WithMessage("Person existiert nicht.")
                 .MustAsync(PersonIsNotAssignedAlready).WithMessage("Person ist zu diesem Zeitpunkt bereits dem Posten zugewiesen!");
             
-            RuleFor(v => v.PositionId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.PositionId)
                 .NotEmpty()
                 .MustAsync(PositionExists).WithMessage("Posten existiert nicht.");
 
-            RuleFor(v => v.AssignmentDateTime).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.AssignmentDateTime)
                 .NotEmpty()
                 .Must(AssignmentDateTimeIsBeforeEndDateTime).WithMessage("Anfangszeit muss vor Endzeit sein.");
         }

@@ -12,10 +12,11 @@ namespace MemberManager.Application.MemberStatuss.Commands.UpdateMemberStatus
         public UpdateMemberStatusCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(v => v.MemberStatusId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.MemberStatusId)
                 .NotEmpty()
                 .MustAsync(MemberStatusExists).WithMessage("Mitgliedstatus existiert nicht!");
-            RuleFor(v => v.Name).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.Name)
                 .MaximumLength(200)
                 .NotEmpty()
                 .MustAsync(MemberStatusNameUnique).WithMessage("Name des Mitgliedstatus wird bereits verwendet!");

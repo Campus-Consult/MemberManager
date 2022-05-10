@@ -32,7 +32,7 @@ const routes: Routes = [{ path: '', component: AdminCenterComponent }];
     MatButtonModule,
     MatIconModule,
     MatButtonModule,
-    EventTrackingModule
+    EventTrackingModule,
   ],
 })
 export class AdminCenterModule {}

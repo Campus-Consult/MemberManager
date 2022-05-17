@@ -730,6 +730,9 @@ export class CareerLevelClient implements ICareerLevelClient {
 
 export interface IEventClient {
     get(): Observable<EventLookupDto[]>;
+    create(cmd: CreateEventCommand): Observable<number>;
+    getSingle(id: number): Observable<EventDetailDto>;
+    update(id: number, cmd: UpdateEventCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -798,6 +801,163 @@ export class EventClient implements IEventClient {
             }));
         }
         return _observableOf<EventLookupDto[]>(null as any);
+    }
+
+    create(cmd: CreateEventCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Event";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(cmd);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(null as any);
+    }
+
+    getSingle(id: number): Observable<EventDetailDto> {
+        let url_ = this.baseUrl + "/api/Event/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetSingle(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetSingle(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EventDetailDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EventDetailDto>;
+        }));
+    }
+
+    protected processGetSingle(response: HttpResponseBase): Observable<EventDetailDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EventDetailDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EventDetailDto>(null as any);
+    }
+
+    update(id: number, cmd: UpdateEventCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Event/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(cmd);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileResponse>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(null as any);
     }
 }
 
@@ -3173,6 +3333,254 @@ export interface IEventLookupDto {
     end?: string;
 }
 
+export class EventDetailDto implements IEventDetailDto {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    secretKey?: string | undefined;
+    organizer?: PersonLookupDto | undefined;
+    eventAnswers?: EventAnswerDto[] | undefined;
+
+    constructor(data?: IEventDetailDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.start = _data["start"];
+            this.end = _data["end"];
+            this.secretKey = _data["secretKey"];
+            this.organizer = _data["organizer"] ? PersonLookupDto.fromJS(_data["organizer"]) : <any>undefined;
+            if (Array.isArray(_data["eventAnswers"])) {
+                this.eventAnswers = [] as any;
+                for (let item of _data["eventAnswers"])
+                    this.eventAnswers!.push(EventAnswerDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): EventDetailDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventDetailDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["start"] = this.start;
+        data["end"] = this.end;
+        data["secretKey"] = this.secretKey;
+        data["organizer"] = this.organizer ? this.organizer.toJSON() : <any>undefined;
+        if (Array.isArray(this.eventAnswers)) {
+            data["eventAnswers"] = [];
+            for (let item of this.eventAnswers)
+                data["eventAnswers"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IEventDetailDto {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    secretKey?: string | undefined;
+    organizer?: PersonLookupDto | undefined;
+    eventAnswers?: EventAnswerDto[] | undefined;
+}
+
+export class PersonLookupDto implements IPersonLookupDto {
+    id?: string | undefined;
+    fistName?: string | undefined;
+    surname?: string | undefined;
+
+    constructor(data?: IPersonLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fistName = _data["fistName"];
+            this.surname = _data["surname"];
+        }
+    }
+
+    static fromJS(data: any): PersonLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fistName"] = this.fistName;
+        data["surname"] = this.surname;
+        return data;
+    }
+}
+
+export interface IPersonLookupDto {
+    id?: string | undefined;
+    fistName?: string | undefined;
+    surname?: string | undefined;
+}
+
+export class EventAnswerDto implements IEventAnswerDto {
+    id?: number;
+    person?: PersonLookupDto | undefined;
+
+    constructor(data?: IEventAnswerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.person = _data["person"] ? PersonLookupDto.fromJS(_data["person"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): EventAnswerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventAnswerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["person"] = this.person ? this.person.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IEventAnswerDto {
+    id?: number;
+    person?: PersonLookupDto | undefined;
+}
+
+export class CreateEventCommand implements ICreateEventCommand {
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    organizerEmail?: string | undefined;
+
+    constructor(data?: ICreateEventCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.start = _data["start"];
+            this.end = _data["end"];
+            this.organizerEmail = _data["organizerEmail"];
+        }
+    }
+
+    static fromJS(data: any): CreateEventCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEventCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["start"] = this.start;
+        data["end"] = this.end;
+        data["organizerEmail"] = this.organizerEmail;
+        return data;
+    }
+}
+
+export interface ICreateEventCommand {
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    organizerEmail?: string | undefined;
+}
+
+export class UpdateEventCommand implements IUpdateEventCommand {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+
+    constructor(data?: IUpdateEventCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.start = _data["start"];
+            this.end = _data["end"];
+        }
+    }
+
+    static fromJS(data: any): UpdateEventCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateEventCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["start"] = this.start;
+        data["end"] = this.end;
+        return data;
+    }
+}
+
+export interface IUpdateEventCommand {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+}
+
 export class MemberStatusVm implements IMemberStatusVm {
     memberStatus?: MemberStatusLookupDto[] | undefined;
 
@@ -3747,50 +4155,6 @@ export class PeopleVm implements IPeopleVm {
 
 export interface IPeopleVm {
     people?: PersonLookupDto[] | undefined;
-}
-
-export class PersonLookupDto implements IPersonLookupDto {
-    id?: string | undefined;
-    fistName?: string | undefined;
-    surname?: string | undefined;
-
-    constructor(data?: IPersonLookupDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.fistName = _data["fistName"];
-            this.surname = _data["surname"];
-        }
-    }
-
-    static fromJS(data: any): PersonLookupDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PersonLookupDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["fistName"] = this.fistName;
-        data["surname"] = this.surname;
-        return data;
-    }
-}
-
-export interface IPersonLookupDto {
-    id?: string | undefined;
-    fistName?: string | undefined;
-    surname?: string | undefined;
 }
 
 export class PeopleWithBasicInfoVm implements IPeopleWithBasicInfoVm {

@@ -11,10 +11,7 @@ using MemberManager.Application.Events.Common;
 
 namespace MemberManager.Application.Events.Queries.GetAllEvents
 {
-    public class GetAllEventsQuery : IRequest<List<EventLookupDto>>
-    {
-        public int MemberStatusId { get; set; }
-    }
+    public class GetAllEventsQuery : IRequest<List<EventLookupDto>> {}
 
     public class GetAllEventsQueryHandler : IRequestHandler<GetAllEventsQuery, List<EventLookupDto>>
     {

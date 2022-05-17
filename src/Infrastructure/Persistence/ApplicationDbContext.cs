@@ -41,7 +41,7 @@ namespace MemberManager.Infrastructure.Persistence
         public DbSet<Position> Positions { get; set; }
         public DbSet<PersonPosition> PersonPositions { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<EventAnswer> EventAnwers { get; set; }
+        public DbSet<EventAnswer> EventAnswers { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

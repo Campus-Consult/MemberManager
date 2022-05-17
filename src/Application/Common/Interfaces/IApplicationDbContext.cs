@@ -18,7 +18,7 @@ namespace MemberManager.Application.Common.Interfaces
         DbSet<Position> Positions { get; set; }
         DbSet<PersonPosition> PersonPositions { get; set; }
         DbSet<Event> Events { get; set; }
-        DbSet<EventAnswer> EventAnwers { get; set; }
+        DbSet<EventAnswer> EventAnswers { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

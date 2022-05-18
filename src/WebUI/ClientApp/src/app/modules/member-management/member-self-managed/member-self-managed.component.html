@@ -3,7 +3,7 @@
     <mat-card-title>Deine Daten</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="memberData && !isEditing; else noDataMessage">
+    <ng-container *ngIf="memberData && !isEditing">
       <div class="heading-margin">
         <app-member-data
           [memberDetails]="memberData"
@@ -12,14 +12,14 @@
         </app-member-data>
       </div>
     </ng-container>
-    <ng-template #noDataMessage>
+    <ng-container *ngIf="!memberData">
       <div class="mat-card-content-margin">
         <p>
           Für diesen Nutzer sind keine Daten verfügbar. <br />
           Möglicherweise wurde für dich noch kein Datensatz angelegt.
         </p>
       </div>
-    </ng-template>
+    </ng-container>
     <ng-container *ngIf="isEditing">
       <div class="mat-card-content-margin">
         <app-member-form [memberData]="memberData"></app-member-form>

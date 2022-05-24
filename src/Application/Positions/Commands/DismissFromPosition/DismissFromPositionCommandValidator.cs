@@ -15,16 +15,17 @@ namespace MemberManager.Application.Positions.Commands.DismissFromPosition
         {
             _context = context;
 
-            RuleFor(v => v.PositionId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.PositionId)
                 .NotEmpty()
                 .MustAsync(PositionExists).WithMessage("Posten existiert nicht.");
 
-            RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.PersonId)
                 .NotEmpty()
                 .MustAsync(PersonExists).WithMessage("Person existiert nicht.")
                 .MustAsync(PersonIsAssignedAlready).WithMessage("Person ist nicht besetzt.");
 
-            RuleFor(v => v.DismissalDateTime).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.DismissalDateTime)
                 .NotEmpty();
         }
 

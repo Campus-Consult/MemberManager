@@ -15,16 +15,17 @@ namespace MemberManager.Application.MemberStatuss.Commands.AssignToMemberStatus
         {
             _context = context;
 
-            RuleFor(v => v.PersonId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.PersonId)
                 .NotEmpty()
                 .MustAsync(PersonExists).WithMessage("Person does not exist.")
                 .MustAsync(PersonIsNotAssignedAlready).WithMessage("Person is already assigned.");
 
-            RuleFor(v => v.MemberStatusId).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.MemberStatusId)
                 .NotEmpty()
                 .MustAsync(MemberStatusExists).WithMessage("Member status does not exist.");
 
-            RuleFor(v => v.AssignmentDateTime).Cascade(CascadeMode.StopOnFirstFailure)
+            RuleFor(v => v.AssignmentDateTime)
                 .NotEmpty();
         }
 

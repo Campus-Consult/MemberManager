@@ -15,13 +15,12 @@ namespace MemberManager.Application.Positions.Commands.CreatePosition
         {
             _context = context;
 
+            RuleLevelCascadeMode = CascadeMode.Stop;
             RuleFor(v => v.Name)
-                .Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(200)
                 .NotEmpty()
                 .MustAsync(PositionNameIsUnique).WithMessage("Postenname existiert bereits.");
             RuleFor(v => v.ShortName)
-                .Cascade(CascadeMode.StopOnFirstFailure)
                 .MaximumLength(20)
                 .NotEmpty()
                 .MustAsync(PositionShortNameIsUnique).WithMessage("Posten Kurzbezeichnung existiert bereits.");

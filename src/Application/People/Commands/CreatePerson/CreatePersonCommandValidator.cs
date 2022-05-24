@@ -29,7 +29,7 @@ namespace MemberManager.Application.People.Commands.CreatePerson
             RuleFor(v => v.EmailPrivate)
                 .EmailAddress()
                 .NotEmpty();
-            RuleFor(v => v.EmailAssociaton)
+            RuleFor(v => v.EmailAssociaton).Cascade(CascadeMode.Stop)
                 .EmailAddress()
                 .NotEmpty()
                 .MustAsync(EmailDoesntAlreadyExist).WithMessage("Die E-Mail Addresse existiert bereits!");

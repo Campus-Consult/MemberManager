@@ -16,8 +16,8 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
         {
             _context = context;
 
+            RuleLevelCascadeMode = CascadeMode.Stop;
             RuleFor(v => v.Id)
-                .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
                 .MustAsync(PositionExists).WithMessage("Posten existiert nicht.")
                 .MustAsync(PositionIsNotDeactivatedAlready).WithMessage("Posten ist bereits deaktiviert.")

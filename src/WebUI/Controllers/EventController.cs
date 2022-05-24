@@ -63,7 +63,6 @@ namespace MemberManager.WebUI.Controllers
             return NoContent();
         }
 
-        [Authorize(Policy = "Admin")]
         [HttpGet("[action]")]
         public async Task<ActionResult<List<EventAnswerWithEventDto>>> GetOwn() {
             return await Mediator.Send(new GetOwnEventsQuery());

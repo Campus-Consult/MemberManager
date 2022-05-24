@@ -219,11 +219,14 @@ namespace MemberManager.Infrastructure.Migrations
                     b.Property<int>("AnswerKind")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EventId")
+                    b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PersonId")
+                    b.Property<int>("PersonId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -231,7 +234,7 @@ namespace MemberManager.Infrastructure.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("EventAnwers");
+                    b.ToTable("EventAnswers");
                 });
 
             modelBuilder.Entity("MemberManager.Domain.Entities.MemberStatus", b =>
@@ -612,12 +615,14 @@ namespace MemberManager.Infrastructure.Migrations
                     b.HasOne("MemberManager.Domain.Entities.Event", "Event")
                         .WithMany("EventAnswers")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MemberManager.Domain.Entities.Person", "Person")
                         .WithMany("EventAnswers")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Event");
 

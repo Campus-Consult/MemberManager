@@ -31,7 +31,7 @@ namespace MemberManager.Application.Events.Commands.CreateEvent
         }
 
         public async Task<bool> PersonExists(CreateEventCommand command, string email, CancellationToken token) {
-            return await _context.People.Where(p => p.EmailAssociaton == email).AnyAsync();
+            return await _context.People.Where(p => p.EmailAssociaton == email).AnyAsync(token);
         }
     }
 }

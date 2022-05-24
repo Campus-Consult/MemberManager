@@ -31,7 +31,7 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
         public async Task<Unit> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
             
-            var evnt = await _context.Events.FindAsync(request.Id);
+            var evnt = await _context.Events.FindAsync(new object [] {request.Id}, cancellationToken);
             
             evnt.Name = request.Name;
             evnt.End = request.End;

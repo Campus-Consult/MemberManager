@@ -8,6 +8,7 @@ namespace MemberManager.Domain.Entities
     {
         public int Id { get; set; }
         public EventAnswerKind AnswerKind { get; set; }
+        public DateTime Time { get; set; }
         public int EventId { get; set; }
         public int PersonId { get; set; }
         public Event Event { get; set; }

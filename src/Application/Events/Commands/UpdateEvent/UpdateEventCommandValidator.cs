@@ -31,7 +31,7 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
         }
 
         public async Task<bool> EventExists(UpdateEventCommand model, int eventId, CancellationToken cancellationToken) {
-            return await _context.CareerLevels.FindAsync(eventId) != null;
+            return await _context.Events.FindAsync(new object[] {eventId}, cancellationToken) != null;
         }
     }
 }

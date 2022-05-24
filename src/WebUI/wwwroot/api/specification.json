@@ -641,6 +641,148 @@
             "JWT": []
           }
         ]
+      },
+      "delete": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Event/Attend": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_Attend",
+        "requestBody": {
+          "x-name": "cmd",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendEventCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Event/GetOwn": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_GetOwn",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventAnswerWithEventDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Event/GetForPerson/{personId}": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_GetForPerson",
+        "parameters": [
+          {
+            "name": "personId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventAnswerWithEventDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/MemberStatus": {
@@ -2196,6 +2338,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
           "person": {
             "nullable": true,
             "oneOf": [
@@ -2247,6 +2393,38 @@
           "end": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "AttendEventCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "eventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "eventSecretKey": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "EventAnswerWithEventDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "event": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EventLookupDto"
+              }
+            ]
           }
         }
       },

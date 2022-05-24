@@ -733,6 +733,10 @@ export interface IEventClient {
     create(cmd: CreateEventCommand): Observable<number>;
     getSingle(id: number): Observable<EventDetailDto>;
     update(id: number, cmd: UpdateEventCommand): Observable<FileResponse>;
+    delete(id: number): Observable<FileResponse>;
+    attend(cmd: AttendEventCommand): Observable<FileResponse>;
+    getOwn(): Observable<EventAnswerWithEventDto[]>;
+    getForPerson(personId: number): Observable<EventAnswerWithEventDto[]>;
 }
 
 @Injectable({
@@ -958,6 +962,218 @@ export class EventClient implements IEventClient {
             }));
         }
         return _observableOf<FileResponse>(null as any);
+    }
+
+    delete(id: number): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Event/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileResponse>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(null as any);
+    }
+
+    attend(cmd: AttendEventCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Event/Attend";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(cmd);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAttend(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAttend(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileResponse>;
+        }));
+    }
+
+    protected processAttend(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(null as any);
+    }
+
+    getOwn(): Observable<EventAnswerWithEventDto[]> {
+        let url_ = this.baseUrl + "/api/Event/GetOwn";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetOwn(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetOwn(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EventAnswerWithEventDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EventAnswerWithEventDto[]>;
+        }));
+    }
+
+    protected processGetOwn(response: HttpResponseBase): Observable<EventAnswerWithEventDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EventAnswerWithEventDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EventAnswerWithEventDto[]>(null as any);
+    }
+
+    getForPerson(personId: number): Observable<EventAnswerWithEventDto[]> {
+        let url_ = this.baseUrl + "/api/Event/GetForPerson/{personId}";
+        if (personId === undefined || personId === null)
+            throw new Error("The parameter 'personId' must be defined.");
+        url_ = url_.replace("{personId}", encodeURIComponent("" + personId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetForPerson(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetForPerson(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EventAnswerWithEventDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EventAnswerWithEventDto[]>;
+        }));
+    }
+
+    protected processGetForPerson(response: HttpResponseBase): Observable<EventAnswerWithEventDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EventAnswerWithEventDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EventAnswerWithEventDto[]>(null as any);
     }
 }
 
@@ -3447,6 +3663,7 @@ export interface IPersonLookupDto {
 
 export class EventAnswerDto implements IEventAnswerDto {
     id?: number;
+    time?: string;
     person?: PersonLookupDto | undefined;
 
     constructor(data?: IEventAnswerDto) {
@@ -3461,6 +3678,7 @@ export class EventAnswerDto implements IEventAnswerDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.time = _data["time"];
             this.person = _data["person"] ? PersonLookupDto.fromJS(_data["person"]) : <any>undefined;
         }
     }
@@ -3475,6 +3693,7 @@ export class EventAnswerDto implements IEventAnswerDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["time"] = this.time;
         data["person"] = this.person ? this.person.toJSON() : <any>undefined;
         return data;
     }
@@ -3482,6 +3701,7 @@ export class EventAnswerDto implements IEventAnswerDto {
 
 export interface IEventAnswerDto {
     id?: number;
+    time?: string;
     person?: PersonLookupDto | undefined;
 }
 
@@ -3579,6 +3799,86 @@ export interface IUpdateEventCommand {
     name?: string | undefined;
     start?: string;
     end?: string;
+}
+
+export class AttendEventCommand implements IAttendEventCommand {
+    eventId?: number;
+    eventSecretKey?: string | undefined;
+
+    constructor(data?: IAttendEventCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.eventId = _data["eventId"];
+            this.eventSecretKey = _data["eventSecretKey"];
+        }
+    }
+
+    static fromJS(data: any): AttendEventCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new AttendEventCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["eventId"] = this.eventId;
+        data["eventSecretKey"] = this.eventSecretKey;
+        return data;
+    }
+}
+
+export interface IAttendEventCommand {
+    eventId?: number;
+    eventSecretKey?: string | undefined;
+}
+
+export class EventAnswerWithEventDto implements IEventAnswerWithEventDto {
+    time?: string;
+    event?: EventLookupDto | undefined;
+
+    constructor(data?: IEventAnswerWithEventDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.time = _data["time"];
+            this.event = _data["event"] ? EventLookupDto.fromJS(_data["event"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): EventAnswerWithEventDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventAnswerWithEventDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["time"] = this.time;
+        data["event"] = this.event ? this.event.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IEventAnswerWithEventDto {
+    time?: string;
+    event?: EventLookupDto | undefined;
 }
 
 export class MemberStatusVm implements IMemberStatusVm {

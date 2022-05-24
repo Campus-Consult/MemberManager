@@ -37,26 +37,27 @@ namespace MemberManager.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "EventAnwers",
+                name: "EventAnswers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AnswerKind = table.Column<int>(type: "int", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: true),
-                    PersonId = table.Column<int>(type: "int", nullable: true)
+                    Time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    PersonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventAnwers", x => x.Id);
+                    table.PrimaryKey("PK_EventAnswers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EventAnwers_Events_EventId",
+                        name: "FK_EventAnswers_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventAnwers_People_PersonId",
+                        name: "FK_EventAnswers_People_PersonId",
                         column: x => x.PersonId,
                         principalTable: "People",
                         principalColumn: "Id",
@@ -65,13 +66,13 @@ namespace MemberManager.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventAnwers_EventId",
-                table: "EventAnwers",
+                name: "IX_EventAnswers_EventId",
+                table: "EventAnswers",
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventAnwers_PersonId",
-                table: "EventAnwers",
+                name: "IX_EventAnswers_PersonId",
+                table: "EventAnswers",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
@@ -83,7 +84,7 @@ namespace MemberManager.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EventAnwers");
+                name: "EventAnswers");
 
             migrationBuilder.DropTable(
                 name: "Events");

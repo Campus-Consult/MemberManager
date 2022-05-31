@@ -22,6 +22,7 @@ using MemberManager.Application.People.Commands.UpdatePerson;
 using MemberManager.Application.People.Commands.CreatePerson;
 using MemberManager.Application.SelfManagement.Commands.UpdateSelf;
 using MemberManager.Application.SelfManagement.Commands.CreateSelf;
+using MemberManager.Application.Common.Interfaces;
 
 namespace MemberManager.WebUI.Controllers
 {
@@ -29,24 +30,23 @@ namespace MemberManager.WebUI.Controllers
     [Route("api/self")]
     public class SelfManagementController : ApiController
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public SelfManagementController(IHttpContextAccessor httpContextAccessor) {
-            _httpContextAccessor = httpContextAccessor;
+        private readonly ICurrentUserService _currentUserService;
+        public SelfManagementController(ICurrentUserService currentUserService) {
+            _currentUserService = currentUserService;
         }
 
         [HttpGet]
         public async Task<ActionResult<PersonDetailVm>> GetOverview()
         {
-            return await Mediator.Send(new GetSelfQuery{ Email = Util.GetAssociationEmailOrError(_httpContextAccessor)});
+            return await Mediator.Send(new GetSelfQuery{ Email = _currentUserService.GetEmailAssociate()});
         }
 
         [HttpPost("[action]")]
         public async Task<ActionResult> Create(CreatePersonCommand command)
         {
-            var userMail = Util.GetAssociationEmailOrError(_httpContextAccessor);
             var selfCommand = new CreateSelfCommand {
                 CreateCommand = command,
-                Email = userMail,
+                Email = _currentUserService.GetEmailAssociate(),
             };
 
             await Mediator.Send(selfCommand);
@@ -57,10 +57,9 @@ namespace MemberManager.WebUI.Controllers
         [HttpPut("[action]")]
         public async Task<ActionResult> Update(UpdatePersonCommand command)
         {
-            var userMail = Util.GetAssociationEmailOrError(_httpContextAccessor);
             var selfCommand = new UpdateSelfCommand {
                 UpdateCommand = command,
-                Email = userMail,
+                Email = _currentUserService.GetEmailAssociate(),
             };
 
             await Mediator.Send(selfCommand);

@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class EventCodeDialogComponent implements OnInit {
 
-  qrDataUrl: string;
+  qrDataUrl = 'http://membermanager.campus-consult.org/';
 
   constructor(
     public dialogRef: MatDialogRef<EventCodeDialogComponent>,

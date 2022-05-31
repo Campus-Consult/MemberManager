@@ -33,6 +33,17 @@ export class EventTrackingTableComponent implements OnInit {
       });
     }
   }
+
+  openEventDialog() {
+    const dialogRef = this.dialog.open(EventCodeDialogComponent, {
+      width: '650px',
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 }
 
 export interface Event {}

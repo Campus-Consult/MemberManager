@@ -14,7 +14,7 @@
   <ng-container matColumnDef="qrcode">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let row">
-      <button mat-mini-fab color="primary" aria-label="open-qrcode"><mat-icon>qr_code_2</mat-icon></button>
+      <button mat-mini-fab color="primary" aria-label="open-qrcode" (click)="openEventDialog()"><mat-icon>qr_code_2</mat-icon></button>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

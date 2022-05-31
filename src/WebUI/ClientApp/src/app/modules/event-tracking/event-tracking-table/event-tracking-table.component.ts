@@ -1,6 +1,7 @@
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { EventDetailDto } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-event-tracking-table',
@@ -8,14 +9,14 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./event-tracking-table.component.scss'],
 })
 export class EventTrackingTableComponent implements OnInit {
-  displayedColumns: string[] = ['eventname', 'tag', 'attendances', 'qrcode'];
+  displayedColumns: string[] = ['eventname', 'date', /*'tag',*/ 'attendances', 'qrcode'];
 
-  events: any[];
+  events: EventDetailDto[];
 
   constructor(protected dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.events = [];
+    /*     this.events = [];
     for (let index = 0; index < 10; index++) {
       this.events.push({
         eventname: "Eventname" + index,
@@ -31,13 +32,13 @@ export class EventTrackingTableComponent implements OnInit {
         attendances: index,
         qrCode: "abcdefg"
       });
-    }
+    } */
   }
 
-  openEventDialog() {
+  openEventDialog(event: EventDetailDto) {
     const dialogRef = this.dialog.open(EventCodeDialogComponent, {
       width: '650px',
-      data: {},
+      data: event,
     });
 
     dialogRef.afterClosed().subscribe(result => {

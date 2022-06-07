@@ -12,6 +12,8 @@ namespace MemberManager.Domain.Entities
             PersonCareerLevels = new HashSet<PersonCareerLevel>();
             PersonMemberStatus = new HashSet<PersonMemberStatus>();
             PersonPositions = new HashSet<PersonPosition>();
+            EventAnswers = new HashSet<EventAnswer>();
+            OrganizedEvents = new HashSet<Event>();
         }
 
         public int Id { get; set; }
@@ -30,6 +32,8 @@ namespace MemberManager.Domain.Entities
         public ICollection<PersonCareerLevel> PersonCareerLevels { get; private set; }
         public ICollection<PersonMemberStatus> PersonMemberStatus { get; private set; }
         public ICollection<PersonPosition> PersonPositions { get; private set; }
+        public ICollection<EventAnswer> EventAnswers { get; private set; }
+        public ICollection<Event> OrganizedEvents { get; private set; }
 
         public PersonCareerLevel GetCurrentCareerLevel(DateTime time) {
             // throw away all later assignments and get the latest one

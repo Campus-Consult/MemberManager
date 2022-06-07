@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +17,7 @@ namespace MemberManager.Application.Events.Commands.CreateEvent
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string OrganizerEmail { get; set; }
+        public List<string> Tags { get; set; }
     }
 
     public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, int>
@@ -44,6 +45,15 @@ namespace MemberManager.Application.Events.Commands.CreateEvent
             };
 
             _context.Events.Add(evnt);
+
+            if (request.Tags != null) {
+                foreach (var tag in request.Tags.Distinct()) {
+                    _context.EventTags.Add(new EventTag() {
+                        Event = evnt,
+                        Tag = tag,
+                    });
+                }
+            }
 
             await _context.SaveChangesAsync(cancellationToken);
 

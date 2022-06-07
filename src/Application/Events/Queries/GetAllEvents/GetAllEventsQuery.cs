@@ -26,7 +26,7 @@ namespace MemberManager.Application.Events.Queries.GetAllEvents
 
         public async Task<List<EventLookupDto>> Handle(GetAllEventsQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Events.ProjectTo<EventLookupDto>(_mapper.ConfigurationProvider).ToListAsync();
+            return await _context.Events.Include(e => e.EventTags).ProjectTo<EventLookupDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
     }
 }

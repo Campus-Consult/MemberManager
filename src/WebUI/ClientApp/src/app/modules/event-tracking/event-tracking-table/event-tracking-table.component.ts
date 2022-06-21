@@ -1,3 +1,4 @@
+import { EventFormComponent } from './../event-form/event-form.component';
 import {
   CreateEventCommand,
   EventClient,
@@ -52,16 +53,29 @@ export class EventTrackingTableComponent implements OnInit {
 
   onCreate() {
     // Open Form Dialog
+    const dialogRef = this.dialog.open(EventFormComponent, {
+      width: '250px',
+      data: {edit: false}
+    });
 
-    const command = new CreateEventCommand({});
-    this.eventClient.create(command);
+    dialogRef.afterClosed().subscribe(result => {
+      const command = new CreateEventCommand();
+      // this.eventClient.create(command);
+    });
   }
 
   onEdit() {
     // Open Form Dialog
-    const id = 0
-    const command = new UpdateEventCommand({});
-    this.eventClient.update(id, command);
+    const dialogRef = this.dialog.open(EventFormComponent, {
+      width: '250px',
+      data: {edit: true}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      const id = 0
+      const command = new UpdateEventCommand({});
+      // this.eventClient.update(id, command);
+    });
   }
 
   openEventDialog(event: EventDetailDto) {

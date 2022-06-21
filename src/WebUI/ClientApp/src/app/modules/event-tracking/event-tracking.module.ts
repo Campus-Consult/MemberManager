@@ -1,3 +1,4 @@
+import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from './../../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +9,7 @@ import { EventFormComponent } from './event-form/event-form.component';
 
 @NgModule({
   declarations: [EventTrackingTableComponent, EventCodeDialogComponent, EventFormComponent],
-  imports: [CommonModule, SharedModule, QRCodeModule],
+  imports: [CommonModule, SharedModule, ReactiveFormsModule, QRCodeModule],
   exports: [EventTrackingTableComponent],
 })
 export class EventTrackingModule {}

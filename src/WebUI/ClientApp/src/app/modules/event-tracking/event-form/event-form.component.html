@@ -1,36 +1,70 @@
-<form (ngSubmit)="onSubmit()">
-  <div formGroupName="address">
-    <!-- Name -->
-    <mat-form-field>
-      <input matInput placeholder="Eventname" value="value" />
-    </mat-form-field>
-    <!-- Tags -->
-    <mat-form-field class="example-chip-list" appearance="fill">
-      <mat-label>Event Tags</mat-label>
-      <mat-chip-list
-        #chipList
-        aria-label="Event Tags"
-        multiple
-        formControlName="tags"
-      >
-        <mat-chip
-          *ngFor="let keyword of keywords"
-          [selected]="keyword"
-          [value]="keyword"
-          (removed)="removeKeyword(keyword)"
+<mat-dialog-content>
+  <form [formGroup]="eventFormGroup" (ngSubmit)="onSubmit()">
+      <!-- Name -->
+      <mat-form-field>
+        <mat-label>Event Name</mat-label>
+        <input matInput placeholder="Eventname" value="value"  formControlName="name" />
+      </mat-form-field>
+      <!-- Tags -->
+      <mat-form-field class="example-chip-list" appearance="fill">
+        <mat-label>Event Tags</mat-label>
+        <mat-chip-list
+          #chipList
+          aria-label="Event Tags"
+          multiple
+          formControlName="tags"
         >
-          {{ keyword }}
-        </mat-chip>
+          <mat-chip
+            *ngFor="let keyword of keywords"
+            [selected]="keyword"
+            [value]="keyword"
+            (removed)="removeKeyword(keyword)"
+          >
+            {{ keyword }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            placeholder="Suche Tag"
+            [matChipInputFor]="chipList"
+            formControlName="tagInput"
+            [matAutocomplete]="auto"
+            (matChipInputTokenEnd)="addKeywordFromInput($event)"
+          />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Organisator</mat-label>
+        <input matInput placeholder="Organisator" formControlName="organizer" />
+      </mat-form-field>
+      <!-- <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Number</mat-label>
         <input
-          placeholder="New keyword..."
-          [matChipInputFor]="chipList"
-          (matChipInputTokenEnd)="addKeywordFromInput($event)"
+          type="text"
+          placeholder="Pick one"
+          aria-label="Number"
+          matInput
+          [formControl]="myControl"
+          [matAutocomplete]="auto"
         />
-      </mat-chip-list>
-    </mat-form-field>
-    <!-- Start - End -->
-    <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
-<!--     <section>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> -->
+      <!-- Start - End -->
+      <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
+      <!--     <section>
       <div>
         <mat-form-field>
           <mat-label>Choose a date</mat-label>
@@ -50,5 +84,11 @@
         </mat-form-field>
       </div>
     </section> -->
-  </div>
-</form>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="warn" mat-dialog-close>Abbrechen</button>
+  <button mat-raised-button color="accent" (click)="onSubmit()">
+    Erstellen
+  </button>
+</mat-dialog-actions>

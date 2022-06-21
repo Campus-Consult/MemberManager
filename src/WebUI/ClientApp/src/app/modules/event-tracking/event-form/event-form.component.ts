@@ -1,9 +1,17 @@
+import { PeopleClient } from './../../../membermanager-api';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  Validators,
+  FormGroup,
+} from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EventDetailDto } from 'src/app/membermanager-api';
+import { PersonLookupDto } from 'src/app/membermanager-api';
 import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
+import { Observable } from 'rxjs';
+import { startWith, map, pluck, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-event-form',
@@ -11,26 +19,48 @@ import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
-  keywords = new Set(['angular', 'how-to', 'tutorial']);
+  keywords = new Set(['MV', 'VT']);
 
-  form = this.formBuilder.group({
+  autoCompleteKeywords: string[] = ['Peter', 'Max', 'Kevin'];
+  filteredOptions: Observable<string[]>;
+  lastAutoValue = '';
+
+  people: PersonLookupDto[] = [];
+
+  eventFormGroup = this.formBuilder.group({
     name: ['Event', [Validators.required]],
     tags: [[this.keywords], [Validators.required]],
+    tagInput: [''],
+    organizer: ['', [Validators.required]],
     startDate: [Date.now()],
     endDate: [Date.now()],
     startTime: ['20:00'],
     endTime: ['22:00'],
   });
 
-  formControl = new FormControl(['angular']);
-
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<EventCodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private memberClient: PeopleClient
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const sub = this.memberClient.get().subscribe((data) => {
+      this.people.concat(data.people);
+      sub.unsubscribe();
+    });
+
+    this.filteredOptions = this.eventFormGroup.valueChanges.pipe(
+      pluck('tagInput'),
+      startWith(''),
+      filter((value)=> this.lastAutoValue !== value),
+      map((value) => {
+        this.lastAutoValue = value;
+        return this._filter(value);
+      })
+    );
+  }
 
   addKeywordFromInput(event: MatChipInputEvent) {
     if (event.value) {
@@ -43,9 +73,15 @@ export class EventFormComponent implements OnInit {
     this.keywords.delete(keyword);
   }
 
+  private _filter(value: string): string[] {
+    const filterValue = value?.toLowerCase();
+    return this.autoCompleteKeywords.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
   onSubmit() {
     // TODO: create output interface
-    if(this.form.status)
-      this.dialogRef.close(this.form)
+    if (this.eventFormGroup.status) this.dialogRef.close(this.eventFormGroup);
   }
 }

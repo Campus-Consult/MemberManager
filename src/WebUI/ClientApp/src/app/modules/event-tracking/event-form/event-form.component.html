@@ -29,11 +29,11 @@
             placeholder="Event Tag hinzufügen"
             [matChipInputFor]="chipList"
             formControlName="tagInput"
-            [matAutocomplete]="auto"
+            [matAutocomplete]="autoTag"
             (matChipInputTokenEnd)="addTagFromInput($event)"
           />
-          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          <mat-autocomplete autoActiveFirstOption #autoTag="matAutocomplete">
+            <mat-option *ngFor="let option of filteredTagOptions | async" [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
@@ -41,7 +41,12 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Organisator</mat-label>
-        <input matInput placeholder="Organisator" formControlName="organizer" />
+        <input matInput placeholder="Organisator" formControlName="organizer" [matAutocomplete]="autoOrga" />
+        <mat-autocomplete #autoOrga="matAutocomplete" [displayWith]="displayOrganizerFn">
+          <mat-option *ngFor="let option of filteredOrgaOptions | async" [value]="option">
+            {{option | displayOrganizer}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
       <!-- <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Number</mat-label>

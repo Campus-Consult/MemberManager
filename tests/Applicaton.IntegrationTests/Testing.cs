@@ -180,10 +180,15 @@ public class Testing
         await context.SaveChangesAsync();
     }
 
-    public static void AssertValidationError(Task task, string errorKey, string errorMessage) {
-        FluentActions.Invoking(() => task)
-            .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey))
-            .And.Errors[errorKey].Should().Contain(errorMessage);
+    public static void AssertValidationError(Task task, string errorKey, string errorMessage = null) {
+        if (errorMessage == null) {
+            FluentActions.Invoking(() => task)
+                .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey));
+        } else {
+            FluentActions.Invoking(() => task)
+                .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey))
+                .And.Errors[errorKey].Should().Contain(errorMessage);
+        }
     }
 
     public static void SetDateTime(DateTime newNow) {

@@ -145,7 +145,7 @@ namespace MemberManager.Application.IntegrationTests.Events
                 OrganizerEmail = organizerEmail,
                 Start = validStart,
                 End = validEnd,
-            }), "Name", "'Name' darf nicht leer sein.");
+            }), "Name");
         }
     }
 }

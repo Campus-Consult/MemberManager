@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using AutoMapper;
 using MemberManager.Domain.Entities;
@@ -16,5 +17,11 @@ namespace MemberManager.Application.Events.Common
         public string SecretKey { get; set; }
         public PersonLookupDto Organizer { get; set; }
         public ICollection<EventAnswerDto> EventAnswers { get; set; }
+        public ICollection<string> Tags { get; set; }
+
+        public void Mapping(Profile profile) {
+            profile.CreateMap<Event, EventDetailDto>()
+                .ForMember(e => e.Tags, opt => opt.MapFrom(e => e.EventTags.Select(t => t.Tag).ToList()));
+        } 
     }
 }

@@ -734,6 +734,7 @@ export interface IEventClient {
     getSingle(id: number): Observable<EventDetailDto>;
     update(id: number, cmd: UpdateEventCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
+    allTags(): Observable<string[]>;
     attend(cmd: AttendEventCommand): Observable<FileResponse>;
     getOwn(): Observable<EventAnswerWithEventDto[]>;
     getForPerson(personId: number): Observable<EventAnswerWithEventDto[]>;
@@ -1011,6 +1012,61 @@ export class EventClient implements IEventClient {
             }));
         }
         return _observableOf<FileResponse>(null as any);
+    }
+
+    allTags(): Observable<string[]> {
+        let url_ = this.baseUrl + "/api/Event/AllTags";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAllTags(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAllTags(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string[]>;
+        }));
+    }
+
+    protected processAllTags(response: HttpResponseBase): Observable<string[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(item);
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string[]>(null as any);
     }
 
     attend(cmd: AttendEventCommand): Observable<FileResponse> {
@@ -3506,6 +3562,7 @@ export class EventLookupDto implements IEventLookupDto {
     name?: string | undefined;
     start?: string;
     end?: string;
+    tags?: string[] | undefined;
 
     constructor(data?: IEventLookupDto) {
         if (data) {
@@ -3522,6 +3579,11 @@ export class EventLookupDto implements IEventLookupDto {
             this.name = _data["name"];
             this.start = _data["start"];
             this.end = _data["end"];
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
+            }
         }
     }
 
@@ -3538,6 +3600,11 @@ export class EventLookupDto implements IEventLookupDto {
         data["name"] = this.name;
         data["start"] = this.start;
         data["end"] = this.end;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
         return data;
     }
 }
@@ -3547,6 +3614,7 @@ export interface IEventLookupDto {
     name?: string | undefined;
     start?: string;
     end?: string;
+    tags?: string[] | undefined;
 }
 
 export class EventDetailDto implements IEventDetailDto {
@@ -3557,6 +3625,7 @@ export class EventDetailDto implements IEventDetailDto {
     secretKey?: string | undefined;
     organizer?: PersonLookupDto | undefined;
     eventAnswers?: EventAnswerDto[] | undefined;
+    tags?: string[] | undefined;
 
     constructor(data?: IEventDetailDto) {
         if (data) {
@@ -3579,6 +3648,11 @@ export class EventDetailDto implements IEventDetailDto {
                 this.eventAnswers = [] as any;
                 for (let item of _data["eventAnswers"])
                     this.eventAnswers!.push(EventAnswerDto.fromJS(item));
+            }
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
             }
         }
     }
@@ -3603,6 +3677,11 @@ export class EventDetailDto implements IEventDetailDto {
             for (let item of this.eventAnswers)
                 data["eventAnswers"].push(item.toJSON());
         }
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
         return data;
     }
 }
@@ -3615,6 +3694,7 @@ export interface IEventDetailDto {
     secretKey?: string | undefined;
     organizer?: PersonLookupDto | undefined;
     eventAnswers?: EventAnswerDto[] | undefined;
+    tags?: string[] | undefined;
 }
 
 export class PersonLookupDto implements IPersonLookupDto {
@@ -3710,6 +3790,7 @@ export class CreateEventCommand implements ICreateEventCommand {
     start?: string;
     end?: string;
     organizerEmail?: string | undefined;
+    tags?: string[] | undefined;
 
     constructor(data?: ICreateEventCommand) {
         if (data) {
@@ -3726,6 +3807,11 @@ export class CreateEventCommand implements ICreateEventCommand {
             this.start = _data["start"];
             this.end = _data["end"];
             this.organizerEmail = _data["organizerEmail"];
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
+            }
         }
     }
 
@@ -3742,6 +3828,11 @@ export class CreateEventCommand implements ICreateEventCommand {
         data["start"] = this.start;
         data["end"] = this.end;
         data["organizerEmail"] = this.organizerEmail;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
         return data;
     }
 }
@@ -3751,6 +3842,7 @@ export interface ICreateEventCommand {
     start?: string;
     end?: string;
     organizerEmail?: string | undefined;
+    tags?: string[] | undefined;
 }
 
 export class UpdateEventCommand implements IUpdateEventCommand {
@@ -3758,6 +3850,7 @@ export class UpdateEventCommand implements IUpdateEventCommand {
     name?: string | undefined;
     start?: string;
     end?: string;
+    tags?: string[] | undefined;
 
     constructor(data?: IUpdateEventCommand) {
         if (data) {
@@ -3774,6 +3867,11 @@ export class UpdateEventCommand implements IUpdateEventCommand {
             this.name = _data["name"];
             this.start = _data["start"];
             this.end = _data["end"];
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
+            }
         }
     }
 
@@ -3790,6 +3888,11 @@ export class UpdateEventCommand implements IUpdateEventCommand {
         data["name"] = this.name;
         data["start"] = this.start;
         data["end"] = this.end;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
         return data;
     }
 }
@@ -3799,6 +3902,7 @@ export interface IUpdateEventCommand {
     name?: string | undefined;
     start?: string;
     end?: string;
+    tags?: string[] | undefined;
 }
 
 export class AttendEventCommand implements IAttendEventCommand {

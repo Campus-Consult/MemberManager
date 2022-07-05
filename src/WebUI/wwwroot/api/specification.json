@@ -679,6 +679,34 @@
         ]
       }
     },
+    "/api/Event/AllTags": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_AllTags",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Event/Attend": {
       "post": {
         "tags": [
@@ -2268,6 +2296,13 @@
           "end": {
             "type": "string",
             "format": "date-time"
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -2308,6 +2343,13 @@
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/EventAnswerDto"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
             }
           }
         }
@@ -2371,6 +2413,13 @@
           "organizerEmail": {
             "type": "string",
             "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -2393,6 +2442,13 @@
           "end": {
             "type": "string",
             "format": "date-time"
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

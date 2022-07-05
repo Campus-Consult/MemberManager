@@ -42,6 +42,7 @@ namespace MemberManager.Infrastructure.Persistence
         public DbSet<PersonPosition> PersonPositions { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventAnswer> EventAnswers { get; set; }
+        public DbSet<EventTag> EventTags { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -159,6 +160,9 @@ namespace MemberManager.Infrastructure.Persistence
             builder.Entity<EventAnswer>()
                 .Property(e => e.AnswerKind)
                 .IsRequired();
+
+            builder.Entity<EventTag>()
+                .HasKey(e => new {e.EventId, e.Tag});
         }
     }
 }

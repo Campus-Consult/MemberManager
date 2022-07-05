@@ -8,6 +8,7 @@ namespace MemberManager.Domain.Entities
         public Event()
         {
             EventAnswers = new HashSet<EventAnswer>();
+            EventTags = new HashSet<EventTag>();
         }
 
         public int Id { get; set; }
@@ -18,6 +19,7 @@ namespace MemberManager.Domain.Entities
         public Person Organizer { get; set; }
 
         public ICollection<EventAnswer> EventAnswers { get; private set; }
+        public ICollection<EventTag> EventTags { get; private set; }
 
 
     }

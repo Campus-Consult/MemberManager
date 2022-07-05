@@ -29,7 +29,7 @@ namespace MemberManager.Application.Events.Queries.GetPersonEvents
         public async Task<List<EventAnswerWithEventDto>> Handle(GetPersonEventsQuery request, CancellationToken cancellationToken)
         {
             return await _context.EventAnswers
-                .Include(a => a.Event)
+                .Include(a => a.Event).ThenInclude(e => e.EventTags)
                 .Where(a => a.PersonId == request.PersonId)
                 .ProjectTo<EventAnswerWithEventDto>(_mapper.ConfigurationProvider).ToListAsync();
         }

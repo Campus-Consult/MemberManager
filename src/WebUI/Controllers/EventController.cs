@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using MemberManager.Application.Events.Queries.GetPersonEvents;
 using MemberManager.Application.Events.Queries.GetOwnEvents;
 using MemberManager.Application.Events.Commands.DeleteEvent;
+using MemberManager.Application.Events.Queries.GetAllTags;
 
 namespace MemberManager.WebUI.Controllers
 {
@@ -55,6 +56,13 @@ namespace MemberManager.WebUI.Controllers
         {
             await Mediator.Send(new DeleteEventCommand{ Id = id });
             return NoContent();
+        }
+
+        [Authorize(Policy = "Admin")]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<List<string>>> AllTags()
+        {
+            return await Mediator.Send(new GetAllTagsQuery());
         }
 
         [HttpPost("[action]")]

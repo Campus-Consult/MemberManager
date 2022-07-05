@@ -100,12 +100,10 @@ export class EventFormComponent implements OnInit {
   }
 
   private _filterOrga(person: string): IPersonDetailVm[] {
-    console.log(person);
     const filterValue = person.toLowerCase();
-    const arr = this.suggOrganizer.filter((option) =>
+    return this.suggOrganizer.filter((option) =>
       this.displayOrganizerFn(option).toLowerCase().includes(filterValue)
     );
-    return arr;
   }
 
   displayOrganizerFn(person: IPersonDetailVm): string {

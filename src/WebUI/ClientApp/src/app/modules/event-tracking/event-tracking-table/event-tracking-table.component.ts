@@ -32,23 +32,6 @@ export class EventTrackingTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventClient.get().subscribe((events) => (this.events = events));
-
-    /*  for (let index = 0; index < 10; index++) {
-      this.events.push({
-        eventname: "Eventname" + index,
-        tag: 'VT',
-        attendances: index,
-        qrCode: "abcdefg"
-      });
-    }
-    for (let index = 0; index < 5; index++) {
-      this.events.push({
-        eventname: "MV" + index,
-        tag: 'MV',
-        attendances: index,
-        qrCode: "abcdefg"
-      });
-    } */
   }
 
   onCreate() {

@@ -2359,8 +2359,8 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "fistName": {
             "type": "string",

@@ -16,8 +16,8 @@ namespace MemberManager.Application.Events.Common
         public DateTime End { get; set; }
         public string SecretKey { get; set; }
         public PersonLookupDto Organizer { get; set; }
-        public ICollection<EventAnswerDto> EventAnswers { get; set; }
-        public ICollection<string> Tags { get; set; }
+        public List<EventAnswerDto> EventAnswers { get; set; }
+        public List<string> Tags { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<Event, EventDetailDto>()

@@ -3698,7 +3698,7 @@ export interface IEventDetailDto {
 }
 
 export class PersonLookupDto implements IPersonLookupDto {
-    id?: string | undefined;
+    id?: number;
     fistName?: string | undefined;
     surname?: string | undefined;
 
@@ -3736,7 +3736,7 @@ export class PersonLookupDto implements IPersonLookupDto {
 }
 
 export interface IPersonLookupDto {
-    id?: string | undefined;
+    id?: number;
     fistName?: string | undefined;
     surname?: string | undefined;
 }

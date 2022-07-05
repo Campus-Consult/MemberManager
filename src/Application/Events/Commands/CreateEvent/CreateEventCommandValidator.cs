@@ -17,6 +17,8 @@ namespace MemberManager.Application.Events.Commands.CreateEvent
             _context = context;
 
             RuleLevelCascadeMode = CascadeMode.Stop;
+            RuleFor(v => v.Name)
+                .NotEmpty();
             RuleFor(v => v.Start)
                 .NotEmpty()
                 .Must(StartBeforeEnd).WithMessage("Start has to be before End");

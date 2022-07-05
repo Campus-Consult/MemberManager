@@ -37,7 +37,7 @@ export class EventTrackingTableComponent implements OnInit {
   onCreate() {
     // Open Form Dialog
     const dialogRef = this.dialog.open(EventFormComponent, {
-      width: '250px',
+      width: '450px',
       data: {edit: false}
     });
 
@@ -50,7 +50,7 @@ export class EventTrackingTableComponent implements OnInit {
   onEdit() {
     // Open Form Dialog
     const dialogRef = this.dialog.open(EventFormComponent, {
-      width: '250px',
+      width: '450px',
       data: {edit: true}
     });
 

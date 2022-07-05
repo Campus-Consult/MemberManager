@@ -6,11 +6,9 @@ import { EventTrackingTableComponent } from './event-tracking-table/event-tracki
 import { EventCodeDialogComponent } from './event-code-dialog/event-code-dialog.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { EventFormComponent } from './event-form/event-form.component';
-import { DisplayOrganizerPipe } from './event-form/display-organizer.pipe';
-
 @NgModule({
-  declarations: [EventTrackingTableComponent, EventCodeDialogComponent, EventFormComponent, DisplayOrganizerPipe],
+  declarations: [EventTrackingTableComponent, EventCodeDialogComponent, EventFormComponent],
   imports: [CommonModule, SharedModule, ReactiveFormsModule, QRCodeModule],
-  exports: [EventTrackingTableComponent],
+  exports: [EventTrackingTableComponent]
 })
 export class EventTrackingModule {}

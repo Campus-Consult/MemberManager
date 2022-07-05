@@ -15,12 +15,11 @@ import { PersonDetailVm, IPersonDetailVm } from 'src/app/membermanager-api';
 import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
 import { Observable } from 'rxjs';
 import { startWith, map, pluck } from 'rxjs/operators';
-import { DisplayOrganizerPipe } from './display-organizer.pipe';
 
 @Component({
   selector: 'app-event-form',
   templateUrl: './event-form.component.html',
-  styleUrls: ['./event-form.component.scss'],
+  styleUrls: ['./event-form.component.scss']
 })
 export class EventFormComponent implements OnInit {
   @Input()
@@ -39,8 +38,7 @@ export class EventFormComponent implements OnInit {
     tags: [[this.tagsOnEvent], [Validators.required]],
     tagInput: [''],
     organizer: ['', [Validators.required]],
-    startDate: [Date.now()],
-    endDate: [Date.now()],
+    eventDate: [Date.now()],
     startTime: ['20:00'],
     endTime: ['22:00'],
   });
@@ -49,7 +47,6 @@ export class EventFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<EventCodeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    protected displayOrganizerPipe: DisplayOrganizerPipe
   ) {}
 
   ngOnInit(): void {
@@ -107,7 +104,7 @@ export class EventFormComponent implements OnInit {
   }
 
   displayOrganizerFn(person: IPersonDetailVm): string {
-    return this.displayOrganizerPipe.transform(person);
+    return person ? `${person.firstName} ${person.surname}` : '';
   }
 
   onSubmit() {

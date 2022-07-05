@@ -1,5 +1,8 @@
-import { PeopleClient } from './../../../membermanager-api';
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  PeopleClient,
+  ICreateEventCommand,
+} from './../../../membermanager-api';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -19,17 +22,20 @@ import { startWith, map, pluck, filter } from 'rxjs/operators';
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
-  keywords = new Set(['MV', 'VT']);
+
+  @Input()
+  suggestedOrganizer: PersonLookupDto[] = [];
+
+  tagsOnEvent: Set<string> = new Set(['MV', 'VT']);
 
   autoCompleteKeywords: string[] = ['Peter', 'Max', 'Kevin'];
   filteredOptions: Observable<string[]>;
   lastAutoValue = '';
 
-  people: PersonLookupDto[] = [];
 
   eventFormGroup = this.formBuilder.group({
     name: ['Event', [Validators.required]],
-    tags: [[this.keywords], [Validators.required]],
+    tags: [[this.tagsOnEvent], [Validators.required]],
     tagInput: [''],
     organizer: ['', [Validators.required]],
     startDate: [Date.now()],
@@ -47,14 +53,14 @@ export class EventFormComponent implements OnInit {
 
   ngOnInit(): void {
     const sub = this.memberClient.get().subscribe((data) => {
-      this.people.concat(data.people);
+      this.suggestedOrganizer.concat(data.people);
       sub.unsubscribe();
     });
 
     this.filteredOptions = this.eventFormGroup.valueChanges.pipe(
       pluck('tagInput'),
       startWith(''),
-      filter((value)=> this.lastAutoValue !== value),
+      filter((value) => this.lastAutoValue !== value),
       map((value) => {
         this.lastAutoValue = value;
         return this._filter(value);
@@ -62,15 +68,15 @@ export class EventFormComponent implements OnInit {
     );
   }
 
-  addKeywordFromInput(event: MatChipInputEvent) {
+  addTagFromInput(event: MatChipInputEvent) {
     if (event.value) {
-      this.keywords.add(event.value);
+      this.tagsOnEvent.add(event.value);
       event.chipInput!.clear();
     }
   }
 
-  removeKeyword(keyword: string) {
-    this.keywords.delete(keyword);
+  removeTag(keyword: string) {
+    this.tagsOnEvent.delete(keyword);
   }
 
   private _filter(value: string): string[] {
@@ -81,6 +87,10 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit() {
+    const command: ICreateEventCommand = {
+      name: this.eventFormGroup.get('name').value,
+      tags: Array.from(this.eventFormGroup.get('tags').value),
+    };
     // TODO: create output interface
     if (this.eventFormGroup.status) this.dialogRef.close(this.eventFormGroup);
   }

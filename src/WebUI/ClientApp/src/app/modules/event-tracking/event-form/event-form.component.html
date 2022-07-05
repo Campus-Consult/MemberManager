@@ -15,22 +15,22 @@
           formControlName="tags"
         >
           <mat-chip
-            *ngFor="let keyword of keywords"
-            [selected]="keyword"
-            [value]="keyword"
-            (removed)="removeKeyword(keyword)"
+            *ngFor="let tag of tagsOnEvent"
+            [selected]="tag"
+            [value]="tag"
+            (removed)="removeTag(tag)"
           >
-            {{ keyword }}
+            {{ tag }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
           <input
-            placeholder="Suche Tag"
+            placeholder="Event Tag hinzufügen"
             [matChipInputFor]="chipList"
             formControlName="tagInput"
             [matAutocomplete]="auto"
-            (matChipInputTokenEnd)="addKeywordFromInput($event)"
+            (matChipInputTokenEnd)="addTagFromInput($event)"
           />
           <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">

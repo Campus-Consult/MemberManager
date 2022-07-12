@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PersonDetailVm } from 'src/app/membermanager-api';
 import { MemberFormComponent } from 'src/app/shared/components/member-form/member-form.component';
+import { fixNonEmptyStringAll } from 'src/app/util';
 import {
   CreatePersonCommand,
   ICreatePersonCommand,
@@ -42,7 +43,7 @@ export class MemberSelfManagedComponent implements OnInit {
 
   onCreateSubmit() {
     const command = this.convertCreateFormIntoCommand(
-      this.memberFormComp.personalForm.value
+      fixNonEmptyStringAll(this.memberFormComp.personalForm.value)
     );
     this.selfManagementClient.create(command).subscribe(
       () => {
@@ -56,7 +57,7 @@ export class MemberSelfManagedComponent implements OnInit {
 
   onEditSubmit() {
     const command = this.convertEditFormIntoCommand(
-      this.memberFormComp.personalForm.value
+      fixNonEmptyStringAll(this.memberFormComp.personalForm.value)
     );
     this.selfManagementClient.update(command).subscribe(
       () => {

@@ -11,6 +11,7 @@ import {
   MemberStatusLookupDto,
   PeopleClient,
 } from 'src/app/membermanager-api';
+import { fixNonEmptyStringAll } from 'src/app/util';
 import { MemberFormComponent } from '../../../shared/components/member-form/member-form.component';
 
 /**
@@ -44,7 +45,7 @@ export class CreateMemberComponent implements AfterViewInit {
    * Results Module returns on close
    */
   getResult(): any {
-    return this.memberForm.value;
+    return fixNonEmptyStringAll(this.memberForm.value);
   }
 
   onSubmit() {

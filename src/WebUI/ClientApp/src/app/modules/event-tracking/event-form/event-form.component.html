@@ -1,7 +1,8 @@
+<h1 mat-dialog-title>Event erstellen</h1>
 <mat-dialog-content>
   <form [formGroup]="eventFormGroup" (ngSubmit)="onSubmit()">
     <!-- Name -->
-    <mat-form-field>
+    <mat-form-field class="name" appearance="outline">
       <mat-label>Event Name</mat-label>
       <input
         matInput
@@ -10,9 +11,55 @@
         formControlName="name"
       />
     </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Organisator</mat-label>
+      <input
+        matInput
+        placeholder="Organisator"
+        formControlName="organizer"
+        [matAutocomplete]="autoOrga"
+      />
+      <mat-autocomplete
+        #autoOrga="matAutocomplete"
+        [displayWith]="displayOrganizerFn"
+      >
+        <mat-option
+          *ngFor="let option of filteredOrgaOptions | async"
+          [value]="option"
+        >
+          {{ displayOrganizerFn(option) }}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="formError.organizer">{{
+        formError.organizer
+      }}</mat-error>
+    </mat-form-field>
+    <!-- Start - End -->
+    <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
+    <section>
+      <mat-form-field id="date" appearance="outline">
+        <mat-label>Event Termin</mat-label>
+        <input matInput formControlName="eventDate" [matDatepicker]="picker" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field id="start-time" appearance="outline">
+        <mat-label>Startzeit</mat-label>
+        <input formControlName="startTime" matInput placeholder="label" />
+        <mat-hint>hh:mm</mat-hint>
+      </mat-form-field>
+      <mat-form-field id="end-time" appearance="outline">
+        <mat-label>Endzeit</mat-label>
+        <input formControlName="endTime" matInput placeholder="label" />
+        <mat-hint>hh:mm</mat-hint>
+      </mat-form-field>
+    </section>
     <!-- Tags -->
-    <mat-form-field class="example-chip-list" appearance="fill">
+    <mat-form-field class="event-tags" appearance="outline">
       <mat-label>Event Tags</mat-label>
+      <mat-hint>Tags kategorisieren und beschreiben die Eventgruppe</mat-hint>
+      <mat-hint align="end">unbeschränkt</mat-hint>
       <mat-chip-list
         #chipList
         aria-label="Event Tags"
@@ -47,40 +94,11 @@
         </mat-autocomplete>
       </mat-chip-list>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Organisator</mat-label>
-      <input
-        matInput
-        placeholder="Organisator"
-        formControlName="organizer"
-        [matAutocomplete]="autoOrga"
-      />
-      <mat-autocomplete
-        #autoOrga="matAutocomplete"
-        [displayWith]="displayOrganizerFn"
-      >
-        <mat-option
-          *ngFor="let option of filteredOrgaOptions | async"
-          [value]="option"
-        >
-          {{ displayOrganizerFn(option) }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <!-- Start - End -->
-    <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
-    <mat-form-field appearance="fill">
-      <mat-label>Wähle ein Datum</mat-label>
-      <input matInput formControlName="eventDate" [matDatepicker]="picker">
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="warn" mat-dialog-close>Abbrechen</button>
   <button mat-raised-button color="accent" (click)="onSubmit()">
     Erstellen
   </button>
+  <button mat-button color="warn" mat-dialog-close>Abbrechen</button>
 </mat-dialog-actions>

@@ -1,7 +1,23 @@
 .example-chip-list {
-    width: 100%;
-  }
-  
-  .example-button-container > button {
-    margin: 0 12px;
-  }
+  width: 100%;
+}
+
+.example-button-container > button {
+  margin: 0 12px;
+}
+
+.event-tags {
+  width: 100%;
+}
+
+.name {
+  width: 100%;
+}
+
+#date {
+  width: 50%;
+}
+
+#start-time, #end-time{
+  width: 20%;
+}

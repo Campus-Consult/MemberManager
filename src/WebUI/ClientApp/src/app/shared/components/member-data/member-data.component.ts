@@ -149,26 +149,14 @@ export class MemberDataComponent implements OnInit, OnChanges {
   }
 
   get strasseHausNr(): string {
-    if (this.memberDetails.adressStreet && this.memberDetails.adressNo) {
-      return (
-        this.memberDetails.adressStreet + ', ' + this.memberDetails.adressNo
-      );
-    } else if (this.memberDetails.adressStreet) {
-      return this.memberDetails.adressNo + ' -';
-    } else if (this.memberDetails.adressNo) {
-      return '- , ' + this.memberDetails.adressStreet;
-    }
+    return `${this.memberDetails.adressStreet || '-'}, ${
+      this.memberDetails.adressNo || '-'
+    }`;
   }
 
   get plzStadt(): string {
-    if (this.memberDetails.adressZIP && this.memberDetails.adressCity) {
-      return (
-        this.memberDetails.adressZIP + ', ' + this.memberDetails.adressCity
-      );
-    } else if (this.memberDetails.adressZIP) {
-      return this.memberDetails.adressZIP + ' -';
-    } else if (this.memberDetails.adressCity) {
-      return '- , ' + this.memberDetails.adressCity;
-    }
+    return `${this.memberDetails.adressZIP || '-'}, ${
+      this.memberDetails.adressCity || '-'
+    }`;
   }
 }

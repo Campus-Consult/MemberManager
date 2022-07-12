@@ -6,7 +6,7 @@ namespace MemberManager.Application.People.Queries.GetPeople
 {
     public class PersonLookupDto : IMapFrom<Person>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string FistName { get; set; }
         public string Surname { get; set; }
 

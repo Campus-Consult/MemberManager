@@ -11,9 +11,7 @@ using MemberManager.Application.Events.Queries.GetPersonEvents;
 
 namespace MemberManager.Application.Events.Queries.GetOwnEvents
 {
-    public class GetOwnEventsQuery : IRequest<List<EventAnswerWithEventDto>> {
-        public int PersonId { get; set; }
-    }
+    public class GetOwnEventsQuery : IRequest<List<EventAnswerWithEventDto>> {}
 
     public class GetOwnEventsQueryHandler : IRequestHandler<GetOwnEventsQuery, List<EventAnswerWithEventDto>>
     {

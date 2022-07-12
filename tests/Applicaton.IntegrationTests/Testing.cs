@@ -24,6 +24,23 @@ public class Testing
     private static IConfigurationRoot _configuration;
     public static IServiceScopeFactory _scopeFactory;
     private static string _currentUserId;
+    private static string _currentUserEmail;
+    private static DateTime _currentTime = new DateTime(2020,01,01);
+
+    private class MockedDateTime : IDateTime
+    {
+        public DateTime Now => _currentTime;
+    }
+
+    private class MockedUserService : ICurrentUserService
+    {
+        public string UserId => _currentUserId;
+
+        public string GetEmailAssociate()
+        {
+            return _currentUserEmail;
+        }
+    }
 
     [OneTimeSetUp]
     public void RunBeforeAnyTests()
@@ -55,8 +72,11 @@ public class Testing
         services.Remove(currentUserServiceDescriptor);
 
         // Register testing version
-        services.AddTransient(provider =>
-            Mock.Of<ICurrentUserService>(s => s.UserId == _currentUserId));
+        services.AddTransient<ICurrentUserService, MockedUserService>();
+
+        services.Remove(services.FirstOrDefault(d => d.ServiceType == typeof(IDateTime)));
+
+        services.AddTransient<IDateTime, MockedDateTime>();
 
         _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
         
@@ -97,6 +117,7 @@ public class Testing
 
         if (alreadyExistsUser != null) {
             _currentUserId = alreadyExistsUser.Id;
+            _currentUserEmail = userName;
 
             return _currentUserId;
         }
@@ -108,6 +129,7 @@ public class Testing
         if (result.Succeeded)
         {
             _currentUserId = user.Id;
+            _currentUserEmail = userName;
 
             return _currentUserId;
         }
@@ -131,6 +153,7 @@ public class Testing
         context.Positions.RemoveRange(context.Positions);
         context.CareerLevels.RemoveRange(context.CareerLevels);
         context.MemberStatus.RemoveRange(context.MemberStatus);
+        context.Events.RemoveRange(context.Events);
         await context.SaveChangesAsync();
         _currentUserId = null;
     }
@@ -157,10 +180,19 @@ public class Testing
         await context.SaveChangesAsync();
     }
 
-    public static void AssertValidationError(Task task, string errorKey, string errorMessage) {
-        FluentActions.Invoking(() => task)
-            .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey))
-            .And.Errors[errorKey].Should().Contain(errorMessage);
+    public static void AssertValidationError(Task task, string errorKey, string errorMessage = null) {
+        if (errorMessage == null) {
+            FluentActions.Invoking(() => task)
+                .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey));
+        } else {
+            FluentActions.Invoking(() => task)
+                .Should().Throw<ValidationException>().Where(ex => ex.Errors.ContainsKey(errorKey))
+                .And.Errors[errorKey].Should().Contain(errorMessage);
+        }
+    }
+
+    public static void SetDateTime(DateTime newNow) {
+        _currentTime = newNow;
     }
 
     [OneTimeTearDown]

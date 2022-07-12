@@ -29,7 +29,12 @@ namespace MemberManager.Application.Events.Queries.GetEventDetails
 
         public async Task<EventDetailDto> Handle(GetEventDetailsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _context.Events.Include(e => e.Organizer).Include(e => e.EventAnswers).Include(e => e.EventTags).FirstOrDefaultAsync(e => e.Id == request.EventId);
+            var result = await _context.Events
+                .Include(e => e.Organizer)
+                .Include(e => e.EventAnswers)
+                    .ThenInclude(a => a.Person)
+                .Include(e => e.EventTags)
+                .FirstOrDefaultAsync(e => e.Id == request.EventId);
             if (result != null) {
                 return _mapper.Map<EventDetailDto>(result);
             }

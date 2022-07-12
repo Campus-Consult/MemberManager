@@ -59,7 +59,6 @@ namespace MemberManager.Application.IntegrationTests.Events
             createdEvent.Name.Should().Be(eventName);
             createdEvent.Start.Should().Be(startTime);
             createdEvent.End.Should().Be(endTime);
-            // TODO: id is not a string...
             createdEvent.Organizer.Id.Should().Be(organizerId);
 
         }
@@ -92,7 +91,6 @@ namespace MemberManager.Application.IntegrationTests.Events
             updatedEvent.Name.Should().Be(newName);
             updatedEvent.Start.Should().Be(newStart);
             updatedEvent.End.Should().Be(newEnd);
-            // TODO: id is not a string...
             updatedEvent.Organizer.Id.Should().Be(organizerId);
 
         }

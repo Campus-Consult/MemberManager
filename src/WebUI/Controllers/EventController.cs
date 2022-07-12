@@ -5,6 +5,8 @@ using MemberManager.Application.Events.Commands.UpdateEvent;
 using MemberManager.Application.Events.Queries.GetAllEvents;
 using MemberManager.Application.Events.Queries.GetEventDetails;
 using MemberManager.Application.Events.Commands.AttendEvent;
+using MemberManager.Application.Events.Commands.AddEventAnswer;
+using MemberManager.Application.Events.Commands.RemoveEventAnswer;
 using MemberManager.Application.Events.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +84,19 @@ namespace MemberManager.WebUI.Controllers
             return await Mediator.Send(new GetPersonEventsQuery {
                 PersonId = personId,
             });
+        }
+
+        [Authorize(Policy = "Admin")]
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> AddEventAnswer(AddEventAnswerCommand cmd) {
+            return await Mediator.Send(cmd);
+        }
+
+        [Authorize(Policy = "Admin")]
+        [HttpPost("[action]")]
+        public async Task<ActionResult> RemoveEventAnswer(RemoveEventAnswerCommand cmd) {
+            await Mediator.Send(cmd);
+            return NoContent();
         }
     }
 }

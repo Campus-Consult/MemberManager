@@ -2,6 +2,7 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
+  FormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
@@ -9,9 +10,17 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
-import { IPersonDetailVm, PersonDetailVm } from 'src/app/membermanager-api';
+import {
+  EventDetailDto,
+  IPersonDetailVm,
+  IUpdateEventCommand,
+  PersonDetailVm,
+} from 'src/app/membermanager-api';
 import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
-import { ICreateEventCommand } from './../../../membermanager-api';
+import {
+  ICreateEventCommand,
+  PeopleClient,
+} from './../../../membermanager-api';
 
 @Component({
   selector: 'app-event-form',
@@ -19,14 +28,11 @@ import { ICreateEventCommand } from './../../../membermanager-api';
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
-  @Input()
   suggOrganizer: IPersonDetailVm[] = [];
-  @Input()
-  suggTags: string[] = ['Peter', 'Max', 'Kevin'];
-  @Input()
-  startingTags: Set<string> = new Set(['VT']);
-  
-  tagsOnEvent = this.startingTags;
+
+  suggTags: string[];
+  startingTags: Set<string>;
+  tagsOnEvent: Set<string>;
 
   formError = { organizer: '' };
 
@@ -34,54 +40,56 @@ export class EventFormComponent implements OnInit {
   filteredTagOptions: Observable<string[]>;
   filteredOrgaOptions: Observable<IPersonDetailVm[]>;
 
-  eventFormGroup = this.formBuilder.group({
-    name: ['Event', [Validators.required]],
-    tags: [
-      [this.tagsOnEvent],
-      {
-        validators: [Validators.required, (val) => this.isInternal(val)],
-        updateOn: 'blur',
-      },
-    ],
-    tagInput: [''],
-    organizer: ['', [Validators.required]],
-    eventDate: [Date.now(), [Validators.required]],
-    startTime: ['20:00', [Validators.required]],
-    endTime: ['22:00', [Validators.required]],
-  });
+  eventFormGroup: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<EventCodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData,
+    private memberClient: PeopleClient
+  ) {
+    this.suggTags = this.data.suggestedTags;
+    this.startingTags = new Set(this.data.startingTags);
+    this.tagsOnEvent = new Set(this.data.startingTags);
+  }
 
   ngOnInit(): void {
-    /*     const sub = this.memberClient.get().subscribe((data) => {
-      this.suggestedOrganizer = this.suggestedOrganizer.concat(data.people);
-      sub.unsubscribe();
-    }); */
+    // Init Suggested Organizer, default load People
+    if (this.data.suggestedOrganizer?.length > 0) {
+      this.suggOrganizer = this.data.suggestedOrganizer;
+    } else {
+      this.memberClient.getWithBasicInfo().subscribe((data) => {
+        this.suggOrganizer = this.suggOrganizer.concat(data.people);
+      });
+    }
 
-    this.suggOrganizer = [
-      {
-        id: 0,
-        firstName: 'Kevin',
-        surname: 'Kvbe',
-        emailAssociaton: 'aalf@cc.de',
-      },
-      {
-        id: 1,
-        firstName: 'Adrian',
-        surname: 'rec',
-        emailAssociaton: 'arec@cc.de',
-      },
-      {
-        id: 2,
-        firstName: 'chlor',
-        surname: 'serbe',
-        emailAssociaton: 'erbe@cc.de',
-      },
-    ];
+    const eventEdit = this.data.edit;
+    this.eventFormGroup = this.formBuilder.group({
+      name: [eventEdit?.name ?? 'Vereinstreffen', [Validators.required]],
+      tags: [
+        [this.tagsOnEvent],
+        {
+          validators: [Validators.required, (val) => this.isInternal(val)],
+          updateOn: 'blur',
+        },
+      ],
+      tagInput: [''],
+      organizer: [eventEdit?.organizer ?? '', [Validators.required]],
+      eventDate: [Date.now(), [Validators.required]],
+      startTime: ['20:00', [Validators.required]],
+      endTime: ['22:00', [Validators.required]],
+    });
+    if (eventEdit) {
+      const startDate = new Date(eventEdit.start);
+      const endDate = new Date(eventEdit.end);
+      const start = `${startDate.getHours()}:${startDate.getMinutes()}`;
+      const end = `${endDate.getHours()}:${endDate.getMinutes()}`;
+      this.eventFormGroup.setValue({
+        eventDate: startDate,
+        start: start,
+        end: end,
+      });
+    }
 
     // Filter Observable for tags and organizer
     this.filteredTagOptions = this.eventFormGroup.valueChanges.pipe(
@@ -130,15 +138,10 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit() {
-    const organizer = this.eventFormGroup.get('organizer')
-      .value as PersonDetailVm;
-    const command: ICreateEventCommand = {
-      name: this.eventFormGroup.get('name').value,
-      tags: Array.from(this.eventFormGroup.get('tags').value),
-      organizerEmail: organizer.emailAssociaton,
-    };
-    // TODO: create output interface
-    if (this.eventFormGroup.status) this.dialogRef.close(this.eventFormGroup);
+    if (this.eventFormGroup.status) {
+      const command = this.getCommand();
+      this.dialogRef.close(command);
+    }
   }
 
   isInternal(formControl: AbstractControl): ValidationErrors | null {
@@ -155,4 +158,42 @@ export class EventFormComponent implements OnInit {
       ? { forbiddenName: { value: formControl.value } }
       : null;
   }
+
+  getCommand() {
+    let organizer = this.eventFormGroup.get('organizer').value;
+    if (!organizer) {
+      organizer = undefined;
+    }
+
+    const startDate = new Date(this.eventFormGroup.get('eventDate').value);
+    const start = this.eventFormGroup.get('startTime').value.split(':');
+    startDate.setHours(start[0]);
+    startDate.setHours(start[2]);
+
+    const endDate = new Date(this.eventFormGroup.get('eventDate').value);
+    const end = this.eventFormGroup.get('startTime').value.split(':');
+    endDate.setHours(end[0]);
+    endDate.setHours(end[2]);
+
+    const tags = Array.from<string>(this.eventFormGroup.get('tags').value);
+
+    let command: ICreateEventCommand & IUpdateEventCommand = {
+      name: this.eventFormGroup.get('name').value,
+      tags: tags,
+      organizerEmail: organizer?.emailAssociaton,
+      start: startDate.toUTCString(),
+      end: endDate.toUTCString(),
+    };
+    if (this.data.edit) {
+      command.id = this.data.edit.id;
+    }
+    return command;
+  }
+}
+
+export interface EventFormDialogData {
+  edit?: EventDetailDto;
+  suggestedOrganizer?: PersonDetailVm[];
+  suggestedTags: string[];
+  startingTags?: string[];
 }

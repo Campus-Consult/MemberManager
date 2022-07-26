@@ -23,9 +23,16 @@
     <td mat-cell *matCellDef="let row">
       <button
         mat-mini-fab
-        color="primary"
         aria-label="open-qrcode"
         (click)="openEventDialog()"
+      >
+        <mat-icon>qr_code_2</mat-icon>
+      </button>
+      <button
+        mat-mini-fab
+        color="secondary"
+        aria-label="edit-event"
+        (click)="onEdit()"
       >
         <mat-icon>qr_code_2</mat-icon>
       </button>

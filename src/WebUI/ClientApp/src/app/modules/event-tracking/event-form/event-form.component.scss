@@ -14,10 +14,20 @@
   width: 100%;
 }
 
+.full-flex {
+  display: flex;
+}
+
 #date {
+  flex-grow: 1;
   width: 50%;
 }
 
 #start-time, #end-time{
-  width: 20%;
+  min-width: 22%; // removes std. mat-form width, min value
+  flex-grow: 2; // let them grow to fill full line
+}
+
+#end-time {
+  margin-right: 0px; // same alignment with other Form Fields 
 }

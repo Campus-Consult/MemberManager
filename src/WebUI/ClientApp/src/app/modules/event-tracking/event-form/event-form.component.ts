@@ -70,7 +70,9 @@ export class EventFormComponent implements OnInit {
       tags: [
         [this.tagsOnEvent],
         {
-          validators: [Validators.required, (val) => this.isInternal(val)],
+          validators: [
+            Validators.required /* , (val) => this.isInternal(val) */,
+          ],
           updateOn: 'blur',
         },
       ],

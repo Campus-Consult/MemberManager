@@ -15,5 +15,12 @@
       [title]="'A custom title attribute'"
       [width]="500"
     ></qrcode>
+    <button mat-raised-button>
+      Download QR-Code <mat-icon>qr-code</mat-icon>
+    </button>
+  </div>
+  <div>
+    <app-event-form [data]="data" (submitEvent)="onSubmit($event)">
+    </app-event-form>
   </div>
 </mat-dialog-content>

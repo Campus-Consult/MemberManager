@@ -21,4 +21,8 @@ export class EventCodeDialogComponent implements OnInit {
     const urlAppendix = this.data.id + this.data.secretKey;
     this.qrDataUrl = this.urlPath + urlAppendix;
   }
+
+  onSubmit(event) {
+    this.dialogRef.close(event);
+  }
 }

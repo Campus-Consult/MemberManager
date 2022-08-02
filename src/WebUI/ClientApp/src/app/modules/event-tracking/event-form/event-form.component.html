@@ -10,7 +10,7 @@
     />
     <mat-hint>Bei Check-IN angezeigt, z.B. Terminname</mat-hint>
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field id="organizer" appearance="outline">
     <mat-label>Organisator</mat-label>
     <input matInput placeholder="Organisator" formControlName="organizer" />
     <!-- TODO: Auto Complete auskommentiert, da keine E-MAil Member Bulk Schnittstelle
@@ -40,7 +40,7 @@
     <mat-form-field id="date" appearance="outline">
       <mat-label>Event Termin</mat-label>
       <input matInput formControlName="eventDate" [matDatepicker]="picker" />
-      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-hint>DD.MM.YYYY</mat-hint>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -106,7 +106,12 @@
   </mat-form-field>
 </form>
 <div>
-  <button mat-raised-button color="accent" (click)="onSubmit()">
+  <button
+    mat-raised-button
+    color="accent"
+    [disabled]="eventFormGroup.status !== 'VALID'"
+    (click)="onSubmit()"
+  >
     {{ data.edit ? 'Bearbeiten' : 'Erstellen' }}
   </button>
   <button mat-button color="warn" mat-dialog-close>Abbrechen</button>

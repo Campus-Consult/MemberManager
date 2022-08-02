@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EventDetailDto } from 'src/app/membermanager-api';
+import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
 import { EventClient } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
 import {
@@ -32,16 +33,15 @@ export class EventTrackingTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventClient.get().subscribe((events) => {
-      console.log(events);
-
       this.events = events;
     });
   }
 
   onCreate() {
     // Open Form Dialog
-    const dialogRef = this.dialog.open(EventFormComponent, {
+    const dialogRef = this.dialog.open(EventCreateDialogComponent, {
       width: '450px',
+      // height: '700px',
       data: {
         suggestedTags: ['test'],
         startingTags: ['VT'],

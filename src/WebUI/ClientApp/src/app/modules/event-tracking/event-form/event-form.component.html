@@ -1,21 +1,19 @@
-<h1 mat-dialog-title>Event erstellen</h1>
-<mat-dialog-content>
-  <form [formGroup]="eventFormGroup" (ngSubmit)="onSubmit()">
-    <!-- Name -->
-    <mat-form-field class="name" appearance="outline">
-      <mat-label>Event Name</mat-label>
-      <input
-        matInput
-        placeholder="Eventname"
-        value="value"
-        formControlName="name"
-      />
-      <mat-hint>Bei Check-IN angezeigt, z.B. Terminname</mat-hint>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Organisator</mat-label>
-      <input matInput placeholder="Organisator" formControlName="organizer" />
-      <!-- TODO: Auto Complete auskommentiert, da keine E-MAil Member Bulk Schnittstelle
+<form [formGroup]="eventFormGroup" (ngSubmit)="onSubmit()">
+  <!-- Name -->
+  <mat-form-field class="name" appearance="outline">
+    <mat-label>Event Name</mat-label>
+    <input
+      matInput
+      placeholder="Eventname"
+      value="value"
+      formControlName="name"
+    />
+    <mat-hint>Bei Check-IN angezeigt, z.B. Terminname</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Organisator</mat-label>
+    <input matInput placeholder="Organisator" formControlName="organizer" />
+    <!-- TODO: Auto Complete auskommentiert, da keine E-MAil Member Bulk Schnittstelle
       <input
         matInput
         placeholder="Organisator"
@@ -33,86 +31,83 @@
           {{ displayOrganizerFn(option) }}
         </mat-option>
       </mat-autocomplete> -->
-      <mat-hint>Bei Check-IN angezeigt, nur CC Intern</mat-hint>
-      <mat-error *ngIf="formError.organizer">{{
-        formError.organizer
-      }}</mat-error>
+    <mat-hint>Bei Check-IN angezeigt, nur CC Intern</mat-hint>
+    <mat-error *ngIf="formError.organizer">{{ formError.organizer }}</mat-error>
+  </mat-form-field>
+  <!-- Start - End -->
+  <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
+  <section class="full-flex">
+    <mat-form-field id="date" appearance="outline">
+      <mat-label>Event Termin</mat-label>
+      <input matInput formControlName="eventDate" [matDatepicker]="picker" />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <!-- Start - End -->
-    <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
-    <section class="full-flex">
-      <mat-form-field id="date" appearance="outline">
-        <mat-label>Event Termin</mat-label>
-        <input matInput formControlName="eventDate" [matDatepicker]="picker" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field id="start-time" appearance="outline">
-        <mat-label>Startzeit</mat-label>
-        <input
-          formControlName="startTime"
-          matInput
-          placeholder="label"
-          type="time"
-        />
-        <mat-hint>hh:mm</mat-hint>
-      </mat-form-field>
-      <mat-form-field id="end-time" appearance="outline">
-        <mat-label>Endzeit</mat-label>
-        <input
-          formControlName="endTime"
-          matInput
-          placeholder="label"
-          type="time"
-        />
-        <mat-hint>hh:mm</mat-hint>
-      </mat-form-field>
-    </section>
-    <!-- Tags -->
-    <mat-form-field class="event-tags" appearance="outline">
-      <mat-label>Event Tags</mat-label>
-      <mat-hint>Tags kategorisieren und beschreiben die Eventgruppe</mat-hint>
-      <mat-hint align="end">unbeschränkt</mat-hint>
-      <mat-chip-list
-        #chipList
-        aria-label="Event Tags"
-        multiple
-        formControlName="tags"
+    <mat-form-field id="start-time" appearance="outline">
+      <mat-label>Startzeit</mat-label>
+      <input
+        formControlName="startTime"
+        matInput
+        placeholder="label"
+        type="time"
+      />
+      <mat-hint>hh:mm</mat-hint>
+    </mat-form-field>
+    <mat-form-field id="end-time" appearance="outline">
+      <mat-label>Endzeit</mat-label>
+      <input
+        formControlName="endTime"
+        matInput
+        placeholder="label"
+        type="time"
+      />
+      <mat-hint>hh:mm</mat-hint>
+    </mat-form-field>
+  </section>
+  <!-- Tags -->
+  <mat-form-field class="event-tags" appearance="outline">
+    <mat-label>Event Tags</mat-label>
+    <mat-hint>Tags kategorisieren und beschreiben die Eventgruppe</mat-hint>
+    <mat-hint align="end">unbeschränkt</mat-hint>
+    <mat-chip-list
+      #chipList
+      aria-label="Event Tags"
+      multiple
+      formControlName="tags"
+    >
+      <mat-chip
+        *ngFor="let tag of tagsOnEvent"
+        [selected]="tag"
+        [value]="tag"
+        (removed)="removeTag(tag)"
       >
-        <mat-chip
-          *ngFor="let tag of tagsOnEvent"
-          [selected]="tag"
-          [value]="tag"
-          (removed)="removeTag(tag)"
+        {{ tag }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+      <input
+        placeholder="Event Tag hinzufügen"
+        [matChipInputFor]="chipList"
+        formControlName="tagInput"
+        [matAutocomplete]="autoTag"
+        (matChipInputTokenEnd)="addTagFromInput($event)"
+      />
+      <mat-autocomplete autoActiveFirstOption #autoTag="matAutocomplete">
+        <mat-option
+          *ngFor="let option of filteredTagOptions | async"
+          [value]="option"
         >
-          {{ tag }}
-          <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip>
-        <input
-          placeholder="Event Tag hinzufügen"
-          [matChipInputFor]="chipList"
-          formControlName="tagInput"
-          [matAutocomplete]="autoTag"
-          (matChipInputTokenEnd)="addTagFromInput($event)"
-        />
-        <mat-autocomplete autoActiveFirstOption #autoTag="matAutocomplete">
-          <mat-option
-            *ngFor="let option of filteredTagOptions | async"
-            [value]="option"
-          >
-            {{ option }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-chip-list>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions>
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-chip-list>
+  </mat-form-field>
+</form>
+<div>
   <button mat-raised-button color="accent" (click)="onSubmit()">
-    Erstellen
+    {{ data.edit ? 'Bearbeiten' : 'Erstellen' }}
   </button>
   <button mat-button color="warn" mat-dialog-close>Abbrechen</button>
-</mat-dialog-actions>
+</div>

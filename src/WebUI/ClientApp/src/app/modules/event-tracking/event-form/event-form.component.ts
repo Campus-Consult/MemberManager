@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
@@ -16,7 +15,6 @@ import {
   IUpdateEventCommand,
   PersonLookupDto,
 } from 'src/app/membermanager-api';
-import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
 import {
   ICreateEventCommand,
   PeopleClient,
@@ -28,6 +26,12 @@ import {
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
+  @Input() data: EventFormDialogData;
+
+  @Output() submitEvent = new EventEmitter<
+    ICreateEventCommand & IUpdateEventCommand
+  >();
+
   suggOrganizer: PersonLookupDto[] = [];
 
   suggTags: string[];
@@ -44,16 +48,13 @@ export class EventFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<EventCodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData,
     private memberClient: PeopleClient
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.suggTags = this.data.suggestedTags;
     this.startingTags = new Set(this.data.startingTags);
     this.tagsOnEvent = new Set(this.data.startingTags);
-  }
-
-  ngOnInit(): void {
     // Init Suggested Organizer, default load People
     if (this.data.suggestedOrganizer?.length > 0) {
       this.suggOrganizer = this.data.suggestedOrganizer;
@@ -144,7 +145,7 @@ export class EventFormComponent implements OnInit {
   onSubmit() {
     if (this.eventFormGroup.status) {
       const command = this.getCommand();
-      this.dialogRef.close(command);
+      this.submitEvent.emit(command);
     }
   }
 

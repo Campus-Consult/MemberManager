@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -12,9 +12,9 @@ import { Observable } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
   EventDetailDto,
-  IPersonDetailVm,
+  IPersonLookupDto,
   IUpdateEventCommand,
-  PersonDetailVm,
+  PersonLookupDto,
 } from 'src/app/membermanager-api';
 import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
 import {
@@ -28,7 +28,7 @@ import {
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
-  suggOrganizer: IPersonDetailVm[] = [];
+  suggOrganizer: PersonLookupDto[] = [];
 
   suggTags: string[];
   startingTags: Set<string>;
@@ -38,7 +38,7 @@ export class EventFormComponent implements OnInit {
 
   // Auto Complete Observables, which handle valueChangeEvents
   filteredTagOptions: Observable<string[]>;
-  filteredOrgaOptions: Observable<IPersonDetailVm[]>;
+  filteredOrgaOptions: Observable<IPersonLookupDto[]>;
 
   eventFormGroup: FormGroup;
 
@@ -58,7 +58,7 @@ export class EventFormComponent implements OnInit {
     if (this.data.suggestedOrganizer?.length > 0) {
       this.suggOrganizer = this.data.suggestedOrganizer;
     } else {
-      this.memberClient.getWithBasicInfo().subscribe((data) => {
+      this.memberClient.get().subscribe((data) => {
         this.suggOrganizer = this.suggOrganizer.concat(data.people);
       });
     }
@@ -74,7 +74,7 @@ export class EventFormComponent implements OnInit {
         },
       ],
       tagInput: [''],
-      organizer: [eventEdit?.organizer ?? '', [Validators.required]],
+      organizer: [eventEdit?.organizer ?? '', [Validators.required, Validators.email]],
       eventDate: [Date.now(), [Validators.required]],
       startTime: ['20:00', [Validators.required]],
       endTime: ['22:00', [Validators.required]],
@@ -126,15 +126,16 @@ export class EventFormComponent implements OnInit {
     );
   }
 
-  private _filterOrga(person: string): IPersonDetailVm[] {
+  private _filterOrga(person: string): IPersonLookupDto[] {
     const filterValue = person.toLowerCase();
     return this.suggOrganizer.filter((option) =>
       this.displayOrganizerFn(option).toLowerCase().includes(filterValue)
     );
   }
 
-  displayOrganizerFn(person: IPersonDetailVm): string {
-    return person ? `${person.firstName} ${person.surname}` : '';
+  displayOrganizerFn(person: IPersonLookupDto): string {
+    // TODO: Check for also for emailAssociation in case user Inputs E-Mail! 
+    return person ? `${person.fistName} ${person.surname}` : '';
   }
 
   onSubmit() {
@@ -145,8 +146,6 @@ export class EventFormComponent implements OnInit {
   }
 
   isInternal(formControl: AbstractControl): ValidationErrors | null {
-    console.log('werde ausgeführt');
-
     const isInternalOrganizer =
       this.suggOrganizer.findIndex(
         (value) => formControl.value.id === value.id
@@ -163,26 +162,28 @@ export class EventFormComponent implements OnInit {
     let organizer = this.eventFormGroup.get('organizer').value;
     if (!organizer) {
       organizer = undefined;
+    } else if(typeof organizer === 'object'){
+      organizer = organizer?.emailAssociaton;
     }
 
     const startDate = new Date(this.eventFormGroup.get('eventDate').value);
     const start = this.eventFormGroup.get('startTime').value.split(':');
     startDate.setHours(start[0]);
-    startDate.setHours(start[2]);
+    startDate.setMinutes(start[1]);
 
     const endDate = new Date(this.eventFormGroup.get('eventDate').value);
     const end = this.eventFormGroup.get('startTime').value.split(':');
     endDate.setHours(end[0]);
-    endDate.setHours(end[2]);
+    endDate.setMinutes(end[1]);
 
     const tags = Array.from<string>(this.eventFormGroup.get('tags').value);
 
     let command: ICreateEventCommand & IUpdateEventCommand = {
       name: this.eventFormGroup.get('name').value,
       tags: tags,
-      organizerEmail: organizer?.emailAssociaton,
-      start: startDate.toUTCString(),
-      end: endDate.toUTCString(),
+      organizerEmail: organizer,
+      start: startDate.toISOString(),
+      end: endDate.toISOString(),
     };
     if (this.data.edit) {
       command.id = this.data.edit.id;
@@ -193,7 +194,7 @@ export class EventFormComponent implements OnInit {
 
 export interface EventFormDialogData {
   edit?: EventDetailDto;
-  suggestedOrganizer?: PersonDetailVm[];
+  suggestedOrganizer?: PersonLookupDto[];
   suggestedTags: string[];
   startingTags?: string[];
 }

@@ -74,7 +74,10 @@ export class EventFormComponent implements OnInit {
         },
       ],
       tagInput: [''],
-      organizer: [eventEdit?.organizer ?? '', [Validators.required, Validators.email]],
+      organizer: [
+        eventEdit?.organizer ?? '',
+        [Validators.required, Validators.email],
+      ],
       eventDate: [Date.now(), [Validators.required]],
       startTime: ['20:00', [Validators.required]],
       endTime: ['22:00', [Validators.required]],
@@ -134,7 +137,7 @@ export class EventFormComponent implements OnInit {
   }
 
   displayOrganizerFn(person: IPersonLookupDto): string {
-    // TODO: Check for also for emailAssociation in case user Inputs E-Mail! 
+    // TODO: Check for also for emailAssociation in case user Inputs E-Mail!
     return person ? `${person.fistName} ${person.surname}` : '';
   }
 
@@ -162,7 +165,7 @@ export class EventFormComponent implements OnInit {
     let organizer = this.eventFormGroup.get('organizer').value;
     if (!organizer) {
       organizer = undefined;
-    } else if(typeof organizer === 'object'){
+    } else if (typeof organizer === 'object') {
       organizer = organizer?.emailAssociaton;
     }
 

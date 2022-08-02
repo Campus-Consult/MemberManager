@@ -23,11 +23,12 @@
   width: 50%;
 }
 
-#start-time, #end-time{
+#start-time,
+#end-time {
   min-width: 22%; // removes std. mat-form width, min value
   flex-grow: 2; // let them grow to fill full line
 }
 
 #end-time {
-  margin-right: 0px; // same alignment with other Form Fields 
+  margin-right: 0px; // same alignment with other Form Fields
 }

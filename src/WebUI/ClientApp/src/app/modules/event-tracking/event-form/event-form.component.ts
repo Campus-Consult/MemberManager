@@ -178,7 +178,7 @@ export class EventFormComponent implements OnInit {
     startDate.setMinutes(start[1]);
 
     const endDate = new Date(this.eventFormGroup.get('eventDate').value);
-    const end = this.eventFormGroup.get('startTime').value.split(':');
+    const end = this.eventFormGroup.get('endTime').value.split(':');
     endDate.setHours(end[0]);
     endDate.setMinutes(end[1]);
 

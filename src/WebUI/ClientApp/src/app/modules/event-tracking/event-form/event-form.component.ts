@@ -186,7 +186,7 @@ export class EventFormComponent implements OnInit {
 
     let command: ICreateEventCommand & IUpdateEventCommand = {
       name: this.eventFormGroup.get('name').value,
-      tags: tags,
+      tags: Array.from(this.tagsOnEvent),
       organizerEmail: organizer,
       start: startDate.toISOString(),
       end: endDate.toISOString(),

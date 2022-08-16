@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { EventDetailDto } from 'src/app/membermanager-api';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { EventDetailDto, EventLookupDto } from 'src/app/membermanager-api';
+import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
 import { EventClient } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
@@ -16,6 +19,18 @@ import {
   styleUrls: ['./event-tracking-table.component.scss'],
 })
 export class EventTrackingTableComponent implements OnInit {
+  private sort: MatSort;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    if (this.events) this.dataSource.sort = this.sort;
+  }
+
+  @ViewChild(DataTableComponent)
+  dataTable: DataTableComponent<EventLookupDto>;
+
+  dataSource: MatTableDataSource<EventLookupDto>
+  
   displayedColumns: string[] = [
     'eventname',
     'date',
@@ -23,7 +38,7 @@ export class EventTrackingTableComponent implements OnInit {
     'qrcode',
   ];
 
-  events: EventDetailDto[];
+  events: EventLookupDto[];
 
   constructor(
     protected dialog: MatDialog,
@@ -32,9 +47,7 @@ export class EventTrackingTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.eventClient.get().subscribe((events) => {
-      this.events = events;
-    });
+    this.loadEvents();
   }
 
   onCreate() {
@@ -53,15 +66,26 @@ export class EventTrackingTableComponent implements OnInit {
         const createCommand = result;
         this.eventClient.create(createCommand).subscribe(
           () => {
-            this.eventClient
-              .get()
-              .subscribe((events) => (this.events = events));
+            this.loadEvents()
             this._snackBar.open(`${result.name} erstellt!`);
           },
           (err) => console.error(err)
         );
       }
     });
+  }
+
+  loadEvents() {
+    this.eventClient
+              .get()
+              .subscribe((events) =>{
+                this.events = events
+                this.dataSource = new MatTableDataSource<EventLookupDto>(
+                  this.events
+                );
+                this.dataSource.sort = this.sort;
+              } );
+
   }
 
   onEdit(event: EventDetailDto) {

@@ -3,10 +3,10 @@
   [title]="displayedName"
   [subTitle]="'Mitglieds Details'"
   (onEdit)="onEdit()"
-  (onShowHistory)="onShowHistoryButtonClicked()"
   (onDelete)="openDeleteDialog()"
 >
   <app-member-data [memberDetails]="personDetails"></app-member-data>
+  <app-history-panels [person]="personDetails"></app-history-panels>
 </app-detail-view-wrapper>
 <ng-template #toolTip>
   Für mehr Informationen klicke auf ein Element in der Tabelle!

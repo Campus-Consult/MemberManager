@@ -29,8 +29,8 @@ export class EventTrackingTableComponent implements OnInit {
   @ViewChild(DataTableComponent)
   dataTable: DataTableComponent<EventLookupDto>;
 
-  dataSource: MatTableDataSource<EventLookupDto>
-  
+  dataSource: MatTableDataSource<EventLookupDto>;
+
   displayedColumns: string[] = [
     'eventname',
     'date',
@@ -66,7 +66,7 @@ export class EventTrackingTableComponent implements OnInit {
         const createCommand = result;
         this.eventClient.create(createCommand).subscribe(
           () => {
-            this.loadEvents()
+            this.loadEvents();
             this._snackBar.open(`${result.name} erstellt!`);
           },
           (err) => console.error(err)
@@ -76,16 +76,11 @@ export class EventTrackingTableComponent implements OnInit {
   }
 
   loadEvents() {
-    this.eventClient
-              .get()
-              .subscribe((events) =>{
-                this.events = events
-                this.dataSource = new MatTableDataSource<EventLookupDto>(
-                  this.events
-                );
-                this.dataSource.sort = this.sort;
-              } );
-
+    this.eventClient.get().subscribe((events) => {
+      this.events = events;
+      this.dataSource = new MatTableDataSource<EventLookupDto>(this.events);
+      this.dataSource.sort = this.sort;
+    });
   }
 
   onEdit(event: EventDetailDto) {
@@ -107,10 +102,15 @@ export class EventTrackingTableComponent implements OnInit {
     });
   }
 
-  openEventDialog(event: EventDetailDto) {
+  async openEventDialog(event: EventLookupDto) {
+    const eventDetails = await this.eventClient.getSingle(event.id).toPromise().then((value)=>value)
     const dialogRef = this.dialog.open(EventCodeDialogComponent, {
       width: '650px',
-      data: event,
+      data: {
+        edit: eventDetails,
+        suggestedTags: ['test'],
+        startingTags: ['VT'],
+      } as EventFormDialogData,
     });
 
     dialogRef.afterClosed().subscribe();

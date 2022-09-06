@@ -3,7 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { EventDetailDto, EventLookupDto } from 'src/app/membermanager-api';
+import {
+  EventDetailDto,
+  EventLookupDto,
+  UpdateEventCommand,
+} from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
 import { EventClient } from './../../../membermanager-api';
@@ -86,7 +90,7 @@ export class EventTrackingTableComponent implements OnInit {
   onEdit(event: EventDetailDto) {
     // Open Form Dialog
     const dialogRef = this.dialog.open(EventFormComponent, {
-      width: '450px',
+      width: '650px',
       data: {
         edit: event,
         suggestedTags: ['test'],
@@ -94,27 +98,28 @@ export class EventTrackingTableComponent implements OnInit {
       } as EventFormDialogData,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      this.eventClient.update(event.id, result).subscribe(
-        () => this._snackBar.open(`${result.name} erfolgreich bearbeitet!`),
-        (err) => this._snackBar.open('Something went wrong.')
-      );
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   async openEventDialog(event: EventLookupDto) {
-    const eventDetails = await this.eventClient.getSingle(event.id).toPromise().then((value)=>value)
+    const eventDetails = await this.eventClient
+      .getSingle(event.id)
+      .toPromise()
+      .then((value) => value);
     const dialogRef = this.dialog.open(EventCodeDialogComponent, {
       width: '650px',
       data: {
         edit: eventDetails,
         suggestedTags: ['test'],
         startingTags: ['VT'],
+        submitAction: (result: UpdateEventCommand) =>
+          this.eventClient.update(event.id, result),
       } as EventFormDialogData,
     });
 
-    dialogRef.afterClosed().subscribe();
+    dialogRef.afterClosed().subscribe(
+      (result) => this._snackBar.open(`${result?.name} erfolgreich bearbeitet!`),
+      (err) => this._snackBar.open('Something went wrong.')
+    );
   }
 }
-
-export interface Event {}

@@ -10,10 +10,13 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
+  CreateEventCommand,
   EventDetailDto,
+  FileResponse,
   IPersonLookupDto,
   IUpdateEventCommand,
   PersonLookupDto,
+  UpdateEventCommand,
 } from 'src/app/membermanager-api';
 import {
   ICreateEventCommand,
@@ -66,7 +69,7 @@ export class EventFormComponent implements OnInit {
 
     const eventEdit = this.data.edit;
     this.eventFormGroup = this.formBuilder.group({
-      name: [eventEdit?.name ?? 'Vereinstreffen', [Validators.required]],
+      name: ['Vereinstreffen', [Validators.required]],
       tags: [
         [this.tagsOnEvent],
         {
@@ -77,8 +80,7 @@ export class EventFormComponent implements OnInit {
         },
       ],
       tagInput: [''],
-      organizer: [
-        eventEdit?.organizer ?? '',
+      organizer: ['',
         [Validators.required, Validators.email],
       ],
       eventDate: [Date.now(), [Validators.required]],
@@ -88,12 +90,16 @@ export class EventFormComponent implements OnInit {
     if (eventEdit) {
       const startDate = new Date(eventEdit.start);
       const endDate = new Date(eventEdit.end);
-      const start = `${startDate.getHours()}:${startDate.getMinutes()}`;
-      const end = `${endDate.getHours()}:${endDate.getMinutes()}`;
+      const start = this.formatTime(startDate);
+      const end = this.formatTime(endDate);;
       this.eventFormGroup.setValue({
-        eventDate: startDate,
-        start: start,
-        end: end,
+        name: eventEdit.name,
+        organizer: this.displayOrganizerFn(eventEdit?.organizer),
+        eventDate: eventEdit.start,
+        startTime: start,
+        endTime: end,
+        tags: eventEdit.tags,
+        tagInput: ''
       });
     }
 
@@ -142,6 +148,11 @@ export class EventFormComponent implements OnInit {
   displayOrganizerFn(person: IPersonLookupDto): string {
     // TODO: Check for also for emailAssociation in case user Inputs E-Mail!
     return person ? `${person.fistName} ${person.surname}` : '';
+  }
+
+  formatTime(dateTime: Date) {
+    const split = dateTime.toUTCString().split(' ') 
+    return split[4];
   }
 
   onSubmit() {
@@ -203,4 +214,5 @@ export interface EventFormDialogData {
   suggestedOrganizer?: PersonLookupDto[];
   suggestedTags: string[];
   startingTags?: string[];
+  submitAction: (result: UpdateEventCommand & CreateEventCommand)=> Observable<any>;
 }

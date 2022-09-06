@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EventDetailDto } from 'src/app/membermanager-api';
+import { UpdateEventCommand } from 'src/app/membermanager-api';
 import { EventFormDialogData } from '../event-form/event-form.component';
 
 @Component({
@@ -23,7 +23,13 @@ export class EventCodeDialogComponent implements OnInit {
     this.qrDataUrl = this.urlPath + urlAppendix;
   }
 
-  onSubmit(event) {
-    this.dialogRef.close(event);
+  onSubmit(event: UpdateEventCommand) {
+    this.data.submitAction(event).subscribe((response) => {
+      this.dialogRef.close(event);
+    }, errorResponse => this.handleError(errorResponse));
+  }
+  
+  handleError(errorResponse: any): void {
+    throw new Error('Method not implemented.');
   }
 }

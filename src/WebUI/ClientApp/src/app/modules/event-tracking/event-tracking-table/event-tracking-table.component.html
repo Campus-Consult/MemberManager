@@ -5,6 +5,7 @@
   [columns]="displayedColumns"
   (onAddClickedEvent)="onCreate()"
   (oneRefreshClickedEvent)="loadEvents()"
+  [deactivateSelection]="true"
   matSort
 >
     <ng-container matColumnDef="eventname">
@@ -20,7 +21,7 @@
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Termin</th>
       <td mat-cell *matCellDef="let row">
-        {{ row.start | date: 'dd.MM.yy hh:mm' }} - {{ row.end | date: 'hh:mm' }}
+        {{ row.start | date: 'dd.MM.yy HH:mm' }} - {{ row.end | date: 'HH:mm' }}
       </td>
     </ng-container>
     <ng-container matColumnDef="attendances">

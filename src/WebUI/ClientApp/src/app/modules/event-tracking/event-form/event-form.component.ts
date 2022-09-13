@@ -41,7 +41,7 @@ export class EventFormComponent implements OnInit {
   startingTags: Set<string>;
   tagsOnEvent: Set<string>;
 
-  formError = { organizer: '' };
+  formError: EventFormError = {};
 
   // Auto Complete Observables, which handle valueChangeEvents
   filteredTagOptions: Observable<string[]>;
@@ -80,9 +80,7 @@ export class EventFormComponent implements OnInit {
         },
       ],
       tagInput: [''],
-      organizer: ['',
-        [Validators.required, Validators.email],
-      ],
+      organizer: ['', [Validators.required, Validators.email]],
       eventDate: [Date.now(), [Validators.required]],
       startTime: ['20:00', [Validators.required]],
       endTime: ['22:00', [Validators.required]],
@@ -91,7 +89,7 @@ export class EventFormComponent implements OnInit {
       const startDate = new Date(eventEdit.start);
       const endDate = new Date(eventEdit.end);
       const start = this.formatTime(startDate);
-      const end = this.formatTime(endDate);;
+      const end = this.formatTime(endDate);
       this.eventFormGroup.setValue({
         name: eventEdit.name,
         organizer: this.displayOrganizerFn(eventEdit?.organizer),
@@ -99,7 +97,7 @@ export class EventFormComponent implements OnInit {
         startTime: start,
         endTime: end,
         tags: eventEdit.tags,
-        tagInput: ''
+        tagInput: '',
       });
     }
 
@@ -151,14 +149,19 @@ export class EventFormComponent implements OnInit {
   }
 
   formatTime(dateTime: Date) {
-    const split = dateTime.toUTCString().split(' ') 
+    const split = dateTime.toUTCString().split(' ');
     return split[4];
   }
 
   onSubmit() {
     if (this.eventFormGroup.status) {
       const command = this.getCommand();
-      this.submitEvent.emit(command);
+      this.data.submitAction(command).subscribe((response)=>{
+        this.submitEvent.emit(command);
+      }), errorResponse =>{
+        this.handleError(errorResponse)
+      }
+      
     }
   }
 
@@ -175,7 +178,7 @@ export class EventFormComponent implements OnInit {
       : null;
   }
 
-  getCommand() {
+  getCommand(): ICreateEventCommand & IUpdateEventCommand {
     let organizer = this.eventFormGroup.get('organizer').value;
     if (!organizer) {
       organizer = undefined;
@@ -207,6 +210,10 @@ export class EventFormComponent implements OnInit {
     }
     return command;
   }
+
+  handleError(errorResponse: any) {
+    throw new Error('Function not implemented.');
+  }
 }
 
 export interface EventFormDialogData {
@@ -214,5 +221,17 @@ export interface EventFormDialogData {
   suggestedOrganizer?: PersonLookupDto[];
   suggestedTags: string[];
   startingTags?: string[];
-  submitAction: (result: UpdateEventCommand & CreateEventCommand)=> Observable<any>;
+  submitAction: (
+    result: IUpdateEventCommand & ICreateEventCommand
+  ) => Observable<FileResponse>;
 }
+
+export interface EventFormError {
+  name?: string;
+  organizer?: string;
+  eventDate?: string;
+  startTime?: string;
+  endTime?: string;
+  tags?: string;
+}
+

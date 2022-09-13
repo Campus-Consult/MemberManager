@@ -1,7 +1,9 @@
+import { catchError } from 'rxjs/operators';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UpdateEventCommand } from 'src/app/membermanager-api';
+import { FileResponse, UpdateEventCommand } from 'src/app/membermanager-api';
 import { EventFormDialogData } from '../event-form/event-form.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-event-code-dialog',
@@ -9,27 +11,28 @@ import { EventFormDialogData } from '../event-form/event-form.component';
   styleUrls: ['./event-code-dialog.component.scss'],
 })
 export class EventCodeDialogComponent implements OnInit {
-  urlPath = 'http://membermanager.campus-consult.org/event/attend';
-  qrDataUrl = 'http://membermanager.campus-consult.org/';
-
   constructor(
     public dialogRef: MatDialogRef<EventCodeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData
   ) {}
 
   ngOnInit(): void {
-    // TODO: refactor to pipe
-    const urlAppendix = this.data.edit.id + this.data.edit.secretKey;
-    this.qrDataUrl = this.urlPath + urlAppendix;
+    this.data.submitAction = (result: UpdateEventCommand) =>
+      this.data
+        .submitAction(result)
+        .pipe(
+          catchError<FileResponse, Observable<FileResponse>>((error) =>
+            this.handleUpdateError(error)
+          )
+        );
+  }
+
+  handleUpdateError(error: any): any {
+    // Handle specific Update Errors in future
+    return error;
   }
 
   onSubmit(event: UpdateEventCommand) {
-    this.data.submitAction(event).subscribe((response) => {
-      this.dialogRef.close(event);
-    }, errorResponse => this.handleError(errorResponse));
-  }
-  
-  handleError(errorResponse: any): void {
-    throw new Error('Method not implemented.');
+    this.dialogRef.close(event);
   }
 }

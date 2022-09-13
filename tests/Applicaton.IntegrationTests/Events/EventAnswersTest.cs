@@ -8,6 +8,9 @@ using MemberManager.Application.Events.Queries.GetEventDetails;
 using MemberManager.Application.Events.Common;
 using MemberManager.Application.Events.Commands.AttendEvent;
 using MemberManager.Application.Events.Queries.GetOwnEvents;
+using MemberManager.Application.Events.Commands.AddEventAnswer;
+using MemberManager.Application.Events.Queries.GetPersonEvents;
+using MemberManager.Application.Events.Commands.RemoveEventAnswer;
 
 namespace MemberManager.Application.IntegrationTests.Events
 {
@@ -20,6 +23,7 @@ namespace MemberManager.Application.IntegrationTests.Events
         private static readonly DateTime eventStartTime = new DateTime(2020,01,01);
         private static readonly DateTime validTime = eventStartTime.AddHours(1);
         private static readonly DateTime eventEndTime = new DateTime(2020,01,03);
+        private static readonly DateTime invalidTime = eventEndTime.AddHours(1);
         private int testPersonId;
         private int eventId;
         private string secretKey;
@@ -36,9 +40,11 @@ namespace MemberManager.Application.IntegrationTests.Events
             });
         }
 
-        public async Task DoSetup() {
+        public async Task DoSetup(bool logIn = true) {
             testPersonId = await SetupTestPerson(testuserMail);
-            await Testing.RunAsUserAsync(testuserMail, testuserPassword);
+            if (logIn) {
+                await Testing.RunAsUserAsync(testuserMail, testuserPassword);
+            }
             Testing.SetDateTime(validTime);
             eventId = await SetupTestEvent();
             secretKey = await GetSecretKey(eventId);
@@ -137,6 +143,58 @@ namespace MemberManager.Application.IntegrationTests.Events
             eventAnswers[0].Event.Should().NotBeNull();
             eventAnswers[0].Event.Name.Should().Be("TestEvent");
             eventAnswers[0].Time.Should().Be(validTime);
+        }
+
+        [Test]
+        public async Task CanAddAttendeesLater() {
+            await DoSetup(false);
+            var eventAnswerId = await SendAsync(new AddEventAnswerCommand {
+                EventId = eventId,
+                PersonId = testPersonId,
+                // this is fine since only admins can use this
+                AnswerTime = invalidTime,
+            });
+            var evnt = await SendAsync(new GetEventDetailsQuery {
+                EventId = eventId,
+            });
+            evnt.EventAnswers.Should().HaveCount(1);
+            evnt.EventAnswers[0].Id.Should().Be(eventAnswerId);
+            evnt.Name.Should().Be("TestEvent");
+            evnt.EventAnswers[0].Time.Should().Be(invalidTime);
+        }
+
+        [Test]
+        public async Task CantAddAttendeesMultipleTimes() {
+            await DoSetup(false);
+            await SendAsync(new AddEventAnswerCommand {
+                EventId = eventId,
+                PersonId = testPersonId,
+                // this is fine since only admins can use this
+                AnswerTime = invalidTime,
+            });
+            AssertValidationError(SendAsync(new AddEventAnswerCommand {
+                EventId = eventId,
+                PersonId = testPersonId,
+                AnswerTime = invalidTime,
+            }), "PersonId", "Person already answered for this Event");
+        }
+
+        [Test]
+        public async Task CanRemoveAttendees() {
+            await DoSetup(false);
+            var eventAnswerId = await SendAsync(new AddEventAnswerCommand {
+                EventId = eventId,
+                PersonId = testPersonId,
+                // this is fine since only admins can use this
+                AnswerTime = invalidTime,
+            });
+            await SendAsync(new RemoveEventAnswerCommand {
+                Id = eventAnswerId
+            });
+            var evnt = await SendAsync(new GetEventDetailsQuery {
+                EventId = eventId,
+            });
+            evnt.EventAnswers.Should().HaveCount(0);
         }
     }
 }

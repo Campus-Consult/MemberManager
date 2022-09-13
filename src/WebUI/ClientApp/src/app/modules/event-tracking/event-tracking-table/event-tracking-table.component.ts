@@ -118,7 +118,10 @@ export class EventTrackingTableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(
-      (result) => this._snackBar.open(`${result?.name} erfolgreich bearbeitet!`),
+      (result) => {
+        if (result)
+          this._snackBar.open(`${result?.name} erfolgreich bearbeitet!`);
+      },
       (err) => this._snackBar.open('Something went wrong.')
     );
   }

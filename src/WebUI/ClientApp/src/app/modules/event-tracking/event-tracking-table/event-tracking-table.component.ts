@@ -4,15 +4,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  CreateEventCommand, EventLookupDto, UpdateEventCommand
+  CreateEventCommand,
+  EventLookupDto,
+  UpdateEventCommand,
 } from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
 import { EventClient } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
-import {
-  EventFormDialogData
-} from './../event-form/event-form.component';
+import { EventFormDialogData } from './../event-form/event-form.component';
 
 @Component({
   selector: 'app-event-tracking-table',
@@ -97,7 +97,7 @@ export class EventTrackingTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(
       (result) => {
-        if (result){
+        if (result) {
           this.loadEvents();
           this._snackBar.open(`${result?.name} erfolgreich bearbeitet!`);
         }

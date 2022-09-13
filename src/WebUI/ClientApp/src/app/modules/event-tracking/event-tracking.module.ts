@@ -18,7 +18,13 @@ import { EventTrackingRoutingModule } from './event-tracking-routing.module';
     EventCreateDialogComponent,
     EventTrackingLandingpageComponent,
   ],
-  imports: [CommonModule, SharedModule, ReactiveFormsModule, QRCodeModule, EventTrackingRoutingModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    ReactiveFormsModule,
+    QRCodeModule,
+    EventTrackingRoutingModule,
+  ],
   exports: [EventTrackingTableComponent],
 })
 export class EventTrackingModule {}

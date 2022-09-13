@@ -9,7 +9,7 @@
       formControlName="name"
     />
     <mat-hint>Bei Check-IN angezeigt, z.B. Terminname</mat-hint>
-    <mat-error *ngIf="formError.name">{{formError.name}}</mat-error>
+    <mat-error *ngIf="formError.name">{{ formError.name }}</mat-error>
   </mat-form-field>
   <mat-form-field id="organizer" appearance="outline">
     <mat-label>Organisator</mat-label>
@@ -42,7 +42,9 @@
       <mat-label>Event Termin</mat-label>
       <input matInput formControlName="eventDate" [matDatepicker]="picker" />
       <mat-hint>DD.MM.YYYY</mat-hint>
-      <mat-error *ngIf="formError.eventDate">{{formError.eventDate}}</mat-error>
+      <mat-error *ngIf="formError.eventDate">{{
+        formError.eventDate
+      }}</mat-error>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -55,7 +57,9 @@
         type="time"
       />
       <mat-hint>hh:mm</mat-hint>
-      <mat-error *ngIf="formError.startTime">{{formError.startTime}}</mat-error>
+      <mat-error *ngIf="formError.startTime">{{
+        formError.startTime
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field id="end-time" appearance="outline">
       <mat-label>Endzeit</mat-label>
@@ -66,14 +70,14 @@
         type="time"
       />
       <mat-hint>hh:mm</mat-hint>
-      <mat-error *ngIf="formError.endTime">{{formError.endTime}}</mat-error>
+      <mat-error *ngIf="formError.endTime">{{ formError.endTime }}</mat-error>
     </mat-form-field>
   </section>
   <!-- Tags -->
   <mat-form-field class="event-tags" appearance="outline">
     <mat-label>Event Tags</mat-label>
     <mat-hint>Tags kategorisieren und beschreiben die Eventgruppe</mat-hint>
-    <mat-error *ngIf="formError.tags">{{formError.tags}}</mat-error>
+    <mat-error *ngIf="formError.tags">{{ formError.tags }}</mat-error>
     <mat-hint align="end">unbeschränkt</mat-hint>
     <mat-chip-list
       #chipList

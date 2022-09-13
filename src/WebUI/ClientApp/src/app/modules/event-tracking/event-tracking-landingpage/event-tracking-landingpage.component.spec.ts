@@ -8,9 +8,8 @@ describe('EventTrackingLandingpageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventTrackingLandingpageComponent ]
-    })
-    .compileComponents();
+      declarations: [EventTrackingLandingpageComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

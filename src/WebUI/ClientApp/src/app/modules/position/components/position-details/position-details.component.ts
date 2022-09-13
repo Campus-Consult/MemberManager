@@ -16,9 +16,12 @@ import {
   MatTable,
   MatTableDataSource,
 } from '@angular/material/table';
+import { Observable } from 'rxjs';
+import { MemberDismissDialogComponent } from 'src/app/modules/member-management/member-dismiss-dialog/member-dismiss-dialog.component';
 import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
 import {
   AssigneeDto,
+  DismissFromPositionCommand,
   PositionClient,
   PositionDto,
 } from '../../../../membermanager-api';
@@ -37,20 +40,25 @@ export class PositionDetailsComponent
   implements OnInit, OnChanges, AfterViewInit
 {
   @Input() positionID: number;
+  @Input() hideUntilColumn: boolean = false;
   @Output() onReloadRequired = new EventEmitter();
 
   position: PositionDto;
 
   assignees: AssigneeDto[];
   dataSource: MatTableDataSource<AssigneeDto>;
-  columns: string[] = ['name', 'since', 'till'];
+  columns: string[] = ['name', 'since', 'till', 'actions'];
 
   constructor(
     public dialog: MatDialog,
-    private positionClient: PositionClient
+    private positionClient: PositionClient,
+    private positionService: PositionClient
   ) {}
 
   ngOnInit(): void {
+    if (this.hideUntilColumn) {
+      this.columns = this.columns.filter(c => c != 'till');
+    }
     this.fetchPositionDetails();
   }
 
@@ -150,20 +158,32 @@ export class PositionDetailsComponent
     });
   }
 
-  onDismissPersonButtonClicked() {
-    let dialogRef = this.dialog.open(PositionDismissDialogComponent, {
-      width: '300px',
-      data: {
-        description: 'Dismiss from ' + this.position.name,
-        position: this.position,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.reloadRequired();
-      }
-    });
+  onPersonDismissClicked(element: AssigneeDto) {
+    console.log(element);
+    this.dialog
+      .open(MemberDismissDialogComponent, {
+        role: 'alertdialog',
+        width: '250px',
+        data: {
+          description: `${element.name} von Posten ${this.position.name} entfernen?`,
+          dismissCallback: (dismissalDate: string): Observable<any> => {
+            return this.positionService.dismiss(
+              this.positionID,
+              new DismissFromPositionCommand({
+                dismissalDateTime: dismissalDate,
+                personId: element.personId,
+                positionId: this.positionID,
+              })
+            );
+          },
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.reloadRequired();
+        }
+      });
   }
 
   onShowHistoryButtonClicked() {

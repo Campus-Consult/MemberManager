@@ -8,7 +8,7 @@ namespace MemberManager.Application.People.Queries.GetPeopleWithBasicInfo
     public class PersonWithBasicInfoLookupDto
     {
         public int Id { get; set; }
-        public string FistName { get; set; }
+        public string FirstName { get; set; }
         public string Surname { get; set; }
 
         public IList<SimplePositionDto> CurrentPositions { get; set; }

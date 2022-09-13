@@ -32,7 +32,7 @@ namespace MemberManager.Application.People.Queries.GetPeopleWithBasicInfo
                 .Include(p => p.PersonPositions).ThenInclude(pp => pp.Position)
                 .Select(person => new PersonWithBasicInfoLookupDto{
                     Id = person.Id,
-                    FistName = person.FirstName,
+                    FirstName = person.FirstName,
                     Surname = person.Surname,
                     CurrentCareerLevel = person.PersonCareerLevels
                         .Where(cl => cl.EndDateTime == null).Select(pc => pc.CareerLevel.Name).FirstOrDefault(),

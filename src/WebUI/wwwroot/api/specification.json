@@ -2438,7 +2438,11 @@
             "type": "integer",
             "format": "int32"
           },
-          "fistName": {
+          "emailAssociaton": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
             "type": "string",
             "nullable": true
           },
@@ -2818,7 +2822,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "fistName": {
+          "firstName": {
             "type": "string",
             "nullable": true
           },

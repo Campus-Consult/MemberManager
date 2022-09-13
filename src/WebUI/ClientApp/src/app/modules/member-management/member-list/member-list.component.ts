@@ -22,7 +22,7 @@ import {
 import { CreateMemberComponent } from '../create-member/create-member.component';
 
 export const PERSON_LIST_POSSIBLE_COLUMNS = [
-  'fistName',
+  'firstName',
   'surname',
   'currentMemberStatus',
   'currentCareerLevel',

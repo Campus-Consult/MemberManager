@@ -1,5 +1,4 @@
 import { DeleteDialogComponent } from './../../../shared/components/delete-dialog/delete-dialog.component';
-import { HistoryDialogComponent } from './history-dialog/history-dialog.component';
 import {
   Component,
   EventEmitter,
@@ -87,13 +86,6 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   onEdit() {
     this.editEvent.emit(this.personDetails);
-  }
-
-  onShowHistoryButtonClicked() {
-    let dialogRef = this.dialog.open(HistoryDialogComponent, {
-      data: { person: this.personDetails },
-      width: '600px',
-    });
   }
 
   private onDelete() {

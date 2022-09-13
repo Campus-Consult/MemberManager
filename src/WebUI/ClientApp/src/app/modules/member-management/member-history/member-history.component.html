@@ -1,0 +1,36 @@
+<mat-expansion-panel class="expansion-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title> {{ title }} </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="historyData && historyData.length > 0; else noData">
+    <table id="tight-table" mat-table [dataSource]="historyData">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ title }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <a (click)="emitOpenDetails(element)">{{ element.name }}</a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="time-span">
+        <th mat-header-cell *matHeaderCellDef>Von - Bis</th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+            {{ dateSinceUntilToString(element.startDate, element.endDate) }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Dismiss</th>
+        <td mat-cell *matCellDef="let element">
+          <a *ngIf="!element.endDate" (click)="dismissCallback(element)">
+            <mat-icon>person_remove</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </ng-container>
+  <ng-template #noData> <p>Keine Daten vorliegend</p> </ng-template>
+</mat-expansion-panel>

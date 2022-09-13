@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ data.description }}</h2>
+<mat-dialog-content [formGroup]="dismissForm">
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Dismissal date"
+      formControlName="dismissalDate"
+      type="date"
+    />
+    <!--<mat-error *ngIf="assignDate.hasError('required')">
+      Datum ist Pflichtfeld
+    </mat-error>-->
+  </mat-form-field>
+
+  <app-dialog-error [errors]="errors"></app-dialog-error>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button
+    [disabled]="isSaving"
+    class="mat-raised-button mat-primary"
+    (click)="confirmDismiss()"
+  >
+    Entfernen
+  </button>
+</mat-dialog-actions>

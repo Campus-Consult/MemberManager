@@ -7,8 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable } from 'rxjs';
-import { map, pluck, startWith } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, pluck, startWith } from 'rxjs/operators';
 import {
   CreateEventCommand,
   EventDetailDto,
@@ -16,7 +16,6 @@ import {
   IPersonLookupDto,
   IUpdateEventCommand,
   PersonLookupDto,
-  UpdateEventCommand,
 } from 'src/app/membermanager-api';
 import {
   ICreateEventCommand,
@@ -156,12 +155,14 @@ export class EventFormComponent implements OnInit {
   onSubmit() {
     if (this.eventFormGroup.status) {
       const command = this.getCommand();
-      this.data.submitAction(command).subscribe((response)=>{
-        this.submitEvent.emit(command);
-      }), errorResponse =>{
-        this.handleError(errorResponse)
-      }
-      
+      this.data.submitAction(command).subscribe(
+        (response) => {
+          if (response) {
+            this.submitEvent.emit(command);
+          }
+        },
+        (errorResponse) => this.handleError(errorResponse)
+      );
     }
   }
 
@@ -170,7 +171,7 @@ export class EventFormComponent implements OnInit {
       this.suggOrganizer.findIndex(
         (value) => formControl.value.id === value.id
       ) > -1;
-    this.formError.organizer = isInternalOrganizer
+    this.formError.OrganizerEmail = isInternalOrganizer
       ? ''
       : 'Person existiert nicht im Member Manager oder ist Teil von CC';
     return isInternalOrganizer
@@ -211,8 +212,15 @@ export class EventFormComponent implements OnInit {
     return command;
   }
 
-  handleError(errorResponse: any) {
-    throw new Error('Function not implemented.');
+  handleError(error) {
+    let parsedErrorObject: any;
+    // Intercept Normal Error
+/*     if (error?.response) {
+      parsedErrorObject = JSON.parse(error.response);
+    } */
+    this.formError = error;
+
+    return of(false);
   }
 }
 
@@ -223,12 +231,14 @@ export interface EventFormDialogData {
   startingTags?: string[];
   submitAction: (
     result: IUpdateEventCommand & ICreateEventCommand
-  ) => Observable<FileResponse>;
+  ) => Observable<any>;
+  onSuccess: (response) => void;
+  onError: (response) => void;
 }
 
 export interface EventFormError {
   name?: string;
-  organizer?: string;
+  OrganizerEmail?: string;
   eventDate?: string;
   startTime?: string;
   endTime?: string;

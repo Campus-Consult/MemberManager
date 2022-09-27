@@ -8,7 +8,7 @@
       value="value"
       formControlName="name"
     />
-    <mat-hint>Bei Check-IN angezeigt, z.B. Terminname</mat-hint>
+    <mat-hint>Terminname</mat-hint>
     <mat-error *ngIf="formError.name">{{ formError.name }}</mat-error>
   </mat-form-field>
   <mat-form-field id="organizer" appearance="outline">
@@ -32,8 +32,8 @@
           {{ displayOrganizerFn(option) }}
         </mat-option>
       </mat-autocomplete> -->
-    <mat-hint>Bei Check-IN angezeigt, nur CC Intern</mat-hint>
-    <mat-error *ngIf="formError.organizer">{{ formError.organizer }}</mat-error>
+    <mat-hint>Nur CC interne Adressen</mat-hint>
+    <mat-error *ngIf="formError.OrganizerEmail">{{ 'Test' }}</mat-error>
   </mat-form-field>
   <!-- Start - End -->
   <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
@@ -114,6 +114,7 @@
     </mat-chip-list>
   </mat-form-field>
 </form>
+<app-dialog-error [errors]="formError"></app-dialog-error>
 <div class="dialog-actions">
   <button
     mat-raised-button

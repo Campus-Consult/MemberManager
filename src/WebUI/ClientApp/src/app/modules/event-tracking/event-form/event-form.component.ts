@@ -215,7 +215,7 @@ export class EventFormComponent implements OnInit {
   handleError(error) {
     let parsedErrorObject: any;
     // Intercept Normal Error
-/*     if (error?.response) {
+    /*     if (error?.response) {
       parsedErrorObject = JSON.parse(error.response);
     } */
     this.formError = error;
@@ -244,4 +244,3 @@ export interface EventFormError {
   endTime?: string;
   tags?: string;
 }
-

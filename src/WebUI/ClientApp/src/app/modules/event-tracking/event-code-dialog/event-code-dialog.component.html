@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Event QR Code</h2>
 <mat-dialog-content class="center">
-  <div class="qrcodeImage">  
-  <qrcode
+  <div class="qrcodeImage">
+    <qrcode
       #qrElement
       [qrdata]="qrCodeURL"
       [alt]="'A custom alt attribute'"
@@ -17,7 +17,9 @@
       [width]="200"
     ></qrcode>
     <br />
-    <button mat-raised-button color="accent" (click)="saveAsImage(qrElement)">Download</button> 
+    <button mat-raised-button color="accent" (click)="saveAsImage(qrElement)">
+      Download
+    </button>
   </div>
   <div id="formContainer">
     <app-event-form [data]="data" (submitEvent)="onSubmit($event)">

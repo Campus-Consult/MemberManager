@@ -112,8 +112,8 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   getFullName(): string {
     let fullname = '';
-    if (this.person.fistName) {
-      fullname = fullname + this.person.fistName;
+    if (this.person.firstName) {
+      fullname = fullname + this.person.firstName;
     }
     if (this.person.surname) {
       fullname = fullname + ' ' + this.person.surname;

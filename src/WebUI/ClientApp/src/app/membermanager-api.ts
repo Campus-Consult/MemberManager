@@ -3804,7 +3804,8 @@ export interface IEventDetailDto {
 
 export class PersonLookupDto implements IPersonLookupDto {
     id?: number;
-    fistName?: string | undefined;
+    emailAssociaton?: string | undefined;
+    firstName?: string | undefined;
     surname?: string | undefined;
 
     constructor(data?: IPersonLookupDto) {
@@ -3819,7 +3820,8 @@ export class PersonLookupDto implements IPersonLookupDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.fistName = _data["fistName"];
+            this.emailAssociaton = _data["emailAssociaton"];
+            this.firstName = _data["firstName"];
             this.surname = _data["surname"];
         }
     }
@@ -3834,7 +3836,8 @@ export class PersonLookupDto implements IPersonLookupDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["fistName"] = this.fistName;
+        data["emailAssociaton"] = this.emailAssociaton;
+        data["firstName"] = this.firstName;
         data["surname"] = this.surname;
         return data;
     }
@@ -3842,7 +3845,8 @@ export class PersonLookupDto implements IPersonLookupDto {
 
 export interface IPersonLookupDto {
     id?: number;
-    fistName?: string | undefined;
+    emailAssociaton?: string | undefined;
+    firstName?: string | undefined;
     surname?: string | undefined;
 }
 
@@ -4792,7 +4796,7 @@ export interface IPeopleWithBasicInfoVm {
 
 export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupDto {
     id?: number;
-    fistName?: string | undefined;
+    firstName?: string | undefined;
     surname?: string | undefined;
     currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;
@@ -4811,7 +4815,7 @@ export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupD
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.fistName = _data["fistName"];
+            this.firstName = _data["firstName"];
             this.surname = _data["surname"];
             if (Array.isArray(_data["currentPositions"])) {
                 this.currentPositions = [] as any;
@@ -4834,7 +4838,7 @@ export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupD
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["fistName"] = this.fistName;
+        data["firstName"] = this.firstName;
         data["surname"] = this.surname;
         if (Array.isArray(this.currentPositions)) {
             data["currentPositions"] = [];
@@ -4850,7 +4854,7 @@ export class PersonWithBasicInfoLookupDto implements IPersonWithBasicInfoLookupD
 
 export interface IPersonWithBasicInfoLookupDto {
     id?: number;
-    fistName?: string | undefined;
+    firstName?: string | undefined;
     surname?: string | undefined;
     currentPositions?: SimplePositionDto[] | undefined;
     currentCareerLevel?: string | undefined;

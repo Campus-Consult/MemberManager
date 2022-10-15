@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import {
+  AttendEventCommand,
+  EventClient,
+  EventDetailDto,
+  IAttendEventCommand,
+} from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-event-tracking-landingpage',
@@ -6,7 +13,51 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-tracking-landingpage.component.scss'],
 })
 export class EventTrackingLandingpageComponent implements OnInit {
-  constructor() {}
+  eventId: number;
+  eventCode: string;
+  event: EventDetailDto;
+  state: LandingPageState = LandingPageState.eventDefault;
+  landingPageStateEnum = LandingPageState;
 
-  ngOnInit(): void {}
+  constructor(
+    private route: ActivatedRoute,
+    private eventClient: EventClient
+  ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      this.eventId = params['eventid'];
+      this.eventCode = params['eventcode'];
+      this.eventClient
+        .getSingle(this.eventId)
+        .subscribe((response: EventDetailDto) => {
+          this.event = response;
+          //this.state = this.isEventExpired(this.event)? LandingPageState.eventExpired : this.state; 
+          this.state = this.landingPageStateEnum.eventConfirmed;
+        });
+    });
+  }
+
+  isEventExpired(event : EventDetailDto): boolean {
+    const currentDate = new Date();
+    const startDate = new Date(event.start);
+    const endDate = new Date(event.end);
+    return !(currentDate < endDate && currentDate > startDate);
+  }
+
+  confirmAttendance() {
+    const command = new AttendEventCommand({
+      eventId: this.event.id,
+      eventSecretKey: this.event.secretKey,
+    });
+    this.eventClient.attend(command).subscribe((response) => {
+      this.state = LandingPageState.eventConfirmed;
+    });
+  }
+}
+
+enum LandingPageState{
+  eventExpired,
+  eventConfirmed,
+  eventDefault,
 }

@@ -74,6 +74,7 @@ export class EventTrackingTableComponent implements OnInit {
   loadEvents() {
     this.eventClient.get().subscribe((events) => {
       this.events = events;
+      console.log(events);
       this.dataSource = new MatTableDataSource<EventLookupDto>(this.events);
       this.dataSource.sort = this.sort;
     });

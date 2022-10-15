@@ -1,0 +1,24 @@
+#landingPageContent{
+    text-align: center;
+    
+}
+#expiredMessage{
+    color: red;
+}
+p{
+    margin-bottom: 0px;
+}
+#attendanceContainer{
+    margin-top: 20px;
+}
+#buttonText{
+    font-size: large;
+}
+.mirroredIcon{
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: "FlipH";
+    filter: FlipH;
+}

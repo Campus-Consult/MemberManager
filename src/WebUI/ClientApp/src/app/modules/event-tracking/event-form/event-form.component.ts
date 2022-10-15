@@ -144,7 +144,7 @@ export class EventFormComponent implements OnInit {
 
   displayOrganizerFn(person: IPersonLookupDto): string {
     // TODO: Check for also for emailAssociation in case user Inputs E-Mail!
-    return person ? `${person.fistName} ${person.surname}` : '';
+    return person ? `${person.firstName} ${person.surname}` : '';
   }
 
   formatTime(dateTime: Date) {

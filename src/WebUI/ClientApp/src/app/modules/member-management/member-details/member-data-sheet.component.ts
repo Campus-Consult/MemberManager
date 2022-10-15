@@ -116,16 +116,20 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
           element.name
         } entfernen?`,
         dismissCallback: (dismissalDate: string): Observable<any> => {
-          return this.positionService.dismiss(
-            element.connectedId,
-            new DismissFromPositionCommand({
-              dismissalDateTime: dismissalDate,
-              personId: this.person.id,
-              positionId: element.connectedId,
-            })
-          ).pipe(tap(() => {
-            this.doReload();
-          }));
+          return this.positionService
+            .dismiss(
+              element.connectedId,
+              new DismissFromPositionCommand({
+                dismissalDateTime: dismissalDate,
+                personId: this.person.id,
+                positionId: element.connectedId,
+              })
+            )
+            .pipe(
+              tap(() => {
+                this.doReload();
+              })
+            );
         },
       },
     });

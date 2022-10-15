@@ -57,7 +57,7 @@ export class PositionDetailsComponent
 
   ngOnInit(): void {
     if (this.hideUntilColumn) {
-      this.columns = this.columns.filter(c => c != 'till');
+      this.columns = this.columns.filter((c) => c != 'till');
     }
     this.fetchPositionDetails();
   }

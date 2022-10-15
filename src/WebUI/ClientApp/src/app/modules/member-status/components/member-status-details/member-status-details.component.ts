@@ -47,7 +47,7 @@ export class MemberStatusDetailsComponent
 
   ngOnInit(): void {
     if (this.hideUntilColumn) {
-      this.columns = this.columns.filter(c => c != 'till');
+      this.columns = this.columns.filter((c) => c != 'till');
     }
     this.fetchMemberStatusDetails();
   }

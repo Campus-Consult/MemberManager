@@ -17,12 +17,22 @@ import {
   PersonCareerLevelVm,
   PositionClient,
   DismissFromPositionCommand,
+  CareerLevelClient,
+  ChangePersonCareerLevelCommand,
+  MemberStatusClient,
+  DismissFromMemberStatusCommand,
+  UpdateMemberStatusCommand,
 } from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoryData } from '../member-history/member-history.component';
 import { MemberDismissDialogComponent } from '../member-dismiss-dialog/member-dismiss-dialog.component';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import {
+  MemberReassignDialogComponent,
+  MemberReassignDialogData,
+} from '../member-reassign-dialog/member-reassign-dialog.component';
+import { SelectOption } from 'src/app/shared/components/search-select/search-select.component';
 
 @Component({
   selector: 'app-person-details',
@@ -49,6 +59,8 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   careerLevelHistory: HistoryData[] = [];
   positionHistory: HistoryData[] = [];
   memberStatusHistory: HistoryData[] = [];
+  careerLevelSuggestions: SelectOption[] = [];
+  memberStatusSuggestions: SelectOption[] = [];
 
   /**
    * if set text will be displayed, below loading
@@ -57,6 +69,8 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   constructor(
     private personApi: PeopleClient,
+    private careerLevelApi: CareerLevelClient,
+    private memberStatusApi: MemberStatusClient,
     protected dialog: MatDialog,
     private positionService: PositionClient
   ) {}
@@ -135,6 +149,72 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     });
   };
 
+  handleCareerReassign = async (element: HistoryData): Promise<void> => {
+    const dialogData: MemberReassignDialogData = {
+      description: `${this.getFullName()} von Karrierestufe ${
+        element.name
+      } entfernen?`,
+      reassignSelectSuggestions: await this.getCareerLevelSuggestions(),
+      reassignLabel: 'Karrierestufe',
+      reassignCallback: (reassignDate, newAssignedId) => {
+        return this.careerLevelApi
+          .changePersonCareerLevel(
+            new ChangePersonCareerLevelCommand({
+              personId: this.person.id,
+              careerLevelId: newAssignedId,
+              changeDateTime: reassignDate,
+            })
+          )
+          .pipe(
+            tap(() => {
+              this.doReload();
+            }),
+            // it returns a number, we're not interested in that
+            map((v) => undefined)
+          );
+      },
+    };
+    this.dialog.open(MemberReassignDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: dialogData,
+    });
+  };
+
+  handleMemberStatusReassign = async (element: HistoryData): Promise<void> => {
+    // broken, blame Yorrck
+    // const dialogData: MemberReassignDialogData = {
+    //   description: `${this.getFullName()} vom Status ${
+    //     element.name
+    //   } entfernen?`,
+    //   reassignSelectSuggestions: await this.getMemberStatusSuggestions(),
+    //   reassignLabel: "Mitgliedsstatus",
+    //   reassignCallback: (reassignDate, newAssignedId) => {
+    //     return this.memberStatusApi
+    //       .assign(
+    //         this.person.id,
+    //         new UpdateMemberStatusCommand({
+    //           personId: this.person.id,
+    //           dismissalDateTime: reassignDate,
+    //           memberStatusId: newAssignedId,
+    //         })
+    //       )
+    //       .pipe(
+    //         tap(() => {
+    //           this.doReload();
+    //         }),
+    //         // it returns something, we're not interested in that
+    //         map(v => undefined)
+    //       );
+    //   },
+    // };
+    // this.dialog.open(MemberReassignDialogComponent, {
+    //   role: 'alertdialog',
+    //   width: '250px',
+    //   data: dialogData,
+    // })
+  };
+
   getCareerLevelHistory(): HistoryData[] {
     return this.personDetails.careerLevels.map((careerLevel) => ({
       id: careerLevel.id,
@@ -163,6 +243,28 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
       startDate: memberStatus.beginDateTime,
       endDate: memberStatus.endDateTime,
     }));
+  }
+
+  async getCareerLevelSuggestions(): Promise<SelectOption[]> {
+    if (this.careerLevelSuggestions.length === 0) {
+      // TODO: implement business logic in backend!
+      const suggestions = await this.careerLevelApi.get().toPromise();
+      this.careerLevelSuggestions = suggestions.careerLevels.map((s) => {
+        return { name: s.name, id: s.id };
+      });
+    }
+    return this.careerLevelSuggestions;
+  }
+
+  async getMemberStatusSuggestions(): Promise<SelectOption[]> {
+    if (this.memberStatusSuggestions.length === 0) {
+      // TODO: implement business logic in backend!
+      const suggestions = await this.memberStatusApi.get().toPromise();
+      this.memberStatusSuggestions = suggestions.memberStatus.map((s) => {
+        return { name: s.name, id: s.id };
+      });
+    }
+    return this.memberStatusSuggestions;
   }
 
   onEdit() {

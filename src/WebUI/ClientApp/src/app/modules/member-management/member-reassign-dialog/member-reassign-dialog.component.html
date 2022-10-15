@@ -1,11 +1,11 @@
 <h2 mat-dialog-title>{{ data.description }}</h2>
 <mat-dialog-content [formGroup]="reassignForm">
+  <search-select
+    [selectSuggestions]="data.reassignSelectSuggestions"
+    placeholder="{{ data.reassignLabel }}"
+    formControlName="reassignedElement"
+  ></search-select>
   <mat-form-field>
-    <search-select
-      [selectSuggestions]="data.reassignSelectSuggestions"
-      placeholder="{{ data.reassignLabel }}"
-      formControlName="reassignedElement"
-    ></search-select>
     <input
       matInput
       placeholder="Reassign date"
@@ -27,6 +27,6 @@
     class="mat-raised-button mat-primary"
     (click)="confirmDismiss()"
   >
-    Entfernen
+    Neu zuweisen
   </button>
 </mat-dialog-actions>

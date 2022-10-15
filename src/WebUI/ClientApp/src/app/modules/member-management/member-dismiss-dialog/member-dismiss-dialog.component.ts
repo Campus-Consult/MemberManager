@@ -51,10 +51,11 @@ export class MemberDismissDialogComponent implements OnInit {
     this.data.dismissCallback(this.dismissalDate).subscribe(
       () => {
         this.dialogRef.close(this.dismissalDate);
-        this.isSaving = false;
       },
       (err) => {
         this.errors = err;
+      },
+      () => {
         this.isSaving = false;
       }
     );

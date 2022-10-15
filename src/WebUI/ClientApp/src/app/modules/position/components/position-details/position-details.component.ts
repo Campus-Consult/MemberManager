@@ -51,8 +51,7 @@ export class PositionDetailsComponent
 
   constructor(
     public dialog: MatDialog,
-    private positionClient: PositionClient,
-    private positionService: PositionClient
+    private positionClient: PositionClient
   ) {}
 
   ngOnInit(): void {
@@ -167,7 +166,7 @@ export class PositionDetailsComponent
         data: {
           description: `${element.name} von Posten ${this.position.name} entfernen?`,
           dismissCallback: (dismissalDate: string): Observable<any> => {
-            return this.positionService.dismiss(
+            return this.positionClient.dismiss(
               this.positionID,
               new DismissFromPositionCommand({
                 dismissalDateTime: dismissalDate,

@@ -32,8 +32,6 @@ export class EventTrackingLandingpageComponent implements OnInit {
         .getSingle(this.eventId)
         .subscribe((response: EventDetailDto) => {
           this.event = response;
-          //this.state = this.isEventExpired(this.event)? LandingPageState.eventExpired : this.state;
-          this.state = this.landingPageStateEnum.eventConfirmed;
         });
     });
   }

@@ -1,6 +1,9 @@
 <div id="landingPageContent" *ngIf="event">
   <h1>{{ event.name }} am {{ event.start | date }}</h1>
-  <p>{{ event.start | date: 'shortTime' }} bis {{ event.end | date: 'shortTime' }}</p>
+  <p>
+    {{ event.start | date: 'shortTime' }} bis
+    {{ event.end | date: 'shortTime' }}
+  </p>
   <p>
     organisiert von {{ event.organizer.fistName }} {{ event.organizer.surname }}
   </p>
@@ -15,13 +18,14 @@
       </ng-container>
       <ng-container *ngSwitchCase="landingPageStateEnum.eventConfirmed">
         <p>
-          <mat-icon class="mirroredIcon" color="primary"> celebration </mat-icon>
+          <mat-icon class="mirroredIcon" color="primary">
+            celebration
+          </mat-icon>
           Teilnahme bestätigt
           <mat-icon color="primary"> celebration </mat-icon>
         </p>
-
       </ng-container>
-      <ng-container *ngSwitchDefault> 
+      <ng-container *ngSwitchDefault>
         <button
           id="confirmationAction"
           mat-raised-button

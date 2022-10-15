@@ -32,13 +32,13 @@ export class EventTrackingLandingpageComponent implements OnInit {
         .getSingle(this.eventId)
         .subscribe((response: EventDetailDto) => {
           this.event = response;
-          //this.state = this.isEventExpired(this.event)? LandingPageState.eventExpired : this.state; 
+          //this.state = this.isEventExpired(this.event)? LandingPageState.eventExpired : this.state;
           this.state = this.landingPageStateEnum.eventConfirmed;
         });
     });
   }
 
-  isEventExpired(event : EventDetailDto): boolean {
+  isEventExpired(event: EventDetailDto): boolean {
     const currentDate = new Date();
     const startDate = new Date(event.start);
     const endDate = new Date(event.end);
@@ -56,7 +56,7 @@ export class EventTrackingLandingpageComponent implements OnInit {
   }
 }
 
-enum LandingPageState{
+enum LandingPageState {
   eventExpired,
   eventConfirmed,
   eventDefault,

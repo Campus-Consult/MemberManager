@@ -22,6 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HistoryData } from '../member-history/member-history.component';
 import { MemberDismissDialogComponent } from '../member-dismiss-dialog/member-dismiss-dialog.component';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-person-details',
@@ -37,6 +38,9 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   @Output()
   deleteEvent = new EventEmitter<void>();
+
+  @Output()
+  reloadEvent = new EventEmitter<void>();
 
   public personDetails: IPersonDetailVm;
 
@@ -87,6 +91,11 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     });
   }
 
+  doReload() {
+    this.loadPersondata();
+    this.reloadEvent.emit();
+  }
+
   getFullName(): string {
     let fullname = '';
     if (this.person.fistName) {
@@ -114,7 +123,9 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
               personId: this.person.id,
               positionId: element.connectedId,
             })
-          );
+          ).pipe(tap(() => {
+            this.doReload();
+          }));
         },
       },
     });

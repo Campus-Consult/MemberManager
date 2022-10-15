@@ -43,7 +43,7 @@
   <tr
     mat-row
     *matRowDef="let row; columns: columns"
-    [ngClass]="{ selected: selection.isSelected(row) }"
+    [ngClass]="{ selected: !deactivateSelection && selection.isSelected(row) }"
     (click)="selection.select(row)"
   ></tr>
 </table>

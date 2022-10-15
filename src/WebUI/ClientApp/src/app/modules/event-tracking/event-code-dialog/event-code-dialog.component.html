@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Event QR Code</h2>
+<mat-dialog-content>
+  <div class="qrcodeImage">
+    <!-- TODO: Binde QRCode in einem Folgenden Pull Request ein     
+  <qrcode
+      [qrdata]="qrDataUrl"
+      [alt]="'A custom alt attribute'"
+      [ariaLabel]="'QR Code image with the following content...'"
+      [cssClass]="'center'"
+      [colorDark]="'#000000ff'"
+      [colorLight]="'#ffffffff'"
+      [elementType]="'img'"
+      [errorCorrectionLevel]="'M'"
+      [margin]="4"
+      [scale]="1"
+      [title]="'A custom title attribute'"
+      [width]="200"
+    ></qrcode>
+    <br />
+    <button mat-raised-button>Download</button> -->
+  </div>
+  <div>
+    <app-event-form [data]="data" (submitEvent)="onSubmit($event)">
+    </app-event-form>
+  </div>
+</mat-dialog-content>

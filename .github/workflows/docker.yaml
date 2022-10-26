@@ -41,8 +41,8 @@ jobs:
           push: ${{ github.ref == 'refs/heads/docker-deploy' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=campus-consult/membermanager:buildcache
-          cache-to: type=registry,ref=campus-consult/membermanager:buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/campus-consult/membermanager:buildcache
+          cache-to: type=registry,ref=ghcr.io/campus-consult/membermanager:buildcache,mode=max
 
       - name: test print
         run: echo ${{ steps.image-build.outputs.digest }} ${{ steps.image-build.outputs.imageid }}

@@ -38,44 +38,44 @@
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <a class="nav-link text-dark" [routerLink]="['/Personal']"
-                >Mitgliederverwaltung</a
-              >
+              <a class="nav-link text-dark" [routerLink]="['/Personal']">
+                Mitgliederverwaltung
+              </a>
             </li>
             <li class="nav-item" [routerLinkActive]="['link-active']">
-              <a class="nav-link text-dark" [routerLink]="['/member-status']"
-                >Status</a
-              >
+              <a class="nav-link text-dark" [routerLink]="['/member-status']">
+                Status
+              </a>
             </li>
             <li
               class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <a class="nav-link text-dark" [routerLink]="['/position']"
-                >Posten</a
-              >
+              <a class="nav-link text-dark" [routerLink]="['/position']">
+                Posten
+              </a>
             </li>
             <li
               class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <a class="nav-link text-dark" [routerLink]="['/career-level']"
-                >Karrierestufen</a
-              >
+              <a class="nav-link text-dark" [routerLink]="['/career-level']">
+                Karrierestufen
+              </a>
             </li>
             <li
               class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <a class="nav-link text-dark" [routerLink]="['admin-center']"
-                >Admin Center</a
-              >
+              <a class="nav-link text-dark" [routerLink]="['admin-center']">
+                Admin Center
+              </a>
             </li>
           </ng-container>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="isProduction">
             <a class="nav-link text-dark" href="/api" target="_blank">API</a>
           </li>
         </ul>

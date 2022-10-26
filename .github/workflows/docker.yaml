@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: ${{ github.ref == 'refs/heads/master' }}
+          push: ${{ github.ref == 'refs/heads/docker-deploy' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 

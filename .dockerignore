@@ -1,0 +1,7 @@
+
+**/node_modules
+**/.angular
+**/dist
+**/bin
+**/obj
+**/appsettings.Production.json

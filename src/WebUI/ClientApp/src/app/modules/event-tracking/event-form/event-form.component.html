@@ -12,23 +12,23 @@
   </mat-form-field>
   <mat-form-field id="organizer" appearance="outline">
     <mat-label>Organisator</mat-label>
-      <input
-        matInput
-        placeholder="Organisator"
-        formControlName="organizer"
-        [matAutocomplete]="autoOrga"
-      />
-      <mat-autocomplete
-        #autoOrga="matAutocomplete"
-        [displayWith]="displayOrganizerFn"
+    <input
+      matInput
+      placeholder="Organisator"
+      formControlName="organizer"
+      [matAutocomplete]="autoOrga"
+    />
+    <mat-autocomplete
+      #autoOrga="matAutocomplete"
+      [displayWith]="displayOrganizerFn"
+    >
+      <mat-option
+        *ngFor="let option of filteredOrgaOptions | async"
+        [value]="option"
       >
-        <mat-option
-          *ngFor="let option of filteredOrgaOptions | async"
-          [value]="option"
-        >
-          {{ displayOrganizerFn(option) }}
-        </mat-option>
-      </mat-autocomplete>
+        {{ displayOrganizerFn(option) }}
+      </mat-option>
+    </mat-autocomplete>
     <mat-hint>Nur CC interne Adressen</mat-hint>
   </mat-form-field>
   <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
@@ -36,8 +36,8 @@
     <mat-form-field id="date" appearance="outline">
       <mat-label>Event Termin</mat-label>
       <mat-date-range-input [formGroup]="eventDate" [rangePicker]="picker">
-        <input matStartDate formControlName="start" placeholder="Start date">
-        <input matEndDate formControlName="end" placeholder="End date">
+        <input matStartDate formControlName="start" placeholder="Start date" />
+        <input matEndDate formControlName="end" placeholder="End date" />
       </mat-date-range-input>
       <mat-hint>DD.MM.YYYY-DD.MM.YYYY</mat-hint>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

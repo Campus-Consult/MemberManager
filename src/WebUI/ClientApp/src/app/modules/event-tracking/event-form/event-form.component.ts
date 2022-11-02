@@ -1,19 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup, Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable, of } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
-  EventDetailDto, IPersonLookupDto,
+  EventDetailDto,
+  IPersonLookupDto,
   IUpdateEventCommand,
-  PersonLookupDto
+  PersonLookupDto,
 } from 'src/app/membermanager-api';
 import {
   ICreateEventCommand,
-  PeopleClient
+  PeopleClient,
 } from './../../../membermanager-api';
 
 @Component({
@@ -41,7 +39,7 @@ export class EventFormComponent implements OnInit {
   filteredOrgaOptions: Observable<IPersonLookupDto[]>;
 
   eventFormGroup: FormGroup;
-  eventDate:FormGroup;
+  eventDate: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,8 +58,8 @@ export class EventFormComponent implements OnInit {
 
     this.eventDate = this.formBuilder.group({
       start: [Date.now(), [Validators.required]],
-      end: [Date.now(), [Validators.required]]
-    })
+      end: [Date.now(), [Validators.required]],
+    });
     this.eventFormGroup = this.formBuilder.group({
       name: ['Vereinstreffen', [Validators.required]],
       tags: [[this.tagsOnEvent], [Validators.required]],
@@ -82,7 +80,7 @@ export class EventFormComponent implements OnInit {
       this.eventFormGroup.setValue({
         name: eventEdit.name,
         organizer: eventEdit?.organizer,
-        eventDate: {start: startDate, end: endDate},
+        eventDate: { start: startDate, end: endDate },
         startTime: start,
         endTime: end,
         tags: eventEdit.tags,
@@ -127,7 +125,7 @@ export class EventFormComponent implements OnInit {
       const command = this.getCommand();
       this.data.submitAction(command).subscribe(
         (response) => {
-            this.submitEvent.emit(command);
+          this.submitEvent.emit(command);
         },
         (errorResponse) => this.handleError(errorResponse)
       );
@@ -147,7 +145,9 @@ export class EventFormComponent implements OnInit {
     startDate.setHours(start[0]);
     startDate.setMinutes(start[1]);
 
-    const endDate = new Date(this.eventFormGroup.get('eventDate').get('end').value);
+    const endDate = new Date(
+      this.eventFormGroup.get('eventDate').get('end').value
+    );
     const end = this.eventFormGroup.get('endTime').value.split(':');
     endDate.setHours(end[0]);
     endDate.setMinutes(end[1]);
@@ -170,7 +170,7 @@ export class EventFormComponent implements OnInit {
   handleError(error) {
     this.formError = error;
     console.error(error);
-    
+
     return of(false);
   }
 
@@ -199,4 +199,3 @@ export interface EventFormDialogData {
   onSuccess: (response) => void;
   onError: (response) => void;
 }
-

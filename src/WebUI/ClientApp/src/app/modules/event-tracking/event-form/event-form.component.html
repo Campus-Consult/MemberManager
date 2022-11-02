@@ -35,10 +35,13 @@
   <section class="full-flex">
     <mat-form-field id="date" appearance="outline">
       <mat-label>Event Termin</mat-label>
-      <input matInput formControlName="eventDate" [matDatepicker]="picker" />
-      <mat-hint>DD.MM.YYYY</mat-hint>
+      <mat-date-range-input [formGroup]="eventDate" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-hint>DD.MM.YYYY-DD.MM.YYYY</mat-hint>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
     <mat-form-field id="start-time" appearance="outline">
       <mat-label>Startzeit</mat-label>

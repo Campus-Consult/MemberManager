@@ -41,6 +41,7 @@ export class EventFormComponent implements OnInit {
   filteredOrgaOptions: Observable<IPersonLookupDto[]>;
 
   eventFormGroup: FormGroup;
+  eventDate:FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,12 +58,16 @@ export class EventFormComponent implements OnInit {
       this.suggOrganizer = data.people;
     });
 
+    this.eventDate = this.formBuilder.group({
+      start: [Date.now(), [Validators.required]],
+      end: [Date.now(), [Validators.required]]
+    })
     this.eventFormGroup = this.formBuilder.group({
       name: ['Vereinstreffen', [Validators.required]],
       tags: [[this.tagsOnEvent], [Validators.required]],
       tagInput: [''],
       organizer: ['', [Validators.required]],
-      eventDate: [Date.now(), [Validators.required]],
+      eventDate: this.eventDate,
       startTime: ['20:00', [Validators.required]],
       endTime: ['22:00', [Validators.required]],
     });
@@ -77,7 +82,7 @@ export class EventFormComponent implements OnInit {
       this.eventFormGroup.setValue({
         name: eventEdit.name,
         organizer: eventEdit?.organizer,
-        eventDate: eventEdit.start,
+        eventDate: {start: startDate, end: endDate},
         startTime: start,
         endTime: end,
         tags: eventEdit.tags,
@@ -137,12 +142,12 @@ export class EventFormComponent implements OnInit {
       organizer = organizer?.emailAssociaton;
     }
 
-    const startDate = new Date(this.eventFormGroup.get('eventDate').value);
+    const startDate = new Date(this.eventDate.get('start').value);
     const start = this.eventFormGroup.get('startTime').value.split(':');
     startDate.setHours(start[0]);
     startDate.setMinutes(start[1]);
 
-    const endDate = new Date(this.eventFormGroup.get('eventDate').value);
+    const endDate = new Date(this.eventFormGroup.get('eventDate').get('end').value);
     const end = this.eventFormGroup.get('endTime').value.split(':');
     endDate.setHours(end[0]);
     endDate.setMinutes(end[1]);

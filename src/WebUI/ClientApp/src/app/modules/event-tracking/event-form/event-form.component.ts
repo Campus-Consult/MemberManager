@@ -133,9 +133,7 @@ export class EventFormComponent implements OnInit {
       const command = this.getCommand();
       this.data.submitAction(command).subscribe(
         (response) => {
-          if (response) {
             this.submitEvent.emit(command);
-          }
         },
         (errorResponse) => this.handleError(errorResponse)
       );
@@ -177,6 +175,8 @@ export class EventFormComponent implements OnInit {
 
   handleError(error) {
     this.formError = error;
+    console.error(error);
+    
     return of(false);
   }
 

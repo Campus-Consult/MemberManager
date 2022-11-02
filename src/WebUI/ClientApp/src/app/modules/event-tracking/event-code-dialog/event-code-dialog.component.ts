@@ -27,14 +27,6 @@ export class EventCodeDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data.submitAction = (result: UpdateEventCommand) =>
-      this.data
-        .submitAction(result)
-        .pipe(
-          catchError<FileResponse, Observable<FileResponse>>((error) =>
-            this.handleUpdateError(error)
-          )
-        );
     this.qrCodeURL = `${location.origin}/landingpage?eventid=${this.event.id}&eventcode=${this.event.secretKey}`;
   }
 
@@ -79,12 +71,9 @@ export class EventCodeDialogComponent implements OnInit {
     return new Blob([uInt8Array], { type: imageType });
   }
 
-  handleUpdateError(error: any): any {
-    // Handle specific Update Errors in future
-    return error;
-  }
-
   onSubmit(event: UpdateEventCommand) {
+    console.log("Werde ausgeführt!");
+    
     this.dialogRef.close(event);
   }
 }

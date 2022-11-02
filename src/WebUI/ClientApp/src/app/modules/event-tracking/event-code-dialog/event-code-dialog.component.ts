@@ -72,8 +72,6 @@ export class EventCodeDialogComponent implements OnInit {
   }
 
   onSubmit(event: UpdateEventCommand) {
-    console.log("Werde ausgeführt!");
-    
     this.dialogRef.close(event);
   }
 }

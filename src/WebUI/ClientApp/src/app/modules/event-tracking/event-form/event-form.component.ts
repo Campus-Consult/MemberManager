@@ -40,7 +40,7 @@ export class EventFormComponent implements OnInit {
   startingTags: Set<string>;
   tagsOnEvent: Set<string>;
 
-  formError: EventFormError = {};
+  formError;
 
   // Auto Complete Observables, which handle valueChangeEvents
   filteredTagOptions: Observable<string[]>;
@@ -57,33 +57,24 @@ export class EventFormComponent implements OnInit {
     this.suggTags = this.data.suggestedTags;
     this.startingTags = new Set(this.data.startingTags);
     this.tagsOnEvent = new Set(this.data.startingTags);
-    // Init Suggested Organizer, default load People
-    if (this.data.suggestedOrganizer?.length > 0) {
-      this.suggOrganizer = this.data.suggestedOrganizer;
-    } else {
-      this.memberClient.get().subscribe((data) => {
-        this.suggOrganizer = this.suggOrganizer.concat(data.people);
-      });
-    }
 
-    const eventEdit = this.data.edit;
+    // Init Suggested Organizer, default load People
+    this.memberClient.get().subscribe((data) => {
+      this.suggOrganizer = data.people;
+    });
+
     this.eventFormGroup = this.formBuilder.group({
       name: ['Vereinstreffen', [Validators.required]],
-      tags: [
-        [this.tagsOnEvent],
-        {
-          validators: [
-            Validators.required /* , (val) => this.isInternal(val) */,
-          ],
-          updateOn: 'blur',
-        },
-      ],
+      tags: [[this.tagsOnEvent], [Validators.required]],
       tagInput: [''],
-      organizer: ['', [Validators.required, Validators.email]],
+      organizer: ['', [Validators.required]],
       eventDate: [Date.now(), [Validators.required]],
       startTime: ['20:00', [Validators.required]],
       endTime: ['22:00', [Validators.required]],
     });
+
+    // Set Value in Edit Case
+    const eventEdit = this.data.edit;
     if (eventEdit) {
       const startDate = new Date(eventEdit.start);
       const endDate = new Date(eventEdit.end);
@@ -91,7 +82,7 @@ export class EventFormComponent implements OnInit {
       const end = this.formatTime(endDate);
       this.eventFormGroup.setValue({
         name: eventEdit.name,
-        organizer: this.displayOrganizerFn(eventEdit?.organizer),
+        organizer: eventEdit?.organizer,
         eventDate: eventEdit.start,
         startTime: start,
         endTime: end,
@@ -128,22 +119,7 @@ export class EventFormComponent implements OnInit {
     this.tagsOnEvent.delete(keyword);
   }
 
-  private _filterTags(value: string): string[] {
-    const filterValue = value?.toLowerCase();
-    return this.suggTags.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
-  }
-
-  private _filterOrga(person: string): IPersonLookupDto[] {
-    const filterValue = person.toLowerCase();
-    return this.suggOrganizer.filter((option) =>
-      this.displayOrganizerFn(option).toLowerCase().includes(filterValue)
-    );
-  }
-
   displayOrganizerFn(person: IPersonLookupDto): string {
-    // TODO: Check for also for emailAssociation in case user Inputs E-Mail!
     return person ? `${person.firstName} ${person.surname}` : '';
   }
 
@@ -164,19 +140,6 @@ export class EventFormComponent implements OnInit {
         (errorResponse) => this.handleError(errorResponse)
       );
     }
-  }
-
-  isInternal(formControl: AbstractControl): ValidationErrors | null {
-    const isInternalOrganizer =
-      this.suggOrganizer.findIndex(
-        (value) => formControl.value.id === value.id
-      ) > -1;
-    this.formError.OrganizerEmail = isInternalOrganizer
-      ? ''
-      : 'Person existiert nicht im Member Manager oder ist Teil von CC';
-    return isInternalOrganizer
-      ? { forbiddenName: { value: formControl.value } }
-      : null;
   }
 
   getCommand(): ICreateEventCommand & IUpdateEventCommand {
@@ -213,20 +176,27 @@ export class EventFormComponent implements OnInit {
   }
 
   handleError(error) {
-    let parsedErrorObject: any;
-    // Intercept Normal Error
-    /*     if (error?.response) {
-      parsedErrorObject = JSON.parse(error.response);
-    } */
     this.formError = error;
-
     return of(false);
+  }
+
+  private _filterTags(value: string): string[] {
+    const filterValue = value?.toLowerCase();
+    return this.suggTags.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterOrga(person: string): IPersonLookupDto[] {
+    const filterValue = person.toLowerCase();
+    return this.suggOrganizer.filter((option) =>
+      this.displayOrganizerFn(option).toLowerCase().includes(filterValue)
+    );
   }
 }
 
 export interface EventFormDialogData {
   edit?: EventDetailDto;
-  suggestedOrganizer?: PersonLookupDto[];
   suggestedTags: string[];
   startingTags?: string[];
   submitAction: (
@@ -236,11 +206,3 @@ export interface EventFormDialogData {
   onError: (response) => void;
 }
 
-export interface EventFormError {
-  name?: string;
-  OrganizerEmail?: string;
-  eventDate?: string;
-  startTime?: string;
-  endTime?: string;
-  tags?: string;
-}

@@ -1,25 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  Validators,
+  FormGroup, Validators
 } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, pluck, startWith } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, pluck, startWith } from 'rxjs/operators';
 import {
-  CreateEventCommand,
-  EventDetailDto,
-  FileResponse,
-  IPersonLookupDto,
+  EventDetailDto, IPersonLookupDto,
   IUpdateEventCommand,
-  PersonLookupDto,
+  PersonLookupDto
 } from 'src/app/membermanager-api';
 import {
   ICreateEventCommand,
-  PeopleClient,
+  PeopleClient
 } from './../../../membermanager-api';
 
 @Component({

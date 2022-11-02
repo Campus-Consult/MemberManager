@@ -2523,6 +2523,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "organizerEmail": {
+            "type": "string",
+            "nullable": true
+          },
           "tags": {
             "type": "array",
             "nullable": true,

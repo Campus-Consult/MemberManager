@@ -16,6 +16,7 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
         public string Name { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
+        public string OrganizerEmail { get; set; }
         public List<string> Tags { get; set; }
     }
 
@@ -30,10 +31,12 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
 
         public async Task<Unit> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
-            
+            var origanizer = await _context.People.Where(p => p.EmailAssociaton == request.OrganizerEmail).FirstOrDefaultAsync();
+
             var evnt = await _context.Events.FindAsync(new object [] {request.Id}, cancellationToken);
             
             evnt.Name = request.Name;
+            evnt.Organizer = origanizer;
             evnt.End = request.End;
             evnt.Start = request.Start;
 

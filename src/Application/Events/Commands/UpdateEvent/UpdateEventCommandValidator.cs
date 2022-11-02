@@ -24,6 +24,10 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
             RuleFor(v => v.Id)
                 .NotEmpty()
                 .MustAsync(EventExists).WithMessage("Event does not exist.");
+
+            RuleFor(v => v.OrganizerEmail)
+                .NotEmpty()
+                .MustAsync(PersonExists).WithMessage("Organizer does not exist.");
         }
 
         public bool StartBeforeEnd(UpdateEventCommand model, DateTime start) {
@@ -32,6 +36,10 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
 
         public async Task<bool> EventExists(UpdateEventCommand model, int eventId, CancellationToken cancellationToken) {
             return await _context.Events.FindAsync(new object[] {eventId}, cancellationToken) != null;
+        }
+
+        public async Task<bool> PersonExists(UpdateEventCommand command, string email, CancellationToken token) {
+            return await _context.People.Where(p => p.EmailAssociaton == email).AnyAsync(token);
         }
     }
 }

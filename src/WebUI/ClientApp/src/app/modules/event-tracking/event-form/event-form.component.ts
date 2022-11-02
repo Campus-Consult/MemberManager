@@ -72,8 +72,8 @@ export class EventFormComponent implements OnInit {
     if (eventEdit) {
       const startDate = new Date(eventEdit.start);
       const endDate = new Date(eventEdit.end);
-      const start = this.formatTime(startDate);
-      const end = this.formatTime(endDate);
+      const start = startDate.toLocaleTimeString();
+      const end = endDate.toLocaleTimeString();
       this.eventFormGroup.setValue({
         name: eventEdit.name,
         organizer: eventEdit?.organizer,
@@ -115,11 +115,6 @@ export class EventFormComponent implements OnInit {
 
   displayOrganizerFn(person: IPersonLookupDto): string {
     return person ? `${person.firstName} ${person.surname}` : '';
-  }
-
-  formatTime(dateTime: Date) {
-    const split = dateTime.toUTCString().split(' ');
-    return split[4];
   }
 
   onSubmit() {

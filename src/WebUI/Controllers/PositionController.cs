@@ -4,6 +4,7 @@ using MemberManager.Application.Positions.Commands.DeactivatePosition;
 using MemberManager.Application.Positions.Commands.DismissFromPosition;
 using MemberManager.Application.Positions.Commands.ReactivatePosition;
 using MemberManager.Application.Positions.Commands.UpdatePosition;
+using MemberManager.Application.Positions.Commands.UpdatePersonPosition;
 using MemberManager.Application.Positions.Queries.GetAssignSuggestions;
 using MemberManager.Application.Positions.Queries.GetDismissSuggestions;
 using MemberManager.Application.Positions.Queries.GetPositionDetails;
@@ -123,6 +124,13 @@ namespace MemberManager.WebUI.Controllers
 
             await Mediator.Send(command);
             
+            return NoContent();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdatePersonPosition(UpdatePersonPositionCommand command) {
+            await Mediator.Send(command);
+
             return NoContent();
         }
     }

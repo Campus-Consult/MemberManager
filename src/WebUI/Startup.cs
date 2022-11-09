@@ -42,7 +42,7 @@ namespace MemberManager.WebUI
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
-            services.AddControllersWithViews(options => 
+            services.AddControllersWithViews(options =>
                 options.Filters.Add(new ApiExceptionFilter()));
 
             services.AddRazorPages();
@@ -97,11 +97,14 @@ namespace MemberManager.WebUI
                 app.UseSpaStaticFiles();
             }
 
-            app.UseSwaggerUi3(settings =>
+            if (env.IsDevelopment())
             {
-                settings.Path = "/api";
-                settings.DocumentPath = "/api/specification.json";
-            });
+                app.UseSwaggerUi3(settings =>
+                {
+                    settings.Path = "/api";
+                    settings.DocumentPath = "/api/specification.json";
+                });
+            }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

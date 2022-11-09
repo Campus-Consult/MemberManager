@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { AuthorizeService } from './../../api-authorization/authorize.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -11,6 +12,7 @@ export class NavMenuComponent {
   isExpanded = false;
   isAuthenticated = false;
   isAdmin = false;
+  isProduction = environment.production;
 
   constructor(private authService: AuthorizeService) {
     this.authService.isAuthenticated().subscribe((val) => {

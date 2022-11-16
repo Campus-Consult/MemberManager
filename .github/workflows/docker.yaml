@@ -64,7 +64,7 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
-  deploy:
+  build-and-push-image:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'

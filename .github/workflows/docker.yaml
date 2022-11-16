@@ -67,7 +67,7 @@ jobs:
   deploy:
     needs: build-and-push-image
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/docker-deploy2'
 
     steps:
     - name: Install SSH Key
@@ -79,4 +79,4 @@ jobs:
     - name: Adding Known Hosts
       run: ssh-keyscan -H ${{ secrets.CAMPUS_CONSULT_SERVER_IP }} >> ~/.ssh/known_hosts
     - name: Restart backend
-      run: ssh ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }} 'systemctl --user restart dotnet-membermanager.service'
+      run: ssh ${{ secrets.CAMPUS_CONSULT_SERVER_USER }}@${{ secrets.CAMPUS_CONSULT_SERVER_IP }} 'podman pull ghcr.io/campus-consult/membermanager:docker-deploy2 && systemctl --user restart dotnet-membermanager.service'

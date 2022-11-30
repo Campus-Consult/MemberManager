@@ -54,7 +54,7 @@ export class EventTrackingTableComponent implements OnInit {
   onCreate() {
     // Open Form Dialog
     const dialogRef = this.dialog.open(EventCreateDialogComponent, {
-      width: '450px',
+      width: '500px',
       data: {
         suggestedTags: ['test'],
         startingTags: ['VT'],
@@ -86,7 +86,7 @@ export class EventTrackingTableComponent implements OnInit {
       .toPromise()
       .then((value) => value);
     const dialogRef = this.dialog.open(EventCodeDialogComponent, {
-      width: '650px',
+      width: '750px',
       data: {
         edit: eventDetails,
         suggestedTags: ['test'],

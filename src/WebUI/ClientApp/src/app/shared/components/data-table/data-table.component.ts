@@ -42,6 +42,7 @@ export class DataTableComponent<T>
 
   @Input() dataSource: MatTableDataSource<T>;
   @Input() columns: string[];
+  @Input() deactivateSelection = false;
 
   @Output() onSelectEvent = new EventEmitter<T>();
   @Output() onAddClickedEvent = new EventEmitter<T>();
@@ -49,12 +50,13 @@ export class DataTableComponent<T>
 
   selection: SelectionModel<T>;
 
+  hasSelection = false;
+
   constructor() {
     const initialSelection = [];
     const allowMultiSelect = false;
 
     this.selection = new SelectionModel<T>(allowMultiSelect, initialSelection);
-
     // selection changed
     this.selection.changed.subscribe((a) => {
       this.onSelectEvent.emit(a.added[0] as T);

@@ -24,7 +24,7 @@ export class DialogErrorComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.errors) {
+    if (this.errors && Object.keys(this.errors).length > 0) {
       this.handleError(this.errors);
     }
   }

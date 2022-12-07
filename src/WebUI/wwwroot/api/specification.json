@@ -2001,6 +2001,44 @@
         ]
       }
     },
+    "/api/Position/UpdatePersonPosition": {
+      "post": {
+        "tags": [
+          "Position"
+        ],
+        "operationId": "Position_UpdatePersonPosition",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePersonPositionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/self": {
       "get": {
         "tags": [
@@ -3487,6 +3525,25 @@
           "dismissalDateTime": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "UpdatePersonPositionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "personPositionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assignmentDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dismissalDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       }

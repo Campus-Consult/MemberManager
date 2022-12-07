@@ -1,0 +1,7 @@
+<h1 mat-dialog-title>Event erstellen</h1>
+<mat-dialog-content>
+  <app-event-form
+    [data]="data"
+    (submitEvent)="onSubmit($event)"
+  ></app-event-form>
+</mat-dialog-content>

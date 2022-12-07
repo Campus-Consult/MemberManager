@@ -1,0 +1,41 @@
+<div id="landingPageContent" *ngIf="event">
+  <h1>{{ event.name }} am {{ event.start | date }}</h1>
+  <p>
+    {{ event.start | date: 'shortTime' }} bis
+    {{ event.end | date: 'shortTime' }}
+  </p>
+  <p>
+    organisiert von {{ event.organizer.fistName }} {{ event.organizer.surname }}
+  </p>
+
+  <div id="attendanceContainer">
+    <span [ngSwitch]="state">
+      <ng-container *ngSwitchCase="landingPageStateEnum.eventExpired">
+        <p id="expiredMessage">
+          <mat-icon> unpublished </mat-icon>
+          Hey du Flachzange, das Event ist abgelaufen! ಠ_ಠ
+        </p>
+      </ng-container>
+      <ng-container *ngSwitchCase="landingPageStateEnum.eventConfirmed">
+        <p>
+          <mat-icon class="mirroredIcon" color="primary">
+            celebration
+          </mat-icon>
+          Teilnahme bestätigt
+          <mat-icon color="primary"> celebration </mat-icon>
+        </p>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <button
+          id="confirmationAction"
+          mat-raised-button
+          color="primary"
+          (click)="confirmAttendance()"
+        >
+          <mat-icon> task_alt </mat-icon>
+          <span id="buttonText"> Anwesenheit bestätigen </span>
+        </button>
+      </ng-container>
+    </span>
+  </div>
+</div>

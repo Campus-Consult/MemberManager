@@ -11,7 +11,7 @@
         (click)="wrapReassignCallback()"
         [title]="reassignLabel"
       >
-        <mat-icon>edit</mat-icon>
+        <mat-icon color="primary">edit</mat-icon>
       </button>
     </div>
     <table id="tight-table" mat-table [dataSource]="historyData">
@@ -41,7 +41,7 @@
             (click)="wrapDismissCallback(element)"
             [title]="dismissLabel"
           >
-            <mat-icon>person_remove</mat-icon>
+            <mat-icon color="primary">person_remove</mat-icon>
           </button>
         </td>
       </ng-container>

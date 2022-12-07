@@ -8,26 +8,18 @@ import {
   Output,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  MatColumnDef,
-  MatHeaderRowDef,
-  MatNoDataRow,
-  MatRowDef,
-  MatTable,
-  MatTableDataSource,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { MemberDismissDialogComponent } from 'src/app/modules/member-management/member-dismiss-dialog/member-dismiss-dialog.component';
 import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
 import {
-  AssigneeDto,
   DismissFromPositionCommand,
+  PositionAssignee,
   PositionClient,
   PositionDto,
 } from '../../../../membermanager-api';
 import { PositionAssignDialogComponent } from '../position-assign-dialog/position-assign-dialog.component';
 import { PositionDeactivateDialogComponent } from '../position-deactivate-dialog/position-deactivate-dialog.component';
-import { PositionDismissDialogComponent } from '../position-dismiss-dialog/position-dismiss-dialog.component';
 import { PositionEditDialogComponent } from '../position-edit-dialog/position-edit-dialog.component';
 import { PositionReactivateDialogComponent } from '../position-reactivate-dialog/position-reactivate-dialog.component';
 
@@ -45,8 +37,7 @@ export class PositionDetailsComponent
 
   position: PositionDto;
 
-  assignees: AssigneeDto[];
-  dataSource: MatTableDataSource<AssigneeDto>;
+  dataSource: MatTableDataSource<PositionAssignee>;
   columns: string[] = ['name', 'since', 'till', 'actions'];
 
   constructor(
@@ -85,7 +76,9 @@ export class PositionDetailsComponent
   private fetchPositionDetails() {
     this.positionClient.get2(this.positionID, false).subscribe((result) => {
       this.position = result;
-      this.dataSource = new MatTableDataSource<AssigneeDto>(result.assignees);
+      this.dataSource = new MatTableDataSource<PositionAssignee>(
+        result.assignees
+      );
     });
   }
 
@@ -157,14 +150,16 @@ export class PositionDetailsComponent
     });
   }
 
-  onPersonDismissClicked(element: AssigneeDto) {
+  onPersonDismissClicked(element: PositionAssignee) {
     console.log(element);
     this.dialog
       .open(MemberDismissDialogComponent, {
         role: 'alertdialog',
         width: '250px',
         data: {
-          description: `${element.name} von Posten ${this.position.name} entfernen?`,
+          description: `${element.firstName ?? ''} ${
+            element.surname ?? ''
+          } von Posten ${this.position.name} entfernen?`,
           dismissCallback: (dismissalDate: string): Observable<any> => {
             return this.positionClient.dismiss(
               this.positionID,

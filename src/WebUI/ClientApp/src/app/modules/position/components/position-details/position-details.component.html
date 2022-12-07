@@ -36,7 +36,11 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button class="btn btn-link" *ngIf="!element.endDate" (click)="onPersonDismissClicked(element)">
+        <button
+          class="btn btn-link"
+          *ngIf="!element.endDate"
+          (click)="onPersonDismissClicked(element)"
+        >
           <mat-icon color="primary">person_remove</mat-icon>
         </button>
       </td>

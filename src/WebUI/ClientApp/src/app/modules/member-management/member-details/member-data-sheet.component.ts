@@ -181,40 +181,6 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     });
   };
 
-  handleMemberStatusReassign = async (element: HistoryData): Promise<void> => {
-    // broken, blame Yorrck
-    // const dialogData: MemberReassignDialogData = {
-    //   description: `${this.getFullName()} vom Status ${
-    //     element.name
-    //   } entfernen?`,
-    //   reassignSelectSuggestions: await this.getMemberStatusSuggestions(),
-    //   reassignLabel: "Mitgliedsstatus",
-    //   reassignCallback: (reassignDate, newAssignedId) => {
-    //     return this.memberStatusApi
-    //       .assign(
-    //         this.person.id,
-    //         new UpdateMemberStatusCommand({
-    //           personId: this.person.id,
-    //           dismissalDateTime: reassignDate,
-    //           memberStatusId: newAssignedId,
-    //         })
-    //       )
-    //       .pipe(
-    //         tap(() => {
-    //           this.doReload();
-    //         }),
-    //         // it returns something, we're not interested in that
-    //         map(v => undefined)
-    //       );
-    //   },
-    // };
-    // this.dialog.open(MemberReassignDialogComponent, {
-    //   role: 'alertdialog',
-    //   width: '250px',
-    //   data: dialogData,
-    // })
-  };
-
   getCareerLevelHistory(): HistoryData[] {
     return this.personDetails.careerLevels.map((careerLevel) => ({
       id: careerLevel.id,

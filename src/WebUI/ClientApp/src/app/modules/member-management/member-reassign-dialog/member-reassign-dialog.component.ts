@@ -32,7 +32,6 @@ export class MemberReassignDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data.reassignSelectSuggestions);
     this.reassignForm = this.fb.group({
       reassignDate: [null, Validators.required],
       reassignedElement: [true, Validators.required],

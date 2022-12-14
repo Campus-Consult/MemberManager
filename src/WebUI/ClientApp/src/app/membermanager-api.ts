@@ -4010,6 +4010,7 @@ export class UpdateEventCommand implements IUpdateEventCommand {
     name?: string | undefined;
     start?: string;
     end?: string;
+    organizerEmail?: string | undefined;
     tags?: string[] | undefined;
 
     constructor(data?: IUpdateEventCommand) {
@@ -4027,6 +4028,7 @@ export class UpdateEventCommand implements IUpdateEventCommand {
             this.name = _data["name"];
             this.start = _data["start"];
             this.end = _data["end"];
+            this.organizerEmail = _data["organizerEmail"];
             if (Array.isArray(_data["tags"])) {
                 this.tags = [] as any;
                 for (let item of _data["tags"])
@@ -4048,6 +4050,7 @@ export class UpdateEventCommand implements IUpdateEventCommand {
         data["name"] = this.name;
         data["start"] = this.start;
         data["end"] = this.end;
+        data["organizerEmail"] = this.organizerEmail;
         if (Array.isArray(this.tags)) {
             data["tags"] = [];
             for (let item of this.tags)
@@ -4062,6 +4065,7 @@ export interface IUpdateEventCommand {
     name?: string | undefined;
     start?: string;
     end?: string;
+    organizerEmail?: string | undefined;
     tags?: string[] | undefined;
 }
 

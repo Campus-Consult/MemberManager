@@ -77,6 +77,7 @@ namespace MemberManager.Application.IntegrationTests.Events
                 Id = eventId,
                 Name = newName,
                 Start = newStart,
+                OrganizerEmail = organizerEmail,
                 End = newEnd,
                 Tags = null,
             });

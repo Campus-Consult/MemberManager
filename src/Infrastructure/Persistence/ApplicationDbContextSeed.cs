@@ -224,6 +224,64 @@ namespace MemberManager.Infrastructure.Persistence
                         }
                     }
                 }
+
+                if (persons.Any())
+                {
+                    EventTag eventTag = new EventTag()
+                    {
+                        Tag = "VT",
+                    };
+                    DateTime startTime = new DateTime(2022, 4, 16);
+                    startTime = startTime.AddHours(20);
+                    DateTime endTime = startTime.AddHours(21);
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        await context.Events.AddAsync(new Event()
+                        {
+                            Name = "Vereinstreffen " + i,
+                            End = startTime.AddDays(i),
+                            Start = endTime.AddDays(i),
+                            Organizer = PickRandom(rand, persons),
+                            SecretKey = "IchBinEinSecretKey" + i,
+                        });
+
+                    }
+                    var events = await context.Events.ToListAsync();
+                    if (events.Any())
+                    {
+                        
+                        foreach (var item in events)
+                        {
+                            EventTag tag = new EventTag()
+                            {
+                                Tag = "VT",
+                                Event = item,
+                                EventId = item.Id
+                            };
+                            await context.EventTags.AddAsync(tag);
+                            Person person = PickRandom(rand, persons);
+                            await context.EventAnswers.AddAsync(new EventAnswer()
+                            {
+                                Person = PickRandom(rand, persons),
+                                PersonId = person.Id,
+                                Time = item.Start.AddMinutes(1),
+                                AnswerKind = EventAnswerKind.Accept,
+                                EventId = item.Id
+                            });
+                        }
+                    }
+
+                    await context.Events.AddAsync(new Event()
+                    {
+                        Name = "Vereinstreffen leer",
+                        End = startTime.AddDays(10),
+                        Start = endTime.AddDays(10),
+                        Organizer = PickRandom(rand, persons),
+                        SecretKey = "IchBinEinSecretKeyLeer"
+                    });
+
+                }
             }
             await context.SaveChangesAsync();
         }

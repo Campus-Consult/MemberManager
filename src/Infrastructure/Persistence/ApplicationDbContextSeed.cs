@@ -237,33 +237,33 @@ namespace MemberManager.Infrastructure.Persistence
 
                     for (int i = 0; i < 4; i++)
                     {
-                        await context.Events.AddAsync(new Event()
+                        var evnt = new Event()
                         {
                             Name = "Vereinstreffen " + i,
                             End = startTime.AddDays(i),
                             Start = endTime.AddDays(i),
                             Organizer = PickRandom(rand, persons),
                             SecretKey = "IchBinEinSecretKey" + i,
+                        };
+                        await context.Events.AddAsync(evnt);
+                        await context.EventTags.AddAsync(new EventTag {
+                            Tag = "VT",
+                            Event = evnt,
                         });
 
                     }
+
+                    await context.SaveChangesAsync();
                     var events = await context.Events.ToListAsync();
+
                     if (events.Any())
                     {
                         
                         foreach (var item in events)
                         {
-                            EventTag tag = new EventTag()
-                            {
-                                Tag = "VT",
-                                Event = item,
-                                EventId = item.Id
-                            };
-                            await context.EventTags.AddAsync(tag);
                             Person person = PickRandom(rand, persons);
                             await context.EventAnswers.AddAsync(new EventAnswer()
                             {
-                                Person = PickRandom(rand, persons),
                                 PersonId = person.Id,
                                 Time = item.Start.AddMinutes(1),
                                 AnswerKind = EventAnswerKind.Accept,

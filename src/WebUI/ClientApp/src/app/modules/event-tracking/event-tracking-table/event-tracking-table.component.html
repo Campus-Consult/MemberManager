@@ -31,6 +31,11 @@
       </th>
       <td mat-cell *matCellDef="let row">
         {{ row.eventAnswers?.length ?? 0 }}
+        <button 
+            (click)="openAttendeesDialog(row)"
+             >
+           Teilnehmer Anzeigen
+         </button>
       </td>
     </ng-container>
     <ng-container matColumnDef="qrcode">

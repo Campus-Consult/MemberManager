@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EventAnswerDto, EventClient, EventDetailDto, RemoveEventAnswerCommand } from 'src/app/membermanager-api';
+import { AddEventAnswerCommand, EventAnswerDto, EventClient, EventDetailDto, RemoveEventAnswerCommand } from 'src/app/membermanager-api';
 
 @Component({
   selector: 'app-event-attendees-dialog',
@@ -33,4 +33,7 @@ export class EventAttendeesDialogComponent implements OnInit {
     })
   }
 
+  attendeeAdd(){
+    console.error("bitte implementier mich!");
+  }
 }

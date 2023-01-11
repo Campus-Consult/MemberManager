@@ -108,12 +108,12 @@ export class EventTrackingTableComponent implements OnInit {
     );
   }
   openAttendeesDialog(row: EventLookupDto) {
-    console.log(row)
+    console.log(row);
     const dialogRef = this.dialog.open(EventAttendeesDialogComponent, {
       width: '750px',
       data: {
-        id: row.id 
-      } ,
+        id: row.id,
+      },
     });
   }
 }

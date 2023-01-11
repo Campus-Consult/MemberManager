@@ -8,9 +8,8 @@ describe('EventAttendeesDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventAttendeesDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [EventAttendeesDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

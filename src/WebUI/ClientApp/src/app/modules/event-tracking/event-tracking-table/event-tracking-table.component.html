@@ -31,8 +31,13 @@
       </th>
       <td mat-cell *matCellDef="let row">
         {{ row.eventAnswers?.length ?? 0 }}
-        <button mat-icon-button matTooltip="Teilnehmer anzeigen" color="primary" (click)="openAttendeesDialog(row)">
-          <mat-icon>group</mat-icon> 
+        <button
+          mat-icon-button
+          matTooltip="Teilnehmer anzeigen"
+          color="primary"
+          (click)="openAttendeesDialog(row)"
+        >
+          <mat-icon>group</mat-icon>
         </button>
       </td>
     </ng-container>

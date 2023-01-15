@@ -9,6 +9,7 @@ import { EventFormComponent } from './event-form/event-form.component';
 import { EventCreateDialogComponent } from './event-create-dialog/event-create-dialog.component';
 import { EventTrackingLandingpageComponent } from './event-tracking-landingpage/event-tracking-landingpage.component';
 import { EventTrackingRoutingModule } from './event-tracking-routing.module';
+import { EventAttendeesDialogComponent } from './event-attendees-dialog/event-attendees-dialog.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { EventTrackingRoutingModule } from './event-tracking-routing.module';
     EventFormComponent,
     EventCreateDialogComponent,
     EventTrackingLandingpageComponent,
+    EventAttendeesDialogComponent,
   ],
   imports: [
     CommonModule,

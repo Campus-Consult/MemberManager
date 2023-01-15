@@ -9,6 +9,7 @@ import {
   UpdateEventCommand,
 } from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
+import { EventAttendeesDialogComponent } from '../event-attendees-dialog/event-attendees-dialog.component';
 import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
 import { EventClient } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
@@ -105,5 +106,14 @@ export class EventTrackingTableComponent implements OnInit {
       },
       (err) => this._snackBar.open('Something went wrong.')
     );
+  }
+  openAttendeesDialog(row: EventLookupDto) {
+    console.log(row);
+    const dialogRef = this.dialog.open(EventAttendeesDialogComponent, {
+      width: '750px',
+      data: {
+        id: row.id,
+      },
+    });
   }
 }

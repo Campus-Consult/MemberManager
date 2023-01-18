@@ -20,7 +20,7 @@
           {{ title }}
         </th>
         <td mat-cell *matCellDef="let element">
-          <a (click)="emitOpenDetails(element)">{{ element.name }}</a>
+          <a>{{ element.name }}</a>
         </td>
       </ng-container>
       <ng-container matColumnDef="time-span">

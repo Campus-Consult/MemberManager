@@ -26,8 +26,6 @@ export class MemberHistoryComponent implements OnInit {
       : ['name', 'time-span'];
   }
 
-  emitOpenDetails(element: HistoryData) {}
-
   wrapDismissCallback(historyData: HistoryData) {
     if (this.dismissCallback) {
       this.isLocked = true;

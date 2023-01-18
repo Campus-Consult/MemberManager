@@ -75,7 +75,6 @@ export class EventTrackingTableComponent implements OnInit {
   loadEvents() {
     this.eventClient.get().subscribe((events) => {
       this.events = events;
-      console.log(events);
       this.dataSource = new MatTableDataSource<EventLookupDto>(this.events);
       this.dataSource.sort = this.sort;
     });
@@ -108,7 +107,6 @@ export class EventTrackingTableComponent implements OnInit {
     );
   }
   openAttendeesDialog(row: EventLookupDto) {
-    console.log(row);
     const dialogRef = this.dialog.open(EventAttendeesDialogComponent, {
       width: '750px',
       data: {

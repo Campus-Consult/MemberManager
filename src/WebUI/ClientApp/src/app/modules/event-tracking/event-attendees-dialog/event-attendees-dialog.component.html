@@ -33,8 +33,8 @@
       <td mat-cell *matCellDef="let element">
         <button
           mat-icon-button
+          color="warn"
           matTooltip="Teilnehmer entfernen"
-          color="primary"
           (click)="attendeeRemove(element.id)"
         >
           <mat-icon>person_remove</mat-icon>
@@ -44,8 +44,9 @@
         <button
           mat-icon-button
           matTooltip="Teilnehmer hinzufügen"
-          color="secondary"
+          color="accent"
           (click)="attendeeAdd()"
+          [disabled]="formGroup.invalid"
         >
           <mat-icon>person_add</mat-icon>
         </button>

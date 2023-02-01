@@ -49,6 +49,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
 import { HistoryDialogComponent } from './components/history-dialog/history-dialog.component';
 import { MemberFormComponent } from './components/member-form/member-form.component';
 import { MemberDataComponent } from './components/member-data/member-data.component';
+import { AutocompleteMemberInputComponent } from './components/autocomplete-member-input/autocomplete-member-input.component';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -63,6 +64,7 @@ import { MemberDataComponent } from './components/member-data/member-data.compon
     HistoryDialogComponent,
     MemberFormComponent,
     MemberDataComponent,
+    AutocompleteMemberInputComponent,
   ],
   exports: [
     DataTableComponent,
@@ -104,6 +106,7 @@ import { MemberDataComponent } from './components/member-data/member-data.compon
     MatSortModule,
     MatPaginatorModule,
     MemberDataComponent,
+    AutocompleteMemberInputComponent
   ],
   imports: [
     CommonModule,

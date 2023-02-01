@@ -30,7 +30,9 @@ export class EventCodeDialogComponent implements OnInit {
     this.qrCodeURL = `${location.origin}/landingpage?eventid=${this.event.id}&eventcode=${this.event.secretKey}`;
   }
 
-  downloadQRCode() {}
+  copyLink() {
+    navigator.clipboard.writeText(this.qrCodeURL);
+  }
 
   saveAsImage(parent: any) {
     let parentElement = null;

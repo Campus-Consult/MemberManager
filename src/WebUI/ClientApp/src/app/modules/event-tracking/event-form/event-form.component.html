@@ -10,7 +10,12 @@
     />
     <mat-hint>Terminname</mat-hint>
   </mat-form-field>
-  <app-autocomplete-member-input [formGroup]="eventFormGroup" fControlName="organizer"></app-autocomplete-member-input>
+  <app-autocomplete-member-input
+    [formGroup]="eventFormGroup"
+    label="Organisator"
+    fControlName="organizer"
+  >
+  </app-autocomplete-member-input>
   <!-- https://www.npmjs.com/package/@angular-material-components/datetime-picker -->
   <section class="full-flex">
     <mat-form-field id="date" appearance="outline">

@@ -36,7 +36,7 @@ export class EventAttendeesDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({
-      member: this.fb.control('', Validators.required)
+      member: this.fb.control('', [Validators.required])
     })
   }
 
@@ -57,6 +57,7 @@ export class EventAttendeesDialogComponent implements OnInit {
       id = (person as IPersonLookupDto).id;
     } else {
       console.warn('attendeeAdd: Could not extract personID');
+      return;
     }
     const answerTime = new Date(this.event.start);
     const cmd = new AddEventAnswerCommand({eventId: this.event.id, personId:id, answerTime: answerTime.toISOString()});

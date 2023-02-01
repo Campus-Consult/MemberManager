@@ -1,9 +1,10 @@
 <div [formGroup]="formGroup">
   <mat-form-field id="organizer" appearance="outline">
-    <mat-label>Organisator</mat-label>
+    <mat-label>{{ label }}</mat-label>
+    <mat-error> {{ error }}</mat-error>
     <input
       matInput
-      placeholder="Organisator"
+      [placeholder]="placeholder"
       [formControlName]="fControlName"
       [matAutocomplete]="autoOrga"
     />

@@ -14,11 +14,11 @@ import {
   styleUrls: ['./autocomplete-member-input.component.scss'],
 })
 export class AutocompleteMemberInputComponent implements OnInit {
-  @Input()
-  formGroup: FormGroup;
-
-  @Input()
-  fControlName?: string;
+  @Input() formGroup: FormGroup;
+  @Input() label?: string;
+  @Input() placeholder: string = '';
+  @Input() fControlName?: string;
+  @Input() error: string;
 
   filteredMemberOptions: Observable<IPersonLookupDto[]>;
 
@@ -42,7 +42,10 @@ export class AutocompleteMemberInputComponent implements OnInit {
         'AutoCompleteMemberInputComponent: formControlName Input not set. Assuming control does not exist create and add own control'
       );
       this.fControlName = 'member';
-      this.formGroup.setControl(this.fControlName, this.formBuilder.control(''));
+      this.formGroup.setControl(
+        this.fControlName,
+        this.formBuilder.control('')
+      );
     }
 
     this.formControl = this.formGroup.get(this.fControlName) as FormControl;

@@ -240,8 +240,8 @@ namespace MemberManager.Infrastructure.Persistence
                         var evnt = new Event()
                         {
                             Name = "Vereinstreffen " + i,
-                            End = startTime.AddDays(i),
-                            Start = endTime.AddDays(i),
+                            Start = startTime.AddDays(i),
+                            End = endTime.AddDays(i),
                             Organizer = PickRandom(rand, persons),
                             SecretKey = "IchBinEinSecretKey" + i,
                         };
@@ -275,8 +275,8 @@ namespace MemberManager.Infrastructure.Persistence
                     await context.Events.AddAsync(new Event()
                     {
                         Name = "Vereinstreffen leer",
-                        End = startTime.AddDays(10),
-                        Start = endTime.AddDays(10),
+                        Start = startTime.AddDays(10),
+                        End = endTime.AddDays(10),
                         Organizer = PickRandom(rand, persons),
                         SecretKey = "IchBinEinSecretKeyLeer"
                     });

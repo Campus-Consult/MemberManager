@@ -12,9 +12,27 @@ import {
   IPersonWithBasicInfoLookupDto,
   IPersonDetailVm,
   PeopleClient,
+  PersonPositionVm,
+  PersonMemberStatusVm,
+  PersonCareerLevelVm,
+  PositionClient,
+  DismissFromPositionCommand,
+  CareerLevelClient,
+  ChangePersonCareerLevelCommand,
+  MemberStatusClient,
+  DismissFromMemberStatusCommand,
+  UpdateMemberStatusCommand,
 } from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { HistoryData } from '../member-history/member-history.component';
+import { MemberDismissDialogComponent } from '../member-dismiss-dialog/member-dismiss-dialog.component';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import {
+  MemberReassignDialogComponent,
+  MemberReassignDialogData,
+} from '../member-reassign-dialog/member-reassign-dialog.component';
+import { SelectOption } from 'src/app/shared/components/search-select/search-select.component';
 
 @Component({
   selector: 'app-person-details',
@@ -31,9 +49,18 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   @Output()
   deleteEvent = new EventEmitter<void>();
 
+  @Output()
+  reloadEvent = new EventEmitter<void>();
+
   public personDetails: IPersonDetailVm;
 
   public displayedName: string;
+
+  careerLevelHistory: HistoryData[] = [];
+  positionHistory: HistoryData[] = [];
+  memberStatusHistory: HistoryData[] = [];
+  careerLevelSuggestions: SelectOption[] = [];
+  memberStatusSuggestions: SelectOption[] = [];
 
   /**
    * if set text will be displayed, below loading
@@ -42,8 +69,10 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
 
   constructor(
     private personApi: PeopleClient,
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private careerLevelApi: CareerLevelClient,
+    private memberStatusApi: MemberStatusClient,
+    protected dialog: MatDialog,
+    private positionService: PositionClient
   ) {}
 
   ngOnInit(): void {
@@ -69,8 +98,16 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     this.showLoadingText = 'Laden Mitglieder Details';
     this.personApi.get2(Number(this.person.id)).subscribe((person) => {
       this.personDetails = person;
+      this.careerLevelHistory = this.getCareerLevelHistory();
+      this.positionHistory = this.getPositionHistory();
+      this.memberStatusHistory = this.getMemberStatusHistory();
       this.showLoadingText = undefined;
     });
+  }
+
+  doReload() {
+    this.loadPersondata();
+    this.reloadEvent.emit();
   }
 
   getFullName(): string {
@@ -78,10 +115,122 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     if (this.person.firstName) {
       fullname = fullname + this.person.firstName;
     }
-    if (this.person.firstName) {
+    if (this.person.surname) {
       fullname = fullname + ' ' + this.person.surname;
     }
     return fullname;
+  }
+
+  handlePositionDismiss = (element: HistoryData) => {
+    this.dialog.open(MemberDismissDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: {
+        description: `${this.getFullName()} von Posten ${
+          element.name
+        } entfernen?`,
+        dismissCallback: (dismissalDate: string): Observable<any> => {
+          return this.positionService
+            .dismiss(
+              element.connectedId,
+              new DismissFromPositionCommand({
+                dismissalDateTime: dismissalDate,
+                personId: this.person.id,
+                positionId: element.connectedId,
+              })
+            )
+            .pipe(
+              tap(() => {
+                this.doReload();
+              })
+            );
+        },
+      },
+    });
+  };
+
+  handleCareerReassign = async (element: HistoryData): Promise<void> => {
+    const dialogData: MemberReassignDialogData = {
+      description: `${this.getFullName()} von Karrierestufe ${
+        element.name
+      } entfernen?`,
+      reassignSelectSuggestions: await this.getCareerLevelSuggestions(),
+      reassignLabel: 'Karrierestufe',
+      reassignCallback: (reassignDate, newAssignedId) => {
+        return this.careerLevelApi
+          .changePersonCareerLevel(
+            new ChangePersonCareerLevelCommand({
+              personId: this.person.id,
+              careerLevelId: newAssignedId,
+              changeDateTime: reassignDate,
+            })
+          )
+          .pipe(
+            tap(() => {
+              this.doReload();
+            }),
+            // it returns a number, we're not interested in that
+            map((v) => undefined)
+          );
+      },
+    };
+    this.dialog.open(MemberReassignDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: dialogData,
+    });
+  };
+
+  getCareerLevelHistory(): HistoryData[] {
+    return this.personDetails.careerLevels.map((careerLevel) => ({
+      id: careerLevel.id,
+      connectedId: careerLevel.careerLevelId,
+      name: `${careerLevel.careerLevelName} (${careerLevel.careerLevelShortName})`,
+      startDate: careerLevel.beginDateTime,
+      endDate: careerLevel.endDateTime,
+    }));
+  }
+
+  getPositionHistory(): HistoryData[] {
+    return this.personDetails.positions.map((position) => ({
+      id: position.id,
+      connectedId: position.positionId,
+      name: `${position.positionName} (${position.positionShortName})`,
+      startDate: position.beginDateTime,
+      endDate: position.endDateTime,
+    }));
+  }
+
+  getMemberStatusHistory(): HistoryData[] {
+    return this.personDetails.memberStatus.map((memberStatus) => ({
+      id: memberStatus.id,
+      connectedId: memberStatus.memberStatusId,
+      name: memberStatus.memberStatusName,
+      startDate: memberStatus.beginDateTime,
+      endDate: memberStatus.endDateTime,
+    }));
+  }
+
+  async getCareerLevelSuggestions(): Promise<SelectOption[]> {
+    if (this.careerLevelSuggestions.length === 0) {
+      // TODO: implement business logic in backend!
+      const suggestions = await this.careerLevelApi.get().toPromise();
+      this.careerLevelSuggestions = suggestions.careerLevels.map((s) => {
+        return { name: s.name, id: s.id };
+      });
+    }
+    return this.careerLevelSuggestions;
+  }
+
+  async getMemberStatusSuggestions(): Promise<SelectOption[]> {
+    if (this.memberStatusSuggestions.length === 0) {
+      // TODO: implement business logic in backend!
+      const suggestions = await this.memberStatusApi.get().toPromise();
+      this.memberStatusSuggestions = suggestions.memberStatus.map((s) => {
+        return { name: s.name, id: s.id };
+      });
+    }
+    return this.memberStatusSuggestions;
   }
 
   onEdit() {

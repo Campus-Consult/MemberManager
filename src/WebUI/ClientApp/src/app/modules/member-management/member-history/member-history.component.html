@@ -1,0 +1,53 @@
+<mat-expansion-panel class="expansion-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title> {{ title }} </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="historyData && historyData.length > 0; else noData">
+    <div>
+      <button
+        [disabled]="isLocked"
+        class="btn btn-link"
+        *ngIf="reassignCallback"
+        (click)="wrapReassignCallback()"
+        [title]="reassignLabel"
+      >
+        <mat-icon color="primary">edit</mat-icon>
+      </button>
+    </div>
+    <table id="tight-table" mat-table [dataSource]="historyData">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ title }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span>{{ element.name }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="time-span">
+        <th mat-header-cell *matHeaderCellDef>Von - Bis</th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+            {{ dateSinceUntilToString(element.startDate, element.endDate) }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>{{ dismissLabel }}</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            [disabled]="isLocked"
+            class="btn btn-link"
+            *ngIf="!element.endDate"
+            (click)="wrapDismissCallback(element)"
+            [title]="dismissLabel"
+          >
+            <mat-icon color="primary">person_remove</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </ng-container>
+  <ng-template #noData> <p>Keine Daten vorliegend</p> </ng-template>
+</mat-expansion-panel>

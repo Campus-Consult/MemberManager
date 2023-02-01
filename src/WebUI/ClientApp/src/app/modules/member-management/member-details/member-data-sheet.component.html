@@ -6,7 +6,22 @@
   (onDelete)="openDeleteDialog()"
 >
   <app-member-data [memberDetails]="personDetails"></app-member-data>
-  <app-history-panels [person]="personDetails"></app-history-panels>
+  <mat-accordion>
+    <app-member-history
+      title="Mitglieds-Status"
+      [historyData]="memberStatusHistory"
+    ></app-member-history>
+    <app-member-history
+      title="Karriere-Stufen"
+      [historyData]="careerLevelHistory"
+      [reassignCallback]="handleCareerReassign"
+    ></app-member-history>
+    <app-member-history
+      title="Posten"
+      [historyData]="positionHistory"
+      [dismissCallback]="handlePositionDismiss"
+    ></app-member-history>
+  </mat-accordion>
 </app-detail-view-wrapper>
 <ng-template #toolTip>
   Für mehr Informationen klicke auf ein Element in der Tabelle!

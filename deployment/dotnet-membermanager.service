@@ -1,6 +1,6 @@
 [Unit]
 Description=Member Manager running with dotnet core
-After=mysql.service
+After=mysql.service podman.service
 
 [Service]
 WorkingDirectory=/var/www/membermanager

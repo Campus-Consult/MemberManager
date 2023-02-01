@@ -26,11 +26,13 @@ import { SharedModule } from '../../shared/shared.module';
 import { CreateMemberComponent } from './create-member/create-member.component';
 import { ErrorHintComponent } from './create-member/error-hint/error-hint.component';
 import { EditMemberDataComponent } from './edit-member-data/edit-member-data.component';
-import { HistoryPanelsComponent } from './member-details/history-panels/history-panels.component';
 import { MemberDataSheetComponent } from './member-details/member-data-sheet.component';
 import { MemberListComponent } from './member-list/member-list.component';
 import { MemberManagementComponent } from './member-management.component';
 import { MemberManagerRoutingModule } from './member-manager-routing.module';
+import { MemberDismissDialogComponent } from './member-dismiss-dialog/member-dismiss-dialog.component';
+import { MemberHistoryComponent } from './member-history/member-history.component';
+import { MemberReassignDialogComponent } from './member-reassign-dialog/member-reassign-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,10 +40,12 @@ import { MemberManagerRoutingModule } from './member-manager-routing.module';
     MemberDataSheetComponent,
     MemberListComponent,
     EditMemberDataComponent,
-    HistoryPanelsComponent,
     CreateMemberComponent,
     ErrorHintComponent,
     MemberSelfManagedComponent,
+    MemberDismissDialogComponent,
+    MemberHistoryComponent,
+    MemberReassignDialogComponent,
   ],
   exports: [MemberManagementComponent, MemberSelfManagedComponent],
   imports: [

@@ -31,6 +31,7 @@ export class MemberStatusDetailsComponent
   implements OnInit, OnChanges, AfterViewInit
 {
   @Input() memberStatusID: number;
+  @Input() hideUntilColumn: boolean = false;
   @Output() onReloadRequired = new EventEmitter();
 
   memberStatus: MemberStatusDetailVm;
@@ -45,6 +46,9 @@ export class MemberStatusDetailsComponent
   ) {}
 
   ngOnInit(): void {
+    if (this.hideUntilColumn) {
+      this.columns = this.columns.filter((c) => c != 'till');
+    }
     this.fetchMemberStatusDetails();
   }
 

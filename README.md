@@ -57,3 +57,21 @@ To deploy the Project to the server, the following steps have to be taken:
 Execute this from the src directory, replace MigrationName with the actual name
 
     dotnet ef migrations add MigrationName -s WebUI -p Infrastructure
+
+## Managing Member Connections in the past
+
+Sometimes, you migrate data and then you realize you made a mistake, or maybe you were told something wrong. Either way, this needs to be corrected
+and the member manager needs to be able to easily provide that functionality, with little to no potential for misuse. This is a powerful tool, but
+the current workaround is to just delete the user, which really sucks
+
+### Functions
+#### Replace
+startdata, enddate, connected id, essentially removes all the entries in the specified range and gets inserted then, extending along the barriers when they're from the same kind
+
+This tools can do *almost* everything to completely rewrite history: It can't change the first entry
+#### change startdate
+Allows changing the startdate of an entry, 
+
+## for ui
+
+make sure to display "ALL" the necessary changes

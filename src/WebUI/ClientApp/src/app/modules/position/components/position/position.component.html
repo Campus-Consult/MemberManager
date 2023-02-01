@@ -9,6 +9,7 @@
     <app-position-details
       *ngIf="selectedPosition"
       [positionID]="selectedPosition?.id"
+      [hideUntilColumn]="true"
       (onReloadRequired)="reloadRequired()"
     ></app-position-details>
   </div>

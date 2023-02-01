@@ -18,7 +18,7 @@ export class AutocompleteMemberInputComponent implements OnInit {
   formGroup: FormGroup;
 
   @Input()
-  fControlName: string = 'member';
+  fControlName?: string;
 
   filteredMemberOptions: Observable<IPersonLookupDto[]>;
 
@@ -37,10 +37,11 @@ export class AutocompleteMemberInputComponent implements OnInit {
       this.suggMember = data.people;
     });
 
-    if (!this.fControlName || this.fControlName === 'member') {
+    if (!this.fControlName) {
       console.warn(
         'AutoCompleteMemberInputComponent: formControlName Input not set. Assuming control does not exist create and add own control'
       );
+      this.fControlName = 'member';
       this.formGroup.setControl(this.fControlName, this.formBuilder.control(''));
     }
 

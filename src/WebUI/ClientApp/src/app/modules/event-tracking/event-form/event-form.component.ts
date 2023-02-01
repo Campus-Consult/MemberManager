@@ -88,12 +88,12 @@ export class EventFormComponent implements OnInit {
       });
     }
 
-      // Filter Observable for tags
-      this.filteredTagOptions = this.eventFormGroup.valueChanges.pipe(
-        pluck('tagInput'),
-        startWith(''),
-        map((value) => this._filterTags(value || ''))
-      );
+    // Filter Observable for tags
+    this.filteredTagOptions = this.eventFormGroup.valueChanges.pipe(
+      pluck('tagInput'),
+      startWith(''),
+      map((value) => this._filterTags(value || ''))
+    );
   }
 
   addTagFromInput(event: MatChipInputEvent) {

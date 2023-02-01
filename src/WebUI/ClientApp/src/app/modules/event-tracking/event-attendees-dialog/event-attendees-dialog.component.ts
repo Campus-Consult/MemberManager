@@ -19,9 +19,9 @@ import {
 export class EventAttendeesDialogComponent implements OnInit {
   public attendees: EventAnswerDto[];
   displayedColumns: string[] = ['name', 'date', 'delete'];
-  event: IEventDetailDto = {name:'', start: '', end:''};
+  event: IEventDetailDto = { name: '', start: '', end: '' };
 
-  formGroup: FormGroup; 
+  formGroup: FormGroup;
 
   constructor(
     private eventClient: EventClient,
@@ -36,8 +36,8 @@ export class EventAttendeesDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({
-      member: this.fb.control('', [Validators.required])
-    })
+      member: this.fb.control('', [Validators.required]),
+    });
   }
 
   attendeeRemove(id: number) {
@@ -53,14 +53,18 @@ export class EventAttendeesDialogComponent implements OnInit {
   attendeeAdd() {
     const person = this.formGroup.get('member').value;
     let id = undefined;
-    if(typeof person === 'object') {
+    if (typeof person === 'object') {
       id = (person as IPersonLookupDto).id;
     } else {
       console.warn('attendeeAdd: Could not extract personID');
       return;
     }
     const answerTime = new Date(this.event.start);
-    const cmd = new AddEventAnswerCommand({eventId: this.event.id, personId:id, answerTime: answerTime.toISOString()});
+    const cmd = new AddEventAnswerCommand({
+      eventId: this.event.id,
+      personId: id,
+      answerTime: answerTime.toISOString(),
+    });
     this.eventClient.addEventAnswer(cmd).subscribe(() => {
       this.eventClient.getSingle(this.data.id).subscribe((eventObject) => {
         this.attendees = eventObject.eventAnswers;

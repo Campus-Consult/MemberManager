@@ -8,9 +8,8 @@ describe('AutocompleteMemberInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AutocompleteMemberInputComponent ]
-    })
-    .compileComponents();
+      declarations: [AutocompleteMemberInputComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

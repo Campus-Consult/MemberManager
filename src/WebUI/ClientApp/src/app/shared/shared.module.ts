@@ -106,7 +106,7 @@ import { AutocompleteMemberInputComponent } from './components/autocomplete-memb
     MatSortModule,
     MatPaginatorModule,
     MemberDataComponent,
-    AutocompleteMemberInputComponent
+    AutocompleteMemberInputComponent,
   ],
   imports: [
     CommonModule,

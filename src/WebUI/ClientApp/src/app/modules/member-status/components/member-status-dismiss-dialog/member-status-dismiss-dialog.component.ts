@@ -1,9 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DismissSave } from 'src/app/shared/components/dismiss-dialog/dismiss-dialog.component';
 import {
+  AssigneeDto,
+  ChangePersonMemberStatusCommand,
   DismissFromMemberStatusCommand,
   MemberStatusClient,
+  MemberStatusDetailVm,
   MemberStatusLookupDto,
 } from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
@@ -14,20 +18,23 @@ import { SelectOption } from '../../../../shared/components/search-select/search
   styleUrls: ['./member-status-dismiss-dialog.component.scss'],
 })
 export class MemberStatusDismissDialogComponent implements OnInit {
-  form: FormGroup;
   description: string;
 
   suggestions: SelectOption[];
 
-  memberStatus: MemberStatusLookupDto;
+  reassignSuggestions: SelectOption[];
+
+  memberStatus: MemberStatusDetailVm;
 
   errors;
 
   constructor(
-    private fb: FormBuilder,
     private dialogRef: MatDialogRef<MemberStatusDismissDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    data: { description: string; memberStatus: MemberStatusLookupDto },
+    data: {
+      description: string;
+      memberStatus: MemberStatusDetailVm;
+    },
     private memberStatusClient: MemberStatusClient
   ) {
     this.description = data.description;
@@ -35,34 +42,19 @@ export class MemberStatusDismissDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = this.fb.group({
-      description: [this.description, []],
+    this.suggestions = this.memberStatus.assignees.map((s) => {
+      return { name: s.name, id: s.personId };
     });
-
-    this.fetchSuggestions();
+    this.fetchReassignSuggestions();
   }
 
-  dismissForm = this.fb.group({
-    dismissedPerson: [true, Validators.required],
-    dismissalDate: [null, Validators.required],
-  });
-
-  get dismissedPerson() {
-    return this.dismissForm.get('dismissedPerson').value;
-  }
-
-  get dismissalDate() {
-    return this.dismissForm.get('dismissalDate').value;
-  }
-
-  save() {
+  save(dismissEvent: DismissSave) {
     this.memberStatusClient
-      .dismiss(
-        this.memberStatus.id,
-        new DismissFromMemberStatusCommand({
-          dismissalDateTime: this.dismissalDate,
-          memberStatusId: this.memberStatus.id,
-          personId: this.dismissedPerson.id,
+      .changePersonMemberStatus(
+        new ChangePersonMemberStatusCommand({
+          changeDateTime: dismissEvent.dismissalDate,
+          memberStatusId: dismissEvent.reassignElement.id,
+          personId: dismissEvent.dismissedElement.id,
         })
       )
       .subscribe(
@@ -79,16 +71,14 @@ export class MemberStatusDismissDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  fetchSuggestions() {
-    this.memberStatusClient
-      .getDismissSuggestions(this.memberStatus.id)
-      .subscribe(
-        (suggestions) => {
-          this.suggestions = suggestions.suggestions.map((s) => {
-            return { name: s.name, id: s.id };
-          });
-        },
-        (error) => console.error(error)
-      );
+  fetchReassignSuggestions() {
+    this.memberStatusClient.get().subscribe(
+      (suggestions) => {
+        this.reassignSuggestions = suggestions.memberStatus.map((s) => {
+          return { name: s.name, id: s.id };
+        });
+      },
+      (error) => console.error(error)
+    );
   }
 }

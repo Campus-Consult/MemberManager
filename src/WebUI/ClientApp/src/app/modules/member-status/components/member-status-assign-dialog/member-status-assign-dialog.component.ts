@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
-  AssignToMemberStatusCommand,
+  ChangePersonMemberStatusCommand,
   MemberStatusClient,
   MemberStatusLookupDto,
 } from '../../../../membermanager-api';
@@ -57,12 +57,11 @@ export class MemberStatusAssignDialogComponent implements OnInit {
 
   save() {
     this.memberStatusClient
-      .assign(
-        this.memberStatus.id,
-        new AssignToMemberStatusCommand({
-          assignmentDateTime: this.assignDate,
-          memberStatusId: this.memberStatus.id,
+      .changePersonMemberStatus(
+        new ChangePersonMemberStatusCommand({
           personId: this.assignPerson.id,
+          changeDateTime: this.assignDate,
+          memberStatusId: this.memberStatus.id,
         })
       )
       .subscribe(

@@ -1,7 +1,10 @@
 <h1 mat-dialog-title>{{ event.name }}</h1>
-<p>Organisator: {{event?.organizer.firstName}} {{event?.organizer.surname}}</p>
 <p>
-  {{ event.start | date: 'dd.MM.yy HH:mm' }} - <br/> {{ event.end | date: 'dd.MM.yy HH:mm' }}
+  Organisator: {{ event?.organizer.firstName }} {{ event?.organizer.surname }}
+</p>
+<p>
+  {{ event.start | date: 'dd.MM.yy HH:mm' }} - <br />
+  {{ event.end | date: 'dd.MM.yy HH:mm' }}
 </p>
 
 <div mat-dialog-content>

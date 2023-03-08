@@ -231,9 +231,9 @@ namespace MemberManager.Infrastructure.Persistence
                     {
                         Tag = "VT",
                     };
-                    DateTime startTime = new DateTime(2022, 4, 16);
-                    startTime = startTime.AddHours(20);
-                    DateTime endTime = startTime.AddHours(21);
+                    DateTime baseTime = new DateTime(2022, 4, 16);
+                    DateTime startTime = baseTime.AddHours(20);
+                    DateTime endTime = baseTime.AddHours(21);
 
                     for (int i = 0; i < 4; i++)
                     {
@@ -276,7 +276,7 @@ namespace MemberManager.Infrastructure.Persistence
                     {
                         Name = "Vereinstreffen leer",
                         Start = startTime.AddDays(10),
-                        End = endTime.AddDays(10),
+                        End = startTime.AddDays(11),
                         Organizer = PickRandom(rand, persons),
                         SecretKey = "IchBinEinSecretKeyLeer"
                     });

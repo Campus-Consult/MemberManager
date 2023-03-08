@@ -3,6 +3,8 @@ using MemberManager.Application.MemberStatuss.Commands.AssignToMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.CreateMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.DismissFromMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.UpdateMemberStatus;
+using MemberManager.Application.MemberStatuss.Commands.ChangePersonMemberStatus;
+using MemberManager.Application.MemberStatuss.Commands.RemovePersonMemberStatusChange;
 using MemberManager.Application.MemberStatuss.Queries.GetAssignSuggestions;
 using MemberManager.Application.MemberStatuss.Queries.GetDismissSuggestions;
 using MemberManager.Application.MemberStatuss.Queries.GetMemberStatus;
@@ -87,6 +89,17 @@ namespace MemberManager.WebUI.Controllers
 
             await Mediator.Send(command);
 
+            return NoContent();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> ChangePersonMemberStatus(ChangePersonMemberStatusCommand command) {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("RemovePersonMemberStatusChange/{PersonMemberStatusId}")]
+        public async Task<ActionResult> RemovePersonCareerLevelChange(int PersonMemberStatusId) {
+            await Mediator.Send(new RemovePersonMemberStatusChangeCommand { PersonMemberStatusId = PersonMemberStatusId});
             return NoContent();
         }
     }

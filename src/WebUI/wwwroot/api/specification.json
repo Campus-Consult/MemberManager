@@ -1246,6 +1246,82 @@
         ]
       }
     },
+    "/api/MemberStatus/ChangePersonMemberStatus": {
+      "post": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_ChangePersonMemberStatus",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePersonMemberStatusCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/MemberStatus/RemovePersonMemberStatusChange/{PersonMemberStatusId}": {
+      "post": {
+        "tags": [
+          "MemberStatus"
+        ],
+        "operationId": "MemberStatus_RemovePersonCareerLevelChange",
+        "parameters": [
+          {
+            "name": "PersonMemberStatusId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/People": {
       "get": {
         "tags": [
@@ -2825,6 +2901,24 @@
             "format": "int32"
           },
           "dismissalDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ChangePersonMemberStatusCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "memberStatusId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "changeDateTime": {
             "type": "string",
             "format": "date-time"
           }

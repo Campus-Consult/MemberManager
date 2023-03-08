@@ -1,14 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DismissSave } from 'src/app/shared/components/dismiss-dialog/dismiss-dialog.component';
 import {
-  AssigneeDto,
   ChangePersonMemberStatusCommand,
-  DismissFromMemberStatusCommand,
   MemberStatusClient,
   MemberStatusDetailVm,
-  MemberStatusLookupDto,
 } from '../../../../membermanager-api';
 import { SelectOption } from '../../../../shared/components/search-select/search-select.component';
 

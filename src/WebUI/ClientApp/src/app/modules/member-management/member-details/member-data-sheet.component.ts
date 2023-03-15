@@ -20,7 +20,6 @@ import {
   CareerLevelClient,
   ChangePersonCareerLevelCommand,
   MemberStatusClient,
-  DismissFromMemberStatusCommand,
   UpdateMemberStatusCommand,
 } from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';

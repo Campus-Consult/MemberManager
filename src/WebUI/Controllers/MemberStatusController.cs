@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MemberManager.Application.MemberStatuss.Commands.AssignToMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.CreateMemberStatus;
-using MemberManager.Application.MemberStatuss.Commands.DismissFromMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.UpdateMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.ChangePersonMemberStatus;
 using MemberManager.Application.MemberStatuss.Commands.RemovePersonMemberStatusChange;
@@ -64,32 +62,6 @@ namespace MemberManager.WebUI.Controllers
         public async Task<ActionResult<PeopleDismissSuggestions>> GetDismissSuggestions(int id)
         {
             return await Mediator.Send(new GetDismissSuggestionsQuery { MemberStatusId = id });
-        }
-
-        [HttpPost("{id}/[action]")]
-        public async Task<ActionResult> Assign(int id, AssignToMemberStatusCommand command)
-        {
-            if (id != command?.MemberStatusId)
-            {
-                return BadRequest();
-            }
-
-            await Mediator.Send(command);
-
-            return NoContent();
-        }
-
-        [HttpPost("{id}/[action]")]
-        public async Task<ActionResult> Dismiss(int id, DismissFromMemberStatusCommand command)
-        {
-            if (id != command.MemberStatusId)
-            {
-                return BadRequest();
-            }
-
-            await Mediator.Send(command);
-
-            return NoContent();
         }
 
         [HttpPost("[action]")]

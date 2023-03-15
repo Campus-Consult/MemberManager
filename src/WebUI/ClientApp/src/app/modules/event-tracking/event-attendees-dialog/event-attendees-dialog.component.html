@@ -1,68 +1,92 @@
-<h1 mat-dialog-title>{{ event.name }}</h1>
-<p>
-  Organisator: {{ event?.organizer.firstName }} {{ event?.organizer.surname }}
-</p>
-<p>
-  {{ event.start | date: 'dd.MM.yy HH:mm' }} - <br />
-  {{ event.end | date: 'dd.MM.yy HH:mm' }}
-</p>
+<ng-container *ngIf="event">
+  <h1 mat-dialog-title>{{ event.name }}</h1>
+  <div class="sub-header-content">
+    <p>
+      Organisator: {{ event?.organizer.firstName }}
+      {{ event?.organizer.surname }}
+    </p>
+    <p>
+      Termin:
+      {{ event.start | date: 'dd.MM.yy HH:mm' }} -
+      {{ event.end | date: 'dd.MM.yy HH:mm' }}
+    </p>
+  </div>
 
-<div mat-dialog-content>
-  <table
-    id="attendees-table"
-    mat-table
-    [dataSource]="attendees"
-    class="mat-elevation-z8"
-  >
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.person.firstName + ' ' + element.person.surname }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef>
-        <app-autocomplete-member-input
-          [formGroup]="formGroup"
-          label="Teilnehmer hinzufügen"
-          fControlName="member"
-        ></app-autocomplete-member-input>
-      </td>
-    </ng-container>
+  <div mat-dialog-content>
+    <table id="attendees-table" mat-table [dataSource]="attendees">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.person.firstName + ' ' + element.person.surname }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Datum</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.time | date: 'dd.MM.yy HH:mm' }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+      <ng-container matColumnDef="attendee-input">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="add-missing-member">
+            <app-autocomplete-member-input
+              [formGroup]="formGroup"
+              label="Teilnehmer hinzufügen"
+              fControlName="member"
+            ></app-autocomplete-member-input>
+          </div>
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="date-input">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="add-missing-member">
+            <mat-form-field appearance="outline">
+              <input
+                [formControl]="formGroup.controls.date"
+                matInput
+                placeholder="Datum"
+                type="datetime-local"
+              />
+            </mat-form-field>
+          </div>
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="add-button">
+        <th mat-header-cell *matHeaderCellDef>
+          <button
+            mat-icon-button
+            matTooltip="Teilnehmer hinzufügen"
+            color="accent"
+            (click)="attendeeAdd()"
+            [disabled]="formGroup.invalid"
+          >
+            <mat-icon>person_add</mat-icon>
+          </button>
+        </th>
+      </ng-container>
 
-    <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
-        <button
-          mat-icon-button
-          color="warn"
-          matTooltip="Teilnehmer entfernen"
-          (click)="attendeeRemove(element.id)"
-        >
-          <mat-icon>person_remove</mat-icon>
-        </button>
-      </td>
-      <td mat-footer-cell *matFooterCellDef>
-        <button
-          mat-icon-button
-          matTooltip="Teilnehmer hinzufügen"
-          color="accent"
-          (click)="attendeeAdd()"
-          [disabled]="formGroup.invalid"
-        >
-          <mat-icon>person_add</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Datum</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.time | date: 'dd.MM.yy HH:mm' }}
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-  </table>
-</div>
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            color="warn"
+            matTooltip="Teilnehmer entfernen"
+            (click)="attendeeRemove(element.id)"
+          >
+            <mat-icon>person_remove</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-header-row
+        *matHeaderRowDef="['attendee-input', 'date-input', 'add-button']"
+      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</ng-container>

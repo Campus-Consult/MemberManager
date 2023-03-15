@@ -8,6 +8,7 @@ import {
   EventDetailDto,
   IEventDetailDto,
   IPersonLookupDto,
+  PersonLookupDto,
   RemoveEventAnswerCommand,
 } from 'src/app/membermanager-api';
 
@@ -19,7 +20,7 @@ import {
 export class EventAttendeesDialogComponent implements OnInit {
   public attendees: EventAnswerDto[];
   displayedColumns: string[] = ['name', 'date', 'delete'];
-  event: IEventDetailDto = { name: '', start: '', end: '' };
+  event: IEventDetailDto; //= { name: '', start: '', end: '',  organizer: new PersonLookupDto({firstName:'', surname: ''}) };
 
   formGroup: FormGroup;
 
@@ -31,12 +32,14 @@ export class EventAttendeesDialogComponent implements OnInit {
     this.eventClient.getSingle(data.id).subscribe((eventObject) => {
       this.attendees = eventObject.eventAnswers ?? [];
       this.event = eventObject;
+      this.formGroup.setValue({ member: '', date: this.event.start });
     });
   }
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       member: this.fb.control('', [Validators.required]),
+      date: this.fb.control(this.event?.start, [Validators.required]),
     });
   }
 

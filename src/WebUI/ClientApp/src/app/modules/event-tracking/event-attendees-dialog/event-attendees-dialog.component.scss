@@ -3,4 +3,18 @@
   .mat-column-date {
     padding-left: 24px;
   }
+  .mat-column-date-input {
+    padding-left: 24px;
+  }
+}
+
+.sub-header-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-missing-member {
+  margin-top: 1.34375em;
 }

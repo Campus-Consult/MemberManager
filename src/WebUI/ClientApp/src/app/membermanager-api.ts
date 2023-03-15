@@ -736,6 +736,7 @@ export interface IEventClient {
     delete(id: number): Observable<FileResponse>;
     allTags(): Observable<string[]>;
     attend(cmd: AttendEventCommand): Observable<FileResponse>;
+    getDetailsPublic(eventId: number | undefined, secretKey: string | null | undefined): Observable<EventDetailPublicDto>;
     getOwn(): Observable<EventAnswerWithEventDto[]>;
     getForPerson(personId: number): Observable<EventAnswerWithEventDto[]>;
     addEventAnswer(cmd: AddEventAnswerCommand): Observable<number>;
@@ -1119,6 +1120,60 @@ export class EventClient implements IEventClient {
             }));
         }
         return _observableOf<FileResponse>(null as any);
+    }
+
+    getDetailsPublic(eventId: number | undefined, secretKey: string | null | undefined): Observable<EventDetailPublicDto> {
+        let url_ = this.baseUrl + "/api/Event/GetDetailsPublic?";
+        if (eventId === null)
+            throw new Error("The parameter 'eventId' cannot be null.");
+        else if (eventId !== undefined)
+            url_ += "eventId=" + encodeURIComponent("" + eventId) + "&";
+        if (secretKey !== undefined && secretKey !== null)
+            url_ += "secretKey=" + encodeURIComponent("" + secretKey) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDetailsPublic(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDetailsPublic(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EventDetailPublicDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EventDetailPublicDto>;
+        }));
+    }
+
+    protected processGetDetailsPublic(response: HttpResponseBase): Observable<EventDetailPublicDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EventDetailPublicDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EventDetailPublicDto>(null as any);
     }
 
     getOwn(): Observable<EventAnswerWithEventDto[]> {
@@ -4103,6 +4158,70 @@ export class AttendEventCommand implements IAttendEventCommand {
 export interface IAttendEventCommand {
     eventId?: number;
     eventSecretKey?: string | undefined;
+}
+
+export class EventDetailPublicDto implements IEventDetailPublicDto {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    organizer?: PersonLookupDto | undefined;
+    tags?: string[] | undefined;
+
+    constructor(data?: IEventDetailPublicDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.start = _data["start"];
+            this.end = _data["end"];
+            this.organizer = _data["organizer"] ? PersonLookupDto.fromJS(_data["organizer"]) : <any>undefined;
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): EventDetailPublicDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventDetailPublicDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["start"] = this.start;
+        data["end"] = this.end;
+        data["organizer"] = this.organizer ? this.organizer.toJSON() : <any>undefined;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IEventDetailPublicDto {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    organizer?: PersonLookupDto | undefined;
+    tags?: string[] | undefined;
 }
 
 export class EventAnswerWithEventDto implements IEventAnswerWithEventDto {

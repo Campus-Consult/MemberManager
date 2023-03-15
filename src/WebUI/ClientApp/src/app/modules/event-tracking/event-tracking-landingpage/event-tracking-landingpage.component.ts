@@ -29,7 +29,7 @@ export class EventTrackingLandingpageComponent implements OnInit {
       this.eventId = params['eventid'];
       this.eventCode = params['eventcode'];
       this.eventClient
-        .getSingle(this.eventId)
+        .getDetailsPublic(this.eventId, this.eventCode)
         .subscribe((response: EventDetailDto) => {
           this.event = response;
         });

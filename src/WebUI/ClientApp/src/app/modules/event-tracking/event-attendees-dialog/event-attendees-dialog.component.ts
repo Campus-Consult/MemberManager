@@ -51,6 +51,7 @@ export class EventAttendeesDialogComponent implements OnInit {
   }
 
   attendeeRemove(answerToRemove: EventAnswerDto) {
+    this.errorMsg = undefined;
     const dialogRef = this.dialogCtrl.open(DeleteDialogComponent, {
       width: '250px',
       data: {
@@ -79,6 +80,7 @@ export class EventAttendeesDialogComponent implements OnInit {
   }
 
   attendeeAdd() {
+    this.errorMsg = undefined;
     const person = this.formGroup.get('member').value;
     let id = undefined;
     if (typeof person === 'object') {

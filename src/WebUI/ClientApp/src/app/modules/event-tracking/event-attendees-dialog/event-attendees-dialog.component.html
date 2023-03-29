@@ -11,6 +11,7 @@
       {{ event.end | date: 'dd.MM.yy HH:mm' }}
     </p>
   </div>
+  <p *ngIf="errorMsg"> <app-dialog-error [errors]="errorMsg"></app-dialog-error> </p>
 
   <div mat-dialog-content>
     <table id="attendees-table" mat-table [dataSource]="attendees">

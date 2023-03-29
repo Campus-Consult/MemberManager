@@ -14,6 +14,7 @@ using MemberManager.Application.Events.Queries.GetPersonEvents;
 using MemberManager.Application.Events.Queries.GetOwnEvents;
 using MemberManager.Application.Events.Commands.DeleteEvent;
 using MemberManager.Application.Events.Queries.GetAllTags;
+using MemberManager.Application.Events.Queries.GetEventPublicQuery;
 
 namespace MemberManager.WebUI.Controllers
 {
@@ -71,6 +72,14 @@ namespace MemberManager.WebUI.Controllers
         public async Task<ActionResult> Attend(AttendEventCommand cmd) {
             await Mediator.Send(cmd);
             return NoContent();
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<EventDetailPublicDto>> GetDetailsPublic(int eventId, string secretKey) {
+            return await Mediator.Send(new GetEventPublicQuery {
+                EventId = eventId,
+                EventSecretKey = secretKey
+            });
         }
 
         [HttpGet("[action]")]

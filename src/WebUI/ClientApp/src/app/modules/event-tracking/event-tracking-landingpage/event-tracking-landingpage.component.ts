@@ -4,6 +4,7 @@ import {
   AttendEventCommand,
   EventClient,
   EventDetailDto,
+  EventDetailPublicDto,
   IAttendEventCommand,
 } from 'src/app/membermanager-api';
 
@@ -15,7 +16,7 @@ import {
 export class EventTrackingLandingpageComponent implements OnInit {
   eventId: number;
   eventCode: string;
-  event: EventDetailDto;
+  event: EventDetailPublicDto;
   state: LandingPageState = LandingPageState.eventDefault;
   landingPageStateEnum = LandingPageState;
 
@@ -29,8 +30,8 @@ export class EventTrackingLandingpageComponent implements OnInit {
       this.eventId = params['eventid'];
       this.eventCode = params['eventcode'];
       this.eventClient
-        .getSingle(this.eventId)
-        .subscribe((response: EventDetailDto) => {
+        .getDetailsPublic(this.eventId, this.eventCode)
+        .subscribe((response: EventDetailPublicDto) => {
           this.event = response;
         });
     });
@@ -46,7 +47,7 @@ export class EventTrackingLandingpageComponent implements OnInit {
   confirmAttendance() {
     const command = new AttendEventCommand({
       eventId: this.event.id,
-      eventSecretKey: this.event.secretKey,
+      eventSecretKey: this.eventCode,
     });
     this.eventClient.attend(command).subscribe((response) => {
       this.state = LandingPageState.eventConfirmed;

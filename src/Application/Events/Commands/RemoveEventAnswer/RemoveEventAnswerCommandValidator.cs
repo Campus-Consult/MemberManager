@@ -24,7 +24,7 @@ namespace MemberManager.Application.Events.Commands.RemoveEventAnswer
         }
 
         public async Task<bool> EventAnswerExists(RemoveEventAnswerCommand model, int eventAnswerId, CancellationToken cancellationToken) {
-            return await _context.Events.FindAsync(new object [] {eventAnswerId}, cancellationToken) != null;
+            return await _context.EventAnswers.FindAsync(new object [] {eventAnswerId}, cancellationToken) != null;
         }
     }
 }

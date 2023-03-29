@@ -22,6 +22,7 @@ import {
   MemberStatusClient,
   UpdateMemberStatusCommand,
   ChangePersonMemberStatusCommand,
+  AssignToPositionCommand,
 } from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoryData } from '../member-history/member-history.component';
@@ -61,6 +62,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   memberStatusHistory: HistoryData[] = [];
   careerLevelSuggestions: SelectOption[] = [];
   memberStatusSuggestions: SelectOption[] = [];
+  positionSuggestions: SelectOption[] = [];
 
   /**
    * if set text will be displayed, below loading
@@ -215,6 +217,38 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
     });
   };
 
+  handlePositionAssign = async (): Promise<void> => {
+    const dialogData: MemberAssignDialogData = {
+      description: `Neuer Posten für ${this.getFullName()}`,
+      assignSelectSuggestions: await this.getPositionSuggestions(),
+      assignLabel: 'Posten',
+      assignAction: 'Neu Zuweisen',
+      assignCallback: (assignDate, newAssignedId) => {
+        return this.positionService
+          .assign(
+            newAssignedId,
+            new AssignToPositionCommand({
+              personId: this.person.id,
+              positionId: newAssignedId,
+              assignmentDateTime: assignDate,
+            })
+          )
+          .pipe(
+            tap(() => {
+              this.doReload();
+            }),
+            // it returns a number, we're not interested in that
+            map((v) => undefined)
+          );
+      },
+    };
+    this.dialog.open(MemberAssignDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: dialogData,
+    });
+  };
+
   getCareerLevelHistory(): HistoryData[] {
     return this.personDetails.careerLevels.map((careerLevel) => ({
       id: careerLevel.id,
@@ -265,6 +299,16 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
       });
     }
     return this.memberStatusSuggestions;
+  }
+
+  async getPositionSuggestions(): Promise<SelectOption[]> {
+    if (this.positionSuggestions.length === 0) {
+      const suggestions = await this.positionService.get().toPromise();
+      this.positionSuggestions = suggestions.positions.map((s) => {
+        return { name: s.name, id: s.id };
+      });
+    }
+    return this.positionSuggestions;
   }
 
   onEdit() {

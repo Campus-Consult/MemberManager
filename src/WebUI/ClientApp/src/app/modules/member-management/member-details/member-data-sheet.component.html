@@ -20,6 +20,7 @@
     <app-member-history
       title="Posten"
       [historyData]="positionHistory"
+      [newAssignCallback]="handlePositionAssign"
       [dismissCallback]="handlePositionDismiss"
     ></app-member-history>
   </mat-accordion>

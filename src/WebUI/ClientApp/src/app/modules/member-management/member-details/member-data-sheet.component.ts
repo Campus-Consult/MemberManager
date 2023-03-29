@@ -29,9 +29,9 @@ import { MemberDismissDialogComponent } from '../member-dismiss-dialog/member-di
 import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {
-  MemberReassignDialogComponent,
-  MemberReassignDialogData,
-} from '../member-reassign-dialog/member-reassign-dialog.component';
+  MemberAssignDialogComponent,
+  MemberAssignDialogData,
+} from '../member-assign-dialog/member-assign-dialog.component';
 import { SelectOption } from 'src/app/shared/components/search-select/search-select.component';
 
 @Component({
@@ -150,13 +150,14 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   };
 
   handleCareerReassign = async (element: HistoryData): Promise<void> => {
-    const dialogData: MemberReassignDialogData = {
+    const dialogData: MemberAssignDialogData = {
       description: `${this.getFullName()} von Karrierestufe ${
         element.name
       } entfernen?`,
-      reassignSelectSuggestions: await this.getCareerLevelSuggestions(),
-      reassignLabel: 'Karrierestufe',
-      reassignCallback: (reassignDate, newAssignedId) => {
+      assignSelectSuggestions: await this.getCareerLevelSuggestions(),
+      assignLabel: 'Karrierestufe',
+      assignAction: 'Neu Zuweisen',
+      assignCallback: (reassignDate, newAssignedId) => {
         return this.careerLevelApi
           .changePersonCareerLevel(
             new ChangePersonCareerLevelCommand({
@@ -174,7 +175,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
           );
       },
     };
-    this.dialog.open(MemberReassignDialogComponent, {
+    this.dialog.open(MemberAssignDialogComponent, {
       role: 'alertdialog',
       width: '250px',
       data: dialogData,
@@ -182,13 +183,14 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   };
 
   handleMemberStatusReassign = async (element: HistoryData): Promise<void> => {
-    const dialogData: MemberReassignDialogData = {
+    const dialogData: MemberAssignDialogData = {
       description: `${this.getFullName()} vom Status ${
         element.name
       } entfernen?`,
-      reassignSelectSuggestions: await this.getMemberStatusSuggestions(),
-      reassignLabel: 'Status',
-      reassignCallback: (reassignDate, newAssignedId) => {
+      assignSelectSuggestions: await this.getMemberStatusSuggestions(),
+      assignLabel: 'Status',
+      assignAction: 'Neu Zuweisen',
+      assignCallback: (reassignDate, newAssignedId) => {
         return this.memberStatusApi
           .changePersonMemberStatus(
             new ChangePersonMemberStatusCommand({
@@ -206,7 +208,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
           );
       },
     };
-    this.dialog.open(MemberReassignDialogComponent, {
+    this.dialog.open(MemberAssignDialogComponent, {
       role: 'alertdialog',
       width: '250px',
       data: dialogData,

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {
   AddEventAnswerCommand,
   EventAnswerDto,
@@ -11,6 +11,7 @@ import {
   PersonLookupDto,
   RemoveEventAnswerCommand,
 } from 'src/app/membermanager-api';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-event-attendees-dialog',
@@ -24,15 +25,21 @@ export class EventAttendeesDialogComponent implements OnInit {
 
   formGroup: FormGroup;
 
+  errorMsg;
+
+  private initialFormValue;
+
   constructor(
     private eventClient: EventClient,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: { id: number }
+    @Inject(MAT_DIALOG_DATA) public data: { id: number },
+    private dialogCtrl: MatDialog
   ) {
     this.eventClient.getSingle(data.id).subscribe((eventObject) => {
       this.attendees = eventObject.eventAnswers ?? [];
       this.event = eventObject;
-      this.formGroup.setValue({ member: '', date: this.event.start });
+      this.initialFormValue = { member: '', date: this.event.start };
+      this.formGroup.setValue(this.initialFormValue);
     });
   }
 
@@ -43,13 +50,31 @@ export class EventAttendeesDialogComponent implements OnInit {
     });
   }
 
-  attendeeRemove(id: number) {
-    const cmd = new RemoveEventAnswerCommand({ id: id });
-    this.eventClient.removeEventAnswer(cmd).subscribe(() => {
-      this.eventClient.getSingle(this.data.id).subscribe((eventObject) => {
-        this.attendees = eventObject.eventAnswers;
-        this.event = eventObject;
-      });
+  attendeeRemove(answerToRemove: EventAnswerDto) {
+    const dialogRef = this.dialogCtrl.open(DeleteDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Anwesenheit entfernen',
+        content: `Willst du ${answerToRemove.person.firstName} ${answerToRemove.person.firstName} entfernen?`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const cmd = new RemoveEventAnswerCommand({ id: answerToRemove.id });
+
+        this.eventClient.removeEventAnswer(cmd).subscribe(
+          () => {
+            this.eventClient
+              .getSingle(this.data.id)
+              .subscribe((eventObject) => {
+                this.attendees = eventObject.eventAnswers;
+                this.event = eventObject;
+              });
+          },
+          (err) => (this.errorMsg = err)
+        );
+      }
     });
   }
 
@@ -68,11 +93,15 @@ export class EventAttendeesDialogComponent implements OnInit {
       personId: id,
       answerTime: answerTime.toISOString(),
     });
-    this.eventClient.addEventAnswer(cmd).subscribe(() => {
-      this.eventClient.getSingle(this.data.id).subscribe((eventObject) => {
-        this.attendees = eventObject.eventAnswers;
-        this.event = eventObject;
-      });
-    });
+    this.eventClient.addEventAnswer(cmd).subscribe(
+      () => {
+        this.eventClient.getSingle(this.data.id).subscribe((eventObject) => {
+          this.attendees = eventObject.eventAnswers;
+          this.event = eventObject;
+        });
+      },
+      (err) => (this.errorMsg = err)
+    );
+    this.formGroup.reset(this.initialFormValue);
   }
 }

@@ -21,11 +21,12 @@ import {
   ChangePersonCareerLevelCommand,
   MemberStatusClient,
   UpdateMemberStatusCommand,
+  ChangePersonMemberStatusCommand,
 } from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoryData } from '../member-history/member-history.component';
 import { MemberDismissDialogComponent } from '../member-dismiss-dialog/member-dismiss-dialog.component';
-import { Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {
   MemberReassignDialogComponent,
@@ -161,6 +162,38 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
             new ChangePersonCareerLevelCommand({
               personId: this.person.id,
               careerLevelId: newAssignedId,
+              changeDateTime: reassignDate,
+            })
+          )
+          .pipe(
+            tap(() => {
+              this.doReload();
+            }),
+            // it returns a number, we're not interested in that
+            map((v) => undefined)
+          );
+      },
+    };
+    this.dialog.open(MemberReassignDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: dialogData,
+    });
+  };
+
+  handleMemberStatusReassign = async (element: HistoryData): Promise<void> => {
+    const dialogData: MemberReassignDialogData = {
+      description: `${this.getFullName()} vom Status ${
+        element.name
+      } entfernen?`,
+      reassignSelectSuggestions: await this.getMemberStatusSuggestions(),
+      reassignLabel: 'Status',
+      reassignCallback: (reassignDate, newAssignedId) => {
+        return this.memberStatusApi
+          .changePersonMemberStatus(
+            new ChangePersonMemberStatusCommand({
+              personId: this.person.id,
+              memberStatusId: newAssignedId,
               changeDateTime: reassignDate,
             })
           )

@@ -231,17 +231,17 @@ namespace MemberManager.Infrastructure.Persistence
                     {
                         Tag = "VT",
                     };
-                    DateTime startTime = new DateTime(2022, 4, 16);
-                    startTime = startTime.AddHours(20);
-                    DateTime endTime = startTime.AddHours(21);
+                    DateTime baseTime = new DateTime(2022, 4, 16);
+                    DateTime startTime = baseTime.AddHours(20);
+                    DateTime endTime = baseTime.AddHours(21);
 
                     for (int i = 0; i < 4; i++)
                     {
                         var evnt = new Event()
                         {
                             Name = "Vereinstreffen " + i,
-                            End = startTime.AddDays(i),
-                            Start = endTime.AddDays(i),
+                            Start = startTime.AddDays(i),
+                            End = endTime.AddDays(i),
                             Organizer = PickRandom(rand, persons),
                             SecretKey = "IchBinEinSecretKey" + i,
                         };
@@ -275,8 +275,8 @@ namespace MemberManager.Infrastructure.Persistence
                     await context.Events.AddAsync(new Event()
                     {
                         Name = "Vereinstreffen leer",
-                        End = startTime.AddDays(10),
-                        Start = endTime.AddDays(10),
+                        Start = startTime.AddDays(10),
+                        End = startTime.AddDays(11),
                         Organizer = PickRandom(rand, persons),
                         SecretKey = "IchBinEinSecretKeyLeer"
                     });

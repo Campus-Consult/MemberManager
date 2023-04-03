@@ -1,6 +1,10 @@
 <h2 mat-dialog-title>Event QR Code</h2>
 <mat-dialog-content class="center">
   <div class="qrcodeImage">
+    <p>
+      <a [href]="qrCodeURL">QR-Code Link</a>
+      <button mat-button (click)="copyLink()" color="primary">Kopieren</button>
+    </p>
     <qrcode
       #qrElement
       [qrdata]="qrCodeURL"

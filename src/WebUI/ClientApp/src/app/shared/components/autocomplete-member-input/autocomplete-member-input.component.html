@@ -1,0 +1,23 @@
+<div [formGroup]="formGroup">
+  <mat-form-field id="organizer" appearance="outline">
+    <mat-label>{{ label }}</mat-label>
+    <mat-error> {{ error }}</mat-error>
+    <input
+      matInput
+      [placeholder]="placeholder"
+      [formControlName]="fControlName"
+      [matAutocomplete]="autoOrga"
+    />
+    <mat-autocomplete
+      #autoOrga="matAutocomplete"
+      [displayWith]="displayMemberFn"
+    >
+      <mat-option
+        *ngFor="let option of filteredMemberOptions | async"
+        [value]="option"
+      >
+        {{ displayMemberFn(option) }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable, of } from 'rxjs';
@@ -9,6 +17,7 @@ import {
   IUpdateEventCommand,
   PersonLookupDto,
 } from 'src/app/membermanager-api';
+import { AutocompleteMemberInputComponent } from 'src/app/shared/components/autocomplete-member-input/autocomplete-member-input.component';
 import {
   ICreateEventCommand,
   PeopleClient,
@@ -26,8 +35,6 @@ export class EventFormComponent implements OnInit {
     ICreateEventCommand & IUpdateEventCommand
   >();
 
-  suggOrganizer: PersonLookupDto[] = [];
-
   suggTags: string[];
   startingTags: Set<string>;
   tagsOnEvent: Set<string>;
@@ -41,25 +48,18 @@ export class EventFormComponent implements OnInit {
   eventFormGroup: FormGroup;
   eventDate: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private memberClient: PeopleClient
-  ) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.suggTags = this.data.suggestedTags;
     this.startingTags = new Set(this.data.startingTags);
     this.tagsOnEvent = new Set(this.data.startingTags);
 
-    // Init Suggested Organizer, default load People
-    this.memberClient.get().subscribe((data) => {
-      this.suggOrganizer = data.people;
-    });
-
     this.eventDate = this.formBuilder.group({
       start: [Date.now(), [Validators.required]],
       end: [Date.now(), [Validators.required]],
     });
+
     this.eventFormGroup = this.formBuilder.group({
       name: ['Vereinstreffen', [Validators.required]],
       tags: [[this.tagsOnEvent], [Validators.required]],
@@ -88,20 +88,11 @@ export class EventFormComponent implements OnInit {
       });
     }
 
-    // Filter Observable for tags and organizer
+    // Filter Observable for tags
     this.filteredTagOptions = this.eventFormGroup.valueChanges.pipe(
       pluck('tagInput'),
       startWith(''),
       map((value) => this._filterTags(value || ''))
-    );
-    this.filteredOrgaOptions = this.eventFormGroup.valueChanges.pipe(
-      pluck('organizer'),
-      startWith(''),
-      map((value) => {
-        const name =
-          typeof value === 'string' ? value : this.displayOrganizerFn(value);
-        return this._filterOrga(name);
-      })
     );
   }
 
@@ -114,10 +105,6 @@ export class EventFormComponent implements OnInit {
 
   removeTag(keyword: string) {
     this.tagsOnEvent.delete(keyword);
-  }
-
-  displayOrganizerFn(person: IPersonLookupDto): string {
-    return person ? `${person.firstName} ${person.surname}` : '';
   }
 
   onSubmit() {
@@ -178,13 +165,6 @@ export class EventFormComponent implements OnInit {
     const filterValue = value?.toLowerCase();
     return this.suggTags.filter((option) =>
       option.toLowerCase().includes(filterValue)
-    );
-  }
-
-  private _filterOrga(person: string): IPersonLookupDto[] {
-    const filterValue = person.toLowerCase();
-    return this.suggOrganizer.filter((option) =>
-      this.displayOrganizerFn(option).toLowerCase().includes(filterValue)
     );
   }
 }

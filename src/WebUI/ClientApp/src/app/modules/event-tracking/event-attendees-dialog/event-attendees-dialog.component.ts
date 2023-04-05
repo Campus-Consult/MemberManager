@@ -56,7 +56,7 @@ export class EventAttendeesDialogComponent implements OnInit {
       width: '250px',
       data: {
         title: 'Anwesenheit entfernen',
-        content: `Willst du ${answerToRemove.person.firstName} ${answerToRemove.person.firstName} entfernen?`,
+        content: `Willst du ${answerToRemove.person.firstName} ${answerToRemove.person.surname} entfernen?`,
       },
     });
 

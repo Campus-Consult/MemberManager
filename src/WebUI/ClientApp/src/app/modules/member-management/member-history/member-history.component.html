@@ -14,6 +14,17 @@
         <mat-icon color="primary">edit</mat-icon>
       </button>
     </div>
+    <div>
+      <button
+        [disabled]="isLocked"
+        class="btn btn-link"
+        *ngIf="newAssignCallback"
+        (click)="wrapNewAssignCallback()"
+        [title]="newAssignLabel"
+      >
+        <mat-icon color="primary">person_add</mat-icon>
+      </button>
+    </div>
     <table id="tight-table" mat-table [dataSource]="historyData">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>

@@ -32,7 +32,7 @@ import { MemberManagementComponent } from './member-management.component';
 import { MemberManagerRoutingModule } from './member-manager-routing.module';
 import { MemberDismissDialogComponent } from './member-dismiss-dialog/member-dismiss-dialog.component';
 import { MemberHistoryComponent } from './member-history/member-history.component';
-import { MemberReassignDialogComponent } from './member-reassign-dialog/member-reassign-dialog.component';
+import { MemberAssignDialogComponent } from './member-assign-dialog/member-assign-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { MemberReassignDialogComponent } from './member-reassign-dialog/member-r
     MemberSelfManagedComponent,
     MemberDismissDialogComponent,
     MemberHistoryComponent,
-    MemberReassignDialogComponent,
+    MemberAssignDialogComponent,
   ],
   exports: [MemberManagementComponent, MemberSelfManagedComponent],
   imports: [

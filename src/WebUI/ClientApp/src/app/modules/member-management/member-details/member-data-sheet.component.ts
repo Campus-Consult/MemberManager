@@ -21,16 +21,18 @@ import {
   ChangePersonCareerLevelCommand,
   MemberStatusClient,
   UpdateMemberStatusCommand,
+  ChangePersonMemberStatusCommand,
+  AssignToPositionCommand,
 } from 'src/app/membermanager-api';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoryData } from '../member-history/member-history.component';
 import { MemberDismissDialogComponent } from '../member-dismiss-dialog/member-dismiss-dialog.component';
-import { Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {
-  MemberReassignDialogComponent,
-  MemberReassignDialogData,
-} from '../member-reassign-dialog/member-reassign-dialog.component';
+  MemberAssignDialogComponent,
+  MemberAssignDialogData,
+} from '../member-assign-dialog/member-assign-dialog.component';
 import { SelectOption } from 'src/app/shared/components/search-select/search-select.component';
 
 @Component({
@@ -60,6 +62,7 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   memberStatusHistory: HistoryData[] = [];
   careerLevelSuggestions: SelectOption[] = [];
   memberStatusSuggestions: SelectOption[] = [];
+  positionSuggestions: SelectOption[] = [];
 
   /**
    * if set text will be displayed, below loading
@@ -149,13 +152,14 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
   };
 
   handleCareerReassign = async (element: HistoryData): Promise<void> => {
-    const dialogData: MemberReassignDialogData = {
+    const dialogData: MemberAssignDialogData = {
       description: `${this.getFullName()} von Karrierestufe ${
         element.name
       } entfernen?`,
-      reassignSelectSuggestions: await this.getCareerLevelSuggestions(),
-      reassignLabel: 'Karrierestufe',
-      reassignCallback: (reassignDate, newAssignedId) => {
+      assignSelectSuggestions: await this.getCareerLevelSuggestions(),
+      assignLabel: 'Karrierestufe',
+      assignAction: 'Neu Zuweisen',
+      assignCallback: (reassignDate, newAssignedId) => {
         return this.careerLevelApi
           .changePersonCareerLevel(
             new ChangePersonCareerLevelCommand({
@@ -173,7 +177,72 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
           );
       },
     };
-    this.dialog.open(MemberReassignDialogComponent, {
+    this.dialog.open(MemberAssignDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: dialogData,
+    });
+  };
+
+  handleMemberStatusReassign = async (element: HistoryData): Promise<void> => {
+    const dialogData: MemberAssignDialogData = {
+      description: `${this.getFullName()} vom Status ${
+        element.name
+      } entfernen?`,
+      assignSelectSuggestions: await this.getMemberStatusSuggestions(),
+      assignLabel: 'Status',
+      assignAction: 'Neu Zuweisen',
+      assignCallback: (reassignDate, newAssignedId) => {
+        return this.memberStatusApi
+          .changePersonMemberStatus(
+            new ChangePersonMemberStatusCommand({
+              personId: this.person.id,
+              memberStatusId: newAssignedId,
+              changeDateTime: reassignDate,
+            })
+          )
+          .pipe(
+            tap(() => {
+              this.doReload();
+            }),
+            // it returns a number, we're not interested in that
+            map((v) => undefined)
+          );
+      },
+    };
+    this.dialog.open(MemberAssignDialogComponent, {
+      role: 'alertdialog',
+      width: '250px',
+      data: dialogData,
+    });
+  };
+
+  handlePositionAssign = async (): Promise<void> => {
+    const dialogData: MemberAssignDialogData = {
+      description: `Neuer Posten für ${this.getFullName()}`,
+      assignSelectSuggestions: await this.getPositionSuggestions(),
+      assignLabel: 'Posten',
+      assignAction: 'Neu Zuweisen',
+      assignCallback: (assignDate, newAssignedId) => {
+        return this.positionService
+          .assign(
+            newAssignedId,
+            new AssignToPositionCommand({
+              personId: this.person.id,
+              positionId: newAssignedId,
+              assignmentDateTime: assignDate,
+            })
+          )
+          .pipe(
+            tap(() => {
+              this.doReload();
+            }),
+            // it returns a number, we're not interested in that
+            map((v) => undefined)
+          );
+      },
+    };
+    this.dialog.open(MemberAssignDialogComponent, {
       role: 'alertdialog',
       width: '250px',
       data: dialogData,
@@ -230,6 +299,16 @@ export class MemberDataSheetComponent implements OnInit, OnChanges {
       });
     }
     return this.memberStatusSuggestions;
+  }
+
+  async getPositionSuggestions(): Promise<SelectOption[]> {
+    if (this.positionSuggestions.length === 0) {
+      const suggestions = await this.positionService.get().toPromise();
+      this.positionSuggestions = suggestions.positions.map((s) => {
+        return { name: s.name, id: s.id };
+      });
+    }
+    return this.positionSuggestions;
   }
 
   onEdit() {

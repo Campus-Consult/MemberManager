@@ -10,10 +10,12 @@ export class MemberHistoryComponent implements OnInit {
   @Input() historyData: HistoryData[];
   @Input() dismissLabel: string = 'Entfernen';
   @Input() reassignLabel: string = 'Neu zuweisen';
+  @Input() newAssignLabel: string = 'Neu zuweisen';
   @Input() dismissCallback?: (historyData: HistoryData) => void | Promise<void>;
   @Input() reassignCallback?: (
     historyData: HistoryData
   ) => void | Promise<void>;
+  @Input() newAssignCallback?: () => void | Promise<void>;
 
   displayedColumns: string[] = [];
   isLocked = false;
@@ -40,6 +42,15 @@ export class MemberHistoryComponent implements OnInit {
       const active = this.historyData.find((val) => !val.endDate);
       this.isLocked = true;
       Promise.resolve(this.reassignCallback(active)).finally(() => {
+        this.isLocked = false;
+      });
+    }
+  }
+
+  wrapNewAssignCallback() {
+    if (this.newAssignCallback) {
+      this.isLocked = true;
+      Promise.resolve(this.newAssignCallback()).finally(() => {
         this.isLocked = false;
       });
     }

@@ -11,7 +11,7 @@ import {
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { EventAttendeesDialogComponent } from '../event-attendees-dialog/event-attendees-dialog.component';
 import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
-import { EventClient } from './../../../membermanager-api';
+import { EventClient, EventLookupDtoWithAnswerCount } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
 import { EventFormDialogData } from './../event-form/event-form.component';
 
@@ -29,9 +29,9 @@ export class EventTrackingTableComponent implements OnInit {
   }
 
   @ViewChild(DataTableComponent)
-  dataTable: DataTableComponent<EventLookupDto>;
+  dataTable: DataTableComponent<EventLookupDtoWithAnswerCount>;
 
-  dataSource: MatTableDataSource<EventLookupDto>;
+  dataSource: MatTableDataSource<EventLookupDtoWithAnswerCount>;
 
   displayedColumns: string[] = [
     'eventname',
@@ -40,7 +40,7 @@ export class EventTrackingTableComponent implements OnInit {
     'qrcode',
   ];
 
-  events: EventLookupDto[];
+  events: EventLookupDtoWithAnswerCount[];
 
   constructor(
     protected dialog: MatDialog,
@@ -75,12 +75,12 @@ export class EventTrackingTableComponent implements OnInit {
   loadEvents() {
     this.eventClient.get().subscribe((events) => {
       this.events = events;
-      this.dataSource = new MatTableDataSource<EventLookupDto>(this.events);
+      this.dataSource = new MatTableDataSource<EventLookupDtoWithAnswerCount>(this.events);
       this.dataSource.sort = this.sort;
     });
   }
 
-  async openEventDialog(event: EventLookupDto) {
+  async openEventDialog(event: EventLookupDtoWithAnswerCount) {
     const eventDetails = await this.eventClient
       .getSingle(event.id)
       .toPromise()
@@ -106,7 +106,7 @@ export class EventTrackingTableComponent implements OnInit {
       (err) => this._snackBar.open('Something went wrong.')
     );
   }
-  openAttendeesDialog(row: EventLookupDto) {
+  openAttendeesDialog(row: EventLookupDtoWithAnswerCount) {
     const dialogRef = this.dialog.open(EventAttendeesDialogComponent, {
       width: '750px',
       data: {

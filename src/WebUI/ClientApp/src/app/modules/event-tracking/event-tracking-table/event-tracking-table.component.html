@@ -17,9 +17,9 @@
       <td mat-cell *matCellDef="let row">
         <mat-chip-list aria-label="Tag List">
           <ng-container *ngFor="let tag of row.tags; let i = index">
-          <mat-chip *ngIf="i<3" color="primary">{{ tag }}</mat-chip>
-          <span *ngIf="i===3" [matTooltip]="row.tags | slice:3" >...</span>
-        </ng-container>
+            <mat-chip *ngIf="i < 3" color="primary">{{ tag }}</mat-chip>
+            <span *ngIf="i === 3" [matTooltip]="row.tags | slice: 3">...</span>
+          </ng-container>
         </mat-chip-list>
       </td>
     </ng-container>

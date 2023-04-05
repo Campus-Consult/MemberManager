@@ -11,7 +11,10 @@ import {
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { EventAttendeesDialogComponent } from '../event-attendees-dialog/event-attendees-dialog.component';
 import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
-import { EventClient, EventLookupDtoWithAnswerCount } from './../../../membermanager-api';
+import {
+  EventClient,
+  EventLookupDtoWithAnswerCount,
+} from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
 import { EventFormDialogData } from './../event-form/event-form.component';
 
@@ -75,7 +78,9 @@ export class EventTrackingTableComponent implements OnInit {
   loadEvents() {
     this.eventClient.get().subscribe((events) => {
       this.events = events;
-      this.dataSource = new MatTableDataSource<EventLookupDtoWithAnswerCount>(this.events);
+      this.dataSource = new MatTableDataSource<EventLookupDtoWithAnswerCount>(
+        this.events
+      );
       this.dataSource.sort = this.sort;
     });
   }

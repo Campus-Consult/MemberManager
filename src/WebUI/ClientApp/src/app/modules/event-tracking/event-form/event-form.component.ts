@@ -62,7 +62,7 @@ export class EventFormComponent implements OnInit {
 
     this.eventFormGroup = this.formBuilder.group({
       name: ['Vereinstreffen', [Validators.required]],
-      tags: [[this.tagsOnEvent], [Validators.required]],
+      tags: [[this.tagsOnEvent]],
       tagInput: [''],
       organizer: ['', [Validators.required]],
       eventDate: this.eventDate,
@@ -73,6 +73,8 @@ export class EventFormComponent implements OnInit {
     // Set Value in Edit Case
     const eventEdit = this.data.edit;
     if (eventEdit) {
+      this.tagsOnEvent = new Set(eventEdit.tags);
+
       const startDate = new Date(eventEdit.start);
       const endDate = new Date(eventEdit.end);
       const start = startDate.toLocaleTimeString();

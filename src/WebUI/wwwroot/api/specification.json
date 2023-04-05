@@ -508,7 +508,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/EventLookupDto"
+                    "$ref": "#/components/schemas/EventLookupDtoWithAnswerCount"
                   }
                 }
               }
@@ -2412,7 +2412,7 @@
           }
         }
       },
-      "EventLookupDto": {
+      "EventLookupDtoWithAnswerCount": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2438,6 +2438,10 @@
             "items": {
               "type": "string"
             }
+          },
+          "answerCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -2661,6 +2665,35 @@
                 "$ref": "#/components/schemas/EventLookupDto"
               }
             ]
+          }
+        }
+      },
+      "EventLookupDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

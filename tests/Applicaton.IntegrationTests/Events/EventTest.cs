@@ -33,7 +33,7 @@ namespace MemberManager.Application.IntegrationTests.Events
             });
         }
 
-        public async Task<List<EventLookupDto>> GetAllEvents() {
+        public async Task<List<EventLookupDtoWithAnswerCount>> GetAllEvents() {
             return await SendAsync(new GetAllEventsQuery());
         }
 

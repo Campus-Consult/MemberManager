@@ -11,9 +11,9 @@ using MemberManager.Application.Events.Common;
 
 namespace MemberManager.Application.Events.Queries.GetAllEvents
 {
-    public class GetAllEventsQuery : IRequest<List<EventLookupDto>> {}
+    public class GetAllEventsQuery : IRequest<List<EventLookupDtoWithAnswerCount>> {}
 
-    public class GetAllEventsQueryHandler : IRequestHandler<GetAllEventsQuery, List<EventLookupDto>>
+    public class GetAllEventsQueryHandler : IRequestHandler<GetAllEventsQuery, List<EventLookupDtoWithAnswerCount>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -24,9 +24,13 @@ namespace MemberManager.Application.Events.Queries.GetAllEvents
             _mapper = mapper;
         }
 
-        public async Task<List<EventLookupDto>> Handle(GetAllEventsQuery request, CancellationToken cancellationToken)
+        public async Task<List<EventLookupDtoWithAnswerCount>> Handle(GetAllEventsQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Events.Include(e => e.EventTags).ProjectTo<EventLookupDto>(_mapper.ConfigurationProvider).ToListAsync();
+            return await _context.Events
+                .Include(e => e.EventTags)
+                .Include(e => e.EventAnswers)
+                .ProjectTo<EventLookupDtoWithAnswerCount>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace MemberManager.WebUI.Controllers
     {
         [Authorize(Policy = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<List<EventLookupDto>>> Get()
+        public async Task<ActionResult<List<EventLookupDtoWithAnswerCount>>> Get()
         {
             return await Mediator.Send(new GetAllEventsQuery());
         }

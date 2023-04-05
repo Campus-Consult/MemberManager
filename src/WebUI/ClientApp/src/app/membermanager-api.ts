@@ -729,7 +729,7 @@ export class CareerLevelClient implements ICareerLevelClient {
 }
 
 export interface IEventClient {
-    get(): Observable<EventLookupDto[]>;
+    get(): Observable<EventLookupDtoWithAnswerCount[]>;
     create(cmd: CreateEventCommand): Observable<number>;
     getSingle(id: number): Observable<EventDetailDto>;
     update(id: number, cmd: UpdateEventCommand): Observable<FileResponse>;
@@ -756,7 +756,7 @@ export class EventClient implements IEventClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    get(): Observable<EventLookupDto[]> {
+    get(): Observable<EventLookupDtoWithAnswerCount[]> {
         let url_ = this.baseUrl + "/api/Event";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -775,14 +775,14 @@ export class EventClient implements IEventClient {
                 try {
                     return this.processGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<EventLookupDto[]>;
+                    return _observableThrow(e) as any as Observable<EventLookupDtoWithAnswerCount[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<EventLookupDto[]>;
+                return _observableThrow(response_) as any as Observable<EventLookupDtoWithAnswerCount[]>;
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<EventLookupDto[]> {
+    protected processGet(response: HttpResponseBase): Observable<EventLookupDtoWithAnswerCount[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -796,7 +796,7 @@ export class EventClient implements IEventClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(EventLookupDto.fromJS(item));
+                    result200!.push(EventLookupDtoWithAnswerCount.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -808,7 +808,7 @@ export class EventClient implements IEventClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<EventLookupDto[]>(null as any);
+        return _observableOf<EventLookupDtoWithAnswerCount[]>(null as any);
     }
 
     create(cmd: CreateEventCommand): Observable<number> {
@@ -3764,14 +3764,15 @@ export interface IPeopleAssignSuggestion {
     id?: number;
 }
 
-export class EventLookupDto implements IEventLookupDto {
+export class EventLookupDtoWithAnswerCount implements IEventLookupDtoWithAnswerCount {
     id?: number;
     name?: string | undefined;
     start?: string;
     end?: string;
     tags?: string[] | undefined;
+    answerCount?: number;
 
-    constructor(data?: IEventLookupDto) {
+    constructor(data?: IEventLookupDtoWithAnswerCount) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3791,12 +3792,13 @@ export class EventLookupDto implements IEventLookupDto {
                 for (let item of _data["tags"])
                     this.tags!.push(item);
             }
+            this.answerCount = _data["answerCount"];
         }
     }
 
-    static fromJS(data: any): EventLookupDto {
+    static fromJS(data: any): EventLookupDtoWithAnswerCount {
         data = typeof data === 'object' ? data : {};
-        let result = new EventLookupDto();
+        let result = new EventLookupDtoWithAnswerCount();
         result.init(data);
         return result;
     }
@@ -3812,16 +3814,18 @@ export class EventLookupDto implements IEventLookupDto {
             for (let item of this.tags)
                 data["tags"].push(item);
         }
+        data["answerCount"] = this.answerCount;
         return data;
     }
 }
 
-export interface IEventLookupDto {
+export interface IEventLookupDtoWithAnswerCount {
     id?: number;
     name?: string | undefined;
     start?: string;
     end?: string;
     tags?: string[] | undefined;
+    answerCount?: number;
 }
 
 export class EventDetailDto implements IEventDetailDto {
@@ -4262,6 +4266,66 @@ export class EventAnswerWithEventDto implements IEventAnswerWithEventDto {
 export interface IEventAnswerWithEventDto {
     time?: string;
     event?: EventLookupDto | undefined;
+}
+
+export class EventLookupDto implements IEventLookupDto {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    tags?: string[] | undefined;
+
+    constructor(data?: IEventLookupDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.start = _data["start"];
+            this.end = _data["end"];
+            if (Array.isArray(_data["tags"])) {
+                this.tags = [] as any;
+                for (let item of _data["tags"])
+                    this.tags!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): EventLookupDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventLookupDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["start"] = this.start;
+        data["end"] = this.end;
+        if (Array.isArray(this.tags)) {
+            data["tags"] = [];
+            for (let item of this.tags)
+                data["tags"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IEventLookupDto {
+    id?: number;
+    name?: string | undefined;
+    start?: string;
+    end?: string;
+    tags?: string[] | undefined;
 }
 
 export class AddEventAnswerCommand implements IAddEventAnswerCommand {

@@ -17,14 +17,11 @@ import { Router } from '@angular/router';
 })
 export class EventCodeDialogComponent implements OnInit {
   qrCodeURL: string = '';
-  event: EventDetailDto;
 
   constructor(
     public dialogRef: MatDialogRef<EventCodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData
-  ) {
-    this.event = this.data.edit;
-  }
+    @Inject(MAT_DIALOG_DATA) public event: EventDetailDto
+  ) {}
 
   ngOnInit(): void {
     this.qrCodeURL = `${location.origin}/landingpage?eventid=${this.event.id}&eventcode=${this.event.secretKey}`;
@@ -71,9 +68,5 @@ export class EventCodeDialogComponent implements OnInit {
     }
     // return blob image after conversion
     return new Blob([uInt8Array], { type: imageType });
-  }
-
-  onSubmit(event: UpdateEventCommand) {
-    this.dialogRef.close(event);
   }
 }

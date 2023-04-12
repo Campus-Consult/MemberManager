@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  Inject,
   Input,
   OnInit,
   Output,
@@ -9,7 +10,6 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable, of } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
   EventDetailDto,
@@ -22,6 +22,9 @@ import {
   ICreateEventCommand,
   PeopleClient,
 } from './../../../membermanager-api';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-event-form',
@@ -29,12 +32,6 @@ import {
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
-  @Input() data: EventFormDialogData;
-
-  @Output() submitEvent = new EventEmitter<
-    ICreateEventCommand & IUpdateEventCommand
-  >();
-
   suggTags: string[];
   startingTags: Set<string>;
   tagsOnEvent: Set<string>;
@@ -48,7 +45,10 @@ export class EventFormComponent implements OnInit {
   eventFormGroup: FormGroup;
   eventDate: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder,
+    private dialogRef: MatDialogRef<EventCodeDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData
+  ) {}
 
   ngOnInit(): void {
     this.suggTags = this.data.suggestedTags;
@@ -112,7 +112,7 @@ export class EventFormComponent implements OnInit {
       const command = this.getCommand();
       this.data.submitAction(command).subscribe(
         (response) => {
-          this.submitEvent.emit(command);
+          this.dialogRef.close(command);
         },
         (errorResponse) => this.handleError(errorResponse)
       );

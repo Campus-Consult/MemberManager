@@ -8,7 +8,7 @@
       value="value"
       formControlName="name"
     />
-    <mat-hint>Terminname</mat-hint>
+    <mat-hint>Name & Organisator werden dem Teilnehmer präsentiert</mat-hint>
   </mat-form-field>
   <app-autocomplete-member-input
     [formGroup]="eventFormGroup"
@@ -52,8 +52,8 @@
   <!-- Tags -->
   <mat-form-field class="event-tags" appearance="outline">
     <mat-label>Event Tags</mat-label>
-    <mat-hint>Tags kategorisieren und beschreiben die Eventgruppe</mat-hint>
-    <mat-hint align="end">unbeschränkt</mat-hint>
+    <mat-hint>Empfehlung: Namen kurz halten</mat-hint>
+    <mat-hint align="end">Mit Enter Eingabe bestätigen</mat-hint>
     <mat-chip-list
       #chipList
       aria-label="Event Tags"

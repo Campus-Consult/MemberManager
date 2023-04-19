@@ -39,7 +39,8 @@ export class EventTrackingTableComponent implements OnInit {
   displayedColumns: string[] = [
     'eventname',
     'date',
-    /*'tag',*/ 'attendances',
+    'tag',
+    'attendances',
     'qrcode',
   ];
 

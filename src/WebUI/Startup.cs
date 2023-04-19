@@ -43,7 +43,10 @@ namespace MemberManager.WebUI
                 .AddDbContextCheck<ApplicationDbContext>();
 
             services.AddControllersWithViews(options =>
-                options.Filters.Add(new ApiExceptionFilter()));
+                options.Filters.Add(new ApiExceptionFilter()))
+                // Adds timezone handling in requests for date strings, src: https://stackoverflow.com/a/60785033 
+                .AddNewtonsoftJson(
+                    options => options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc);
 
             services.AddRazorPages();
 

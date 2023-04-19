@@ -1,3 +1,4 @@
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
 import {
   AfterViewInit,
   Component,
@@ -22,10 +23,20 @@ import {
   ICreateEventCommand,
   PeopleClient,
 } from './../../../membermanager-api';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
 import { Observable, of } from 'rxjs';
 
+/**
+ * Event Form is a dialog form to perform a Create or Edit action.
+ * Depending on given MAT_DIALOG_DATA input in particular
+ * if EventFormDialogData.edit is set it performs as a edit dialog
+ * else it performs as an create Dialog.
+ * Depending on mode the dialog will return onDismiss different results
+ * if EventFormDialogData.edit is set it will return an IUpdateEventCommand
+ * else it will return an ICreateEventCommand
+ * in all modes it will return undefined if the dialog abort is pressed.
+ */
 @Component({
   selector: 'app-event-form',
   templateUrl: './event-form.component.html',
@@ -45,9 +56,11 @@ export class EventFormComponent implements OnInit {
   eventFormGroup: FormGroup;
   eventDate: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<EventCodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData
+    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData,
+    protected dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +120,9 @@ export class EventFormComponent implements OnInit {
     this.tagsOnEvent.delete(keyword);
   }
 
+  /**
+   * Submits ICreateEventCommand or IUpdateEventCommand it depends on form mode
+   */
   onSubmit() {
     if (this.eventFormGroup.status) {
       const command = this.getCommand();

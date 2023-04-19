@@ -10,12 +10,15 @@ import {
 } from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { EventAttendeesDialogComponent } from '../event-attendees-dialog/event-attendees-dialog.component';
-import { EventClient } from './../../../membermanager-api';
+import { EventClient, IUpdateEventCommand } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
 import {
   EventFormComponent,
   EventFormDialogData,
 } from './../event-form/event-form.component';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
+import { concatMap, filter, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-event-tracking-table',
@@ -111,13 +114,32 @@ export class EventTrackingTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(
       (result) => {
-        if (result) {
+        if (result instanceof UpdateEventCommand) {
           this.loadEvents();
           this._snackBar.open(`${result?.name} erfolgreich bearbeitet!`);
         }
       },
       (err) => this._snackBar.open('Something went wrong.')
     );
+  }
+
+  openDeleteDialog(event: EventLookupDto) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      role: 'alertdialog',
+      data: { title: `Event löschen?` },
+    });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((result) => result),
+        switchMap((result) => this.eventClient.delete(event.id))
+      )
+      .subscribe((result) => {
+        this.loadEvents();
+        this._snackBar.open('Event erfolgreich gelöscht!', 'ok', {
+          duration: 3000,
+        });
+      });
   }
 
   openAttendeesDialog(row: EventLookupDto) {
@@ -127,5 +149,6 @@ export class EventTrackingTableComponent implements OnInit {
         id: row.id,
       },
     });
+    dialogRef.afterClosed().subscribe(() => this.loadEvents());
   }
 }

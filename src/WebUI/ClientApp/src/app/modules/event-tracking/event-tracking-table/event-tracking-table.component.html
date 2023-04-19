@@ -57,17 +57,20 @@
           <button
             mat-icon-button
             color="primary"
-            (click)="openEditEventDialog(row)"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            color="primary"
             aria-label="open-qrcode"
             (click)="openEventDialog(row)"
           >
             <mat-icon>qr_code_2</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="openEditEventDialog(row)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="openDeleteDialog(row)">
+            <mat-icon>delete</mat-icon>
           </button>
         </div>
       </td>

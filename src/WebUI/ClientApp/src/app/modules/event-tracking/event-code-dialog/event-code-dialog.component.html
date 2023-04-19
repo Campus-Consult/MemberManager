@@ -1,10 +1,10 @@
 <h2 mat-dialog-title>Event QR Code</h2>
-<mat-dialog-content class="center">
+<mat-dialog-content>
+  <p>
+    <a [href]="qrCodeURL">QR-Code Link</a>
+    <button mat-button (click)="copyLink()" color="primary">Kopieren</button>
+  </p>
   <div class="qrcodeImage">
-    <p>
-      <a [href]="qrCodeURL">QR-Code Link</a>
-      <button mat-button (click)="copyLink()" color="primary">Kopieren</button>
-    </p>
     <qrcode
       #qrElement
       [qrdata]="qrCodeURL"
@@ -21,10 +21,11 @@
       [width]="200"
     ></qrcode>
     <br />
-    <button mat-raised-button color="accent" (click)="saveAsImage(qrElement)">
-      Download
-    </button>
-  </div>
-  <div id="formContainer">
   </div>
 </mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="saveAsImage(qrElement)">
+    Download
+  </button>
+  <button mat-button matDialogClose>Schließen</button>
+</mat-dialog-actions>

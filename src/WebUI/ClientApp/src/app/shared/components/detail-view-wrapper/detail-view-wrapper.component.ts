@@ -18,33 +18,33 @@ export class DetailViewWrapperComponent implements OnInit {
   @Input() subTitle?: string;
   @Input() disablePersonRemoveButton: boolean;
 
-  @Output() onEdit = new EventEmitter();
-  @Output() onAssign = new EventEmitter();
-  @Output() onDismiss = new EventEmitter();
-  @Output() onShowHistory = new EventEmitter();
-  @Output() onDelete = new EventEmitter();
+  @Output() onEdit = new EventEmitter<void>();
+  @Output() onAssign = new EventEmitter<void>();
+  @Output() onDismiss = new EventEmitter<void>();
+  @Output() onShowHistory = new EventEmitter<void>();
+  @Output() onDelete = new EventEmitter<void>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
   onEditButtonClicked() {
-    this.onEdit.emit(undefined);
+    this.onEdit.emit();
   }
 
   onAssignButtonClicked() {
-    this.onAssign.emit(undefined);
+    this.onAssign.emit();
   }
 
   onDismissButtonClicked() {
-    this.onDismiss.emit(undefined);
+    this.onDismiss.emit();
   }
 
   onShowHistoryButtonClicked() {
-    this.onShowHistory.emit(undefined);
+    this.onShowHistory.emit();
   }
 
   onDeleteButtonClicked() {
-    this.onDelete.emit(undefined);
+    this.onDelete.emit();
   }
 }

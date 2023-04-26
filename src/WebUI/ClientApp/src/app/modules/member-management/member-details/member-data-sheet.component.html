@@ -7,10 +7,14 @@
 >
   <app-member-data [memberDetails]="personDetails"></app-member-data>
   <div class="spacing">
-    <a mat-raised-button class="mail" href="mailto:{{personDetails.emailAssociaton}}">
+    <a
+      mat-raised-button
+      class="mail"
+      href="mailto:{{ personDetails.emailAssociaton }}"
+    >
       Email an {{ personDetails.firstName }}
       {{ personDetails.surname }}
-      <mat-icon>mail</mat-icon> 
+      <mat-icon>mail</mat-icon>
     </a>
   </div>
   <div class="spacing">

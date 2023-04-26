@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>{{ data.description }}</h2>
+<mat-dialog-content
+  [formGroup]="form"
+  fxLayout="column"
+  fxLayoutAlign="space-between start"
+>
+  <mat-form-field appearance="fill" fxFlex>
+    <input
+      matInput
+      placeholder="Deactivation date"
+      formControlName="endDateTime"
+      type="date"
+    />
+  </mat-form-field>
+
+  <mat-form-field id="careerLevel" appearance="fill" >
+    <mat-label>Wähle neues Karrierelevel</mat-label>
+    <mat-select [formControl]="newLevel">
+      <mat-option *ngFor="let level of careerLevelSelection" [value]="level">
+        {{level.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <label class="mat-warn" fxFlex>
+    Warning: All current assignements will be asssign to the new Level!
+    You can reactivate the position later.
+  </label>
+  <app-dialog-error [errors]="errors"></app-dialog-error>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+  <button class="mat-raised-button" fxFlex="nogrow" (click)="close()">
+    Cancel
+  </button>
+  <button
+    class="mat-raised-button mat-primary"
+    fxFlex="nogrow"
+    (click)="save()"
+  >
+    Save
+  </button>
+</mat-dialog-actions>

@@ -21,7 +21,7 @@ namespace MemberManager.Application.People.Commands.DeletePerson
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeletePersonCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.People.FindAsync(request.Id);
 
@@ -33,8 +33,6 @@ namespace MemberManager.Application.People.Commands.DeletePerson
             _context.People.Remove(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

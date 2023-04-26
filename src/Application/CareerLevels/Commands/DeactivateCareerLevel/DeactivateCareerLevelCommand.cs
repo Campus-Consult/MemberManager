@@ -29,7 +29,7 @@ namespace MemberManager.Application.CareerLevels.Commands.DeactivateCareerLevel
             _mediator = mediator;
         }
 
-        public async Task<Unit> Handle(DeactivateCareerLevelCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeactivateCareerLevelCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.CareerLevels.Include(c => c.PersonCareerLevels).FirstAsync(c => c.Id == request.CareerLevelId);
 
@@ -45,8 +45,6 @@ namespace MemberManager.Application.CareerLevels.Commands.DeactivateCareerLevel
             }
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

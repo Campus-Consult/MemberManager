@@ -21,7 +21,7 @@ namespace MemberManager.Application.Positions.Commands.ReactivatePosition
             _context = context;
         }
 
-        public async Task<Unit> Handle(ReactivatePositionCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ReactivatePositionCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.Positions.FindAsync(request.Id);
 
@@ -33,8 +33,6 @@ namespace MemberManager.Application.Positions.Commands.ReactivatePosition
             entity.IsActive = true;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

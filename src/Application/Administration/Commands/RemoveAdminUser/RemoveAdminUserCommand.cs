@@ -24,10 +24,9 @@ namespace MemberManager.Application.Administration.Commands.RemoveAdminUser
             _identityService = identityService;
         }
 
-        public async Task<Unit> Handle(RemoveAdminUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveAdminUserCommand request, CancellationToken cancellationToken)
         {
             await _identityService.RemoveUserFromRole(request.Email, "Admin");
-            return Unit.Value;
         }
     }
 }

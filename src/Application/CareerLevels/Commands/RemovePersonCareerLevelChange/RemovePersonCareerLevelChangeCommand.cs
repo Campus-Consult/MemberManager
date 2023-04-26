@@ -23,7 +23,7 @@ namespace MemberManager.Application.CareerLevels.Commands.RemovePersonCareerLeve
             _context = context;
         }
 
-        public async Task<Unit> Handle(RemovePersonCareerLevelChangeCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemovePersonCareerLevelChangeCommand request, CancellationToken cancellationToken)
         {
             PersonCareerLevel persCarLevToDelete = await _context.PersonCareerLevels.FindAsync(request.PersonCareerLevelId);
             var previousPersonCareerLevel = _context.PersonCareerLevels
@@ -42,9 +42,7 @@ namespace MemberManager.Application.CareerLevels.Commands.RemovePersonCareerLeve
 
             _context.PersonCareerLevels.Remove(persCarLevToDelete);
 
-            await _context.SaveChangesAsync(cancellationToken);
-            
-            return Unit.Value;
+            await _context.SaveChangesAsync(cancellationToken);            
         }
     }
 }

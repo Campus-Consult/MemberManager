@@ -19,7 +19,7 @@ namespace MemberManager.Application.Events.Commands.RemoveEventAnswer
             _context = context;
         }
 
-        public async Task<Unit> Handle(RemoveEventAnswerCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveEventAnswerCommand request, CancellationToken cancellationToken)
         {
             
             var evnt = await _context.EventAnswers.FindAsync(new object [] {request.Id}, cancellationToken);
@@ -27,8 +27,6 @@ namespace MemberManager.Application.Events.Commands.RemoveEventAnswer
             _context.EventAnswers.Remove(evnt);
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

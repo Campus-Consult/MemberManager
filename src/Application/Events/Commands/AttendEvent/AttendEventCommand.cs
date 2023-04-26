@@ -31,7 +31,7 @@ namespace MemberManager.Application.Events.Commands.AttendEvent
             _currentUser = currentUser;
         }
 
-        public async Task<Unit> Handle(AttendEventCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AttendEventCommand request, CancellationToken cancellationToken)
         {
             var now = _dateTime.Now;
             var attendeeEmail = _currentUser.GetEmailAssociate();
@@ -49,8 +49,6 @@ namespace MemberManager.Application.Events.Commands.AttendEvent
 
                 await _context.SaveChangesAsync(cancellationToken);
             }
-
-            return Unit.Value;
         }
     }
 }

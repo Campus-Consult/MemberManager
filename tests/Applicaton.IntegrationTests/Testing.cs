@@ -99,7 +99,16 @@ public class Testing
 
         var mediator = scope.ServiceProvider.GetService<IMediator>();
 
-        return await mediator.Send(request);
+        return await mediator.Send<TResponse>(request);
+    }
+
+    public static async Task SendAsync<TRequest>(TRequest request) where TRequest : IRequest
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var mediator = scope.ServiceProvider.GetService<IMediator>();
+
+        await mediator.Send(request);
     }
 
     public static async Task<string> RunAsDefaultUserAsync()

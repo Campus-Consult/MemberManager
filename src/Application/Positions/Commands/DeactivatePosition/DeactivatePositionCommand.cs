@@ -28,7 +28,7 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeactivatePositionCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeactivatePositionCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.Positions
                 .Include(p => p.PersonPositions)
@@ -45,8 +45,6 @@ namespace MemberManager.Application.Positions.Commands.DeactivatePosition
             entity.IsActive = false;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

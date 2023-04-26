@@ -23,7 +23,7 @@ namespace MemberManager.Application.MemberStatuss.Commands.RemovePersonMemberSta
             _context = context;
         }
 
-        public async Task<Unit> Handle(RemovePersonMemberStatusChangeCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemovePersonMemberStatusChangeCommand request, CancellationToken cancellationToken)
         {
             PersonMemberStatus persStatusToDelete = await _context.PersonMemberStatus.FindAsync(new object[] {request.PersonMemberStatusId}, cancellationToken);
             var previousPersStatus = _context.PersonMemberStatus
@@ -41,8 +41,6 @@ namespace MemberManager.Application.MemberStatuss.Commands.RemovePersonMemberSta
             _context.PersonMemberStatus.Remove(persStatusToDelete);
 
             await _context.SaveChangesAsync(cancellationToken);
-            
-            return Unit.Value;
         }
     }
 }

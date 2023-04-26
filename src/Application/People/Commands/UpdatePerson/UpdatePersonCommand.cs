@@ -34,7 +34,7 @@ namespace MemberManager.Application.People.Commands.UpdatePerson
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.People.FindAsync(request.Id);
 
@@ -56,8 +56,6 @@ namespace MemberManager.Application.People.Commands.UpdatePerson
             entity.AdressCity = request.AdressCity;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

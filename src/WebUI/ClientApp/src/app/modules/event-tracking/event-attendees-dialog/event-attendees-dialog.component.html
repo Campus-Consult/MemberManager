@@ -1,5 +1,6 @@
 <ng-container *ngIf="event">
   <h1 mat-dialog-title>{{ event.name }}</h1>
+  <p>Teilnehmer: {{ event.eventAnswers?.length ?? 0 }}</p>
   <div class="sub-header-content">
     <p>
       Organisator: {{ event?.organizer.firstName }}
@@ -15,7 +16,7 @@
     <app-dialog-error [errors]="errorMsg"></app-dialog-error>
   </p>
 
-  <div mat-dialog-content>
+  <mat-dialog-content>
     <table id="attendees-table" mat-table [dataSource]="attendees">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -91,7 +92,7 @@
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-  </div>
+  </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-button matDialogClose>Schließen</button>
   </mat-dialog-actions>

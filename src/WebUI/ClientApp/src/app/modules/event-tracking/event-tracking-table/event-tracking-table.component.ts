@@ -3,22 +3,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { filter, switchMap } from 'rxjs/operators';
 import {
   CreateEventCommand,
   EventLookupDto,
   UpdateEventCommand,
 } from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
+
 import { EventAttendeesDialogComponent } from '../event-attendees-dialog/event-attendees-dialog.component';
-import { EventClient, IUpdateEventCommand } from './../../../membermanager-api';
+import { EventClient } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
 import {
   EventFormComponent,
   EventFormDialogData,
 } from './../event-form/event-form.component';
-import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
-import { concatMap, filter, switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-event-tracking-table',
@@ -82,7 +82,10 @@ export class EventTrackingTableComponent implements OnInit {
   loadEvents() {
     this.eventClient.get().subscribe((events) => {
       this.events = events;
-      this.dataSource = new MatTableDataSource<EventLookupDto>(this.events);
+      // better for change Detection, prevent NG100 Error in Angular Material V 13
+      if (this.dataSource) this.dataSource.data = this.events;
+      else
+        this.dataSource = new MatTableDataSource<EventLookupDto>(this.events);
       this.dataSource.sort = this.sort;
     });
   }

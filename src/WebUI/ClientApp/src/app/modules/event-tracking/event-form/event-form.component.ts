@@ -1,20 +1,20 @@
-import {
-  Component, Inject, OnInit
-} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
   EventDetailDto,
   IPersonLookupDto,
-  IUpdateEventCommand
+  IUpdateEventCommand,
 } from 'src/app/membermanager-api';
 import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
-import {
-  ICreateEventCommand
-} from './../../../membermanager-api';
+import { ICreateEventCommand } from './../../../membermanager-api';
 
 /**
  * Event Form is a dialog form to perform a Create or Edit action.

@@ -24,7 +24,7 @@ namespace MemberManager.Application.Positions.Commands.UpdatePersonPosition
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdatePersonPositionCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdatePersonPositionCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.PersonPositions.FindAsync(request.PersonPositionId);
 
@@ -32,8 +32,6 @@ namespace MemberManager.Application.Positions.Commands.UpdatePersonPosition
             entity.EndDateTime = request.DismissalDateTime;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
             var origanizer = await _context.People.Where(p => p.EmailAssociaton == request.OrganizerEmail).FirstOrDefaultAsync();
 
@@ -53,8 +53,6 @@ namespace MemberManager.Application.Events.Commands.UpdateEvent
             }
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

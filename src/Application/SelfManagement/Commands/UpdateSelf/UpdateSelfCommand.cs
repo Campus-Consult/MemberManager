@@ -25,7 +25,7 @@ namespace MemberManager.Application.SelfManagement.Commands.UpdateSelf
             _mediator = mediator;
         }
 
-        public Task<Unit> Handle(UpdateSelfCommand request, CancellationToken cancellationToken)
+        public Task Handle(UpdateSelfCommand request, CancellationToken cancellationToken)
         {
             // person id and emailassociate has been checked in the validator
             return _mediator.Send(request.UpdateCommand);

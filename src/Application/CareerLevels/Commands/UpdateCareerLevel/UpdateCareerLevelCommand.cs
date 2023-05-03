@@ -22,7 +22,7 @@ namespace MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelComma
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateCareerLevelCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateCareerLevelCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.CareerLevels.FindAsync(request.CareerLevelId);
 
@@ -30,8 +30,6 @@ namespace MemberManager.Application.CareerLevels.Commands.UpdateCareerLevelComma
             entity.ShortName = request.ShortName;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

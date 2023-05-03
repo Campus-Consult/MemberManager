@@ -26,13 +26,12 @@ namespace MemberManager.Application.Positions.Commands.UpdatePosition
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdatePositionCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdatePositionCommand request, CancellationToken cancellationToken)
         {
             var pos = await _context.Positions.FindAsync(request.Id);
             pos.Name = request.Name;
             pos.ShortName = request.ShortName;
             await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }

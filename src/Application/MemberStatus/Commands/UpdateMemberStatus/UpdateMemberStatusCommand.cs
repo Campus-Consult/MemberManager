@@ -21,15 +21,13 @@ namespace MemberManager.Application.MemberStatuss.Commands.UpdateMemberStatus
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateMemberStatusCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateMemberStatusCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.MemberStatus.FindAsync(request.MemberStatusId);
 
             entity.Name = request.Name;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

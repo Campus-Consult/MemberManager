@@ -24,7 +24,7 @@ namespace MemberManager.Application.CareerLevels.Commands.AlterPersonCareerLevel
             _context = context;
         }
 
-        public async Task<Unit> Handle(AlterPersonCareerLevelStartCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AlterPersonCareerLevelStartCommand request, CancellationToken cancellationToken)
         {
             var personCareerLevelToChange = await _context.PersonCareerLevels.FindAsync(new object[]{request.PersonCareerLevelId}, cancellationToken);
             var previousCareerLevel = await _context.PersonCareerLevels.Where(pcl => pcl.EndDateTime == personCareerLevelToChange.BeginDateTime).FirstOrDefaultAsync(cancellationToken);
@@ -34,7 +34,6 @@ namespace MemberManager.Application.CareerLevels.Commands.AlterPersonCareerLevel
                 previousCareerLevel.EndDateTime = request.NewBeginTime;
             }
             await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }

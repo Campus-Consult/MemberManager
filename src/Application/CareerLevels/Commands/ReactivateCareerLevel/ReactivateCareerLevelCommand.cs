@@ -21,15 +21,13 @@ namespace MemberManager.Application.CareerLevels.Commands.ReactivateCareerLevel
             _context = context;
         }
 
-        public async Task<Unit> Handle(ReactivateCareerLevelCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ReactivateCareerLevelCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.CareerLevels.FindAsync(request.CareerLevelId);
 
             entity.IsActive = true;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

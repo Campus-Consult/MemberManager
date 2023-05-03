@@ -25,14 +25,13 @@ namespace MemberManager.Application.Administration.Commands.AddAdminUser
             _identityService = identityService;
         }
 
-        public async Task<Unit> Handle(AddAdminUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddAdminUserCommand request, CancellationToken cancellationToken)
         {
             var result = await _identityService.AddUserToRole(request.Email, "Admin");
             if(!result.Succeeded)
             {
                 throw new MultiErrorException(result.Errors);
             }
-            return Unit.Value;
         }
     }
 }

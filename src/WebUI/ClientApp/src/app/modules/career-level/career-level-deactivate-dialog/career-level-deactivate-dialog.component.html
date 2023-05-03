@@ -13,18 +13,18 @@
     />
   </mat-form-field>
 
-  <mat-form-field id="careerLevel" appearance="fill" >
+  <mat-form-field id="careerLevel" appearance="fill">
     <mat-label>Wähle neues Karrierelevel</mat-label>
     <mat-select formControlName="newLevel">
       <mat-option *ngFor="let level of careerLevelSelection" [value]="level">
-        {{level.name}}
+        {{ level.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <label class="mat-warn" fxFlex>
-    Warning: All current assignements will be asssign to the new Level!
-    You can reactivate the position later.
+    Warning: All current assignements will be asssign to the new Level! You can
+    reactivate the position later.
   </label>
   <app-dialog-error [errors]="errors"></app-dialog-error>
 </mat-dialog-content>

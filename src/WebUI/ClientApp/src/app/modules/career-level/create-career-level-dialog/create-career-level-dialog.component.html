@@ -13,7 +13,12 @@
     <input matInput formControlName="shortName" />
   </mat-form-field>
   <app-dialog-error [errors]="errors"></app-dialog-error>
-  <div fxFlex="nogrow" fxLayout="row" fxLayoutAlign="center" style="width: 100%;">
+  <div
+    fxFlex="nogrow"
+    fxLayout="row"
+    fxLayoutAlign="center"
+    style="width: 100%"
+  >
     <button
       *ngIf="careerLevel.isActive"
       class="mat-raised-button mat-warn"

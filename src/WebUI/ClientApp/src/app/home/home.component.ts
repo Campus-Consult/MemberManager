@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
@@ -8,7 +8,7 @@ import { AuthorizeService } from 'src/api-authorization/authorize.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   public isAuthenticated: Observable<boolean>;
   public userName: Observable<string>;
 

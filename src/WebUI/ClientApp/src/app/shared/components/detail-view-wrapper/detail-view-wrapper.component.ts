@@ -13,7 +13,7 @@ import {
   styleUrls: ['./detail-view-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailViewWrapperComponent implements OnInit {
+export class DetailViewWrapperComponent {
   @Input() title: string = '';
   @Input() subTitle?: string;
   @Input() disablePersonRemoveButton: boolean;
@@ -25,8 +25,6 @@ export class DetailViewWrapperComponent implements OnInit {
   @Output() onDelete = new EventEmitter();
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   onEditButtonClicked() {
     this.onEdit.emit(undefined);

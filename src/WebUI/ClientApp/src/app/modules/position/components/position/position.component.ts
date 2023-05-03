@@ -18,8 +18,6 @@ export class PositionComponent {
 
   selectedPosition: PositionLookupDto;
 
-  ngOnInit() {}
-
   onListSelection(selectedPosition: PositionLookupDto) {
     this.selectedPosition = selectedPosition;
   }

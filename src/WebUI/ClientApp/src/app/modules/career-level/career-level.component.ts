@@ -8,15 +8,13 @@ import { CareerLevelListComponent } from './career-level-list/career-level-list.
   templateUrl: './career-level.component.html',
   styleUrls: ['./career-level.component.scss'],
 })
-export class CareerLevelComponent implements OnInit {
+export class CareerLevelComponent {
   @ViewChild(CareerLevelListComponent)
   careerLevelList: CareerLevelListComponent;
   @ViewChild(CareerLevelDetailsComponent)
   careerLevelDetails: CareerLevelDetailsComponent;
 
   selectedCareerLevel: CareerLevelLookupDto;
-
-  ngOnInit() {}
 
   onListSelection(selectedCareerLevel: CareerLevelLookupDto) {
     this.selectedCareerLevel = selectedCareerLevel;

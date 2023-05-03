@@ -14,15 +14,13 @@ import { MemberListComponent } from './member-list/member-list.component';
   templateUrl: './member-management.component.html',
   styleUrls: ['./member-management.component.scss'],
 })
-export class MemberManagementComponent implements OnInit {
+export class MemberManagementComponent {
   @ViewChild(MemberListComponent) personListComp: MemberListComponent;
 
   // View
   public selectedPerson: IPersonWithBasicInfoLookupDto;
 
   constructor(private dialog: MatDialog) {}
-
-  ngOnInit(): void {}
 
   onEdit(person: IPersonDetailVm) {
     const dialogRef = this.dialog.open(EditMemberDataComponent, {

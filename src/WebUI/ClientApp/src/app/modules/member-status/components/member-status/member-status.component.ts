@@ -19,8 +19,6 @@ export class MemberStatusComponent {
 
   selectedMemberStatus: MemberStatusLookupDto;
 
-  ngOnInit() {}
-
   onListSelection(selectedMemberStatus: MemberStatusLookupDto) {
     this.selectedMemberStatus = selectedMemberStatus;
   }

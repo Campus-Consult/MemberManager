@@ -13,15 +13,13 @@ import {
   styleUrls: ['./dialog-error.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogErrorComponent implements OnInit, OnChanges {
+export class DialogErrorComponent implements OnChanges {
   @Input() errors;
 
   errorMsg;
   errorMsgList: string[];
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.errors && Object.keys(this.errors).length > 0) {

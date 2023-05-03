@@ -15,7 +15,7 @@ import { EventEmitter } from '@angular/core';
   styleUrls: ['./assign-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AssignDialogComponent implements OnInit {
+export class AssignDialogComponent {
   @Input() description: string;
   @Input() assignForm: FormGroup;
   @Input() selectSuggestions: SelectOption[];
@@ -25,8 +25,6 @@ export class AssignDialogComponent implements OnInit {
   @Output() saveEvent = new EventEmitter();
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   close() {
     this.closeEvent.emit(undefined);

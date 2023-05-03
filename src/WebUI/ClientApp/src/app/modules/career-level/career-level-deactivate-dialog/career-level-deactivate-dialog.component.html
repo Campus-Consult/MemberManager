@@ -15,7 +15,7 @@
 
   <mat-form-field id="careerLevel" appearance="fill" >
     <mat-label>Wähle neues Karrierelevel</mat-label>
-    <mat-select [formControl]="newLevel">
+    <mat-select formControlName="newLevel">
       <mat-option *ngFor="let level of careerLevelSelection" [value]="level">
         {{level.name}}
       </mat-option>

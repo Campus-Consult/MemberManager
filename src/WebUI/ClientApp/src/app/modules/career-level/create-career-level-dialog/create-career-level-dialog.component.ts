@@ -5,7 +5,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   CareerLevelClient,
   CareerLevelDto,
-  CareerLevelLookupDto,
   CreateCareerLevelCommand,
   UpdateCareerLevelCommand,
 } from './../../../membermanager-api';
@@ -31,7 +30,6 @@ export class CreateCareerLevelDialogComponent implements OnInit {
     data: {
       description: string;
       careerLevel: CareerLevelDto;
-      careerLevelList: CareerLevelLookupDto[];
     },
     private careerLevelClient: CareerLevelClient
   ) {
@@ -106,9 +104,13 @@ export class CreateCareerLevelDialogComponent implements OnInit {
       );
   }
 
-  deactivate() {}
+  deactivate() {
+    this.dialogRef.close('deactivate');
+  }
 
-  reactivate() {}
+  reactivate() {
+    this.dialogRef.close('reactivate');
+  }
 
   handleError(error) {
     console.error(error);

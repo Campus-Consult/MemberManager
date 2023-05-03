@@ -1,4 +1,3 @@
-import { CareerLevelAssignDialogComponent } from './../career-level-assign-dialog/career-level-assign-dialog.component';
 import {
   AfterViewInit,
   Component,
@@ -11,13 +10,16 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { CareerLevelDto } from 'src/app/membermanager-api';
+import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
+
+import { CareerLevelDeactivateDialogComponent } from '../career-level-deactivate-dialog/career-level-deactivate-dialog.component';
+import { CareerLevelDismissDialogComponent } from '../career-level-dismiss-dialog/career-level-dismiss-dialog.component';
+import { CreateCareerLevelDialogComponent } from '../create-career-level-dialog/create-career-level-dialog.component';
 import {
   CareerLevelAssignee,
   CareerLevelClient,
 } from './../../../membermanager-api';
-import { CareerLevelDismissDialogComponent } from '../career-level-dismiss-dialog/career-level-dismiss-dialog.component';
-import { CreateCareerLevelDialogComponent } from '../create-career-level-dialog/create-career-level-dialog.component';
-import { HistoryDialogComponent } from 'src/app/shared/components/history-dialog/history-dialog.component';
+import { CareerLevelAssignDialogComponent } from './../career-level-assign-dialog/career-level-assign-dialog.component';
 
 @Component({
   selector: 'app-career-level-details',
@@ -83,9 +85,8 @@ export class CareerLevelDetailsComponent
       },
     });
 
-    const sub = dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.reloadRequired();
-      sub.unsubscribe();
     });
   }
 
@@ -97,9 +98,8 @@ export class CareerLevelDetailsComponent
       },
     });
 
-    const sub = dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.reloadRequired();
-      sub.unsubscribe();
     });
   }
 
@@ -111,9 +111,10 @@ export class CareerLevelDetailsComponent
       },
     });
 
-    const sub = dialogRef.afterClosed().subscribe((result) => {
-      this.reload();
-      sub.unsubscribe();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'deactivate') this.deactivateLevel(this.careerLevel);
+      else if (result === 'reactivate') this.reactivateLevel(this.careerLevel);
+      else this.reload();
     });
   }
 
@@ -130,5 +131,30 @@ export class CareerLevelDetailsComponent
       },
       (error) => console.error(error)
     );
+  }
+
+  deactivateLevel(careerLevel: CareerLevelDto) {
+    this.careerLevelClient.get().subscribe((clVm) => {
+      const dialogRef = this.dialog.open(CareerLevelDeactivateDialogComponent, {
+        width: '300px',
+        data: {
+          description: 'Test',
+          careerLevel: careerLevel,
+          careerLevelList: clVm.careerLevels,
+        },
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result)
+          this.careerLevelClient
+            .deactivate(this.careerLevel.id, result)
+            .subscribe(() => this.reloadRequired());
+      });
+    });
+  }
+
+  reactivateLevel(careerLevel: CareerLevelDto) {
+    this.careerLevelClient
+      .reactivate(careerLevel.id)
+      .subscribe(() => this.reloadRequired());
   }
 }

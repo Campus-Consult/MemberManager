@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
-  CareerLevelClient,
   CareerLevelDto,
   CareerLevelLookupDto,
   DeactivateCareerLevelCommand,
@@ -32,8 +31,7 @@ export class CareerLevelDeactivateDialogComponent implements OnInit {
       description: string;
       careerLevel: CareerLevelDto;
       careerLevelList: CareerLevelLookupDto[];
-    },
-    private careerLevelClient: CareerLevelClient
+    }
   ) {}
 
   ngOnInit(): void {
@@ -58,10 +56,10 @@ export class CareerLevelDeactivateDialogComponent implements OnInit {
   save() {
     const command = new DeactivateCareerLevelCommand({
       careerLevelId: this.data.careerLevel.id,
-      newCareerLevelId: undefined,
+      newCareerLevelId: this.newLevel.id,
       changeDateTime: this.endDateTime,
     });
-    this.careerLevelClient.deactivate(this.data.careerLevel.id, command);
+    this.dialogRef.close(command);
   }
 
   close() {

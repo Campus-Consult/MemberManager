@@ -140,7 +140,7 @@ export class CareerLevelDetailsComponent
         data: {
           description: 'Test',
           careerLevel: careerLevel,
-          careerLevelList: clVm.careerLevels,
+          careerLevelList: clVm.careerLevels.filter((item) => item.isActive),
         },
       });
       dialogRef.afterClosed().subscribe((result) => {

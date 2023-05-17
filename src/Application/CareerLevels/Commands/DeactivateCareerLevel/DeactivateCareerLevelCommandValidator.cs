@@ -20,7 +20,7 @@ namespace MemberManager.Application.CareerLevels.Commands.DeactivateCareerLevel
             
             RuleFor(v => v.NewCareerLevelId)
                 .NotEmpty()
-                .Must(NewCareerLevelDifferent).WithMessage("Neues Karriereleves das Gleiche wie das Alte!")
+                .Must(NewCareerLevelDifferent).WithMessage("Neues Karrierelevel das Gleiche wie das Alte!")
                 .MustAsync(CareerLevelExists).WithMessage("Neues Karrierelevel existiert nicht!");
         }
 

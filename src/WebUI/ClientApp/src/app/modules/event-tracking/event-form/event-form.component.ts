@@ -1,40 +1,37 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { map, pluck, startWith } from 'rxjs/operators';
 import {
   EventDetailDto,
   IPersonLookupDto,
   IUpdateEventCommand,
-  PersonLookupDto,
 } from 'src/app/membermanager-api';
-import { AutocompleteMemberInputComponent } from 'src/app/shared/components/autocomplete-member-input/autocomplete-member-input.component';
-import {
-  ICreateEventCommand,
-  PeopleClient,
-} from './../../../membermanager-api';
+import { EventCodeDialogComponent } from '../event-code-dialog/event-code-dialog.component';
+import { ICreateEventCommand } from './../../../membermanager-api';
 
+/**
+ * Event Form is a dialog form to perform a Create or Edit action.
+ * Depending on given MAT_DIALOG_DATA input in particular
+ * if EventFormDialogData.edit is set it performs as a edit dialog
+ * else it performs as an create Dialog.
+ * Depending on mode the dialog will return onDismiss different results
+ * if EventFormDialogData.edit is set it will return an IUpdateEventCommand
+ * else it will return an ICreateEventCommand
+ * in all modes it will return undefined if the dialog abort is pressed.
+ */
 @Component({
   selector: 'app-event-form',
   templateUrl: './event-form.component.html',
   styleUrls: ['./event-form.component.scss'],
 })
 export class EventFormComponent implements OnInit {
-  @Input() data: EventFormDialogData;
-
-  @Output() submitEvent = new EventEmitter<
-    ICreateEventCommand & IUpdateEventCommand
-  >();
-
   suggTags: string[];
   startingTags: Set<string>;
   tagsOnEvent: Set<string>;
@@ -48,7 +45,12 @@ export class EventFormComponent implements OnInit {
   eventFormGroup: FormGroup;
   eventDate: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialogRef: MatDialogRef<EventCodeDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EventFormDialogData,
+    protected dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.suggTags = this.data.suggestedTags;
@@ -109,12 +111,15 @@ export class EventFormComponent implements OnInit {
     this.tagsOnEvent.delete(keyword);
   }
 
+  /**
+   * Submits ICreateEventCommand or IUpdateEventCommand it depends on form mode
+   */
   onSubmit() {
     if (this.eventFormGroup.status) {
       const command = this.getCommand();
       this.data.submitAction(command).subscribe(
         (response) => {
-          this.submitEvent.emit(command);
+          this.dialogRef.close(command);
         },
         (errorResponse) => this.handleError(errorResponse)
       );

@@ -3,20 +3,25 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { filter, switchMap } from 'rxjs/operators';
 import {
   CreateEventCommand,
   EventLookupDto,
   UpdateEventCommand,
 } from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
+import { DeleteDialogComponent } from 'src/app/shared/components/delete-dialog/delete-dialog.component';
+
 import { EventAttendeesDialogComponent } from '../event-attendees-dialog/event-attendees-dialog.component';
-import { EventCreateDialogComponent } from '../event-create-dialog/event-create-dialog.component';
 import {
   EventClient,
   EventLookupDtoWithAnswerCount,
 } from './../../../membermanager-api';
 import { EventCodeDialogComponent } from './../event-code-dialog/event-code-dialog.component';
-import { EventFormDialogData } from './../event-form/event-form.component';
+import {
+  EventFormComponent,
+  EventFormDialogData,
+} from './../event-form/event-form.component';
 
 @Component({
   selector: 'app-event-tracking-table',
@@ -58,7 +63,7 @@ export class EventTrackingTableComponent implements OnInit {
 
   onCreate() {
     // Open Form Dialog
-    const dialogRef = this.dialog.open(EventCreateDialogComponent, {
+    const dialogRef = this.dialog.open(EventFormComponent, {
       width: '500px',
       data: {
         suggestedTags: ['test'],
@@ -71,7 +76,9 @@ export class EventTrackingTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadEvents();
-        this._snackBar.open(`${result.name} erstellt!`);
+        this._snackBar.open(`${result.name} erstellt!`, 'okay', {
+          duration: 3000,
+        });
       }
     });
   }
@@ -79,9 +86,12 @@ export class EventTrackingTableComponent implements OnInit {
   loadEvents() {
     this.eventClient.get().subscribe((events) => {
       this.events = events;
-      this.dataSource = new MatTableDataSource<EventLookupDtoWithAnswerCount>(
-        this.events
-      );
+      // better for change Detection, prevent NG100 Error in Angular Material V 13
+      if (this.dataSource) this.dataSource.data = this.events;
+      else
+        this.dataSource = new MatTableDataSource<EventLookupDtoWithAnswerCount>(
+          this.events
+        );
       this.dataSource.sort = this.sort;
     });
   }
@@ -92,7 +102,16 @@ export class EventTrackingTableComponent implements OnInit {
       .toPromise()
       .then((value) => value);
     const dialogRef = this.dialog.open(EventCodeDialogComponent, {
-      width: '750px',
+      data: eventDetails,
+    });
+  }
+
+  async openEditEventDialog(event: EventLookupDto) {
+    const eventDetails = await this.eventClient
+      .getSingle(event.id)
+      .toPromise()
+      .then((value) => value);
+    const dialogRef = this.dialog.open(EventFormComponent, {
       data: {
         edit: eventDetails,
         suggestedTags: ['test'],
@@ -104,7 +123,7 @@ export class EventTrackingTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(
       (result) => {
-        if (result) {
+        if (result instanceof UpdateEventCommand) {
           this.loadEvents();
           this._snackBar.open(`${result?.name} erfolgreich bearbeitet!`);
         }
@@ -112,6 +131,26 @@ export class EventTrackingTableComponent implements OnInit {
       (err) => this._snackBar.open('Something went wrong.')
     );
   }
+
+  openDeleteDialog(event: EventLookupDto) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      role: 'alertdialog',
+      data: { title: `Event löschen?` },
+    });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((result) => result),
+        switchMap((result) => this.eventClient.delete(event.id))
+      )
+      .subscribe((result) => {
+        this.loadEvents();
+        this._snackBar.open('Event erfolgreich gelöscht!', 'ok', {
+          duration: 3000,
+        });
+      });
+  }
+
   openAttendeesDialog(row: EventLookupDtoWithAnswerCount) {
     const dialogRef = this.dialog.open(EventAttendeesDialogComponent, {
       width: '750px',
@@ -119,5 +158,6 @@ export class EventTrackingTableComponent implements OnInit {
         id: row.id,
       },
     });
+    dialogRef.afterClosed().subscribe(() => this.loadEvents());
   }
 }

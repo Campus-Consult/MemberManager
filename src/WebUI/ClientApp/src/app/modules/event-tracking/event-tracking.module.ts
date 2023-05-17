@@ -6,7 +6,6 @@ import { EventTrackingTableComponent } from './event-tracking-table/event-tracki
 import { EventCodeDialogComponent } from './event-code-dialog/event-code-dialog.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { EventFormComponent } from './event-form/event-form.component';
-import { EventCreateDialogComponent } from './event-create-dialog/event-create-dialog.component';
 import { EventTrackingLandingpageComponent } from './event-tracking-landingpage/event-tracking-landingpage.component';
 import { EventTrackingRoutingModule } from './event-tracking-routing.module';
 import { EventAttendeesDialogComponent } from './event-attendees-dialog/event-attendees-dialog.component';
@@ -16,7 +15,6 @@ import { EventAttendeesDialogComponent } from './event-attendees-dialog/event-at
     EventTrackingTableComponent,
     EventCodeDialogComponent,
     EventFormComponent,
-    EventCreateDialogComponent,
     EventTrackingLandingpageComponent,
     EventAttendeesDialogComponent,
   ],

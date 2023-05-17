@@ -6,24 +6,37 @@
   (onDelete)="openDeleteDialog()"
 >
   <app-member-data [memberDetails]="personDetails"></app-member-data>
-  <mat-accordion>
-    <app-member-history
-      title="Mitglieds-Status"
-      [historyData]="memberStatusHistory"
-      [reassignCallback]="handleMemberStatusReassign"
-    ></app-member-history>
-    <app-member-history
-      title="Karriere-Stufen"
-      [historyData]="careerLevelHistory"
-      [reassignCallback]="handleCareerReassign"
-    ></app-member-history>
-    <app-member-history
-      title="Posten"
-      [historyData]="positionHistory"
-      [newAssignCallback]="handlePositionAssign"
-      [dismissCallback]="handlePositionDismiss"
-    ></app-member-history>
-  </mat-accordion>
+  <div class="spacing">
+    <a
+      mat-raised-button
+      class="mail"
+      href="mailto:{{ personDetails.emailAssociaton }}"
+    >
+      Email an {{ personDetails.firstName }}
+      {{ personDetails.surname }}
+      <mat-icon>mail</mat-icon>
+    </a>
+  </div>
+  <div class="spacing">
+    <mat-accordion>
+      <app-member-history
+        title="Mitglieds-Status"
+        [historyData]="memberStatusHistory"
+        [reassignCallback]="handleMemberStatusReassign"
+      ></app-member-history>
+      <app-member-history
+        title="Karriere-Stufen"
+        [historyData]="careerLevelHistory"
+        [reassignCallback]="handleCareerReassign"
+      ></app-member-history>
+      <app-member-history
+        title="Posten"
+        [historyData]="positionHistory"
+        [newAssignCallback]="handlePositionAssign"
+        [dismissCallback]="handlePositionDismiss"
+      ></app-member-history>
+    </mat-accordion>
+  </div>
 </app-detail-view-wrapper>
 <ng-template #toolTip>
   Für mehr Informationen klicke auf ein Element in der Tabelle!

@@ -13,6 +13,27 @@
     <input matInput formControlName="shortName" />
   </mat-form-field>
   <app-dialog-error [errors]="errors"></app-dialog-error>
+  <div
+    fxFlex="nogrow"
+    fxLayout="row"
+    fxLayoutAlign="center"
+    style="width: 100%"
+  >
+    <button
+      *ngIf="careerLevel.isActive"
+      class="mat-raised-button mat-warn"
+      (click)="deactivate()"
+    >
+      Deaktiviere Level
+    </button>
+    <button
+      *ngIf="!careerLevel.isActive"
+      class="mat-raised-button"
+      (click)="reactivate()"
+    >
+      Reaktiviere Level
+    </button>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">

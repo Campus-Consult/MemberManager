@@ -40,6 +40,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CareerLevelAssignDialogComponent } from './career-level-assign-dialog/career-level-assign-dialog.component';
 import { CareerLevelDismissDialogComponent } from './career-level-dismiss-dialog/career-level-dismiss-dialog.component';
 import { CreateCareerLevelDialogComponent } from './create-career-level-dialog/create-career-level-dialog.component';
+import { CareerLevelDeactivateDialogComponent } from './career-level-deactivate-dialog/career-level-deactivate-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { CreateCareerLevelDialogComponent } from './create-career-level-dialog/c
     CareerLevelAssignDialogComponent,
     CareerLevelDismissDialogComponent,
     CreateCareerLevelDialogComponent,
+    CareerLevelDeactivateDialogComponent,
   ],
   imports: [
     CommonModule,

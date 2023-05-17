@@ -14,6 +14,7 @@ import {
   MemberStatusLookupDto,
 } from 'src/app/membermanager-api';
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
+
 import { CreateCareerLevelDialogComponent } from './../create-career-level-dialog/create-career-level-dialog.component';
 
 @Component({
@@ -47,7 +48,7 @@ export class CareerLevelListComponent implements AfterViewInit {
 
   careerLevels: CareerLevelLookupDto[];
   dataSource: MatTableDataSource<CareerLevelLookupDto>;
-  columns: string[] = ['name', 'shortName', 'countAssignees'];
+  columns: string[] = ['name', 'shortName', 'state', 'countAssignees'];
 
   selected: MemberStatusLookupDto;
 

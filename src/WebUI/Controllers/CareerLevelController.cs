@@ -80,10 +80,7 @@ namespace MemberManager.WebUI.Controllers
             {
                 return BadRequest();
             }
-            await Mediator.Send(new DeactivateCareerLevelCommand {
-                CareerLevelId = command.CareerLevelId,
-                NewCareerLevelId = command.NewCareerLevelId,
-            });
+            await Mediator.Send(command);
             return NoContent();
         }
 

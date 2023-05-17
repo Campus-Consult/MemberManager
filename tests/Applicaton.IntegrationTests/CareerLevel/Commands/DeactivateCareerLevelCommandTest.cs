@@ -32,7 +32,7 @@ namespace MemberManager.Application.IntegrationTests.CareerLevel.Commands
             AssertValidationError(SendAsync(new DeactivateCareerLevelCommand {
                 CareerLevelId = level1,
                 NewCareerLevelId = level1,
-            }), "NewCareerLevelId", "Neues Karriereleves das Gleiche wie das Alte!");
+            }), "NewCareerLevelId", "Neues Karrierelevel das Gleiche wie das Alte!");
 
             await SendAsync(new DeactivateCareerLevelCommand {
                 CareerLevelId = level1,

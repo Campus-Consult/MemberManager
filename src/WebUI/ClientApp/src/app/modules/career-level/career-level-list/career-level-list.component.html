@@ -18,6 +18,13 @@
         <td mat-cell *matCellDef="let element">{{ element.shortName }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktiv?</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.isActive ? 'Ja' : 'Nein' }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="countAssignees">
         <th mat-header-cell *matHeaderCellDef mat-sort-header># Zugewiesen</th>
         <td mat-cell *matCellDef="let element">{{ element.countAssignees }}</td>
